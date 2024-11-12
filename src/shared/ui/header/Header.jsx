@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import styles from './Header.module.css'
+import styles from './header.module.css'
 import classNames from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
