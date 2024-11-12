@@ -3,7 +3,7 @@ version: '3.8'
 services:
   nextjs-app:
     build:
-      context: ./nextjs-app
+      context: .
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
