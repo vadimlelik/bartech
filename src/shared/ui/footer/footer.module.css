@@ -1,0 +1,39 @@
+.footer {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: rgb(245, 245, 245);
+}
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.content {
+	text-align: center;
+}
+.text {
+	font-size: 18px;
+}
+.social {
+	margin-top: 30px;
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	justify-content: center;
+}
+.offer {
+	display: flex;
+	justify-content: center;
+}
+.footer__offer__list {
+	display: flex;
+	flex-direction: column;
+}
+.footer__offer__link {
+	text-decoration: underline;
+	color: #000000;
+}
+.footer__offer__item {
+	margin-bottom: 10px;
+}
