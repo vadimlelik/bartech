@@ -65,11 +65,14 @@ const Header = () => {
 				</div>
 			) : (
 				<nav className={styles.nav}>
-					<Link href='payment_delivery' className={styles.navLink}>
-						payment_delivery
+					<Link href='/' className={styles.navLink}>
+						Каталог
 					</Link>
-					<Link href='about' className={styles.navLink}>
+					<Link href='payment_delivery' className={styles.navLink}>
 						Оплата и доставка
+					</Link>
+					<Link href='contacts' className={styles.navLink}>
+						Контакты
 					</Link>
 					<a href='#services' className={styles.navLink}>
 						пн.- пт.: 9:30 - 21:30

@@ -39,22 +39,25 @@ const Footer = () => {
 					<div className={styles.offer}>
 						<ul className={styles['footer__offer__list']}>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'/'}>
+								<Link className={styles['footer__offer__link']} href={'pk'}>
 									Политика конфиденциальности
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'/'}>
+								<Link className={styles['footer__offer__link']} href={'po'}>
 									Публичная оферта
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
-								<Link href={'/'} className={styles['footer__offer__link']}>
+								<Link
+									href={'guarantee'}
+									className={styles['footer__offer__link']}
+								>
 									Возврат товара
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'/'}>
+								<Link className={styles['footer__offer__link']} href={'/pass'}>
 									Условия рассрочки и сертификация
 								</Link>
 							</li>
