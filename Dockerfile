@@ -8,11 +8,18 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+# Передаем переменные окружения как аргументы
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+# Устанавливаем переменную для продакшн-режима
 ENV NODE_ENV=production
 
+# Собираем приложение
+RUN npm run build
+
+# Команда для запуска приложения
 CMD ["npm", "start"]
 
-# Указываем, что контейнер прослушивает порт 3000
+# Открываем порт 3000
 EXPOSE 3000
