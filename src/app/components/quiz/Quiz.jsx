@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import MaskedPhoneInput from '../InputMask/InputMask'
 import styles from './Quiz.module.css'
+import Button from '../button/Button'
 
-const Quiz = ({ isOpen, onClose, questions }) => {
+const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {
 		control,
 		handleSubmit,
@@ -30,18 +31,6 @@ const Quiz = ({ isOpen, onClose, questions }) => {
 			document.body.style.overflow = ''
 		}
 	}, [isOpen])
-
-	const onSubmit = (data) => {
-		// Для всех вопросов с типом radio или checkbox, где выбран custom, заменяем на введенный текст
-		for (const key in data) {
-			if (data[key] === 'custom' && customOption) {
-				data[key] = customOption
-			}
-		}
-
-		console.log('Отправленные данные:', data)
-		setIsSubmitted(true)
-	}
 
 	const nextQuestion = async () => {
 		const currentFieldName = `question${questions[currentQuestion].id}`
@@ -97,13 +86,22 @@ const Quiz = ({ isOpen, onClose, questions }) => {
 	}
 
 	// Отправка формы
+
 	const handleFormSubmit = async (e) => {
 		e.preventDefault()
 
-		// Проверяем согласие перед отправкой формы
 		const isValid = await handleValidation()
+
 		if (isValid) {
-			handleSubmit(onSubmit)()
+			handleSubmit(async (data) => {
+				try {
+					console.log('Отправка данных:', data)
+					// await onSubmit(data)
+					setIsSubmitted(true)
+				} catch (error) {
+					setValidationError('Не удалось отправить данные, попробуйте позже.')
+				}
+			})()
 		}
 	}
 
@@ -160,7 +158,7 @@ const Quiz = ({ isOpen, onClose, questions }) => {
 																className={styles.radioInput}
 																onChange={(e) => {
 																	field.onChange(e)
-																	handleRadioChange(e) // Handle custom option
+																	handleRadioChange(e)
 																}}
 															/>
 															{option.label}
@@ -261,29 +259,34 @@ const Quiz = ({ isOpen, onClose, questions }) => {
 						</div>
 						<div className={styles.navigation}>
 							{currentQuestion > 0 && (
-								<button
+								<Button
 									type='button'
 									onClick={prevQuestion}
-									className={styles.button}
-								>
-									Назад
-								</button>
+									label='Назад'
+									color='secondary'
+								/>
 							)}
 							{currentQuestion < questions.length - 1 && (
-								<button
+								<Button
 									type='button'
 									onClick={nextQuestion}
-									className={styles.button}
-								>
-									Далее
-								</button>
+									label='Далее'
+									color='secondary'
+									className={styles.submitButton}
+								/>
 							)}
 							{currentQuestion === questions.length - 1 && (
 								<div className={styles.consentsContainer}>
+									<Button
+										type='submit'
+										label='Отправить'
+										color='primary'
+										className={styles.submitButton}
+									/>
 									<label>
 										<input
 											type='checkbox'
-											checked={consent}
+											checked={consent || true}
 											onChange={handleConsentChange}
 											className={styles.checkboxInput}
 										/>
@@ -292,9 +295,6 @@ const Quiz = ({ isOpen, onClose, questions }) => {
 									{validationError && (
 										<span className={styles.error}>{validationError}</span>
 									)}
-									<button type='submit' className={styles.submitButton}>
-										Отправить
-									</button>
 								</div>
 							)}
 						</div>

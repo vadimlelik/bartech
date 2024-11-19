@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import styles from './Button.module.css'
 
 const Button = ({
+	type,
 	label,
 	color = 'primary',
 	size = 'default',
@@ -13,6 +14,7 @@ const Button = ({
 }) => {
 	return (
 		<button
+			type={type}
 			className={classNames(
 				styles.button,
 				styles[color],

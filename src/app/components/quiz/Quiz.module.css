@@ -16,10 +16,10 @@
 
 .quizContainer {
 	background-color: #fff;
-	padding: 20px;
+	padding: 40px;
 	border-radius: 8px;
 	width: 100%;
-	max-width: 600px;
+	max-width: 80%;
 	position: relative;
 	overflow: hidden;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -146,11 +146,21 @@
 }
 
 .submitButton {
-	background-color: #28a745;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
-.submitButton:hover {
+/* .submitButton:hover {
 	background-color: #218838;
+} */
+.consentsContainer {
+	display: flex;
+	align-items: center;
+}
+.consentsContainer label {
+	cursor: pointer;
+	font-size: 14px;
+	margin-right: 20px;
 }
 
 /* Стиль для модального окна при отправке данных */
@@ -168,8 +178,8 @@
 /* Навигация по форме */
 .navigation {
 	display: flex;
-	justify-content: space-between;
-	margin-top: 20px;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 .navigation .button {
@@ -225,10 +235,10 @@
 	margin-bottom: 20px;
 }
 
-.quizContainer form .navigation {
+/* .quizContainer form .navigation {
 	margin-top: 20px;
 	justify-content: space-between;
-}
+} */
 
 .customInputContainer {
 	margin-top: 10px;
@@ -243,4 +253,22 @@
 
 .checkboxInput {
 	margin-right: 10px;
+}
+
+@media (max-width: 772px) {
+	.questionContainer h2 {
+		font-size: 20px;
+	}
+	.navigation {
+		flex-direction: column;
+	}
+	.consentsContainer {
+		flex-direction: column;
+	}
+
+	.submitButton {
+		margin-top: 20px;
+		width: 100%;
+		margin-bottom: 10px;
+	}
 }

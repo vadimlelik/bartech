@@ -9,32 +9,49 @@ import Quiz from '@/app/components/quiz/Quiz'
 const questions = [
 	{
 		id: 1,
-		question: 'Какой ваш любимый цвет?',
+		question: 'Выберите бренд телефона',
 		type: 'radio',
 		options: [
-			{ value: 'red', label: 'Красный' },
-			{ value: 'blue', label: 'Синий' },
-			{ value: 'green', label: 'Зеленый' },
+			{ value: 'Xiaomi', label: 'Xiaomi' },
+			{ value: 'Samsung', label: 'Samsung' },
+			{ value: 'Apple', label: 'Apple' },
+			{
+				value: 'Huawei',
+				label: 'Huawei',
+			},
+			{ value: 'Redmi', label: 'Redmi' },
+			{
+				value: 'custom',
+				label: 'Свой вариант',
+			},
 		],
 	},
 	{
 		id: 2,
-		question: 'Какой ваш возраст?',
+		question: 'Работаете ли Вы на последнем рабочем месте более 3-х месяцев?',
 		type: 'radio',
 		options: [
-			{ value: '18-25', label: '18-25' },
-			{ value: '26-35', label: '26-35' },
-			{ value: '36+', label: '36+' },
+			{ value: 'yes', label: 'Да' },
+			{ value: 'no', label: 'Нет' },
+			{
+				value: 'custom',
+				label: 'Свой вариант',
+			},
 		],
 	},
 	{
 		id: 3,
-		question: 'Какой ваш любимый напиток?',
+		question: 'На какой ежемесячный платеж Вы рассчитываете?',
 		type: 'radio',
 		options: [
-			{ value: 'coffee', label: 'Кофе' },
-			{ value: 'tea', label: 'Чай' },
-			{ value: 'water', label: 'Вода' },
+			{ value: 'coffee', label: 'от 30 до 50 BYN/мес' },
+			{ value: '50/100', label: 'от 50 до 100 BYN/мес' },
+			{ value: '100/200', label: 'от 100 до 200 BYN/мес' },
+			{ value: '200', label: 'от 200 BYN/мес' },
+			{
+				value: 'custom',
+				label: 'Свой вариант',
+			},
 		],
 	},
 	{

@@ -85,6 +85,7 @@ const Tv = () => {
 							оформить рассрочку и получить консультацию специалиста ...
 						</p>
 						<Button
+							onClick={() => setIsQuizOpen(true)}
 							label='Купить в рассрочку'
 							color='orange'
 							size='large'
