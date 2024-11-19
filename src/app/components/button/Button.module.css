@@ -1,0 +1,94 @@
+/* Базовый стиль кнопки */
+.button {
+	position: relative;
+	display: inline-block;
+	padding: 12px 24px;
+	font-size: 22px;
+	font-weight: 600;
+	text-align: center;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+/* Цветовые темы */
+.primary {
+	background-color: #007bff; /* Синий */
+	color: #fff;
+}
+.dangery {
+	background-color: #ec162c; /* Красный */
+	color: #111111;
+}
+
+.secondary {
+	background-color: #6c757d; /* Серый */
+	color: #fff;
+}
+
+.orange {
+	background-color: #fbcb01; /* Оранжевый */
+	color: #000000;
+}
+.success {
+	background-color: #28a745; /* Зелёный */
+	color: #fff;
+}
+
+/* Hover эффекты */
+.primary:hover {
+	background-color: #0056b3;
+}
+
+.secondary:hover {
+	background-color: #5a6268;
+}
+
+.success:hover {
+	background-color: #218838;
+}
+.orange:hover {
+	background-color: #fbcb01;
+}
+
+.default {
+	padding: 12px 24px;
+	font-size: 16px;
+}
+
+.small {
+	padding: 18px 36px;
+	font-size: 14px;
+}
+
+.large {
+	padding: 26px 56px;
+	font-size: 18px;
+}
+
+@media (max-width: 768px) {
+	.small {
+		padding: 10px 20px;
+		font-size: 14px;
+	}
+	.large {
+		padding: 14px 28px;
+		font-size: 16px;
+	}
+}
+
+/* @media (max-width: 480px) {
+	.default {
+		padding: 8px 16px;
+		font-size: 12px;
+	}
+	.small {
+		padding: 4px 8px;
+		font-size: 10px;
+	}
+	.large {
+		padding: 12px 24px;
+		font-size: 14px;
+	}
+} */

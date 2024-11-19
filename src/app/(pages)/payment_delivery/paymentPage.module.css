@@ -9,12 +9,29 @@
 .main {
 	flex: 1;
 }
+
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding-left: 20px;
 	padding-right: 20px;
 }
-.title {
+.dropdowns {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 32px;
+}
+.text {
 	text-align: center;
+}
+
+.text h1 {
+	font-size: 32px;
+	margin-bottom: 16px;
+}
+
+.text h3 {
+	font-size: 24px;
+	margin-bottom: 32px;
+	font-weight: normal;
 }

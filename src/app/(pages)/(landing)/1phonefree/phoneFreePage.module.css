@@ -1,0 +1,98 @@
+.page {
+	padding: 50px 0px;
+	background-color: black;
+}
+.title {
+	font-size: 62px;
+	color: #fbcb01;
+}
+.title span {
+	color: #fff;
+}
+.content {
+	padding: 50px 0px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+.infoTitle {
+	font-size: 24px;
+	color: #fbcb01;
+	margin-bottom: 30px;
+}
+.infoTitle span {
+	font-size: 32px;
+	color: #fb0b01;
+}
+.infoList {
+	display: flex;
+	flex-direction: column;
+}
+.infoItem {
+	color: #fff;
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+.infoItem::before {
+	content: '✓';
+	color: #fbcb01;
+	margin-right: 10px;
+}
+.infoLike {
+	font-size: 20px;
+	color: #fff;
+}
+.infoLike::before {
+	content: '💛';
+	color: #fbcb01;
+	margin-right: 10px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.logoIcon {
+	width: 220px;
+	height: 155px;
+}
+
+.logo {
+	text-align: center;
+}
+.btnWrapper {
+	display: flex;
+	justify-content: center;
+	padding: 50px 0px;
+}
+@media (max-width: 768px) {
+	.title {
+		font-size: 32px;
+		text-align: center;
+	}
+	.infoTitle {
+		font-size: 20px;
+	}
+	.infoItem {
+		font-size: 16px;
+	}
+	.infoLike {
+		font-size: 16px;
+	}
+	.images img {
+		max-width: 280px;
+	}
+	.btnWrapper {
+		padding: 10px 0px;
+	}
+	.content {
+		padding: 10px 0px;
+	}
+	.page {
+		padding: 25px 0px;
+	}
+}

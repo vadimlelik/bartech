@@ -1,5 +1,4 @@
 export const products = [
-	// Телефоны
 	{
 		id: '1',
 		category: 'phones',
@@ -25,7 +24,6 @@ export const products = [
 		imageUrl: '/images/pixel6.jpg',
 	},
 
-	// Ноутбуки
 	{
 		id: '4',
 		category: 'laptops',
@@ -51,7 +49,6 @@ export const products = [
 		imageUrl: '/images/hpspectre.jpg',
 	},
 
-	// Наушники
 	{
 		id: '7',
 		category: 'headphones',
@@ -77,7 +74,6 @@ export const products = [
 		imageUrl: '/images/boseqc35.jpg',
 	},
 
-	// Смарт-часы
 	{
 		id: '10',
 		category: 'smartwatches',
@@ -103,7 +99,6 @@ export const products = [
 		imageUrl: '/images/fitbitversa3.jpg',
 	},
 
-	// Телевизоры
 	{
 		id: '13',
 		category: 'televisions',
@@ -128,8 +123,6 @@ export const products = [
 		price: 999,
 		imageUrl: '/images/sonybraviaxr.jpg',
 	},
-
-	// Холодильники
 	{
 		id: '16',
 		category: 'refrigerators',

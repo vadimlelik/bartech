@@ -1,0 +1,34 @@
+.categoriesItem {
+	flex: 25%;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	text-decoration: none;
+	display: block;
+	width: 150px;
+	text-align: center;
+	padding: 10px;
+	cursor: pointer;
+}
+.categoriesName {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: bold;
+	margin: 0;
+	margin-bottom: 10px;
+	color: #0a0a0a38;
+}
+.categoriesIcon {
+	width: 30px;
+	height: 30px;
+}
+
+.categoriesItem:hover {
+	box-shadow: inset 0 0 0 1px #ccc;
+	transition: box-shadow 0.3s;
+}
+.categoriesImg {
+	width: 200px;
+	height: 200px;
+	object-fit: cover;
+}
