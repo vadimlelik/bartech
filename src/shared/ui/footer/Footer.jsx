@@ -16,17 +16,26 @@ const Footer = () => {
 					<div className={styles.offer}>
 						<ul className={styles['footer__offer__list']}>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'pk'}>
+								<Link
+									className={styles['footer__offer__link']}
+									href={'pk'}
+									target='_blank'
+								>
 									Политика конфиденциальности
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'po'}>
+								<Link
+									target='_blank'
+									className={styles['footer__offer__link']}
+									href={'po'}
+								>
 									Публичная оферта
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
 								<Link
+									target='_blank'
 									href={'guarantee'}
 									className={styles['footer__offer__link']}
 								>
@@ -34,7 +43,11 @@ const Footer = () => {
 								</Link>
 							</li>
 							<li className={styles['footer__offer__item']}>
-								<Link className={styles['footer__offer__link']} href={'/pass'}>
+								<Link
+									className={styles['footer__offer__link']}
+									href={'/pass'}
+									target='_blank'
+								>
 									Условия рассрочки и сертификация
 								</Link>
 							</li>

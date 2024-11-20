@@ -74,7 +74,7 @@ const Header = () => {
 					<Link href='contacts' className={styles.navLink}>
 						Контакты
 					</Link>
-					<a href='#services' className={styles.navLink}>
+					<a href='#' className={styles.navLink}>
 						пн.- пт.: 9:30 - 21:30
 					</a>
 					<a href='tel:+375257766462' className={styles.navLink}>
@@ -85,18 +85,21 @@ const Header = () => {
 
 			{isMobile && isMenuOpen && (
 				<nav className={styles.mobileMenu} onClick={toggleMenu}>
+					<Link href='/' className={styles.mobileLink}>
+						Каталог
+					</Link>
 					<Link href='payment_delivery' className={styles.mobileLink}>
-						payment_delivery
+						Оплата и доставка
 					</Link>
-					<Link href='#about' className={styles.mobileLink}>
-						About
+					<Link href='contacts' className={styles.mobileLink}>
+						Контакты
 					</Link>
-					<Link href='#services' className={styles.mobileLink}>
-						Services
-					</Link>
-					<Link href='contact' className={styles.mobileLink}>
-						Contact
-					</Link>
+					<a href='#' className={styles.navLink}>
+						пн.- пт.: 9:30 - 21:30
+					</a>
+					<a href='tel:+375257766462' className={styles.navLink}>
+						+375257766462
+					</a>
 				</nav>
 			)}
 		</header>

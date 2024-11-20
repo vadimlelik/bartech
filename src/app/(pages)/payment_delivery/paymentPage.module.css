@@ -35,3 +35,10 @@
 	margin-bottom: 32px;
 	font-weight: normal;
 }
+
+@media (max-width: 768px) {
+	.dropdowns {
+		flex-direction: column;
+		gap: 10px;
+	}
+}

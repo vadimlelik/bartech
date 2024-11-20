@@ -1,9 +1,9 @@
 'use client'
 import CountdownTimer from '@/app/components/CountdownTimer/CountdownTimer'
 import Marquee from '@/app/components/Marquee/Marquee'
-import style from './discountPage.module.css'
+import styles from './discountPage.module.css'
 import Button from '@/app/components/button/Button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Quiz from '@/app/components/quiz/Quiz'
 
 const questions = [
@@ -63,18 +63,31 @@ const questions = [
 
 export default function DiscountPage() {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+	const [now, setNow] = useState(null)
+
+	useEffect(() => {
+		setNow(Date.now())
+	}, [])
+	if (!now)
+		return (
+			<div className={styles.overlay}>
+				<div className={styles.spinner}></div>
+				<h1 className={styles.text}>Loading...</h1>
+			</div>
+		)
+
 	return (
-		<div className={style.page}>
+		<div className={styles.page}>
 			<Marquee />
-			<div className={style.content}>
-				<h1 className={style.title}>
+			<div className={styles.content}>
+				<h1 className={styles.title}>
 					НОВЫЕ СМАРТФОНЫ
 					<br />
 					<span>СО СКИДКОЙ 50%</span>
 				</h1>
-				<h3 className={style.subtitle}>ДО КОНЦА РАСПРОДАЖИ ОСТАЛОСЬ:</h3>
-				<CountdownTimer className={style.discountTimer} />
-				<h5 className={style.description}>НАУШНИКИ В ПОДАРОК!</h5>
+				<h3 className={styles.subtitle}>ДО КОНЦА РАСПРОДАЖИ ОСТАЛОСЬ:</h3>
+				<CountdownTimer className={styles.discountTimer} />
+				<h5 className={styles.description}>НАУШНИКИ В ПОДАРОК!</h5>
 				<Button
 					label='Оформить заказ'
 					color='dangery'
@@ -83,17 +96,17 @@ export default function DiscountPage() {
 				/>
 			</div>
 			<Marquee color='red' colorText='white' />
-			<div className={style.info}>
-				<ul className={style.infoList}>
-					<li className={style.InfoItem}>
+			<div className={styles.info}>
+				<ul className={styles.infoList}>
+					<li className={styles.InfoItem}>
 						БЕСПЛАТНАЯ ДОСТАВКА ПО ВСЕЙ БЕЛАРУСИ
 					</li>
-					<li className={style.InfoItem}>БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ</li>
-					<li className={style.InfoItem}>РАССРОЧКУ ОДОБРЯЕМ ВСЕМ</li>
-					<li className={style.InfoItem}>
+					<li className={styles.InfoItem}>БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ</li>
+					<li className={styles.InfoItem}>РАССРОЧКУ ОДОБРЯЕМ ВСЕМ</li>
+					<li className={styles.InfoItem}>
 						БЕЗ ПОРУЧИТЕЛЕЙ И СПРАВОК О ДОХОДАХ
 					</li>
-					<li className={style.InfoItem}>ДАРИМ НАУШНИКИ К КАЖДОМУ ЗАКАЗУ</li>
+					<li className={styles.InfoItem}>ДАРИМ НАУШНИКИ К КАЖДОМУ ЗАКАЗУ</li>
 				</ul>
 			</div>
 			<Marquee color='yellow' colorText='black' />

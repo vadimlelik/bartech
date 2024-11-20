@@ -2,12 +2,16 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem 2rem;
-	background-color: rgb(245, 245, 245);
+	padding: 15px 20px;
+	background-color: #da7f7f;
 }
 .logo {
-	font-size: 1.5rem;
-	font-weight: bold;
+	width: 100px;
+	height: 80px;
+	display: flex;
+	align-items: center;
+	/* font-size: 1.5rem;
+	font-weight: bold; */
 }
 .nav {
 	display: flex;
@@ -63,12 +67,22 @@
 	z-index: 10;
 }
 .mobileLink {
-	color: #000000;
+	color: #ffffff;
 	text-decoration: none;
-	font-size: 1.5rem;
+	font-size: 24px;
 }
 .mobileLink:hover {
 	color: #ff6347;
+}
+
+@media (max-width: 768px) {
+	.navLink {
+		font-size: 24px;
+		color: #ffff;
+	}
+	.header {
+		background-color: #da7f7f;
+	}
 }
 
 @media (min-width: 769px) {
