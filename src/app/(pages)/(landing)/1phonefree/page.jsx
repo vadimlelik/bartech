@@ -70,6 +70,9 @@ const PhoneFree = () => {
 		)
 	}
 
+	const closeQuiz = () => {
+		setIsQuizOpen(false)
+	}
 	const successMessage = (
 		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
 	)
