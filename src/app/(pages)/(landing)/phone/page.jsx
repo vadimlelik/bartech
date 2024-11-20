@@ -6,6 +6,7 @@ import Image from 'next/image'
 import LogoIcon from '@/app/components/Logo/Logo'
 import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
+import axios from 'axios'
 
 const questions = [
 	{
@@ -63,39 +64,18 @@ const Phone = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
 
 	const handleQuizSubmit = async (data) => {
-		for (const key in data) {
-			if (data[key] === 'custom' && customOption) {
-				data[key] = customOption
-			}
-		}
-		// axios
-		// 	.post(
-		// 		'https://technobar.bitrix24.by/rest/25/hqf9giyr41u6puun/crm.lead.add.json',
-		// 		{
-		// 			fields: {
-		// 				TITLE:
-		// 					'Новая заявка тестовая отправка телефона' /* Заголовок заявки */,
-		// 				PHONE: [{ VALUE: '+375 29 123 45 67', VALUE_TYPE: 'WORK' }],
-		// 				EMAIL: [{ VALUE: 'WbGf5@example.com', VALUE_TYPE: 'WORK' }],
-		// 				NAME: 'Тетя Зина',
-		// 			},
-		// 		}
-		// 	)
-		// 	.finally(() => {
-		// 		setIsSubmitted(true)
-		// 	})
-
-		console.log('Отправленные данные:', data)
-		setIsQuizOpen(false)
-	}
-
-	const closeQuiz = () => {
-		setIsQuizOpen(false)
+		axios.post(
+			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+			data
+		)
 	}
 
 	const successMessage = (
 		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
 	)
+	const closeQuiz = () => {
+		setIsQuizOpen(false)
+	}
 
 	return (
 		<div className={styles.page}>

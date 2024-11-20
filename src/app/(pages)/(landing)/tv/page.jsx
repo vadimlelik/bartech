@@ -5,6 +5,7 @@ import Image from 'next/image'
 import LogoIcon from '@/app/components/Logo/Logo'
 import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
+import axios from 'axios'
 
 const questions = [
 	{
@@ -50,20 +51,20 @@ const questions = [
 
 const Tv = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
-
-	const handleQuizSubmit = (data) => {
-		console.log('Отправленные данные:', data)
-		alert('Данные успешно отправлены!')
-		setIsQuizOpen(false)
-	}
-
-	const closeQuiz = () => {
-		setIsQuizOpen(false)
+	const handleQuizSubmit = async (data) => {
+		axios.post(
+			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+			data
+		)
 	}
 
 	const successMessage = (
 		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
 	)
+
+	const closeQuiz = () => {
+		setIsQuizOpen(false)
+	}
 
 	return (
 		<div className={styles.page}>

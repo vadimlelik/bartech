@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+page
 
-## Getting Started
+axios.post(
+'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+data
+)
 
-First, run the development server:
+quiz
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+handleSubmit(async (data) => {
+const formattedComments = questions
+.map((question) => {
+const answer = data[`question${question.id}`]
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    					if (!answer) return `${question.question}: Не указан`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+    					if (question.type === 'checkbox') {
+    						const answers = Array.isArray(answer) ? answer : [answer]
+    						const customValue = data[`customInput${question.id}`]
+    						const finalAnswers = answers.map((ans) =>
+    							ans === 'custom' ? customValue || 'Не указан' : ans
+    						)
+    						return `${question.question}: ${finalAnswers.join(', ')}`
+    					}
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    					if (question.type === 'radio') {
+    						const customValue = data[`customInput${question.id}`]
+    						return `${question.question}: ${
+    							answer === 'custom' ? customValue || 'Не указан' : answer
+    						}`
+    					}
 
-## Learn More
+    					if (question.type === 'text') {
+    						return `${question.question}: ${answer || 'Не указан'}`
+    					}
 
-To learn more about Next.js, take a look at the following resources:
+    					return `${question.question}: ${answer}`
+    				})
+    				.join('\n')
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    			const formattedData = {
+    				FIELDS: {
+    					TITLE: 'Новая заявка с Quiz',
+    					COMMENTS: formattedComments,
+    					PHONE: [
+    						{
+    							VALUE: data.question4 || 'Не указан',
+    							VALUE_TYPE: 'WORK',
+    						},
+    					],
+    					STATUS_ID: 'NEW',
+    					SOURCE_ID: 'WEB',
+    				},
+    			}
+    			try {
+    				await onSubmit(formattedData).then(() => {
+    					setIsSubmitted(true)
+    				})

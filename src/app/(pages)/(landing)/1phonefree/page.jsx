@@ -6,6 +6,8 @@ import Button from '@/app/components/button/Button'
 import LogoIcon from '@/app/components/Logo/Logo'
 import Image from 'next/image'
 import Quiz from '@/app/components/quiz/Quiz'
+import axios from 'axios'
+
 const questions = [
 	{
 		id: 1,
@@ -60,6 +62,17 @@ const questions = [
 
 const PhoneFree = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+
+	const handleQuizSubmit = async (data) => {
+		axios.post(
+			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+			data
+		)
+	}
+
+	const successMessage = (
+		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
+	)
 	return (
 		<main className={styles.page}>
 			<div className={styles.container}>
@@ -111,8 +124,10 @@ const PhoneFree = () => {
 			</div>
 			<Quiz
 				isOpen={isQuizOpen}
-				onClose={() => setIsQuizOpen(false)}
+				onClose={closeQuiz}
 				questions={questions}
+				onSubmit={handleQuizSubmit}
+				successMessage={successMessage}
 			/>
 		</main>
 	)

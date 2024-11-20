@@ -5,6 +5,7 @@ import styles from './discountPage.module.css'
 import Button from '@/app/components/button/Button'
 import { useEffect, useState } from 'react'
 import Quiz from '@/app/components/quiz/Quiz'
+import axios from 'axios'
 
 const questions = [
 	{
@@ -65,6 +66,21 @@ export default function DiscountPage() {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
 	const [now, setNow] = useState(null)
 
+	const handleQuizSubmit = async (data) => {
+		axios.post(
+			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+			data
+		)
+	}
+
+	const closeQuiz = () => {
+		setIsQuizOpen(false)
+	}
+
+	const successMessage = (
+		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
+	)
+
 	useEffect(() => {
 		setNow(Date.now())
 	}, [])
@@ -112,8 +128,10 @@ export default function DiscountPage() {
 			<Marquee color='yellow' colorText='black' />
 			<Quiz
 				isOpen={isQuizOpen}
-				onClose={() => setIsQuizOpen(false)}
+				onClose={closeQuiz}
 				questions={questions}
+				onSubmit={handleQuizSubmit}
+				successMessage={successMessage}
 			/>
 		</div>
 	)
