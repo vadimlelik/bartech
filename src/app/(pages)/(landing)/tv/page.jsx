@@ -1,11 +1,13 @@
 'use client'
-import React, { useState } from 'react'
+
+import React, { useEffect, useState } from 'react'
 import styles from './tvPage.module.css'
 import Image from 'next/image'
 import LogoIcon from '@/app/components/Logo/Logo'
 import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
+import ThankYouModal from '@/shared/ui/ThankYouModal/ThankYouModal'
 
 const questions = [
 	{
@@ -54,18 +56,21 @@ const questions = [
 
 const Tv = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+
+	useEffect(() => {
+		const pixelId = 'CSVHR4JC77U84I7KUSI0'
+		if (window.ttq) {
+			window.ttq.load(pixelId)
+			window.ttq.page()
+		}
+	}, [])
+
 	const handleQuizSubmit = async (data) => {
-		console.log(data)
-
-		axios.post(
-			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-			data
-		)
+		// axios.post(
+		// 	'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+		// 	data
+		// )
 	}
-
-	const successMessage = (
-		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
-	)
 
 	const closeQuiz = () => {
 		setIsQuizOpen(false)
@@ -213,7 +218,6 @@ const Tv = () => {
 				onClose={closeQuiz}
 				questions={questions}
 				onSubmit={handleQuizSubmit}
-				successMessage={successMessage}
 			/>
 		</div>
 	)

@@ -164,16 +164,6 @@
 }
 
 /* Стиль для модального окна при отправке данных */
-.modal {
-	text-align: center;
-}
-
-.modal h2 {
-	font-size: 20px;
-	color: #007bff;
-	font-weight: normal;
-	margin-bottom: 20px;
-}
 
 /* Навигация по форме */
 .navigation {

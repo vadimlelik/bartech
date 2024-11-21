@@ -3,8 +3,9 @@ import { useForm, Controller } from 'react-hook-form'
 import MaskedPhoneInput from '../InputMask/InputMask'
 import styles from './Quiz.module.css'
 import Button from '../button/Button'
+import ThankYouModal from '@/shared/ui/ThankYouModal/ThankYouModal'
 
-const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
+const Quiz = ({ isOpen, onClose, questions, onSubmit, successMessage }) => {
 	const {
 		control,
 		handleSubmit,
@@ -159,9 +160,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 					✖
 				</button>
 				{isSubmitted ? (
-					<div className={styles.modal}>
-						<h2>Ваши данные успешно отправлены!</h2>
-					</div>
+					<ThankYouModal isSubmitted={isSubmitted} />
 				) : (
 					<form onSubmit={handleFormSubmit} className={styles.form}>
 						<div className={styles.progressBarContainer}>
