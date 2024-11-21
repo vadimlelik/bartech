@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './phoneFreePage.module.css'
 import Button from '@/app/components/button/Button'
 import LogoIcon from '@/app/components/Logo/Logo'
@@ -62,6 +62,14 @@ const questions = [
 
 const PhoneFree = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+	useEffect(() => {
+		const pixelId = 'CSIA3F3C77U53KQ7LA50'
+
+		if (window.ttq) {
+			window.ttq.load(pixelId)
+			window.ttq.page()
+		}
+	}, [])
 
 	const handleQuizSubmit = async (data) => {
 		axios.post(

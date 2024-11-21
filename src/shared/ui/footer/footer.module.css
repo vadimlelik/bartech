@@ -37,3 +37,23 @@
 .footer__offer__item {
 	margin-bottom: 10px;
 }
+
+@media (max-width: 768px) {
+	.text {
+		font-size: 16px;
+	}
+	.footer {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+}
+
+@media (max-width: 425px) {
+	.text {
+		font-size: 14px;
+	}
+	.footer__offer__item {
+		font-size: 14px;
+		margin-bottom: 5px;
+	}
+}

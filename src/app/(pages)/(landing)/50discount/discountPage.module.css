@@ -97,3 +97,16 @@
 	color: #fff;
 	font-size: 18px;
 }
+
+@media (max-width: 768px) {
+	.InfoItem {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 425px) {
+	.InfoItem {
+		font-size: 12px;
+		width: 100%;
+	}
+}

@@ -16,7 +16,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const [currentQuestion, setCurrentQuestion] = useState(0)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [validationError, setValidationError] = useState('')
-	const [customOption, setCustomOption] = useState('')
+	const [customOptions, setCustomOptions] = useState({})
 	const [consent, setConsent] = useState(false)
 
 	const watchedFields = watch()
@@ -53,18 +53,15 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
 	const progress = ((currentQuestion + 1) / questions.length) * 100
 
-	const handleRadioChange = (e) => {
-		if (e.target.value === 'custom') {
-			setCustomOption('')
-		}
-	}
-
-	const handleCustomInputChange = (e) => {
-		setCustomOption(e.target.value)
+	const handleCustomInputChange = (questionId, value) => {
+		setCustomOptions((prev) => ({
+			...prev,
+			[questionId]: value,
+		}))
+		setValue(`customInput${questionId}`, value)
 	}
 
 	const handleConsentChange = (e) => {
-		// Чекбокс согласия устанавливаем в true, если это последний вопрос
 		if (currentQuestion === questions.length - 1) {
 			setConsent(true)
 			setValue('consent', true)
@@ -75,7 +72,6 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	}
 
 	const handleValidation = async () => {
-		// Проверяем согласие на обработку данных перед отправкой формы
 		const isValid = await trigger('consent')
 		if (!isValid) {
 			setValidationError('Пожалуйста, дайте согласие на обработку данных.')
@@ -198,24 +194,27 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 																type='radio'
 																value={option.value}
 																className={styles.radioInput}
-																onChange={(e) => {
-																	field.onChange(e)
-																	handleRadioChange(e)
-																}}
 															/>
 															{option.label}
 														</label>
 														{option.value === 'custom' &&
 															field.value === 'custom' && (
-																<div className={styles.customInputContainer}>
-																	<input
-																		type='text'
-																		value={customOption}
-																		onChange={handleCustomInputChange}
-																		className={styles.customInput}
-																		placeholder='Введите свой вариант'
-																	/>
-																</div>
+																<input
+																	type='text'
+																	value={
+																		customOptions[
+																			questions[currentQuestion].id
+																		] || ''
+																	}
+																	onChange={(e) =>
+																		handleCustomInputChange(
+																			questions[currentQuestion].id,
+																			e.target.value
+																		)
+																	}
+																	className={styles.customInput}
+																	placeholder='Введите свой вариант'
+																/>
 															)}
 													</>
 												)}
@@ -234,31 +233,52 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 												defaultValue={[]}
 												rules={{ required: 'Это поле обязательно' }}
 												render={({ field }) => (
-													<label
-														className={`${styles.checkboxLabel} ${
-															field.value.includes(option.value)
-																? styles.checkboxSelected
-																: ''
-														}`}
-													>
-														<input
-															{...field}
-															type='checkbox'
-															value={option.value}
-															className={styles.checkboxInput}
-															onChange={(e) => {
-																const value = e.target.value
-																if (field.value.includes(value)) {
-																	field.onChange(
-																		field.value.filter((v) => v !== value)
-																	)
-																} else {
-																	field.onChange([...field.value, value])
-																}
-															}}
-														/>
-														{option.label}
-													</label>
+													<>
+														<label
+															className={`${styles.checkboxLabel} ${
+																field.value.includes(option.value)
+																	? styles.checkboxSelected
+																	: ''
+															}`}
+														>
+															<input
+																{...field}
+																type='checkbox'
+																value={option.value}
+																className={styles.checkboxInput}
+																onChange={(e) => {
+																	const value = e.target.value
+																	if (field.value.includes(value)) {
+																		field.onChange(
+																			field.value.filter((v) => v !== value)
+																		)
+																	} else {
+																		field.onChange([...field.value, value])
+																	}
+																}}
+															/>
+															{option.label}
+														</label>
+														{option.value === 'custom' &&
+															field.value.includes('custom') && (
+																<input
+																	type='text'
+																	value={
+																		customOptions[
+																			questions[currentQuestion].id
+																		] || ''
+																	}
+																	onChange={(e) =>
+																		handleCustomInputChange(
+																			questions[currentQuestion].id,
+																			e.target.value
+																		)
+																	}
+																	className={styles.customInput}
+																	placeholder='Введите свой вариант'
+																/>
+															)}
+													</>
 												)}
 											/>
 										</div>
@@ -279,7 +299,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 											<MaskedPhoneInput
 												mask='+375 (99) 999-99-99'
 												placeholder='+375 (__) ___-__-__'
-												value={field.value}
+												value={field.value || '+375'}
 												onChange={field.onChange}
 												onBlur={field.onBlur}
 												error={
@@ -305,7 +325,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									type='button'
 									onClick={prevQuestion}
 									label='Назад'
-									color='secondary'
+									color='orange'
 								/>
 							)}
 							{currentQuestion < questions.length - 1 && (
@@ -313,7 +333,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									type='button'
 									onClick={nextQuestion}
 									label='Далее'
-									color='secondary'
+									color='orange'
 									className={styles.submitButton}
 								/>
 							)}
@@ -322,7 +342,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									<Button
 										type='submit'
 										label='Отправить'
-										color='primary'
+										color='orange'
 										className={styles.submitButton}
 									/>
 									<label>

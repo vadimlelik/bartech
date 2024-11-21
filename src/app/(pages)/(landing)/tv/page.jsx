@@ -11,7 +11,7 @@ const questions = [
 	{
 		id: 1,
 		question: 'Выберите бренд телевизора!',
-		type: 'radio',
+		type: 'checkbox',
 		options: [
 			{ label: 'Samsung', value: 'Samsung' },
 			{ label: 'TCL', value: 'TCL' },
@@ -22,12 +22,15 @@ const questions = [
 	},
 	{
 		id: 2,
-		question: 'Работаете ли Вы на последнем рабочем месте более 3-х месяцев?', // Текст вопроса
-		type: 'checkbox',
+		question: 'Работаете ли Вы на последнем рабочем месте более 3-х месяцев?',
+		type: 'radio',
 		options: [
-			{ value: 'smart', label: 'Smart TV' },
-			{ value: 'led', label: 'LED TV' },
-			{ value: 'oled', label: 'OLED TV' },
+			{ value: 'yes', label: 'Да' },
+			{ value: 'no', label: 'Нет' },
+			{
+				value: 'custom',
+				label: 'Свой вариант',
+			},
 		],
 	},
 	{
@@ -52,6 +55,8 @@ const questions = [
 const Tv = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
 	const handleQuizSubmit = async (data) => {
+		console.log(data)
+
 		axios.post(
 			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
 			data
@@ -96,10 +101,8 @@ const Tv = () => {
 					<div className={styles.content}>
 						<div className={styles.info}>
 							<h2 className={styles.infoTitle}>
-								ТЕЛЕВИЗОРЫ <span>ОТ 30 BYN</span>
-								<br /> В МЕСЯЦ
+								ТЕЛЕВИЗОРЫ <span>ОТ 30 BYN</span> В МЕСЯЦ{' '}
 								<span>
-									{' '}
 									В РАССРОЧКУ <br /> ДО 5 ЛЕТ!
 								</span>
 							</h2>
