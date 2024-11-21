@@ -55,7 +55,7 @@ const questions = [
 	},
 	{
 		id: 4,
-		question: 'Комментарий к вопросу.',
+		question: 'Введите ваш номер телефона',
 		type: 'text',
 	},
 ]
