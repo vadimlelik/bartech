@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
 
-export default nextConfig;
+const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true'
+
+const nextConfig = {
+	assetPrefix: isPhoneSubdomain ? 'http://phone.cvirko-vadim.ru' : '',
+}
+
+module.exports = nextConfig
