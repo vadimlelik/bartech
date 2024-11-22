@@ -4,6 +4,7 @@
 docker compose run --rm --entrypoint certbot certonly --webroot -w /var/www --email cvi-vadim@yandex.ru -d cvirko-vadim.ru --agree-tos --force-renewal -->
 
 docker compose run --rm --entrypoint "certbot certonly --webroot -w /var/www/certbot --email test@mail.ru -d cvirko-vadim.ru --agree-tos --force-renewal" certbot
+
 #install docker compose
 
 mkdir -p ~/.docker/cli-plugins
