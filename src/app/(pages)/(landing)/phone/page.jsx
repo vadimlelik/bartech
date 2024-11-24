@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './phonePage.module.css'
 import Image from 'next/image'
 import LogoIcon from '@/app/components/Logo/Logo'
