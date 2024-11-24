@@ -7,6 +7,7 @@ import LogoIcon from '@/app/components/Logo/Logo'
 import Image from 'next/image'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const questions = [
 	{
@@ -62,8 +63,11 @@ const questions = [
 
 const PhoneFree = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+
+	const router = useRouter()
+
 	useEffect(() => {
-		const pixelId = 'CSIA3F3C77U53KQ7LA50'
+		const pixelId = 'CT0VK0BC77U38DURRS9G'
 
 		if (window.ttq) {
 			window.ttq.load(pixelId)
@@ -72,10 +76,14 @@ const PhoneFree = () => {
 	}, [])
 
 	const handleQuizSubmit = async (data) => {
-		axios.post(
-			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-			data
-		)
+		axios
+			.post(
+				'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+				data
+			)
+			.then(() => {
+				router.push(`/thank-you?source=phoneFree`)
+			})
 	}
 
 	const closeQuiz = () => {

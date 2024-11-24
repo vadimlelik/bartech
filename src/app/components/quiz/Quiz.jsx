@@ -5,7 +5,7 @@ import styles from './Quiz.module.css'
 import Button from '../button/Button'
 import ThankYouModal from '@/shared/ui/ThankYouModal/ThankYouModal'
 
-const Quiz = ({ isOpen, onClose, questions, onSubmit, successMessage }) => {
+const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {
 		control,
 		handleSubmit,
@@ -134,9 +134,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, successMessage }) => {
 					},
 				}
 				try {
-					await onSubmit(formattedData).then(() => {
-						setIsSubmitted(true)
-					})
+					await onSubmit(formattedData)
 				} catch (error) {
 					setValidationError('Не удалось отправить данные, попробуйте позже.')
 				}

@@ -7,7 +7,7 @@ import LogoIcon from '@/app/components/Logo/Logo'
 import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
-import ThankYouModal from '@/shared/ui/ThankYouModal/ThankYouModal'
+import { useRouter } from 'next/navigation'
 
 const questions = [
 	{
@@ -56,9 +56,10 @@ const questions = [
 
 const Tv = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
+	const router = useRouter()
 
 	useEffect(() => {
-		const pixelId = 'CSVHR4JC77U84I7KUSI0'
+		const pixelId = 'CT0VM9RC77U38DURRSF0'
 		if (window.ttq) {
 			window.ttq.load(pixelId)
 			window.ttq.page()
@@ -66,10 +67,14 @@ const Tv = () => {
 	}, [])
 
 	const handleQuizSubmit = async (data) => {
-		// axios.post(
-		// 	'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-		// 	data
-		// )
+		axios
+			.post(
+				'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+				data
+			)
+			.then(() => {
+				router.push(`/thank-you?source=tv`)
+			})
 	}
 
 	const closeQuiz = () => {

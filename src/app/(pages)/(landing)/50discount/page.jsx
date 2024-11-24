@@ -6,6 +6,7 @@ import Button from '@/app/components/button/Button'
 import { useEffect, useState } from 'react'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const questions = [
 	{
@@ -65,12 +66,26 @@ const questions = [
 export default function DiscountPage() {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
 	const [now, setNow] = useState(null)
+	const router = useRouter()
+
+	useEffect(() => {
+		const pixelId = 'CT0VKHRC77U1LMCPKV4G'
+
+		if (window.ttq) {
+			window.ttq.load(pixelId)
+			window.ttq.page()
+		}
+	}, [])
 
 	const handleQuizSubmit = async (data) => {
-		axios.post(
-			'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-			data
-		)
+		axios
+			.post(
+				'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+				data
+			)
+			.then(() => {
+				router.push(`/thank-you?source=discount50`)
+			})
 	}
 
 	const closeQuiz = () => {

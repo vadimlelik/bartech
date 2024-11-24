@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './phonePage.module.css'
 import Image from 'next/image'
 import LogoIcon from '@/app/components/Logo/Logo'
@@ -80,7 +80,7 @@ const Phone = () => {
 				data
 			)
 			.then(() => {
-				router.push(`/thank-you?source=phone`)
+				router.push(`/thank-you?source=phone1`)
 			})
 	}
 

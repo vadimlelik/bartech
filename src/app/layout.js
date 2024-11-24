@@ -64,10 +64,12 @@ export default function RootLayout({ children }) {
 				e.parentNode.insertBefore(n, e)
 			}
 
-			ttq.load('CSVHR4JC77U84I7KUSI0') // Замените на ваш Pixel ID
+			ttq.load('CSVHR4JC77U84I7KUSI0')
 			ttq.page()
 		})(window, document, 'ttq')
-	}, []) // Запускать только при рендере компонента
+	}, [])
+
+	console.log(metadata.icons.icon)
 
 	return (
 		<html lang='ru'>
