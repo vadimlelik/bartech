@@ -3,7 +3,6 @@ import { useForm, Controller } from 'react-hook-form'
 import MaskedPhoneInput from '../InputMask/InputMask'
 import styles from './Quiz.module.css'
 import Button from '../button/Button'
-import ThankYouModal from '@/shared/ui/ThankYouModal/ThankYouModal'
 
 const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {
@@ -14,8 +13,8 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 		setValue,
 		trigger,
 	} = useForm()
+
 	const [currentQuestion, setCurrentQuestion] = useState(0)
-	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [validationError, setValidationError] = useState('')
 	const [customOptions, setCustomOptions] = useState({})
 	const [consent, setConsent] = useState(false)
@@ -151,214 +150,207 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 					className={styles.closeButton}
 					onClick={() => {
 						onClose()
-						setIsSubmitted(false)
 						setCurrentQuestion(0)
 					}}
 				>
 					✖
 				</button>
-				{isSubmitted ? (
-					<ThankYouModal isSubmitted={isSubmitted} />
-				) : (
-					<form onSubmit={handleFormSubmit} className={styles.form}>
-						<div className={styles.progressBarContainer}>
-							<div
-								className={styles.progressBar}
-								style={{ width: `${progress}%` }}
-							></div>
-						</div>
-						<div className={styles.questionContainer}>
-							<h2>{questions[currentQuestion].question}</h2>
-							<div className={styles.inputContainer}>
-								{questions[currentQuestion].type === 'radio' ? (
-									questions[currentQuestion].options.map((option) => (
-										<div key={option.value} className={styles.radioContainer}>
-											<Controller
-												name={`question${questions[currentQuestion].id}`}
-												control={control}
-												rules={{ required: 'Это поле обязательно' }}
-												render={({ field }) => (
-													<>
-														<label
-															className={`${styles.radioLabel} ${
-																field.value === option.value
-																	? styles.radioSelected
-																	: ''
-															}`}
-														>
+
+				<form onSubmit={handleFormSubmit} className={styles.form}>
+					<div className={styles.progressBarContainer}>
+						<div
+							className={styles.progressBar}
+							style={{ width: `${progress}%` }}
+						></div>
+					</div>
+					<div className={styles.questionContainer}>
+						<h2>{questions[currentQuestion].question}</h2>
+						<div className={styles.inputContainer}>
+							{questions[currentQuestion].type === 'radio' ? (
+								questions[currentQuestion].options.map((option) => (
+									<div key={option.value} className={styles.radioContainer}>
+										<Controller
+											name={`question${questions[currentQuestion].id}`}
+											control={control}
+											rules={{ required: 'Это поле обязательно' }}
+											render={({ field }) => (
+												<>
+													<label
+														className={`${styles.radioLabel} ${
+															field.value === option.value
+																? styles.radioSelected
+																: ''
+														}`}
+													>
+														<input
+															{...field}
+															type='radio'
+															value={option.value}
+															className={styles.radioInput}
+														/>
+														{option.label}
+													</label>
+													{option.value === 'custom' &&
+														field.value === 'custom' && (
 															<input
-																{...field}
-																type='radio'
-																value={option.value}
-																className={styles.radioInput}
+																type='text'
+																value={
+																	customOptions[
+																		questions[currentQuestion].id
+																	] || ''
+																}
+																onChange={(e) =>
+																	handleCustomInputChange(
+																		questions[currentQuestion].id,
+																		e.target.value
+																	)
+																}
+																className={styles.customInput}
+																placeholder='Введите свой вариант'
 															/>
-															{option.label}
-														</label>
-														{option.value === 'custom' &&
-															field.value === 'custom' && (
-																<input
-																	type='text'
-																	value={
-																		customOptions[
-																			questions[currentQuestion].id
-																		] || ''
-																	}
-																	onChange={(e) =>
-																		handleCustomInputChange(
-																			questions[currentQuestion].id,
-																			e.target.value
-																		)
-																	}
-																	className={styles.customInput}
-																	placeholder='Введите свой вариант'
-																/>
-															)}
-													</>
-												)}
-											/>
-										</div>
-									))
-								) : questions[currentQuestion].type === 'checkbox' ? (
-									questions[currentQuestion].options.map((option) => (
-										<div
-											key={option.value}
-											className={styles.checkboxContainer}
-										>
-											<Controller
-												name={`question${questions[currentQuestion].id}`}
-												control={control}
-												defaultValue={[]}
-												rules={{ required: 'Это поле обязательно' }}
-												render={({ field }) => (
-													<>
-														<label
-															className={`${styles.checkboxLabel} ${
-																field.value.includes(option.value)
-																	? styles.checkboxSelected
-																	: ''
-															}`}
-														>
+														)}
+												</>
+											)}
+										/>
+									</div>
+								))
+							) : questions[currentQuestion].type === 'checkbox' ? (
+								questions[currentQuestion].options.map((option) => (
+									<div key={option.value} className={styles.checkboxContainer}>
+										<Controller
+											name={`question${questions[currentQuestion].id}`}
+											control={control}
+											defaultValue={[]}
+											rules={{ required: 'Это поле обязательно' }}
+											render={({ field }) => (
+												<>
+													<label
+														className={`${styles.checkboxLabel} ${
+															field.value.includes(option.value)
+																? styles.checkboxSelected
+																: ''
+														}`}
+													>
+														<input
+															{...field}
+															type='checkbox'
+															value={option.value}
+															className={styles.checkboxInput}
+															onChange={(e) => {
+																const value = e.target.value
+																if (field.value.includes(value)) {
+																	field.onChange(
+																		field.value.filter((v) => v !== value)
+																	)
+																} else {
+																	field.onChange([...field.value, value])
+																}
+															}}
+														/>
+														{option.label}
+													</label>
+													{option.value === 'custom' &&
+														field.value.includes('custom') && (
 															<input
-																{...field}
-																type='checkbox'
-																value={option.value}
-																className={styles.checkboxInput}
-																onChange={(e) => {
-																	const value = e.target.value
-																	if (field.value.includes(value)) {
-																		field.onChange(
-																			field.value.filter((v) => v !== value)
-																		)
-																	} else {
-																		field.onChange([...field.value, value])
-																	}
-																}}
+																type='text'
+																value={
+																	customOptions[
+																		questions[currentQuestion].id
+																	] || ''
+																}
+																onChange={(e) =>
+																	handleCustomInputChange(
+																		questions[currentQuestion].id,
+																		e.target.value
+																	)
+																}
+																className={styles.customInput}
+																placeholder='Введите свой вариант'
 															/>
-															{option.label}
-														</label>
-														{option.value === 'custom' &&
-															field.value.includes('custom') && (
-																<input
-																	type='text'
-																	value={
-																		customOptions[
-																			questions[currentQuestion].id
-																		] || ''
-																	}
-																	onChange={(e) =>
-																		handleCustomInputChange(
-																			questions[currentQuestion].id,
-																			e.target.value
-																		)
-																	}
-																	className={styles.customInput}
-																	placeholder='Введите свой вариант'
-																/>
-															)}
-													</>
-												)}
-											/>
-										</div>
-									))
-								) : (
-									<Controller
-										name={`question${questions[currentQuestion].id}`}
-										control={control}
-										defaultValue=''
-										rules={{
-											required: 'Это поле обязательно',
-											pattern: {
-												value: /^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/,
-												message: 'Введите корректный номер телефона',
-											},
-										}}
-										render={({ field, fieldState }) => (
-											<MaskedPhoneInput
-												mask='+375 (99) 999-99-99'
-												placeholder='+375 (__) ___-__-__'
-												value={field.value || '+375'}
-												onChange={field.onChange}
-												onBlur={field.onBlur}
-												error={
-													fieldState.invalid ? fieldState.error.message : null
-												}
-											/>
-										)}
-									/>
-								)}
-							</div>
-							{errors[`question${questions[currentQuestion].id}`] && (
-								<span className={styles.error}>
-									{errors[`question${questions[currentQuestion].id}`]?.message}
-								</span>
-							)}
-							{validationError && (
-								<span className={styles.error}>{validationError}</span>
-							)}
-						</div>
-						<div className={styles.navigation}>
-							{currentQuestion > 0 && (
-								<Button
-									type='button'
-									onClick={prevQuestion}
-									label='Назад'
-									color='orange'
+														)}
+												</>
+											)}
+										/>
+									</div>
+								))
+							) : (
+								<Controller
+									name={`question${questions[currentQuestion].id}`}
+									control={control}
+									defaultValue=''
+									rules={{
+										required: 'Это поле обязательно',
+										pattern: {
+											value: /^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/,
+											message: 'Введите корректный номер телефона',
+										},
+									}}
+									render={({ field, fieldState }) => (
+										<MaskedPhoneInput
+											mask='+375 (99) 999-99-99'
+											placeholder='+375 (__) ___-__-__'
+											value={field.value || '+375'}
+											onChange={field.onChange}
+											onBlur={field.onBlur}
+											error={
+												fieldState.invalid ? fieldState.error.message : null
+											}
+										/>
+									)}
 								/>
 							)}
-							{currentQuestion < questions.length - 1 && (
+						</div>
+						{errors[`question${questions[currentQuestion].id}`] && (
+							<span className={styles.error}>
+								{errors[`question${questions[currentQuestion].id}`]?.message}
+							</span>
+						)}
+						{validationError && (
+							<span className={styles.error}>{validationError}</span>
+						)}
+					</div>
+					<div className={styles.navigation}>
+						{currentQuestion > 0 && (
+							<Button
+								type='button'
+								onClick={prevQuestion}
+								label='Назад'
+								color='orange'
+							/>
+						)}
+						{currentQuestion < questions.length - 1 && (
+							<Button
+								type='button'
+								onClick={nextQuestion}
+								label='Далее'
+								color='orange'
+								className={styles.submitButton}
+							/>
+						)}
+						{currentQuestion === questions.length - 1 && (
+							<div className={styles.consentsContainer}>
 								<Button
-									type='button'
-									onClick={nextQuestion}
-									label='Далее'
+									type='submit'
+									label='Отправить'
 									color='orange'
 									className={styles.submitButton}
 								/>
-							)}
-							{currentQuestion === questions.length - 1 && (
-								<div className={styles.consentsContainer}>
-									<Button
-										type='submit'
-										label='Отправить'
-										color='orange'
-										className={styles.submitButton}
+								<label>
+									<input
+										type='checkbox'
+										checked={consent || true}
+										onChange={handleConsentChange}
+										className={styles.checkboxInput}
 									/>
-									<label>
-										<input
-											type='checkbox'
-											checked={consent || true}
-											onChange={handleConsentChange}
-											className={styles.checkboxInput}
-										/>
-										Я даю согласие на обработку персональных данных.
-									</label>
-									{validationError && (
-										<span className={styles.error}>{validationError}</span>
-									)}
-								</div>
-							)}
-						</div>
-					</form>
-				)}
+									Я даю согласие на обработку персональных данных.
+								</label>
+								{validationError && (
+									<span className={styles.error}>{validationError}</span>
+								)}
+							</div>
+						)}
+					</div>
+				</form>
 			</div>
 		</div>
 	)

@@ -3,6 +3,7 @@ import Header from '@/shared/ui/header/Header'
 import React from 'react'
 import styles from './paymentPage.module.css'
 import Dropdown from '@/app/components/Dropdown/Dropdown'
+import Image from 'next/image'
 
 const PageDelivery = () => {
 	return (
@@ -35,7 +36,14 @@ const PageDelivery = () => {
 								</p>
 							</Dropdown>
 							<Dropdown title='Условия рассрочки'>
-								<h5>Оплата осуществляется наличными или банковской картой :</h5>
+								<Image
+									className={styles.image}
+									src='/pass_img.png'
+									width={400}
+									height={300}
+									alt='pass_img'
+								/>
+								{/* <h5>Оплата осуществляется наличными или банковской картой :</h5>
 								<ul>
 									<li>Курьеру при доставке товара.</li>
 									<li> Безналичный и наличный расчет при получении товара.</li>
@@ -49,7 +57,7 @@ const PageDelivery = () => {
 								<p>
 									*информация о товаре и его стоимости актуальна на дату
 									формирования образца чека
-								</p>
+								</p> */}
 							</Dropdown>
 							<Dropdown title='Условия Доставки'>
 								<h5>

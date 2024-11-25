@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 
 const ThankYouPage = () => {
 	const searchParams = useSearchParams()
-	const source = searchParams.get('source') // Достаем параметр `source` из U
+	const source = searchParams.get('source')
 
 	useEffect(() => {
 		if (source) {

@@ -49,3 +49,9 @@
 	max-height: 1000px;
 	padding: 10px 15px;
 }
+
+@media (max-width: 768px) {
+	.dropdown {
+		width: 100%;
+	}
+}

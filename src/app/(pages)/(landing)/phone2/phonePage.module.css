@@ -1,238 +1,130 @@
+/* Контейнер для слайдера */
 .page {
-	padding-top: 50px;
-	padding-bottom: 50px;
-	background-color: #000000;
-	flex-grow: 1;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
+
 .container {
-	max-width: 1200px;
+	max-width: 1400px;
 	margin: 0 auto;
 	padding-left: 20px;
 	padding-right: 20px;
 }
-.logoIcon {
-	max-width: 220px;
-	width: 220px;
-}
 .wrapper {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.intro {
-	text-align: center;
-	margin-bottom: 150px;
-}
-.content {
-	margin-bottom: 150px;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: center;
-	gap: 25px;
-}
-
-.image {
-	flex: 1 1 45%;
-	max-width: 45%;
-}
-
-.info {
-	flex: 1 1 45%;
-	max-width: 45%;
-	text-align: center;
-}
-
-.img {
-	display: block;
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-	object-fit: cover;
 }
 .title {
-	font-size: 48px;
-	margin-bottom: 16px;
-	color: #ffffff;
-}
-.title span {
-	color: #fbcb01;
-}
-.description {
-	font-size: 14px;
-	color: #ffffff;
-	margin-bottom: 30px;
-}
-.infoTitle {
-	font-size: 42px;
-	color: #ffffff;
-}
-.infoTitle span {
-	color: #fbcb01;
-}
-.infoDescription {
-	margin: 0px;
-	padding: 0px;
-	display: flex;
-	flex-direction: column;
-	align-items: baseline;
-}
-.infoDescriptionItem {
-	margin-top: 30px;
-	color: #ffffff;
-}
-.infoDescription li:last-child {
-	margin-bottom: 30px;
-}
-.infoDescriptionItem::before {
-	content: '';
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	background-image: url('/iconCheck.svg');
-	background-size: contain;
-	margin-right: 10px;
-}
-
-.btnArrow::before {
-	position: absolute;
-	left: -100px;
-	top: -25px;
-	content: '';
-	display: inline-block;
-	width: 46px;
-	height: 76px;
-	background-image: url('/iconArrow.svg');
-	background-size: cover;
-}
-.reviews {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
-	padding-bottom: 30px;
-}
-
-.reviewsItem {
-	flex: 1 1 33%;
-	max-width: 32%;
-	position: relative;
-	border-radius: 38px;
-	border: none;
-	padding: 50px 20px;
-	background-color: #fbcb01;
-}
-.reviewsItemTitle {
-	font-size: 22px;
+	margin-bottom: 20px;
 	text-align: center;
+	font-size: 32px;
 }
-.reviewsItemDescription {
-	font-size: 18px;
-	font-weight: 300;
+.rating {
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: 20px;
 }
-.reviewsItemImg {
-	top: 0px;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	position: absolute;
-	display: inline-block;
-	width: 100px;
-	height: 100px;
-	overflow: hidden;
-	border-radius: 50%;
+.sliderContainer {
+	width: 100%;
+	max-width: 1440px; /* Ограничение максимальной ширины слайдера */
+	margin: 0 auto;
+	padding: 0 20px;
 }
-.avatar {
-	object-fit: cover;
+
+/* Сам слайдер */
+.slider {
+	width: 100%;
+	height: auto;
+	position: relative; /* Для корректной работы с позиционированием */
+}
+.swiper-wrapper {
+	height: 400px;
+}
+
+/* Слайды */
+.swiper-slide {
+	display: flex;
+	justify-content: center; /* Центрируем изображение по горизонтали */
+	align-items: center; /* Центрируем изображение по вертикали */
+	width: 100%; /* Слайд занимает всю доступную ширину */
+}
+
+/* Обертка для изображения */
+.slideWrapper {
+	position: relative;
+	width: 100%;
+	height: 100%; /* Слайд займет всю высоту */
+}
+
+/* Стили изображения */
+.image {
+	object-fit: cover; /* Обрезает изображение, сохраняя пропорции */
 	width: 100%;
 	height: 100%;
 }
+.bye {
+	margin-top: 10px;
+	text-align: center;
+}
+.button {
+	margin-top: 10px;
+}
 
-@media (max-width: 1050px) {
-	.headphonesImg {
-		max-width: 100%;
-		width: 100%;
+.info {
+}
+.byeText {
+	font-size: 14px;
+}
+
+.infoItem {
+	font-size: 24px;
+}
+/* Стили для адаптивности */
+@media (max-width: 1024px) {
+	.rating {
+		font-size: 18px;
 	}
-	.reviews {
-		justify-content: center;
-		gap: 5px;
+	.infoItem {
+		font-size: 20px;
+	}
+	.sliderContainer {
+		padding: 0 10px;
 	}
 
-	.reviewsItem {
-		flex: 1 1 100%;
-		max-width: 100%;
-		margin-bottom: 70px;
+	.swiper-slide {
+		height: 300px; /* Меньше высота слайда на планшетах */
 	}
 }
+
 @media (max-width: 768px) {
-	.logoIcon {
-		max-width: 180px;
-		width: 180px;
+	.rating {
+		font-size: 16px;
 	}
-	.page {
-		padding-top: 15px;
-		padding-bottom: 25px;
+	.infoItem {
+		font-size: 18px;
 	}
 	.title {
-		font-size: 32px;
+		margin-bottom: 10px;
 	}
-	.description {
-		font-size: 20px;
-		margin-bottom: 25px;
-	}
-	.intro {
-		margin-bottom: 25px;
-	}
-	.infoTitle {
-		font-size: 32px;
+	.sliderContainer {
+		padding: 0;
 	}
 
-	.infoDescriptionItem {
-		margin-top: 15px;
+	.swiper-slide {
+		height: 200px; /* Меньше высота слайда на мобильных */
+	}
+
+	.image {
+		object-position: center center; /* Центрируем изображение */
+	}
+}
+@media (max-width: 468px) {
+	.rating {
 		font-size: 14px;
 	}
-	.content {
-		flex-direction: column;
+	.infoItem {
+		font-size: 14px;
 	}
-	.info,
-	.image {
-		max-width: 100%;
-		flex: 1 1 100%;
-	}
-}
-.headphonesWrapper {
-	padding: 25px 0px 100px 0px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-.headphonesTitle {
-	text-align: center;
-	font-size: 18px;
-	color: #ffffff;
-}
-.headphonesTitle span {
-	color: #fbcb01;
-}
-.headphonesDescription {
-	font-size: 14px;
-	color: #ffffff;
-}
-.headphones {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-}
-@media (max-width: 416px) {
-	.infoDescriptionItem {
-		margin-top: 10px;
-		font-size: 12px;
-	}
-	.reviewsItem:last-child {
-		margin-bottom: 0px;
-	}
-}
-@media (max-width: 460px) {
-	.btnArrow::before {
-		left: -55px;
+	.title {
+		font-size: 18px;
+		margin-bottom: 10px;
 	}
 }

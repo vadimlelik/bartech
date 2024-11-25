@@ -69,8 +69,6 @@ export default function RootLayout({ children }) {
 		})(window, document, 'ttq')
 	}, [])
 
-	console.log(metadata.icons.icon)
-
 	return (
 		<html lang='ru'>
 			<title>{metadata.title}</title>

@@ -1,15 +1,4 @@
 import Footer from '@/shared/ui/footer/Footer'
-
-export const metadata = {
-	title: 'Технобар',
-	description: 'Интернет магазин Технобар',
-	icons: {
-		icon: '/Frame_3506.png',
-		shortcut: '/Frame_3506.png',
-		apple: '/icon_apple.png', // Для Apple устройств
-	},
-}
-
 export default function LandingLayout({ children }) {
 	return (
 		<div
@@ -21,7 +10,7 @@ export default function LandingLayout({ children }) {
 			}}
 		>
 			{children}
-			<Footer />
+			<Footer isLanding={true} />
 		</div>
 	)
 }

@@ -1,14 +1,25 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import { Autoplay } from 'swiper/modules'
 import styles from './phonePage.module.css'
 import Image from 'next/image'
-import LogoIcon from '@/app/components/Logo/Logo'
 import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { PIXEL } from '@/data/pixel'
 
+import 'swiper/css'
+
+const images = [
+	'/tel/41787398_512_q55.avif',
+	'/tel/41787399_509_q55.avif',
+	'/tel/41787400_509_q55.avif',
+	'/tel/41787401_513_q55.avif',
+]
 const questions = [
 	{
 		id: 1,
@@ -61,14 +72,13 @@ const questions = [
 	},
 ]
 
-const Phone = () => {
+const Phone2 = () => {
 	const [isQuizOpen, setIsQuizOpen] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
-		const pixelId = 'CT0VM9RC77U38DURRSF0'
 		if (window.ttq) {
-			window.ttq.load(pixelId)
+			window.ttq.load(PIXEL.phone1)
 			window.ttq.page()
 		}
 	}, [])
@@ -84,9 +94,6 @@ const Phone = () => {
 			})
 	}
 
-	const successMessage = (
-		<div>{'Ваши данные успешно отправлены! Мы скоро свяжемся с вами'}</div>
-	)
 	const closeQuiz = () => {
 		setIsQuizOpen(false)
 	}
@@ -95,187 +102,69 @@ const Phone = () => {
 		<div className={styles.page}>
 			<div className={styles.container}>
 				<div className={styles.wrapper}>
-					<div className='logo'>
-						<LogoIcon className={styles.logoIcon} />
+					<h5 className={styles.rating}>
+						(4,9) ⭐️⭐️⭐️⭐️⭐️ 1031 отзыв Интернет-магазина
+					</h5>
+					<div className={styles.sliderContainer}>
+						<Swiper
+							modules={[Autoplay]}
+							slidesPerView={1}
+							navigation
+							pagination={{ clickable: true }}
+							autoplay={{ delay: 2000, disableOnInteraction: false }}
+							className={styles.slider}
+						>
+							{images.map((src, index) => (
+								<SwiperSlide key={index}>
+									<div className={styles.slideWrapper}>
+										<Image
+											src={src}
+											alt={`Slide ${index + 1}`}
+											width={400}
+											height={300}
+											objectFit='cover' // Сохраняет пропорции изображения
+											className={styles.image}
+											priority={index === 0} // Приоритет для первого изображения
+										/>
+									</div>
+								</SwiperSlide>
+							))}
+						</Swiper>
 					</div>
-
-					<div className={styles.intro}>
-						<h1 className={styles.title}>
-							ТЕЛЕФОНЫ В РАССРОЧКУ
-							<br />
-							<span>БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ!</span>
-						</h1>
-						<p className={styles.description}>
-							... 9 из 10 клиентов получают рассрочку без процентов и первого
-							платежа после <br />
-							разговора с менеджером. Жмите на кнопку, чтобы оформить рассрочку
-							и получить <br />
-							консультацию специалиста ...
-						</p>
+					<h1 className={styles.title}>ТЕЛЕФОНЫ В РАССРОЧКУ СО СКИДКОЙ 50%</h1>
+					<ul className={styles.info}>
+						<li className={styles.infoItem}>
+							✅ Одобряем всем без справок о доходах
+						</li>
+						<li className={styles.infoItem}>✅ 0 рублей первый взнос</li>
+						<li className={styles.infoItem}>✅ Всего от 29 руб/мес</li>
+						<li className={styles.infoItem}>
+							✅ Расширенная гарантия 3 года в Подарок
+						</li>
+					</ul>
+					<div className={styles.bye}>
+						<strong className={styles.byeText}>
+							Жмите кнопку ниже,
+							<br /> чтобы подобрать модель и узнать цену
+						</strong>
+						<p>⬇️⬇️⬇️⬇️⬇️</p>
 						<Button
+							className={styles.button}
+							label='Подобрать телефон'
 							onClick={() => setIsQuizOpen(true)}
-							label='Купить в рассрочку'
-							color='orange'
-							size='large'
-							className={styles.btnArrow}
 						/>
 					</div>
-					<div className={styles.content}>
-						<div className={styles.info}>
-							<h2 className={styles.infoTitle}>
-								ТЕЛЕФОНЫ <span>ОТ 20 BYN</span>
-								<br /> В МЕСЯЦ
-								<span>
-									{' '}
-									В РАССРОЧКУ <br /> ДО 5 ЛЕТ!
-								</span>
-							</h2>
-							<ul className={styles.infoDescription}>
-								<li className={styles.infoDescriptionItem}>
-									В БЕЛОРУССКИХ РУБЛЯХ
-								</li>
-								<li className={styles.infoDescriptionItem}>
-									БЕЗ СПРАВОК О ДОХОДАХ
-								</li>
-								<li className={styles.infoDescriptionItem}>БЕЗ ПОРУЧИТЕЛЕЙ</li>
-								<li className={styles.infoDescriptionItem}>
-									БЕЗ ПЕРВОГО ВЗНОСА
-								</li>
-								<li className={styles.infoDescriptionItem}>БЕЗ ПЕРЕПЛАТ</li>
-								<li className={styles.infoDescriptionItem}>
-									БЕСПЛАТНАЯ ДОСТАВКА ПО ВСЕЙ БЕЛАРУСИ
-								</li>
-							</ul>
-							<Button
-								onClick={() => setIsQuizOpen(true)}
-								label='Купить в рассрочку'
-								color='orange'
-								size='large'
-								className={styles.btn}
-							/>
-						</div>
-						<div className={styles.image}>
-							<Image
-								width={500}
-								height={800}
-								src={'/phone.jpg'}
-								alt='tv'
-								className={styles.img}
-							/>
-						</div>
-					</div>
-					<div className={styles.headphonesWrapper}>
-						<h5 className={styles.headphonesTitle}>
-							Оформите рассрочку в течении 24 часов
-							<br />
-							<span>И ПОЛУЧИТЕ БЕСПЛАТНО</span> <br />
-							беспроводные наушники в подарок
-						</h5>
-						<Image
-							width={360}
-							height={205}
-							src={'/headphones.jpeg'}
-							alt='headphones'
-							className={styles.headphonesImg}
-						/>
-						<Button
-							onClick={() => setIsQuizOpen(true)}
-							label='Купить в рассрочку'
-							color='orange'
-							size='large'
-						/>
-					</div>
-					<div className={styles.reviews}>
-						<div className={styles.reviewsItem}>
-							<div className={styles.reviewsItemImg}>
-								<Image
-									width={100}
-									height={100}
-									src={'/commentLogo-1.jpg'}
-									alt='review1'
-									className={styles.avatar}
-								/>
-							</div>
-							<div className='reviewsItemText'>
-								<p className={styles.reviewsItemTitle}>Андрей, 22</p>
-								<p className={styles.reviewsItemDescription}>
-									Давно хотел себе новый мощный телефон, чтобы можно было и в
-									игры поиграть, и фильм посмотреть, и не сидеть постоянно на
-									зарядке. Оставил заявку. Менеджеры быстро связались, ответили
-									на все вопросы и предложили на выбор несколько других
-									вариантов телефонов под мой запрос. Через 10 минут оформили
-									рассрочку и уже на следующий день бесплатно доставили прямо
-									домой. Упаковка безупречная и отдельное спасибо за наушники в
-									подарок. Очень доволен покупкой, сервисом и качественным
-									обслуживанием. Магазин рекомендую
-								</p>
-							</div>
-						</div>
-						<div className={styles.reviewsItem}>
-							<div className={styles.reviewsItemImg}>
-								<Image
-									width={100}
-									height={100}
-									src={'/commentLogo-2.jpg'}
-									alt='review1'
-									className={styles.avatar}
-								/>
-							</div>
-							<div className='reviewsItemText'>
-								<p className={styles.reviewsItemTitle}>Саша, 34</p>
-								<p className={styles.reviewsItemDescription}>
-									Покупал в магазине смартфон. Долго не мог определиться с
-									моделью, но консультанты предложили несколько идеальных
-									вариантов под мой запрос и помогли выбрать самый оптимальный
-									вариант для меня. Условия оплаты очень гибкие. Выбрал
-									рассрочку без переплат. Телефон доставили точно в срок,
-									упаковка целая, еще и наушники в подарок привезли. Очень рад
-									покупке и сервисом магазина остался доволен.
-								</p>
-							</div>
-						</div>
-						<div className={styles.reviewsItem}>
-							<div className={styles.reviewsItemImg}>
-								<Image
-									width={100}
-									height={100}
-									src={'/commentLogo-3.jpg'}
-									alt='review1'
-									className={styles.avatar}
-								/>
-							</div>
-							<div className='reviewsItemText'>
-								<p className={styles.reviewsItemTitle}>Света, 41</p>
-								<p className={styles.reviewsItemDescription}>
-									Процесс заказа очень простой. Выбрала смартфон. Оставила
-									заявку. А после обсудили условия рассрочки с менеджером и все.
-									Очень важно было, чтобы быстро могли доставить телефон.
-									Понравилось, что у них бесплатная доставка абсолютно в любую
-									точку Беларуси. Телефон был у меня уже на следующий день.
-									Курьер заранее позвонил, предупредил, во сколько приедет. Это
-									огромный плюс. Приятно, когда сервис на высоте. Рекомендую
-									магазин всем!
-								</p>
-							</div>
-						</div>
-					</div>
-					<Button
-						label='Купить в рассрочку'
-						color='orange'
-						size='large'
-						onClick={() => setIsQuizOpen(true)}
-					/>
 				</div>
 			</div>
+
 			<Quiz
 				isOpen={isQuizOpen}
 				onClose={closeQuiz}
 				questions={questions}
 				onSubmit={handleQuizSubmit}
-				successMessage={successMessage}
 			/>
 		</div>
 	)
 }
 
-export default Phone
+export default Phone2

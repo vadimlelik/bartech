@@ -1,9 +1,8 @@
 import React from 'react'
 import styles from './footer.module.css'
 import Link from 'next/link'
-import { FaInstagram, FaTiktok, FaTelegramPlane } from 'react-icons/fa'
 
-const Footer = () => {
+const Footer = ({ isLanding = false }) => {
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.container}>
@@ -42,15 +41,17 @@ const Footer = () => {
 									Возврат товара
 								</Link>
 							</li>
-							<li className={styles['footer__offer__item']}>
-								<Link
-									className={styles['footer__offer__link']}
-									href={'/pass'}
-									target='_blank'
-								>
-									Условия рассрочки и сертификация
-								</Link>
-							</li>
+							{!isLanding && (
+								<li className={styles['footer__offer__item']}>
+									<Link
+										className={styles['footer__offer__link']}
+										href={'/pass'}
+										target='_blank'
+									>
+										Условия рассрочки и сертификация
+									</Link>
+								</li>
+							)}
 						</ul>
 					</div>
 				</div>

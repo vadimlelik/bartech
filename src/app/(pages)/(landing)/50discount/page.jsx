@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { PIXEL } from '@/data/pixel'
+import Loading from '@/app/loading'
 
 const questions = [
 	{
@@ -69,10 +71,8 @@ export default function DiscountPage() {
 	const router = useRouter()
 
 	useEffect(() => {
-		const pixelId = 'CT0VKHRC77U1LMCPKV4G'
-
 		if (window.ttq) {
-			window.ttq.load(pixelId)
+			window.ttq.load(PIXEL.discount50)
 			window.ttq.page()
 		}
 	}, [])
@@ -99,13 +99,7 @@ export default function DiscountPage() {
 	useEffect(() => {
 		setNow(Date.now())
 	}, [])
-	if (!now)
-		return (
-			<div className={styles.overlay}>
-				<div className={styles.spinner}></div>
-				<h1 className={styles.text}>Loading...</h1>
-			</div>
-		)
+	if (!now) return <Loading />
 
 	return (
 		<div className={styles.page}>

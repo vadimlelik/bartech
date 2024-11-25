@@ -9,6 +9,8 @@ import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
+import { PIXEL } from '../../../../data/pixel'
+
 const questions = [
 	{
 		id: 1,
@@ -67,10 +69,8 @@ const PhoneFree = () => {
 	const router = useRouter()
 
 	useEffect(() => {
-		const pixelId = 'CT0VK0BC77U38DURRS9G'
-
 		if (window.ttq) {
-			window.ttq.load(pixelId)
+			window.ttq.load(PIXEL.phoneFree)
 			window.ttq.page()
 		}
 	}, [])

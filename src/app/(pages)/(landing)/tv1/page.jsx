@@ -8,6 +8,7 @@ import Button from '@/app/components/button/Button'
 import Quiz from '@/app/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { PIXEL } from '@/data/pixel'
 
 const questions = [
 	{
@@ -59,9 +60,8 @@ const Tv = () => {
 	const router = useRouter()
 
 	useEffect(() => {
-		const pixelId = 'CT0VM9RC77U38DURRSF0'
 		if (window.ttq) {
-			window.ttq.load(pixelId)
+			window.ttq.load(PIXEL.tv)
 			window.ttq.page()
 		}
 	}, [])
