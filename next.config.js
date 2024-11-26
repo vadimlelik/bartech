@@ -3,7 +3,7 @@
 const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true'
 
 const nextConfig = {
-	assetPrefix: isPhoneSubdomain ? 'http://phone.cvirko-vadim.ru' : '',
+	assetPrefix: isPhoneSubdomain ? 'https://technobar.by/' : '',
 	reactStrictMode: false,
 }
 
