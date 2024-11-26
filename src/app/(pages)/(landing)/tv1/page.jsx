@@ -41,11 +41,10 @@ const questions = [
 		question: 'На какой ежемесячный платеж Вы рассчитываете?',
 		type: 'radio',
 		options: [
-			{ label: '30/50', value: 'от 30 до 50 BYN/мес' },
-			{ label: '50/100', value: 'от 50 до 100 BYN/мес' },
-			{ label: '100/200', value: 'от 100 до 200 BYN/мес' },
-			{ label: '200', value: 'от 200 ' },
-			{ label: 'Свой вариант', value: 'custom' },
+			{ label: 'от 30 до 50 BYN/мес', value: 'от 30 до 50 BYN/мес' },
+			{ label: 'от 50 до 100 BYN/мес', value: 'от 50 до 100 BYN/мес' },
+			{ label: 'от 100 до 200 BYN/мес', value: 'от 100 до 200 BYN/мес' },
+			{ label: '200 BYN/мес', value: 'от 200  BYN/мес' },
 		],
 	},
 	{

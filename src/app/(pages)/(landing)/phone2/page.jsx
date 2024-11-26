@@ -15,10 +15,13 @@ import { PIXEL } from '@/data/pixel'
 import 'swiper/css'
 
 const images = [
-	'/tel/41787398_512_q55.avif',
-	'/tel/41787399_509_q55.avif',
-	'/tel/41787400_509_q55.avif',
-	'/tel/41787401_513_q55.avif',
+	'/tel/tel1.jpg',
+	'/tel/tel2.jpg',
+	'/tel/tel3.jpg',
+	'/tel/tel4.jpg',
+	'/tel/tel5.jpg',
+	'/tel/tel6.jpg',
+	'/tel/tel7.jpg',
 ]
 const questions = [
 	{
@@ -31,6 +34,7 @@ const questions = [
 			{ value: 'Apple', label: 'Apple' },
 			{ value: 'Huawei', label: 'Huawei' },
 			{ value: 'Redmi', label: 'Redmi' },
+			{ value: 'Phone armor', label: 'Броне телефон' },
 			{
 				value: 'custom',
 				label: 'Свой вариант',
@@ -55,10 +59,10 @@ const questions = [
 		question: 'На какой ежемесячный платеж Вы рассчитываете?',
 		type: 'radio',
 		options: [
-			{ value: 'coffee', label: 'от 30 до 50 BYN/мес' },
-			{ value: '50/100', label: 'от 50 до 100 BYN/мес' },
-			{ value: '100/200', label: 'от 100 до 200 BYN/мес' },
-			{ value: '200', label: 'от 200 BYN/мес' },
+			{ value: 'от 30 до 50 BYN/мес', label: 'от 30 до 50 BYN/мес' },
+			{ value: 'от 50 до 100 BYN/мес', label: 'от 50 до 100 BYN/мес' },
+			{ value: 'от 100 до 200 BYN/мес', label: 'от 100 до 200 BYN/мес' },
+			{ value: 'от 200 BYN/мес', label: 'от 200 BYN/мес' },
 			{
 				value: 'custom',
 				label: 'Свой вариант',
@@ -111,7 +115,7 @@ const Phone2 = () => {
 							slidesPerView={1}
 							navigation
 							pagination={{ clickable: true }}
-							autoplay={{ delay: 2000, disableOnInteraction: false }}
+							// autoplay={{ delay: 2000, disableOnInteraction: false }}
 							className={styles.slider}
 						>
 							{images.map((src, index) => (
