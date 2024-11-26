@@ -63,10 +63,6 @@ const questions = [
 			{ value: 'от 50 до 100 BYN/мес', label: 'от 50 до 100 BYN/мес' },
 			{ value: 'от 100 до 200 BYN/мес', label: 'от 100 до 200 BYN/мес' },
 			{ value: 'от 200 BYN/мес', label: 'от 200 BYN/мес' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
@@ -135,7 +131,9 @@ const Phone2 = () => {
 							))}
 						</Swiper>
 					</div>
-					<h1 className={styles.title}>ТЕЛЕФОНЫ В РАССРОЧКУ СО СКИДКОЙ 50%</h1>
+					<h1 className={styles.title}>
+						ТЕЛЕФОНЫ В РАССРОЧКУ СО СКИДКОЙ ДО 50%
+					</h1>
 					<ul className={styles.info}>
 						<li className={styles.infoItem}>
 							✅ Одобряем всем без справок о доходах
@@ -143,7 +141,7 @@ const Phone2 = () => {
 						<li className={styles.infoItem}>✅ 0 рублей первый взнос</li>
 						<li className={styles.infoItem}>✅ Всего от 29 руб/мес</li>
 						<li className={styles.infoItem}>
-							✅ Расширенная гарантия 3 года в Подарок
+							✅ Бесплатная доставка в подарок
 						</li>
 					</ul>
 					<div className={styles.bye}>

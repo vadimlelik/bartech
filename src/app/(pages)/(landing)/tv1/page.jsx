@@ -44,7 +44,7 @@ const questions = [
 			{ label: 'от 30 до 50 BYN/мес', value: 'от 30 до 50 BYN/мес' },
 			{ label: 'от 50 до 100 BYN/мес', value: 'от 50 до 100 BYN/мес' },
 			{ label: 'от 100 до 200 BYN/мес', value: 'от 100 до 200 BYN/мес' },
-			{ label: '200 BYN/мес', value: 'от 200  BYN/мес' },
+			{ label: 'от 200  BYN/мес', value: 'от 200  BYN/мес' },
 		],
 	},
 	{

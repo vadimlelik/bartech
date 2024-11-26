@@ -52,10 +52,6 @@ const questions = [
 			{ value: 'от 50 до 100 BYN/мес', label: 'от 50 до 100 BYN/мес' },
 			{ value: 'от 100 до 200 BYN/мес', label: 'от 100 до 200 BYN/мес' },
 			{ value: 'от 200 BYN/мес', label: 'от 200 BYN/мес' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
@@ -108,7 +104,7 @@ export default function DiscountPage() {
 				<h1 className={styles.title}>
 					НОВЫЕ СМАРТФОНЫ
 					<br />
-					<span>СО СКИДКОЙ 50%</span>
+					<span>СО СКИДКОЙ ДО 50%</span>
 				</h1>
 				<h3 className={styles.subtitle}>ДО КОНЦА РАСПРОДАЖИ ОСТАЛОСЬ:</h3>
 				<CountdownTimer className={styles.discountTimer} />
