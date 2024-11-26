@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import './globals.css'
 import { Roboto } from 'next/font/google'
 import { metadata } from './metadata'
+import Script from 'next/script'
 
 const roboto = Roboto({
 	subsets: ['latin'],
@@ -13,6 +14,7 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }) {
 	useEffect(() => {
+		// TikTok Pixel
 		;(function (w, d, t) {
 			w.TiktokAnalyticsObject = t
 			var ttq = (w[t] = w[t] || [])
@@ -68,47 +70,54 @@ export default function RootLayout({ children }) {
 			ttq.page()
 		})(window, document, 'ttq')
 	}, [])
+	useEffect(() => {
+		// Yandex Metrica
+		;(function (m, e, t, r, i, k, a) {
+			m[i] =
+				m[i] ||
+				function () {
+					;(m[i].a = m[i].a || []).push(arguments)
+				}
+			m[i].l = 1 * new Date()
+			;(k = e.createElement(t)), (a = e.getElementsByTagName(t)[0])
+			k.async = 1
+			k.src = r
+			a.parentNode.insertBefore(k, a)
+		})(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym')
 
+		ym(99038681, 'init', {
+			clickmap: true,
+			trackLinks: true,
+			accurateTrackBounce: true,
+			webvisor: true,
+		})
+	}, [])
 	return (
 		<html lang='ru'>
-			<title>{metadata.title}</title>
-			<meta name='description' content={metadata.description} />
-			<script
-				type='text/javascript'
-				dangerouslySetInnerHTML={{
-					__html: `
-                        (function(m,e,t,r,i,k,a){
-                            m[i]=m[i]||function(){
-                                (m[i].a=m[i].a||[]).push(arguments);
-                            };
-                            m[i].l=1*new Date();
-                            k=e.createElement(t),a=e.getElementsByTagName(t)[0];
-                            k.async=1;k.src=r;a.parentNode.insertBefore(k,a);
-                        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-                        ym(99038681, "init", {
-                            clickmap:true,
-                            trackLinks:true,
-																												    accurateTrackBounce:true,
-																																webvisor:true
-
-    
-                        });
-                    `,
-				}}
-			/>
-			<noscript>
-				<div>
-					<img
-						src='https://mc.yandex.ru/watch/99038681'
-						style={{ position: 'absolute', left: '-9999px' }}
-						alt='mtr'
-					/>
-				</div>
-			</noscript>
-			<link rel='icon' href={metadata.icons.icon} />
+			<head>
+				<title>{metadata.title}</title>
+				<meta name='description' content={metadata.description} />
+				<Script
+					strategy='afterInteractive'
+					src='https://mc.yandex.ru/metrika/tag.js'
+					onLoad={() => {
+						window.ym =
+							window.ym ||
+							function () {
+								;(window.ym.a = window.ym.a || []).push(arguments)
+							}
+						window.ym.l = +new Date()
+						window.ym(99038681, 'init', {
+							clickmap: true,
+							trackLinks: true,
+							accurateTrackBounce: true,
+							webvisor: true,
+						})
+					}}
+				/>
+			</head>
 			<body
-				className={`${roboto.className} `}
+				className={`${roboto.className}`}
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
@@ -117,6 +126,15 @@ export default function RootLayout({ children }) {
 				}}
 			>
 				<div style={{ flexGrow: 1 }}>{children}</div>
+				<noscript>
+					<div>
+						<img
+							src='https://mc.yandex.ru/watch/99038681'
+							style={{ position: 'absolute', left: '-9999px' }}
+							alt='mtr'
+						/>
+					</div>
+				</noscript>
 			</body>
 		</html>
 	)
