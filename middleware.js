@@ -1,25 +1,21 @@
 import { NextResponse } from 'next/server'
 
 export function middleware(req) {
-	// Создаем новый ответ
-	const res = new Response(null, { status: 204 })
-
-	// Устанавливаем базовые заголовки CORS
+	const url = req.nextUrl.clone()
+	const origin = req.headers.get('origin')
+	const hostname = req.headers.get('host')
 	const allowedOrigins = [
-		'https://cvirko-vadim.ru/', // Ваш основной домен
-		'https://phone.cvirko-vadim.ru/', // Поддомен
-		// Добавьте сюда другие допустимые домены
+		'https://cvirko-vadim.ru',
+		'https://phone.cvirko-vadim.ru',
+		'https://tv1.cvirko-vadim.ru',
 	]
 
-	const origin = req.headers.get('origin')
-
-	// Проверяем, разрешен ли origin
-	if (allowedOrigins.includes(origin)) {
-		res.headers.set('Access-Control-Allow-Origin', origin) // Устанавливаем Origin для безопасности
+	const res = NextResponse.next()
+	if (origin && allowedOrigins.includes(origin)) {
+		res.headers.set('Access-Control-Allow-Origin', origin)
 	} else {
-		res.headers.set('Access-Control-Allow-Origin', '*') // Разрешаем доступ всем для демонстрационных целей
+		res.headers.set('Access-Control-Allow-Origin', '*')
 	}
-
 	res.headers.set(
 		'Access-Control-Allow-Methods',
 		'GET, POST, OPTIONS, PUT, DELETE'
@@ -27,11 +23,19 @@ export function middleware(req) {
 	res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 	res.headers.set('Access-Control-Allow-Credentials', 'true')
 
-	// Обрабатываем preflight-запросы (OPTIONS)
 	if (req.method === 'OPTIONS') {
 		return res
 	}
 
-	// Продолжаем обработку для всех остальных запросов
-	return NextResponse.next()
+	if (hostname === 'phone.cvirko-vadim.ru') {
+		url.pathname = `/phone${url.pathname}`
+		return NextResponse.rewrite(url)
+	}
+
+	if (hostname === 'tv1.cvirko-vadim.ru') {
+		url.pathname = `/tv1${url.pathname}`
+		return NextResponse.rewrite(url)
+	}
+
+	return res
 }
