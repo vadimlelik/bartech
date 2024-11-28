@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 export function middleware(req) {
 	const url = req.nextUrl.clone()
 	const origin = req.headers.get('origin')
-	const hostname = req.headers.get('host')
+	const hostname = req.headers.get('host')?.split(':')[0] // Убираем порт
 	const allowedOrigins = [
 		'https://cvirko-vadim.ru',
 		'https://phone.cvirko-vadim.ru',
@@ -27,6 +27,7 @@ export function middleware(req) {
 		return res
 	}
 
+	// Перенаправление для поддоменов
 	if (hostname === 'phone.cvirko-vadim.ru') {
 		url.pathname = `/phone${url.pathname}`
 		return NextResponse.rewrite(url)
