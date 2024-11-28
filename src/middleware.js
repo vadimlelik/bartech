@@ -12,7 +12,7 @@ export function middleware(req) {
 	}
 
 	if (hostname === 'tv1.cvirko-vadim.ru') {
-		url.pathname = `cvirko-vadim.ru/tv1`
+		url.pathname = `/tv1${url.pathname}`
 		console.log('Redirecting to:', url.toString())
 		return NextResponse.rewrite(url)
 	}
