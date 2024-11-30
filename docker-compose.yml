@@ -29,7 +29,8 @@ services:
       - ./www:/var/www/certbot
     environment:
       - CERTBOT_EMAIL=youremail@example.com
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot >> /var/log/certbot.log 2>&1 && nginx -s reload; sleep 12h & wait $${!}; done;'"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot >> /var/log/certbot.log 2>&1; sleep 12h & wait $${!}; done;'"
+
     logging:
       driver: json-file
       options:
