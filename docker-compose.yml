@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   nextjs-app:
     build:
@@ -18,7 +18,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./www:/var/www/certbot # Это добавление для валидации webroot
+      - ./www:/var/www/certbot
     depends_on:
       - nextjs-app
     restart: always
@@ -27,8 +27,12 @@ services:
     image: certbot/certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
-      - ./www:/var/www/certbot # Это добавление для валидации webroot
+      - ./www:/var/www/certbot
     environment:
       - CERTBOT_EMAIL=youremail@example.com
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    command: ['sh', '-c', 'nginx -s reload && tail -f /dev/null']
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot >> /var/log/certbot.log 2>&1 && nginx -s reload; sleep 12h & wait $${!}; done;'"
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
