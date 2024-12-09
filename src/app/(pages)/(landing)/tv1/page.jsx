@@ -18,6 +18,9 @@ const questions = [
 		options: [
 			{ label: 'Samsung', value: 'Samsung' },
 			{ label: 'TCL', value: 'TCL' },
+			{ label: 'LG', value: 'LG' },
+			{ label: 'Sony', value: 'Sony' },
+			{ label: 'Panasonic', value: 'Panasonic' },
 			{ label: 'Philips', value: 'Philips' },
 			{ label: 'Xiaomi', value: 'Xiaomi' },
 		],
@@ -61,14 +64,16 @@ const Tv = () => {
 	}, [])
 
 	const handleQuizSubmit = async (data) => {
-		axios
-			.post(
-				'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-				data
-			)
-			.then(() => {
-				router.push(`/thank-you?source=tv`)
-			})
+		console.log(data)
+
+		// axios
+		// 	.post(
+		// 		'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+		// 		data
+		// 	)
+		// 	.then(() => {
+		// 		router.push(`/thank-you?source=tv`)
+		// 	})
 	}
 
 	const closeQuiz = () => {

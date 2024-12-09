@@ -22,10 +22,6 @@ const questions = [
 			{ value: 'Huawei', label: 'Huawei' },
 			{ value: 'Redmi', label: 'Redmi' },
 			{ value: 'Phone armor', label: 'Броне телефон' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
@@ -35,10 +31,6 @@ const questions = [
 		options: [
 			{ value: 'yes', label: 'Да' },
 			{ value: 'no', label: 'Нет' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
@@ -50,10 +42,6 @@ const questions = [
 			{ value: 'от 50 до 100 BYN/мес', label: 'от 50 до 100 BYN/мес' },
 			{ value: 'от 100 до 200 BYN/мес', label: 'от 100 до 200 BYN/мес' },
 			{ value: 'от 200 BYN/мес', label: 'от 200 BYN/мес' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{

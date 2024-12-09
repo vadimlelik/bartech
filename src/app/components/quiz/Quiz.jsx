@@ -9,19 +9,15 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 		control,
 		handleSubmit,
 		formState: { errors },
+		trigger,
 		watch,
 		setValue,
-		trigger,
 	} = useForm()
 
 	const [currentQuestion, setCurrentQuestion] = useState(0)
 	const [validationError, setValidationError] = useState('')
-	const [customOptions, setCustomOptions] = useState({})
-	const [consent, setConsent] = useState(false)
 
 	const watchedFields = watch()
-
-	console.log(errors)
 
 	useEffect(() => {
 		if (isOpen) {
@@ -34,12 +30,19 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 		}
 	}, [isOpen])
 
+	const handleFieldInteraction = () => {
+		setValidationError('')
+	}
+
 	const nextQuestion = async () => {
 		const currentFieldName = `question${questions[currentQuestion].id}`
-		if (!watchedFields[currentFieldName]) {
+		const isValid = await trigger(currentFieldName)
+
+		if (!isValid) {
 			setValidationError('Пожалуйста, ответьте на текущий вопрос.')
 			return
 		}
+
 		setValidationError('')
 		if (currentQuestion < questions.length - 1) {
 			setCurrentQuestion(currentQuestion + 1)
@@ -48,93 +51,50 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
 	const progress = ((currentQuestion + 1) / questions.length) * 100
 
-	const handleCustomInputChange = (questionId, value) => {
-		setCustomOptions((prev) => ({
-			...prev,
-			[questionId]: value,
-		}))
-		setValue(`customInput${questionId}`, value)
-	}
-
-	const handleConsentChange = (e) => {
-		if (currentQuestion === questions.length - 1) {
-			setConsent(true)
-			setValue('consent', true)
-		} else {
-			setConsent(e.target.checked)
-			setValue('consent', e.target.checked)
-		}
-	}
-
-	const handleValidation = async () => {
-		const isValid = await trigger('consent')
-		if (!isValid) {
-			setValidationError('Пожалуйста, дайте согласие на обработку данных.')
-			return false
-		}
-		setValidationError('')
-		return true
-	}
-
 	const handleFormSubmit = async (e) => {
 		e.preventDefault()
 
-		const isValid = await handleValidation()
-
-		if (isValid) {
-			handleSubmit(async (data) => {
-				const formattedComments = questions
-					.map((question) => {
-						const answer = data[`question${question.id}`]
-
-						if (!answer) return `${question.question}: Не указан`
-
-						if (question.type === 'checkbox') {
-							const answers = Array.isArray(answer) ? answer : [answer]
-							const customValue = data[`customInput${question.id}`]
-
-							const finalAnswers = answers.map((ans) =>
-								ans === 'custom' ? customValue || 'Не указан' : ans
-							)
-							return `${question.question}: ${finalAnswers.join(', ')}`
-						}
-
-						if (question.type === 'radio') {
-							const customValue = data[`customInput${question.id}`]
-							return `${question.question}: ${
-								answer === 'custom' ? customValue || 'Не указан' : answer
-							}`
-						}
-
-						if (question.type === 'text') {
-							return `${question.question}: ${answer || 'Не указан'}`
-						}
-
-						return `${question.question}: ${answer}`
-					})
-					.join('\n')
-
-				const formattedData = {
-					FIELDS: {
-						TITLE: 'Новая заявка с Quiz',
-						COMMENTS: formattedComments,
-						PHONE: [
-							{
-								VALUE: data.question4 || 'Не указан',
-								VALUE_TYPE: 'WORK',
-							},
-						],
-						STATUS_ID: 'NEW',
-						SOURCE_ID: 'WEB',
-					},
-				}
-				try {
-					await onSubmit(formattedData)
-				} catch (error) {
-					setValidationError('Не удалось отправить данные, попробуйте позже.')
-				}
-			})()
+		const allValid = await trigger()
+		if (!allValid) {
+			setValidationError('Пожалуйста, ответьте на все вопросы.')
+			return
 		}
+
+		handleSubmit(async (data) => {
+			const formattedComments = questions
+				.map((question) => {
+					const answer = data[`question${question.id}`]
+					if (!answer) return `${question.question}: Не указан`
+
+					if (question.type === 'checkbox') {
+						const answers = Array.isArray(answer) ? answer : [answer]
+						return `${question.question}: ${answers.join(', ')}`
+					}
+
+					return `${question.question}: ${answer}`
+				})
+				.join('\n')
+
+			const formattedData = {
+				FIELDS: {
+					TITLE: 'Новая заявка с Quiz',
+					COMMENTS: formattedComments,
+					PHONE: [
+						{
+							VALUE: data.question4 || 'Не указан',
+							VALUE_TYPE: 'WORK',
+						},
+					],
+					STATUS_ID: 'NEW',
+					SOURCE_ID: 'WEB',
+				},
+			}
+			try {
+				await onSubmit(formattedData)
+			} catch (error) {
+				setValidationError('Не удалось отправить данные, попробуйте позже.')
+			}
+		})()
 	}
 
 	if (!isOpen) return null
@@ -171,40 +131,24 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 											rules={{ required: 'Это поле обязательно' }}
 											render={({ field }) => (
 												<>
+													<input
+														{...field}
+														type='radio'
+														value={option.value}
+														id={`radio-${option.value}`}
+														className={styles.radioInput}
+														onFocus={handleFieldInteraction}
+														onChange={(e) => {
+															handleFieldInteraction()
+															field.onChange(e)
+														}}
+													/>
 													<label
-														className={`${styles.radioLabel} ${
-															field.value === option.value
-																? styles.radioSelected
-																: ''
-														}`}
+														htmlFor={`radio-${option.value}`}
+														className={styles.radioLabel}
 													>
-														<input
-															{...field}
-															type='radio'
-															value={option.value}
-															className={styles.radioInput}
-														/>
 														{option.label}
 													</label>
-													{/* {option.value === 'custom' &&
-														field.value === 'custom' && (
-															<input
-																type='text'
-																value={
-																	customOptions[
-																		questions[currentQuestion].id
-																	] || ''
-																}
-																onChange={(e) =>
-																	handleCustomInputChange(
-																		questions[currentQuestion].id,
-																		e.target.value
-																	)
-																}
-																className={styles.customInput}
-																placeholder='Введите свой вариант'
-															/>
-														)} */}
 												</>
 											)}
 										/>
@@ -220,50 +164,31 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 											rules={{ required: 'Это поле обязательно' }}
 											render={({ field }) => (
 												<>
+													<input
+														{...field}
+														type='checkbox'
+														value={option.value}
+														id={`checkbox-${option.value}`}
+														className={styles.checkboxInput}
+														onFocus={handleFieldInteraction}
+														onChange={(e) => {
+															handleFieldInteraction()
+															const value = e.target.value
+															if (field.value.includes(value)) {
+																field.onChange(
+																	field.value.filter((v) => v !== value)
+																)
+															} else {
+																field.onChange([...field.value, value])
+															}
+														}}
+													/>
 													<label
-														className={`${styles.checkboxLabel} ${
-															field.value.includes(option.value)
-																? styles.checkboxSelected
-																: ''
-														}`}
+														htmlFor={`checkbox-${option.value}`}
+														className={styles.checkboxLabel}
 													>
-														<input
-															{...field}
-															type='checkbox'
-															value={option.value}
-															className={styles.checkboxInput}
-															onChange={(e) => {
-																const value = e.target.value
-																if (field.value.includes(value)) {
-																	field.onChange(
-																		field.value.filter((v) => v !== value)
-																	)
-																} else {
-																	field.onChange([...field.value, value])
-																}
-															}}
-														/>
 														{option.label}
 													</label>
-													{option.value === 'custom' &&
-														field.value.includes('custom') && (
-															<input
-																type='text'
-																value={
-																	customOptions[
-																		questions[currentQuestion].id
-																	] || ''
-																}
-																onChange={(e) =>
-																	handleCustomInputChange(
-																		questions[currentQuestion].id,
-																		e.target.value
-																	)
-																}
-																className={styles.customInput}
-																placeholder='Введите свой вариант'
-															/>
-														)}
 												</>
 											)}
 										/>
@@ -286,7 +211,10 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 											mask='+375 (99) 999-99-99'
 											placeholder='+375 (__) ___-__-__'
 											value={field.value || '+375'}
-											onChange={field.onChange}
+											onChange={(e) => {
+												handleFieldInteraction()
+												field.onChange(e)
+											}}
 											onBlur={field.onBlur}
 											error={
 												fieldState.invalid ? fieldState.error.message : null
@@ -301,33 +229,21 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 						)}
 					</div>
 					<div className={styles.navigation}>
-						{currentQuestion < questions.length - 1 && (
+						{currentQuestion < questions.length - 1 ? (
 							<Button
 								type='button'
 								onClick={nextQuestion}
 								label='Далее'
 								color='orange'
-								className={styles.submitButton}
+								className={styles.navButton}
 							/>
-						)}
-						{currentQuestion === questions.length - 1 && (
-							<div className={styles.consentsContainer}>
-								<Button
-									type='submit'
-									label='Отправить'
-									color='orange'
-									className={styles.submitButton}
-								/>
-								<label>
-									<input
-										type='checkbox'
-										checked={consent || true}
-										onChange={handleConsentChange}
-										className={styles.checkboxInput}
-									/>
-									Я даю согласие на обработку персональных данных.
-								</label>
-							</div>
+						) : (
+							<Button
+								type='submit'
+								label='Отправить'
+								color='orange'
+								className={styles.navButton}
+							/>
 						)}
 					</div>
 				</form>

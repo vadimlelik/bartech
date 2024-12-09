@@ -35,10 +35,6 @@ const questions = [
 			{ value: 'Huawei', label: 'Huawei' },
 			{ value: 'Redmi', label: 'Redmi' },
 			{ value: 'Phone armor', label: 'Броне телефон' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
@@ -48,10 +44,6 @@ const questions = [
 		options: [
 			{ value: 'yes', label: 'Да' },
 			{ value: 'no', label: 'Нет' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{
