@@ -6,7 +6,7 @@ import styles from './categoriesItem.module.css'
 
 const CategoriesItem = ({ id, name, imageUrl }) => {
 	return (
-		<Link key={id} href={`#`} className={styles.categoriesItem}>
+		<Link key={id} href={`/category/${id}`} className={styles.categoriesItem}>
 			<span className={styles.categoriesName}>
 				{name}
 				<IoIosArrowForward className={styles.categoriesIcon} />

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import styles from './category.module.css'
 
 async function fetchProductsByCategory(categoryId) {
 	const res = await fetch(
@@ -19,30 +20,29 @@ const Category = async ({ params }) => {
 	const products = await fetchProductsByCategory(id)
 
 	return (
-		<main>
+		<>
 			<h1>Товары категории: {id}</h1>
-			<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+			<div className={styles.CategoryList}>
 				{products.map((product) => (
 					<Link
 						key={product.id}
 						href={`/product/${product.id}`}
-						style={{
-							padding: '1rem',
-							border: '1px solid #ccc',
-							borderRadius: '8px',
-							textDecoration: 'none',
-							display: 'block',
-							width: '200px',
-							textAlign: 'center',
-						}}
+						className={styles.CategoryItem}
 					>
-						<h2>{product.name}</h2>
-						<p>{product.description}</p>
-						<p>${product.price}</p>
+						<div className={styles.CategoryImageContainer}>
+							<img
+								src={product.imageUrl || '/placeholder.png'}
+								alt={product.name}
+								className={styles.CategoryImage}
+							/>
+						</div>
+						<h2 className={styles.CategoryTitle}>{product.name}</h2>
+						<p className={styles.CategoryDescription}>{product.description}</p>
+						<p className={styles.CategoryPrice}>${product.price}</p>
 					</Link>
 				))}
 			</div>
-		</main>
+		</>
 	)
 }
 

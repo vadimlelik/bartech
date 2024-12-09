@@ -1,0 +1,65 @@
+.CategoryLayout {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: bisque;
+	min-height: 100vh;
+}
+.CategoryContainer {
+	max-width: 1240px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0px 20px;
+}
+.CategoryImageContainer {
+	width: 100%;
+	max-width: 150px; /* ограничиваем размер картинки */
+	height: 150px; /* фиксируем высоту */
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+.CategoryImage {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* изображение заполняет контейнер */
+	border-radius: 8px;
+}
+.CategoryList {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+	padding: 40px 0px;
+}
+.CategoryItem {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #333;
+	padding: 16px;
+	transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.CategoryItem:hover {
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	transform: translateY(-4px);
+}
+
+.CategoryImage {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.CategoryDescription {
+	font-size: 0.9rem;
+	margin: 0 0 12px;
+	color: #555;
+}
+.CategoryTitle {
+	font-size: 1.2rem;
+	margin: 0.5rem 1rem;
+}
+.CategoryPrice {
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: #0070f3;
+}

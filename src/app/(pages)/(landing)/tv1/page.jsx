@@ -20,7 +20,6 @@ const questions = [
 			{ label: 'TCL', value: 'TCL' },
 			{ label: 'Philips', value: 'Philips' },
 			{ label: 'Xiaomi', value: 'Xiaomi' },
-			{ label: 'Свой вариант', value: 'custom' },
 		],
 	},
 	{
@@ -30,10 +29,6 @@ const questions = [
 		options: [
 			{ value: 'yes', label: 'Да' },
 			{ value: 'no', label: 'Нет' },
-			{
-				value: 'custom',
-				label: 'Свой вариант',
-			},
 		],
 	},
 	{

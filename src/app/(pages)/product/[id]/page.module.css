@@ -1,0 +1,85 @@
+.productPage {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+	background-color: #f4f4f4;
+}
+
+.productCard {
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-gap: 20px;
+	width: 100%;
+	max-width: 800px;
+	padding: 20px;
+}
+
+.productImage {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.productInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+.productTitle {
+	font-size: 2rem;
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 10px;
+}
+
+.productDescription {
+	font-size: 1rem;
+	color: #666;
+	margin-bottom: 15px;
+}
+
+.productPrice {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #e91e63;
+}
+.productButton {
+	margin-top: 20px;
+}
+
+/* Медиазапросы для адаптивности */
+@media (min-width: 768px) {
+	.productCard {
+		grid-template-columns: 1fr 1fr;
+		padding: 30px;
+	}
+
+	.productImage {
+		border-radius: 10px;
+	}
+
+	.productInfo {
+		padding-left: 20px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.productTitle {
+		font-size: 2.5rem;
+	}
+
+	.productDescription {
+		font-size: 1.1rem;
+	}
+
+	.productPrice {
+		font-size: 1.5rem;
+	}
+}

@@ -4,8 +4,6 @@ export function middleware(req) {
 	const url = req.nextUrl.clone()
 	const hostname = req.headers.get('host') // Получаем hostname
 
-	console.log('Hostname:', hostname)
-
 	// Проверяем, если запрос идет на статические файлы или системные пути Next.js
 	const staticPaths = ['/static', '/_next', '/favicon.ico']
 	if (staticPaths.some((path) => url.pathname.startsWith(path))) {

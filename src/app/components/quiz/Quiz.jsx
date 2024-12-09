@@ -21,6 +21,8 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
 	const watchedFields = watch()
 
+	console.log(errors)
+
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = 'hidden'
@@ -41,13 +43,6 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 		setValidationError('')
 		if (currentQuestion < questions.length - 1) {
 			setCurrentQuestion(currentQuestion + 1)
-		}
-	}
-
-	const prevQuestion = () => {
-		setValidationError('')
-		if (currentQuestion > 0) {
-			setCurrentQuestion(currentQuestion - 1)
 		}
 	}
 
@@ -97,6 +92,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 						if (question.type === 'checkbox') {
 							const answers = Array.isArray(answer) ? answer : [answer]
 							const customValue = data[`customInput${question.id}`]
+
 							const finalAnswers = answers.map((ans) =>
 								ans === 'custom' ? customValue || 'Не указан' : ans
 							)
@@ -190,7 +186,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 														/>
 														{option.label}
 													</label>
-													{option.value === 'custom' &&
+													{/* {option.value === 'custom' &&
 														field.value === 'custom' && (
 															<input
 																type='text'
@@ -208,7 +204,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 																className={styles.customInput}
 																placeholder='Введите свой вариант'
 															/>
-														)}
+														)} */}
 												</>
 											)}
 										/>
@@ -300,24 +296,11 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 								/>
 							)}
 						</div>
-						{errors[`question${questions[currentQuestion].id}`] && (
-							<span className={styles.error}>
-								{errors[`question${questions[currentQuestion].id}`]?.message}
-							</span>
-						)}
 						{validationError && (
 							<span className={styles.error}>{validationError}</span>
 						)}
 					</div>
 					<div className={styles.navigation}>
-						{currentQuestion > 0 && (
-							<Button
-								type='button'
-								onClick={prevQuestion}
-								label='Назад'
-								color='orange'
-							/>
-						)}
 						{currentQuestion < questions.length - 1 && (
 							<Button
 								type='button'
@@ -344,9 +327,6 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									/>
 									Я даю согласие на обработку персональных данных.
 								</label>
-								{validationError && (
-									<span className={styles.error}>{validationError}</span>
-								)}
 							</div>
 						)}
 					</div>
