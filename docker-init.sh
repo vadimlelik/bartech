@@ -47,6 +47,15 @@ if ! node src/scripts/init-phones.mjs; then
 fi
 echo "Phones initialization completed"
 
+# Clean and prepare for build
+echo "Cleaning previous build..."
+rm -rf .next
+rm -rf node_modules/.cache
+
+# Install dependencies if needed
+echo "Installing dependencies..."
+npm install
+
 # Build Next.js application
 echo "Building Next.js application..."
 if ! npm run build; then
@@ -56,4 +65,4 @@ fi
 
 # Start Next.js application
 echo "Starting Next.js application..."
-npm run start
+exec npm run start
