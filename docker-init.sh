@@ -63,6 +63,12 @@ if ! npm run build; then
     exit 1
 fi
 
+# Verify build
+if [ ! -d ".next" ]; then
+    echo "Error: Build directory '.next' not found after build"
+    exit 1
+fi
+
 # Start Next.js application
 echo "Starting Next.js application..."
 exec npm run start
