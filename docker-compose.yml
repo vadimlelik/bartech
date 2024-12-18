@@ -23,6 +23,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:3000
     volumes:
       - nextjs_build:/app/.next
+      - ./certs:/etc/letsencrypt
     depends_on:
       mongodb:
         condition: service_healthy
