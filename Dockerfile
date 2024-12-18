@@ -3,12 +3,11 @@ FROM node:18-alpine
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Устанавливаем MongoDB Shell
-RUN apk add --no-cache mongodb-tools curl \
-    && wget https://downloads.mongodb.com/compass/mongosh-1.8.0-linux-x64.tgz \
-    && tar -zxvf mongosh-1.8.0-linux-x64.tgz \
-    && cp mongosh-1.8.0-linux-x64/bin/mongosh /usr/local/bin/ \
-    && rm -rf mongosh-1.8.0-linux-x64.tgz mongosh-1.8.0-linux-x64
+# Устанавливаем необходимые инструменты
+RUN apk add --no-cache \
+    mongodb-tools \
+    curl \
+    netcat-openbsd
 
 # Копируем package.json и устанавливаем зависимости
 COPY package*.json ./

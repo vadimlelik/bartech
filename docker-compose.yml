@@ -41,14 +41,5 @@ services:
       - nextjs-app
     restart: always
 
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - ./www:/var/www/certbot
-    environment:
-      - CERTBOT_EMAIL=${CERTBOT_EMAIL:-youremail@example.com}
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
 volumes:
   mongodb_data:
