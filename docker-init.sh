@@ -29,12 +29,9 @@ echo "Initializing phones..."
 node src/scripts/init-phones.mjs
 echo "Phones initialization completed"
 
-# Проверяем, что Next.js собран
-echo "Checking Next.js build..."
-if [ ! -d ".next" ]; then
-    echo "Building Next.js application..."
-    npm run build
-fi
+# Собираем Next.js приложение
+echo "Building Next.js application..."
+npm run build
 
 # Запускаем Next.js приложение
 echo "Starting Next.js application..."
