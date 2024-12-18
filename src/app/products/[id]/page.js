@@ -20,6 +20,15 @@ async function getProduct(id) {
 	}
 }
 
+function getCategoryLabel(categoryId) {
+	const categories = {
+		'iphone': 'iPhone',
+		'samsung': 'Samsung',
+		'xiaomi': 'Xiaomi'
+	}
+	return categories[categoryId] || categoryId
+}
+
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
 	return []
@@ -58,9 +67,8 @@ export default async function ProductPage({ params }) {
 		{ label: 'Главная', href: '/' },
 		{ label: 'Категории', href: '/categories' },
 		{
-			label:
-				product.category.charAt(0).toUpperCase() + product.category.slice(1),
-			href: `/categories/${product.category}`,
+			label: getCategoryLabel(product.categoryId),
+			href: `/categories/${product.categoryId}`,
 		},
 		{ label: product.name, href: null },
 	]

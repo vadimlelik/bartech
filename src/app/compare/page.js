@@ -112,13 +112,30 @@ export default function ComparePage() {
         )
     }
 
+    // Минимальное количество товаров для сравнения
+    if (products.length < 2) {
+        return (
+            <Container maxWidth="lg" sx={{ py: 4 }}>
+                <Typography variant="h5" gutterBottom>
+                    Добавьте еще товары для сравнения
+                </Typography>
+                <Typography variant="body1" color="text.secondary" gutterBottom>
+                    Для сравнения необходимо выбрать минимум 2 товара
+                </Typography>
+                <Button variant="contained" onClick={() => router.push('/')}>
+                    Вернуться к покупкам
+                </Button>
+            </Container>
+        )
+    }
+
     // Функция для проверки различий в значениях
     const hasDifferences = (key) => {
         const values = products.map(product => {
             if (key === 'price') {
                 return product.variants?.[0]?.price
             }
-            return product[key]
+            return product.specifications?.[key]
         }).filter(value => value !== undefined && value !== null)
         return values.length > 0 && new Set(values).size > 1
     }
@@ -128,21 +145,35 @@ export default function ComparePage() {
         if (!product) return 'N/A'
         
         if (spec === 'price') {
-            return product.variants?.[0]?.price ? `$${product.variants[0].price}` : 'N/A'
+            return product.variants?.[0]?.price ? 
+                `${product.variants[0].price.toLocaleString()} ₽` : 
+                'N/A'
         }
-        return product[spec] || 'N/A'
+        
+        if (spec === 'name') {
+            return product.name || 'N/A'
+        }
+        
+        return product.specifications?.[spec] || 'N/A'
     }
 
     // Список характеристик для сравнения
     const specs = [
         { key: 'name', label: 'Название' },
         { key: 'price', label: 'Цена' },
+        { key: 'brand', label: 'Бренд' },
+        { key: 'model', label: 'Модель' },
+        { key: 'storage', label: 'Объем памяти' },
         { key: 'memory', label: 'Память' },
         { key: 'ram', label: 'Оперативная память' },
-        { key: 'display', label: 'Дисплей' },
         { key: 'processor', label: 'Процессор' },
+        { key: 'display', label: 'Дисплей' },
         { key: 'camera', label: 'Камера' },
-        { key: 'battery', label: 'Батарея' }
+        { key: 'battery', label: 'Батарея' },
+        { key: 'os', label: 'Операционная система' },
+        { key: 'color', label: 'Цвет' },
+        { key: 'condition', label: 'Состояние' },
+        { key: 'year', label: 'Год выпуска' }
     ]
 
     return (

@@ -7,7 +7,10 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"init-db": "node src/scripts/init-categories.mjs && node src/scripts/init-phones.mjs",
+		"seed": "node src/scripts/init-phones.mjs"
+
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",

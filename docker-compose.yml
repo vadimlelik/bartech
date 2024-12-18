@@ -4,12 +4,16 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: 'http://localhost:3000'
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-'http://localhost:3000'}
+        MONGODB_URI: mongodb://mongodb:27017/bartech
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongodb:27017/bartech
+    ports:
+      - "3000:3000"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     restart: always
 
   mongodb:
@@ -18,6 +22,11 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
 
   nginx:
@@ -28,7 +37,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./www:/var/www/certbot # Это добавление для валидации webroot
+      - ./www:/var/www/certbot
     depends_on:
       - nextjs-app
     restart: always
@@ -37,11 +46,10 @@ services:
     image: certbot/certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
-      - ./www:/var/www/certbot # Это добавление для валидации webroot
+      - ./www:/var/www/certbot
     environment:
-      - CERTBOT_EMAIL=youremail@example.com
+      - CERTBOT_EMAIL=${CERTBOT_EMAIL:-youremail@example.com}
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    command: ['sh', '-c', 'nginx -s reload && tail -f /dev/null']
 
 volumes:
   mongodb_data:

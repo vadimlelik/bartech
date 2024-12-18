@@ -225,10 +225,24 @@ export default function ProductDetails({ product }) {
 				>
 					<Swiper
 						modules={[Navigation, Pagination]}
-						spaceBetween={10}
-						slidesPerView={1}
+						spaceBetween={30}
+						slidesPerView={3}
 						navigation
 						pagination={{ clickable: true }}
+						breakpoints={{
+							320: {
+								slidesPerView: 1,
+								spaceBetween: 10
+							},
+							768: {
+								slidesPerView: 2,
+								spaceBetween: 20
+							},
+							1024: {
+								slidesPerView: 3,
+								spaceBetween: 30
+							}
+						}}
 					>
 						{[product.image, ...(product.additionalImages || [])].map(
 							(image, index) => (

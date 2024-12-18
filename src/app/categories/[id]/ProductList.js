@@ -60,6 +60,7 @@ export default function ProductList({ id }) {
 		os: '',
 		battery: '',
 		camera: '',
+		storage: '',
 	})
 
 	const router = useRouter()
@@ -74,53 +75,50 @@ export default function ProductList({ id }) {
 	}, [])
 
 	useEffect(() => {
-		const fetchProducts = async () => {
-			if (!mounted) return
+		if (mounted) {
+			const fetchProducts = async () => {
+				setLoading(true)
+				try {
+					const page = searchParams.get('page') || 1
+					setCurrentPage(Number(page))
 
-			setLoading(true)
-			try {
-				const page = searchParams.get('page') || 1
-				setCurrentPage(Number(page))
+					// Строим URL с параметрами
+					const queryParams = new URLSearchParams({
+						categoryId: id,
+						page: page,
+						sort: sortOrder,
+						sortBy: sortBy,
+						search: searchTerm,
+					})
 
-				// Строим URL с параметрами
-				const queryParams = new URLSearchParams({
-					categoryId: id,
-					page: page,
-					sort: sortOrder,
-					sortBy: sortBy,
-					search: searchTerm,
-				})
+					// Добавляем все активные фильтры
+					Object.entries(selectedFilters).forEach(([key, value]) => {
+						if (value) queryParams.append(key, value)
+					})
 
-				// Добавляем все активные фильтры
-				Object.entries(selectedFilters).forEach(([key, value]) => {
-					if (value) queryParams.append(key, value)
-				})
+					const response = await fetch(`/api/products?${queryParams}`)
+					if (!response.ok) throw new Error('Failed to fetch')
 
-				const response = await fetch(`/api/products?${queryParams}`)
-				if (!response.ok) throw new Error('Failed to fetch')
-
-				const data = await response.json()
-				setProducts(data.products || [])
-				setFilters(data.filters || {})
-				setTotalPages(Math.ceil((data.pagination?.total || 0) / ITEMS_PER_PAGE))
-			} catch (error) {
-				setSnackbarMessage('Ошибка при загрузке товаров')
-				setSnackbarOpen(true)
-			} finally {
-				setLoading(false)
+					const data = await response.json()
+					console.log('Received filters:', data.filters) // Добавляем отладку
+					setProducts(data.products || [])
+					setFilters(data.filters || {})
+					setTotalPages(Math.ceil((data.pagination?.total || 0) / ITEMS_PER_PAGE))
+				} catch (error) {
+					setSnackbarMessage('Ошибка при загрузке товаров')
+					setSnackbarOpen(true)
+				} finally {
+					setLoading(false)
+				}
 			}
-		}
 
-		fetchProducts()
-	}, [
-		id,
-		mounted,
-		searchParams,
-		sortOrder,
-		sortBy,
-		searchTerm,
-		selectedFilters,
-	])
+			fetchProducts()
+		}
+	}, [currentPage, sortBy, sortOrder, searchTerm, selectedFilters, mounted])
+
+	if (!mounted) {
+		return null
+	}
 
 	const handleAddToCart = (product) => {
 		const productWithPrice = {
@@ -193,15 +191,12 @@ export default function ProductList({ id }) {
 			os: 'Операционная система',
 			battery: 'Аккумулятор',
 			camera: 'Камера',
+			storage: 'Количество памяти'
 		}
 		return (
 			labels[filterName] ||
 			filterName.charAt(0).toUpperCase() + filterName.slice(1)
 		)
-	}
-
-	if (!mounted) {
-		return null
 	}
 
 	return (
@@ -238,56 +233,60 @@ export default function ProductList({ id }) {
 							<Typography variant='subtitle1' sx={{ mb: 1 }}>
 								Основные характеристики
 							</Typography>
-							{['brand', 'model', 'memory', 'ram', 'processor'].map(
-								(filterName) =>
-									filters[filterName + 's'] &&
-									filters[filterName + 's'].length > 0 && (
+							{['brand', 'model', 'storage', 'memory', 'ram', 'processor'].map(
+								(filterName) => {
+									const values = filters[filterName + 's']
+									console.log(`Filter ${filterName}:`, values) // Отладка
+									return values && values.length > 0 ? (
 										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
 											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
 											<Select
-												value={selectedFilters[filterName]}
+												value={selectedFilters[filterName] || ''}
 												onChange={(e) =>
 													handleFilterChange(filterName, e.target.value)
 												}
 												label={getFilterLabel(filterName)}
 											>
 												<MenuItem value=''>Все</MenuItem>
-												{filters[filterName + 's'].map((value) => (
+												{values.map((value) => (
 													<MenuItem key={value} value={value}>
 														{value}
 													</MenuItem>
 												))}
 											</Select>
 										</FormControl>
-									)
+									) : null
+								}
 							)}
 
 							{/* Дополнительные фильтры */}
 							<Typography variant='subtitle1' sx={{ mb: 1, mt: 2 }}>
 								Дополнительные характеристики
 							</Typography>
-							{['display', 'color', 'condition', 'os', 'battery', 'camera'].map(
-								(filterName) =>
-									filters[filterName + 's'] &&
-									filters[filterName + 's'].length > 0 && (
+							{['display', 'camera', 'battery', 'os', 'color', 'condition', 'year'].map(
+								(filterName) => {
+									const values = filters[filterName + 's']
+									console.log(`Filter ${filterName}:`, values) // Отладка
+									return values && values.length > 0 ? (
 										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
 											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
 											<Select
-												value={selectedFilters[filterName]}
+												value={selectedFilters[filterName] || ''}
 												onChange={(e) =>
 													handleFilterChange(filterName, e.target.value)
 												}
 												label={getFilterLabel(filterName)}
 											>
 												<MenuItem value=''>Все</MenuItem>
-												{filters[filterName + 's'].map((value) => (
+												{values.map((value) => (
 													<MenuItem key={value} value={value}>
 														{value}
 													</MenuItem>
 												))}
 											</Select>
 										</FormControl>
-									)
+									) : null
+								}
 							)}
 						</Paper>
 					</Grid>
@@ -463,33 +462,40 @@ export default function ProductList({ id }) {
 													{product.name}
 												</Typography>
 
-												<Stack
-													direction='row'
-													spacing={0.5}
-													flexWrap='wrap'
-													sx={{ mb: 'auto' }}
-												>
-													{product.memory && (
-														<Chip
-															label={product.memory}
-															size='small'
-															sx={{
-																bgcolor: 'primary.light',
-																color: 'primary.contrastText',
-																fontSize: '0.75rem',
-															}}
-														/>
-													)}
-													{product.ram && (
-														<Chip
-															label={product.ram}
-															size='small'
-															sx={{
-																bgcolor: 'secondary.light',
-																color: 'secondary.contrastText',
-																fontSize: '0.75rem',
-															}}
-														/>
+												{/* Основные характеристики */}
+												<Stack spacing={1} sx={{ mb: 2 }}>
+													{product.specifications && (
+														<>
+															<Typography variant="body2" color="text.secondary">
+																Процессор: {product.specifications.processor}
+															</Typography>
+															<Stack direction="row" spacing={1} flexWrap="wrap">
+																<Chip
+																	label={`${product.specifications.memory} память`}
+																	size="small"
+																	sx={{ 
+																		fontSize: '0.75rem',
+																		bgcolor: 'primary.main',
+																		color: 'white'
+																	}}
+																/>
+																<Chip
+																	label={`${product.specifications.ram} ОЗУ`}
+																	size="small"
+																	sx={{ 
+																		fontSize: '0.75rem',
+																		bgcolor: 'secondary.main',
+																		color: 'white'
+																	}}
+																/>
+															</Stack>
+															<Typography variant="body2" color="text.secondary">
+																Экран: {product.specifications.display}
+															</Typography>
+															<Typography variant="body2" color="text.secondary">
+																Камера: {product.specifications.camera}
+															</Typography>
+														</>
 													)}
 												</Stack>
 

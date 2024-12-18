@@ -10,7 +10,7 @@ export async function GET(request) {
         const filterFields = [
             'memory', 'ram', 'display', 'processor', 
             'color', 'condition', 'year', 'brand', 
-            'model', 'os', 'battery', 'camera'
+            'model', 'os', 'battery', 'camera', 'storage'
         ]
 
         // Получаем все параметры из URL
@@ -43,22 +43,23 @@ export async function GET(request) {
         
         // Если переданы ID, ищем только по ним
         if (ids && ids.length > 0) {
-            console.log('Searching products by ids:', ids) // Отладка
-            
-            query._id = { 
-                $in: ids.map(id => {
-                    try {
-                        return new ObjectId(id)
-                    } catch (error) {
-                        console.error('Invalid ObjectId:', id)
-                        return null
-                    }
-                }).filter(id => id !== null)
-            }
+            console.log('Searching products by ids:', ids)
+            query = {
+                $or: [
+                    { _id: { $in: ids.map(id => {
+                        try {
+                            return new ObjectId(id);
+                        } catch {
+                            return id;
+                        }
+                    })}},
+                    { id: { $in: ids }}
+                ]
+            };
         } else {
             // Фильтр по категории
             if (categoryId) {
-                query.category = categoryId.toLowerCase()
+                query.categoryId = categoryId
             }
 
             // Поиск по названию или описанию
@@ -74,12 +75,11 @@ export async function GET(request) {
             // Применяем все активные фильтры
             Object.entries(filters).forEach(([field, value]) => {
                 if (value) {
-                    // Проверяем, есть ли значение в основных полях или в вариантах
-                    query.$or = query.$or || []
-                    query.$or.push(
-                        { [field]: value },
-                        { [`variants.${field}`]: value }
-                    )
+                    // Все фильтры ищем в specifications
+                    query.$and = query.$and || []
+                    query.$and.push({
+                        [`specifications.${field}`]: value
+                    })
                 }
             })
         }
@@ -123,40 +123,43 @@ export async function GET(request) {
         // Получаем фильтры только если не ищем по ID
         let availableFilters = {}
         if (!ids || ids.length === 0) {
-            if (categoryId) {
-                const filterResults = await collection.aggregate([
-                    { $match: { category: categoryId.toLowerCase() } },
-                    { $unwind: { path: '$variants', preserveNullAndEmptyArrays: true } },
-                    {
-                        $group: {
-                            _id: null,
-                            brands: { $addToSet: '$brand' },
-                            models: { $addToSet: '$model' },
-                            memories: { $addToSet: { $ifNull: ['$variants.memory', '$memory'] } },
-                            rams: { $addToSet: { $ifNull: ['$variants.ram', '$ram'] } },
-                            displays: { $addToSet: { $ifNull: ['$variants.display', '$display'] } },
-                            processors: { $addToSet: { $ifNull: ['$variants.processor', '$processor'] } },
-                            colors: { $addToSet: { $ifNull: ['$variants.color', '$color'] } },
-                            conditions: { $addToSet: '$condition' },
-                            years: { $addToSet: '$year' },
-                            oss: { $addToSet: '$os' },
-                            batteries: { $addToSet: '$battery' },
-                            cameras: { $addToSet: '$camera' }
-                        }
+            console.log('Getting filters for category:', categoryId) // Отладка
+            const filterResults = await collection.aggregate([
+                { $match: { categoryId: categoryId } },
+                {
+                    $group: {
+                        _id: null,
+                        brands: { $addToSet: '$specifications.brand' },
+                        models: { $addToSet: '$specifications.model' },
+                        storages: { $addToSet: '$specifications.storage' },
+                        memories: { $addToSet: '$specifications.memory' },
+                        rams: { $addToSet: '$specifications.ram' },
+                        processors: { $addToSet: '$specifications.processor' },
+                        displays: { $addToSet: '$specifications.display' },
+                        cameras: { $addToSet: '$specifications.camera' },
+                        batteries: { $addToSet: '$specifications.battery' },
+                        oss: { $addToSet: '$specifications.os' },
+                        colors: { $addToSet: '$specifications.color' },
+                        conditions: { $addToSet: '$specifications.condition' },
+                        years: { $addToSet: '$specifications.year' }
                     }
-                ]).toArray()
-
-                if (filterResults.length > 0) {
-                    const result = filterResults[0]
-                    delete result._id
-                    availableFilters = Object.fromEntries(
-                        Object.entries(result).map(([key, values]) => [
-                            key,
-                            values.filter(Boolean).sort()
-                        ])
-                    )
                 }
+            ]).toArray()
+            
+            console.log('Filter results:', filterResults) // Отладка
+
+            if (filterResults.length > 0) {
+                const result = filterResults[0]
+                delete result._id
+                availableFilters = Object.fromEntries(
+                    Object.entries(result).map(([key, values]) => [
+                        key,
+                        values.filter(Boolean).sort()
+                    ])
+                )
             }
+            
+            console.log('Available filters:', availableFilters) // Отладка
         }
 
         return NextResponse.json({

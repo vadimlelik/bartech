@@ -5,17 +5,18 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export async function generateMetadata({ params }) {
-	console.log('params', params)
+	const { id } = await params
+	const categoryName = id.charAt(0).toUpperCase() + id.slice(1)
 
-	const id = params?.id || ''
 	return {
-		title: `${id.charAt(0).toUpperCase() + id.slice(1)} - Телефоны`,
-		description: `Купить телефоны ${id} в нашем магазине`,
+		title: `${categoryName} - Телефоны`,
+		description: `Купить телефоны ${categoryName} в нашем магазине`,
 	}
 }
 
 export default async function CategoryPage({ params }) {
-	const id = params?.id || ''
+	const { id } = await params
+
 	const categoryName = id.charAt(0).toUpperCase() + id.slice(1)
 
 	return (

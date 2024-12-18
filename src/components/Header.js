@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
 	AppBar,
 	Toolbar,
@@ -33,8 +33,13 @@ import { useFavoritesStore } from '../store/favorites'
 
 export default function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+	const [mounted, setMounted] = useState(false)
 	const { cartItems } = useCartStore()
 	const { favorites } = useFavoritesStore()
+
+	useEffect(() => {
+		setMounted(true)
+	}, [])
 
 	const menuItems = [
 		{ text: 'Каталог', href: '/', icon: <StorefrontIcon /> },
@@ -71,14 +76,10 @@ export default function Header() {
 					</IconButton>
 
 					{/* Логотип */}
-					<Link
-						href='/'
-						passHref
-						style={{ textDecoration: 'none', color: 'inherit' }}
-					>
+					<Link href='/' style={{ textDecoration: 'none', color: 'inherit' }}>
 						<Box sx={{ display: 'flex', alignItems: 'center' }}>
 							<Image
-								src='logo_techno_bar.svg'
+								src='/logo_techno_bar.svg'
 								alt='Bartech'
 								width={60}
 								height={40}
@@ -150,28 +151,33 @@ export default function Header() {
 
 						{/* Иконки корзины и закладок */}
 						<Box sx={{ display: 'flex', gap: 1 }}>
-							<Tooltip title='Закладки'>
-								<Link href='/favorites' passHref>
+							<Link href='/favorites' style={{ textDecoration: 'none', color: 'inherit' }}>
+								<Tooltip title='Закладки'>
 									<IconButton color='inherit'>
-										<Badge badgeContent={favorites?.length || 0} color='error'>
+										{mounted ? (
+											<Badge badgeContent={favorites.length} color='primary'>
+												<FavoriteIcon />
+											</Badge>
+										) : (
 											<FavoriteIcon />
-										</Badge>
+										)}
 									</IconButton>
-								</Link>
-							</Tooltip>
+								</Tooltip>
+							</Link>
 
-							<Tooltip title='Корзина'>
-								<Link href='/cart' passHref>
+							<Link href='/cart' style={{ textDecoration: 'none', color: 'inherit' }}>
+								<Tooltip title='Корзина'>
 									<IconButton color='inherit'>
-										<Badge
-											badgeContent={cartItems?.length || 0}
-											color='primary'
-										>
+										{mounted ? (
+											<Badge badgeContent={cartItems.length} color='primary'>
+												<ShoppingCartIcon />
+											</Badge>
+										) : (
 											<ShoppingCartIcon />
-										</Badge>
+										)}
 									</IconButton>
-								</Link>
-							</Tooltip>
+								</Tooltip>
+							</Link>
 						</Box>
 					</Box>
 				</Toolbar>
