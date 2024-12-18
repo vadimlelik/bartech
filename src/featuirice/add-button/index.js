@@ -1,6 +1,6 @@
 'use client'
 
-import { useCartStore } from '@/store'
+import { useCartStore } from '@/store/cart'
 import { Button } from '@mui/material'
 
 export default function CartButton({ phone }) {

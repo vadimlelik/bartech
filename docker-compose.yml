@@ -7,6 +7,17 @@ services:
         NEXT_PUBLIC_API_URL: 'http://localhost:3000'
     environment:
       - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/bartech
+    depends_on:
+      - mongodb
+    restart: always
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
     restart: always
 
   nginx:
@@ -31,3 +42,6 @@ services:
       - CERTBOT_EMAIL=youremail@example.com
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     command: ['sh', '-c', 'nginx -s reload && tail -f /dev/null']
+
+volumes:
+  mongodb_data:

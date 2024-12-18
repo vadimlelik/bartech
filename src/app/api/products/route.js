@@ -1,27 +1,180 @@
-import { products } from '@/data/products'
+import clientPromise from '@/lib/mongodb'
+import { ObjectId } from 'mongodb'
+import { NextResponse } from 'next/server'
 
 export async function GET(request) {
-	const { searchParams } = new URL(request.url)
-	const productId = searchParams.get('id')
-	const categoryId = searchParams.get('categoryId')
+    try {
+        const { searchParams } = new URL(request.url)
+        
+        // Получаем все возможные фильтры
+        const filterFields = [
+            'memory', 'ram', 'display', 'processor', 
+            'color', 'condition', 'year', 'brand', 
+            'model', 'os', 'battery', 'camera'
+        ]
 
-	if (productId) {
-		const product = products.find((p) => p.id === productId)
-		if (!product) {
-			return new Response(JSON.stringify({ error: 'Product not found' }), {
-				status: 404,
-			})
-		}
-		return new Response(JSON.stringify(product), {
-			headers: { 'Content-Type': 'application/json' },
-		})
-	}
+        // Получаем все параметры из URL
+        const categoryId = searchParams.get('categoryId')
+        const search = searchParams.get('search')
+        const sort = searchParams.get('sort') || 'asc'
+        const sortBy = searchParams.get('sortBy') || 'name'
+        const page = parseInt(searchParams.get('page')) || 1
+        const limit = parseInt(searchParams.get('limit')) || 12
+        const ids = searchParams.getAll('ids')
 
-	const filteredProducts = categoryId
-		? products.filter((product) => product.category === categoryId)
-		: products
+        // Собираем значения фильтров из параметров запроса
+        const filters = {}
+        filterFields.forEach(field => {
+            const value = searchParams.get(field)
+            if (value) filters[field] = value
+        })
 
-	return new Response(JSON.stringify(filteredProducts), {
-		headers: { 'Content-Type': 'application/json' },
-	})
+        console.log('API received request with params:', { 
+            categoryId, search, sort, sortBy, page, limit, filters, ids 
+        }) // Отладка
+
+        // Подключаемся к MongoDB
+        const client = await clientPromise
+        const db = client.db('bartech')
+        const collection = db.collection('products')
+
+        // Строим запрос
+        let query = {}
+        
+        // Если переданы ID, ищем только по ним
+        if (ids && ids.length > 0) {
+            console.log('Searching products by ids:', ids) // Отладка
+            
+            query._id = { 
+                $in: ids.map(id => {
+                    try {
+                        return new ObjectId(id)
+                    } catch (error) {
+                        console.error('Invalid ObjectId:', id)
+                        return null
+                    }
+                }).filter(id => id !== null)
+            }
+        } else {
+            // Фильтр по категории
+            if (categoryId) {
+                query.category = categoryId.toLowerCase()
+            }
+
+            // Поиск по названию или описанию
+            if (search && search.trim()) {
+                const searchRegex = { $regex: search.trim(), $options: 'i' }
+                query.$or = [
+                    { name: searchRegex },
+                    { description: searchRegex },
+                    { 'variants.name': searchRegex }
+                ]
+            }
+
+            // Применяем все активные фильтры
+            Object.entries(filters).forEach(([field, value]) => {
+                if (value) {
+                    // Проверяем, есть ли значение в основных полях или в вариантах
+                    query.$or = query.$or || []
+                    query.$or.push(
+                        { [field]: value },
+                        { [`variants.${field}`]: value }
+                    )
+                }
+            })
+        }
+
+        console.log('MongoDB query:', JSON.stringify(query)) // Отладка
+
+        // Получаем общее количество товаров
+        const total = await collection.countDocuments(query)
+
+        // Определяем направление сортировки
+        const sortDirection = sort === 'desc' ? -1 : 1
+        const sortOptions = { [sortBy]: sortDirection }
+
+        // Получаем товары с пагинацией
+        let products = []
+        if (ids && ids.length > 0) {
+            // Для избранных товаров не используем пагинацию
+            products = await collection.find(query).toArray()
+        } else {
+            products = await collection
+                .find(query)
+                .sort(sortOptions)
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .toArray()
+        }
+
+        console.log(`Found ${products.length} products`) // Отладка
+
+        // Преобразуем _id в строку и обрабатываем варианты
+        products = products.map(product => ({
+            ...product,
+            _id: product._id.toString(),
+            slug: product.slug || product._id.toString(),
+            variants: product.variants?.map(variant => ({
+                ...variant,
+                _id: variant._id?.toString()
+            })) || []
+        }))
+
+        // Получаем фильтры только если не ищем по ID
+        let availableFilters = {}
+        if (!ids || ids.length === 0) {
+            if (categoryId) {
+                const filterResults = await collection.aggregate([
+                    { $match: { category: categoryId.toLowerCase() } },
+                    { $unwind: { path: '$variants', preserveNullAndEmptyArrays: true } },
+                    {
+                        $group: {
+                            _id: null,
+                            brands: { $addToSet: '$brand' },
+                            models: { $addToSet: '$model' },
+                            memories: { $addToSet: { $ifNull: ['$variants.memory', '$memory'] } },
+                            rams: { $addToSet: { $ifNull: ['$variants.ram', '$ram'] } },
+                            displays: { $addToSet: { $ifNull: ['$variants.display', '$display'] } },
+                            processors: { $addToSet: { $ifNull: ['$variants.processor', '$processor'] } },
+                            colors: { $addToSet: { $ifNull: ['$variants.color', '$color'] } },
+                            conditions: { $addToSet: '$condition' },
+                            years: { $addToSet: '$year' },
+                            oss: { $addToSet: '$os' },
+                            batteries: { $addToSet: '$battery' },
+                            cameras: { $addToSet: '$camera' }
+                        }
+                    }
+                ]).toArray()
+
+                if (filterResults.length > 0) {
+                    const result = filterResults[0]
+                    delete result._id
+                    availableFilters = Object.fromEntries(
+                        Object.entries(result).map(([key, values]) => [
+                            key,
+                            values.filter(Boolean).sort()
+                        ])
+                    )
+                }
+            }
+        }
+
+        return NextResponse.json({
+            products,
+            filters: availableFilters,
+            pagination: {
+                total,
+                page,
+                limit,
+                pages: Math.ceil(total / limit)
+            }
+        })
+
+    } catch (error) {
+        console.error('Error in products API:', error)
+        return NextResponse.json(
+            { error: 'Internal Server Error', details: error.message },
+            { status: 500 }
+        )
+    }
 }

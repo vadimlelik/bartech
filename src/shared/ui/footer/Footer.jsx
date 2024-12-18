@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './footer.module.css'
 import Link from 'next/link'
 
-const Footer = ({ isLanding = false }) => {
+const Footer = () => {
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.container}>
@@ -41,17 +41,16 @@ const Footer = ({ isLanding = false }) => {
 									Возврат товара
 								</Link>
 							</li>
-							{!isLanding && (
-								<li className={styles['footer__offer__item']}>
-									<Link
-										className={styles['footer__offer__link']}
-										href={'/pass'}
-										target='_blank'
-									>
-										Условия рассрочки и сертификация
-									</Link>
-								</li>
-							)}
+
+							<li className={styles['footer__offer__item']}>
+								<Link
+									className={styles['footer__offer__link']}
+									href={'/pass'}
+									target='_blank'
+								>
+									Условия рассрочки и сертификация
+								</Link>
+							</li>
 						</ul>
 					</div>
 				</div>

@@ -1,9 +1,9 @@
-import Footer from '@/shared/ui/footer/Footer'
-import Header from '@/shared/ui/header/Header'
 import React from 'react'
 import styles from './paymentPage.module.css'
 import Dropdown from '@/app/components/Dropdown/Dropdown'
 import Image from 'next/image'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const PageDelivery = () => {
 	return (
@@ -43,21 +43,6 @@ const PageDelivery = () => {
 									height={300}
 									alt='pass_img'
 								/>
-								{/* <h5>Оплата осуществляется наличными или банковской картой :</h5>
-								<ul>
-									<li>Курьеру при доставке товара.</li>
-									<li> Безналичный и наличный расчет при получении товара.</li>
-								</ul>
-								<p>
-									При оплате покупки наличными или банковской картой курьеру Вы
-									получаете: чек об оплате*, подтверждающий факт покупки,
-									гарантийный талон (идет не к каждому товару), документы,
-									предусмотренные производителем к товару.
-								</p>
-								<p>
-									*информация о товаре и его стоимости актуальна на дату
-									формирования образца чека
-								</p> */}
 							</Dropdown>
 							<Dropdown title='Условия Доставки'>
 								<h5>
