@@ -1,32 +1,31 @@
-services:
-  nextjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-'http://localhost:3000'}
-        MONGODB_URI: mongodb://mongodb:27017/bartech
-    environment:
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongodb:27017/bartech
-    ports:
-      - "3000:3000"
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    restart: always
+version: '3'
 
+services:
   mongodb:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongodb_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: always
+
+  nextjs-app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/bartech
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    command: sh docker-init.sh
     restart: always
 
   nginx:

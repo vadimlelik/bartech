@@ -356,7 +356,7 @@ const phones = [
 ]
 
 async function initPhones() {
-	const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/bartech'
+	const uri = process.env.MONGODB_URI
 	if (!uri) {
 		console.error('Please define the MONGODB_URI environment variable')
 		return
@@ -368,7 +368,7 @@ async function initPhones() {
 		await client.connect()
 		console.log('Connected to MongoDB')
 
-		const database = client.db('test')
+		const database = client.db('bartech')
 		const products = database.collection('products')
 
 		// Удаляем существующие продукты
