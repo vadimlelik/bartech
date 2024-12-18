@@ -23,6 +23,8 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/bartech
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://localhost:3000
+    volumes:
+      - nextjs_build:/app/.next
     depends_on:
       mongodb:
         condition: service_healthy
@@ -44,3 +46,4 @@ services:
 
 volumes:
   mongodb_data:
+  nextjs_build:
