@@ -9,9 +9,11 @@ RUN apk add --no-cache \
     curl \
     netcat-openbsd
 
-# Копируем package.json и устанавливаем зависимости
+# Копируем package.json 
 COPY package*.json ./
-RUN npm install
+
+# Очистка кэша npm перед установкой зависимостей
+RUN npm cache clean --force && npm install
 
 # Копируем исходный код приложения
 COPY . .
