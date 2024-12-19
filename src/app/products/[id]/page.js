@@ -22,9 +22,9 @@ async function getProduct(id) {
 
 function getCategoryLabel(categoryId) {
 	const categories = {
-		'iphone': 'iPhone',
-		'samsung': 'Samsung',
-		'xiaomi': 'Xiaomi'
+		iphone: 'iPhone',
+		samsung: 'Samsung',
+		xiaomi: 'Xiaomi',
 	}
 	return categories[categoryId] || categoryId
 }
@@ -41,6 +41,8 @@ export async function generateMetadata({ params }) {
 
 	const product = await getProduct(id)
 	if (!product) return { title: 'Товар не найден' }
+
+	console.log('product', product)
 
 	return {
 		title: `${product.name} - Bartech`,

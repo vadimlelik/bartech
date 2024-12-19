@@ -174,63 +174,64 @@ function generateDescription(specs, brand) {
 
 // Генерация продуктов
 function generateProducts(count = 1000) {
-	const products = []
-	const categories = Object.keys(brandSpecs)
-	const productsPerCategory = Math.floor(count / categories.length)
+    const products = []
+    const categories = Object.keys(brandSpecs)
+    const productsPerCategory = Math.floor(count / categories.length)
 
-	categories.forEach((category) => {
-		const specs = brandSpecs[category]
+    categories.forEach((category) => {
+        const specs = brandSpecs[category]
 
-		for (let i = 0; i < productsPerCategory; i++) {
-			const memory = getRandomItem(specs.memories)
-			const ram = getRandomItem(specs.rams)
+        for (let i = 0; i < productsPerCategory; i++) {
+            const memory = getRandomItem(specs.memories)
+            const ram = getRandomItem(specs.rams)
+            const color = getRandomItem(specs.colors)
 
-			const productSpecs = {
-				display: getRandomItem(specs.displays),
-				displaySize: getRandomItem(specs.displaySizes),
-				refreshRate: getRandomItem(specs.refreshRates),
-				processor: getRandomItem(specs.processors),
-				camera: getRandomItem(specs.cameras),
-				battery: getRandomItem(specs.batteries),
-				chargingSpeed: getRandomItem(specs.chargingSpeeds),
-				wirelessCharging: getRandomItem(specs.wirelessCharging),
-				waterResistance: getRandomItem(specs.waterResistance),
-				security: getRandomItem(specs.security),
-				os: getRandomItem(specs.os),
-			}
+            const specifications = {
+                brand: category,
+                model: generateModelName(category, i),
+                storage: memory,
+                memory: memory,
+                ram: ram,
+                processor: getRandomItem(specs.processors),
+                display: getRandomItem(specs.displays),
+                camera: getRandomItem(specs.cameras),
+                battery: getRandomItem(specs.batteries),
+                os: getRandomItem(specs.os),
+                color: color,
+                condition: getRandomItem(['New', 'Used', 'Refurbished']),
+                year: String(2020 + Math.floor(Math.random() * 4))
+            }
 
-			// Генерация вариантов с разными цветами и ценами
-			const variants = specs.colors
-				.slice(0, 3 + Math.floor(Math.random() * 3)) // 3-5 цветов для каждой модели
-				.map((color) => ({
-					color,
-					model: memory,
-					price: generatePrice(
-						category === 'apple' ? 69990 : 29990,
-						category === 'apple' ? 199990 : 149990
-					),
-				}))
+            // Генерация вариантов с разными цветами и ценами
+            const variants = specs.colors
+                .slice(0, 3 + Math.floor(Math.random() * 3)) // 3-5 цветов для каждой модели
+                .map((variantColor) => ({
+                    color: variantColor,
+                    model: memory,
+                    price: generatePrice(
+                        category === 'apple' ? 69990 : 29990,
+                        category === 'apple' ? 199990 : 149990
+                    ),
+                }))
 
-			products.push({
-				id: `${category}-${i + 1}`,
-				name: generateModelName(category, i),
-				category,
-				variants,
-				memory,
-				ram,
-				...productSpecs,
-				description: generateDescription(productSpecs, category),
-				imageUrl: `/images/${category}-phone.jpg`,
-				image: `/images/${category}-phone.jpg`,
-				additionalImages: [
-					`/images/${category}-phone-2.jpg`,
-					`/images/${category}-phone-3.jpg`,
-				],
-			})
-		}
-	})
+            products.push({
+                id: `${category}-${i + 1}`,
+                name: specifications.model,
+                categoryId: category,
+                variants,
+                specifications,
+                description: generateDescription(specifications, category),
+                imageUrl: `/images/${category}-phone.jpg`,
+                image: `/images/${category}-phone.jpg`,
+                additionalImages: [
+                    `/images/${category}-phone-2.jpg`,
+                    `/images/${category}-phone-3.jpg`,
+                ],
+            })
+        }
+    })
 
-	return products
+    return products
 }
 
 const categories = [

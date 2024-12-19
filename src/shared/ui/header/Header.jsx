@@ -39,9 +39,10 @@ const Header = () => {
 				<Link href='/'>
 					<Image
 						src='/logo_techno_bar.svg'
-						alt='Logo'
-						width={90}
-						height={100}
+						alt='Techno Bar'
+						width={200}
+						height={50}
+						priority
 					/>
 				</Link>
 			</div>

@@ -17,6 +17,7 @@ async function getCategories() {
 		const db = client.db('bartech')
 
 		const categories = await db.collection('categories').find({}).toArray()
+		console.log('Categories fetched:', categories)
 
 		return JSON.parse(JSON.stringify(categories))
 	} catch (error) {

@@ -80,9 +80,10 @@ export default function Header() {
 						<Box sx={{ display: 'flex', alignItems: 'center' }}>
 							<Image
 								src='/logo_techno_bar.svg'
-								alt='Bartech'
-								width={60}
-								height={40}
+								alt='Techno Bar'
+								width={200}
+								height={50}
+								priority
 								style={{
 									width: 'auto',
 									height: 'auto',

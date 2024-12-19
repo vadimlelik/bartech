@@ -85,31 +85,38 @@ export default function ProductDetails({ product }) {
 	// Преобразование характеристик продукта в массив для отображения
 	const getProductSpecifications = () => {
 		const specs = []
-		
+
 		// Добавляем все характеристики из объекта product
 		if (product.specifications) {
 			Object.entries(product.specifications).forEach(([key, value]) => {
 				if (value) {
 					specs.push({
 						name: key,
-						value: value
+						value: value,
 					})
 				}
 			})
 		}
 
 		// Добавляем основные характеристики, если они есть
-		if (product.type) specs.push({ name: 'Тип оборудования', value: product.type })
-		if (product.manufacturer) specs.push({ name: 'Производитель', value: product.manufacturer })
-		if (product.country) specs.push({ name: 'Страна производства', value: product.country })
+		if (product.type)
+			specs.push({ name: 'Тип оборудования', value: product.type })
+		if (product.manufacturer)
+			specs.push({ name: 'Производитель', value: product.manufacturer })
+		if (product.country)
+			specs.push({ name: 'Страна производства', value: product.country })
 		if (product.sku) specs.push({ name: 'Артикул', value: product.sku })
 		if (product.model) specs.push({ name: 'Модель', value: product.model })
 		if (product.year) specs.push({ name: 'Год выпуска', value: product.year })
-		if (product.power) specs.push({ name: 'Мощность двигателя', value: `${product.power} кВт` })
-		if (product.dimensions) specs.push({ name: 'Габариты (Д×Ш×В)', value: product.dimensions })
-		if (product.weight) specs.push({ name: 'Масса', value: `${product.weight} кг` })
-		if (product.equipment) specs.push({ name: 'Комплект поставки', value: product.equipment })
-		
+		if (product.power)
+			specs.push({ name: 'Мощность двигателя', value: `${product.power} кВт` })
+		if (product.dimensions)
+			specs.push({ name: 'Габариты (Д×Ш×В)', value: product.dimensions })
+		if (product.weight)
+			specs.push({ name: 'Масса', value: `${product.weight} кг` })
+		if (product.equipment)
+			specs.push({ name: 'Комплект поставки', value: product.equipment })
+
 		// Добавляем дополнительные характеристики из variants, если они есть
 		if (product.variants && product.variants[0]) {
 			const variant = product.variants[0]
@@ -117,7 +124,7 @@ export default function ProductDetails({ product }) {
 				if (value && !['price', 'id', '_id', 'productId'].includes(key)) {
 					specs.push({
 						name: key,
-						value: value
+						value: value,
 					})
 				}
 			})
@@ -232,16 +239,16 @@ export default function ProductDetails({ product }) {
 						breakpoints={{
 							320: {
 								slidesPerView: 1,
-								spaceBetween: 10
+								spaceBetween: 10,
 							},
 							768: {
 								slidesPerView: 2,
-								spaceBetween: 20
+								spaceBetween: 20,
 							},
 							1024: {
 								slidesPerView: 3,
-								spaceBetween: 30
-							}
+								spaceBetween: 30,
+							},
 						}}
 					>
 						{[product.image, ...(product.additionalImages || [])].map(
@@ -410,15 +417,17 @@ export default function ProductDetails({ product }) {
 					</Tabs>
 
 					<TabPanel value={tabValue} index={0}>
-						<Box sx={{ 
-							width: '100%',
-							maxWidth: '100%',
-							overflowX: 'hidden',
-							'& img': {
+						<Box
+							sx={{
+								width: '100%',
 								maxWidth: '100%',
-								height: 'auto'
-							}
-						}}>
+								overflowX: 'hidden',
+								'& img': {
+									maxWidth: '100%',
+									height: 'auto',
+								},
+							}}
+						>
 							<Typography variant='body1' paragraph>
 								{product.description || 'Описание товара в процессе заполнения'}
 							</Typography>
@@ -469,14 +478,14 @@ export default function ProductDetails({ product }) {
 							))}
 							<ListItem>
 								<ListItemText
-									primary="Гарантия производителя"
-									secondary="12 месяцев"
+									primary='Гарантия производителя'
+									secondary='12 месяцев'
 								/>
 							</ListItem>
 							<ListItem>
 								<ListItemText
-									primary="Сертификация"
-									secondary="Товар сертифицирован"
+									primary='Сертификация'
+									secondary='Товар сертифицирован'
 								/>
 							</ListItem>
 						</List>
@@ -528,15 +537,15 @@ export default function ProductDetails({ product }) {
 				maxWidth='xl'
 				fullWidth
 			>
-				<DialogContent 
-					sx={{ 
-						p: 0, 
-						position: 'relative', 
+				<DialogContent
+					sx={{
+						p: 0,
+						position: 'relative',
 						height: '90vh',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
-						bgcolor: 'black'
+						bgcolor: 'black',
 					}}
 				>
 					<IconButton
@@ -548,26 +557,28 @@ export default function ProductDetails({ product }) {
 							color: 'white',
 							bgcolor: 'rgba(0,0,0,0.5)',
 							'&:hover': {
-								bgcolor: 'rgba(0,0,0,0.7)'
-							}
+								bgcolor: 'rgba(0,0,0,0.7)',
+							},
 						}}
 					>
 						<CloseIcon />
 					</IconButton>
 					{selectedImage && (
-						<Box sx={{ 
-							position: 'relative',
-							width: '100%',
-							height: '100%',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center'
-						}}>
+						<Box
+							sx={{
+								position: 'relative',
+								width: '100%',
+								height: '100%',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
 							<Image
 								src={selectedImage}
-								alt="Увеличенное изображение"
-								layout="fill"
-								objectFit="contain"
+								alt='Увеличенное изображение'
+								layout='fill'
+								objectFit='contain'
 								quality={100}
 							/>
 						</Box>
