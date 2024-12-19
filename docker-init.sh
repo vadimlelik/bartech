@@ -11,21 +11,14 @@ done
 
 echo "MongoDB is up - executing initialization"
 
-# Check if data already exists
-CATEGORIES_COUNT=$(mongo $MONGODB_URI --quiet --eval "db.categories.count()")
+echo "Importing initial data..."
+# Import categories
+mongoimport --uri $MONGODB_URI --collection categories --file /app/data/categories.json --jsonArray
+echo "Categories imported successfully"
 
-if [ "$CATEGORIES_COUNT" = "0" ]; then
-    echo "Importing initial data..."
-    # Import categories
-    mongoimport --uri $MONGODB_URI --collection categories --file /app/data/categories.json --jsonArray
-    echo "Categories imported successfully"
-    
-    # Import products
-    mongoimport --uri $MONGODB_URI --collection products --file /app/data/products.json --jsonArray
-    echo "Products imported successfully"
-else
-    echo "Data already exists, skipping import..."
-fi
+# Import products
+mongoimport --uri $MONGODB_URI --collection products --file /app/data/products.json --jsonArray
+echo "Products imported successfully"
 
 # Start Next.js application
 echo "Starting Next.js application..."
