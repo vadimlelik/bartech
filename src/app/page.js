@@ -49,20 +49,36 @@ export default async function Home() {
 					<Typography
 						variant='h3'
 						component='h1'
-						gutterBottom
 						align='center'
+						gutterBottom
 						sx={{
+							fontWeight: 600,
+							color: '#1a237e',
 							mb: 4,
-							fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-							color: '#2c3e50',
+							fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
 							textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
 						}}
 					>
-						Категории телефонов
+						Категории товаров
 					</Typography>
-					<Grid2 container spacing={{ xs: 2, sm: 3, md: 4 }}>
+					<Grid2
+						container
+						spacing={3}
+						columns={2} 
+						sx={{ 
+							mt: 2,
+							justifyContent: 'center' 
+						}}
+					>
 						{categories.map((category) => (
-							<Grid2 xs={12} sm={6} md={4} key={category._id}>
+							<Grid2 
+								key={category._id} 
+								xs={2} 
+								sm={1} 
+								sx={{
+									maxWidth: '500px' 
+								}}
+							>
 								<CategoryCard category={category} />
 							</Grid2>
 						))}
