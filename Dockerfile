@@ -5,8 +5,7 @@ WORKDIR /app
 
 # Устанавливаем необходимые инструменты
 RUN apk add --no-cache \
-    mongodb-tools \
-    mongodb \
+    mongodb-database-tools \
     curl \
     netcat-openbsd
 

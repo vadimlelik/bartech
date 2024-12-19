@@ -11,13 +11,10 @@ done
 
 echo "MongoDB is up - executing initialization"
 
+# Import data
 echo "Importing initial data..."
-# Import categories
-mongoimport --uri $MONGODB_URI --collection categories --file /app/data/categories.json --jsonArray
-echo "Categories imported successfully"
-
-# Import products
-mongoimport --uri $MONGODB_URI --collection products --file /app/data/products.json --jsonArray
+# Import phones
+mongoimport --uri $MONGODB_URI --collection products --file /app/data/phones.json --jsonArray
 echo "Products imported successfully"
 
 # Start Next.js application
