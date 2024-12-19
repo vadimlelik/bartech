@@ -11,19 +11,22 @@ done
 
 echo "MongoDB is up - executing initialization"
 
-# Initialize data
-echo "Initializing categories..."
-node src/scripts/init-categories.mjs
-echo "Categories initialization completed"
+# Check if data already exists
+CATEGORIES_COUNT=$(mongosh $MONGODB_URI --quiet --eval "db.categories.count()")
 
-echo "Initializing phones..."
-node src/scripts/init-phones.mjs
-echo "Phones initialization completed"
-
-# Build Next.js application
-echo "Building Next.js application..."
-npm run build
+if [ "$CATEGORIES_COUNT" = "0" ]; then
+    echo "Importing initial data..."
+    # Import categories
+    mongoimport --uri $MONGODB_URI --collection categories --file /app/data/categories.json --jsonArray
+    echo "Categories imported successfully"
+    
+    # Import products
+    mongoimport --uri $MONGODB_URI --collection products --file /app/data/products.json --jsonArray
+    echo "Products imported successfully"
+else
+    echo "Data already exists, skipping import..."
+fi
 
 # Start Next.js application
 echo "Starting Next.js application..."
-npm run start
+npm start

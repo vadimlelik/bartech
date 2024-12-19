@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Кофе",
+    "image": "/categories/coffee.png",
+    "description": "Различные сорта кофе высшего качества"
+  },
+  {
+    "name": "Чай",
+    "image": "/categories/tea.png",
+    "description": "Коллекция изысканных чаев"
+  },
+  {
+    "name": "Напитки",
+    "image": "/categories/drinks.png",
+    "description": "Освежающие и тонизирующие напитки"
+  },
+  {
+    "name": "Десерты",
+    "image": "/categories/desserts.png",
+    "description": "Сладости и кондитерские изделия"
+  }
+]
