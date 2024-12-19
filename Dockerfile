@@ -4,10 +4,11 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Устанавливаем необходимые инструменты
-RUN apk add --no-cache \
-    mongodb-database-tools \
-    curl \
-    netcat-openbsd
+RUN apk add --no-cache curl netcat-openbsd wget && \
+    wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-linux-x86_64-100.7.3.tgz && \
+    tar -zxvf mongodb-database-tools-linux-x86_64-100.7.3.tgz && \
+    mv mongodb-database-tools-linux-x86_64-100.7.3/bin/* /usr/local/bin/ && \
+    rm -rf mongodb-database-tools-linux-x86_64-100.7.3.tgz mongodb-database-tools-linux-x86_64-100.7.3
 
 # Копируем package.json 
 COPY package*.json ./
