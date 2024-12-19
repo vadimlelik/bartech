@@ -1,0 +1,542 @@
+[
+	{
+		"id": "1",
+		"name": "iPhone 15 Pro Max",
+		"category": "Смартфоны",
+		"price": 159990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829506",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829506",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-natural-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829496",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-blue-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829493"
+		],
+		"description": "Флагманский смартфон Apple с процессором A17 Pro",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 15 Pro Max",
+			"memory": "256GB",
+			"ram": "8GB",
+			"display": "6.7 OLED",
+			"processor": "A17 Pro",
+			"camera": "48MP + 12MP + 12MP",
+			"battery": "4422mAh",
+			"os": "iOS 17",
+			"color": "Natural Titanium",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "2",
+		"name": "Samsung Galaxy S23 Ultra",
+		"category": "Смартфоны",
+		"price": 129990,
+		"image": "https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkcmea-thumb-534863401",
+		"images": [
+			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkcmea-thumb-534863401",
+			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzgcmea-thumb-534863351",
+			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkamea-thumb-534863376"
+		],
+		"description": "Флагманский смартфон Samsung с S Pen",
+		"specifications": {
+			"brand": "Samsung",
+			"model": "Galaxy S23 Ultra",
+			"memory": "256GB",
+			"ram": "12GB",
+			"display": "6.8 AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "200MP + 12MP + 10MP + 10MP",
+			"battery": "5000mAh",
+			"os": "Android 13",
+			"color": "Phantom Black",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "3",
+		"name": "iPhone 14 Pro",
+		"category": "Смартфоны",
+		"price": 99990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617559",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617559",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617540",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-5-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617535"
+		],
+		"description": "Смартфон Apple с Dynamic Island",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 14 Pro",
+			"memory": "128GB",
+			"ram": "6GB",
+			"display": "6.1 OLED",
+			"processor": "A16 Bionic",
+			"camera": "48MP + 12MP + 12MP",
+			"battery": "3200mAh",
+			"os": "iOS 16",
+			"color": "Space Black",
+			"year": "2022",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "4",
+		"name": "Google Pixel 8 Pro",
+		"category": "Смартфоны",
+		"price": 89990,
+		"image": "https://lh3.googleusercontent.com/0QTqQyp_ArdV9XiMmW_ZGqRePfnNX_qYHGHNEyR_VaLYJRKpqEOj1tB7bExvYaB-_UQrP_kWrGDTb3qbKFvGwQw-jqLPghs=rw-e365-w1440",
+		"images": [
+			"https://lh3.googleusercontent.com/0QTqQyp_ArdV9XiMmW_ZGqRePfnNX_qYHGHNEyR_VaLYJRKpqEOj1tB7bExvYaB-_UQrP_kWrGDTb3qbKFvGwQw-jqLPghs=rw-e365-w1440",
+			"https://lh3.googleusercontent.com/kGmT6yj3qx6UGLc7UZo_P8Jt6ORO3X9d2JKP_UxKGzkYxbwJV4Jv5opcwWOvyDBDkKQXBUXFnbLKW0CBnJxhEBpXzQXYfSo=rw-e365-w1440",
+			"https://lh3.googleusercontent.com/TtBGPQmbmU9kbG2DIwFqxgWwqcV0Sf5BYl8ZL3vHjGABTBlsZfizuVYKC9DmZzfFNGvB7kyXi-vZjXKqcv0KoGXuEXlV1A=rw-e365-w1440"
+		],
+		"description": "Флагман Google с передовыми AI-функциями",
+		"specifications": {
+			"brand": "Google",
+			"model": "Pixel 8 Pro",
+			"memory": "256GB",
+			"ram": "12GB",
+			"display": "6.7 LTPO OLED",
+			"processor": "Google Tensor G3",
+			"camera": "50MP + 48MP + 48MP",
+			"battery": "5050mAh",
+			"os": "Android 14",
+			"color": "Obsidian",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "5",
+		"name": "OnePlus 11",
+		"category": "Смартфоны",
+		"price": 69990,
+		"image": "https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaqwjyaakaqmqxkpy013.png",
+		"images": [
+			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaqwjyaakaqmqxkpy013.png",
+			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8weabfhlaajt7mfbkxm283.png",
+			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaupjmaajt7mfbkxm283.png"
+		],
+		"description": "Мощный флагман с быстрой зарядкой",
+		"specifications": {
+			"brand": "OnePlus",
+			"model": "11",
+			"memory": "256GB",
+			"ram": "16GB",
+			"display": "6.7 AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "50MP + 48MP + 32MP",
+			"battery": "5000mAh",
+			"os": "Android 13",
+			"color": "Eternal Green",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "6",
+		"name": "iPhone 13",
+		"category": "Смартфоны",
+		"price": 69990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-2-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-3-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853"
+		],
+		"description": "Надежный смартфон Apple",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 13",
+			"memory": "128GB",
+			"ram": "4GB",
+			"display": "6.1 OLED",
+			"processor": "A15 Bionic",
+			"camera": "12MP + 12MP",
+			"battery": "3240mAh",
+			"os": "iOS 15",
+			"color": "Midnight",
+			"year": "2021",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "7",
+		"name": "Samsung Galaxy A54",
+		"category": "Смартфоны",
+		"price": 39990,
+		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917487",
+		"images": [
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917487",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917474",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917476"
+		],
+		"description": "Популярный смартфон среднего класса",
+		"specifications": {
+			"brand": "Samsung",
+			"model": "Galaxy A54",
+			"memory": "128GB",
+			"ram": "8GB",
+			"display": "6.4 AMOLED",
+			"processor": "Exynos 1380",
+			"camera": "50MP + 12MP + 5MP",
+			"battery": "5000mAh",
+			"os": "Android 13",
+			"color": "Awesome Graphite",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "8",
+		"name": "Xiaomi 13T Pro",
+		"category": "Смартфоны",
+		"price": 59990,
+		"image": "https://i02.appmifile.com/885_operator_sg/13/09/2023/b8d07e3e53e4a1e3de3f2c89d973c93e.png",
+		"images": [
+			"https://i02.appmifile.com/885_operator_sg/13/09/2023/b8d07e3e53e4a1e3de3f2c89d973c93e.png",
+			"https://i02.appmifile.com/726_operator_sg/13/09/2023/546f5bf1c3ba6f31ba3f4fcd5a36c9f7.png",
+			"https://i02.appmifile.com/279_operator_sg/13/09/2023/1a6cc6d0c5c60e42c5f35ec2e5a8c8b9.png"
+		],
+		"description": "Мощный смартфон с отличной камерой",
+		"specifications": {
+			"brand": "Xiaomi",
+			"model": "13T Pro",
+			"memory": "512GB",
+			"ram": "12GB",
+			"display": "6.67 AMOLED",
+			"processor": "Dimensity 9200+",
+			"camera": "50MP + 50MP + 12MP",
+			"battery": "5000mAh",
+			"os": "Android 13",
+			"color": "Alpine Blue",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "9",
+		"name": "iPhone 12",
+		"category": "Смартфоны",
+		"price": 54990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-2-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-3-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574"
+		],
+		"description": "Классический дизайн Apple",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 12",
+			"memory": "128GB",
+			"ram": "4GB",
+			"display": "6.1 OLED",
+			"processor": "A14 Bionic",
+			"camera": "12MP + 12MP",
+			"battery": "2815mAh",
+			"os": "iOS 14",
+			"color": "Purple",
+			"year": "2020",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "10",
+		"name": "Nothing Phone 2",
+		"category": "Смартфоны",
+		"price": 69990,
+		"image": "https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-full-packshot-1.png",
+		"images": [
+			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-full-packshot-1.png",
+			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-light-full-packshot-1.png",
+			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-back.png"
+		],
+		"description": "Инновационный дизайн с Glyph интерфейсом",
+		"specifications": {
+			"brand": "Nothing",
+			"model": "Phone 2",
+			"memory": "256GB",
+			"ram": "12GB",
+			"display": "6.7 OLED",
+			"processor": "Snapdragon 8+ Gen 1",
+			"camera": "50MP + 50MP",
+			"battery": "4700mAh",
+			"os": "Android 13",
+			"color": "White",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "11",
+		"name": "iPhone 15",
+		"category": "Смартфоны",
+		"price": 89990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-pink?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-pink?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-blue?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-yellow?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672"
+		],
+		"description": "Новый iPhone с Dynamic Island",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 15",
+			"memory": "128GB",
+			"ram": "6GB",
+			"display": "6.1 OLED",
+			"processor": "A16 Bionic",
+			"camera": "48MP + 12MP",
+			"battery": "3349mAh",
+			"os": "iOS 17",
+			"color": "Pink",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "12",
+		"name": "Samsung Galaxy Z Fold 5",
+		"category": "Смартфоны",
+		"price": 179990,
+		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243469",
+		"images": [
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243469",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243454",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243456"
+		],
+		"description": "Складной смартфон нового поколения",
+		"specifications": {
+			"brand": "Samsung",
+			"model": "Galaxy Z Fold 5",
+			"memory": "512GB",
+			"ram": "12GB",
+			"display": "7.6 Dynamic AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "50MP + 12MP + 10MP",
+			"battery": "4400mAh",
+			"os": "Android 13",
+			"color": "Cream",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "13",
+		"name": "Google Pixel 7a",
+		"category": "Смартфоны",
+		"price": 44990,
+		"image": "https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
+		"images": [
+			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
+			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
+			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440"
+		],
+		"description": "Доступный Google с отличной камерой",
+		"specifications": {
+			"brand": "Google",
+			"model": "Pixel 7a",
+			"memory": "128GB",
+			"ram": "8GB",
+			"display": "6.1 OLED",
+			"processor": "Google Tensor G2",
+			"camera": "64MP + 13MP",
+			"battery": "4385mAh",
+			"os": "Android 13",
+			"color": "Sea",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "14",
+		"name": "iPhone 14",
+		"category": "Смартфоны",
+		"price": 79990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-3-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976"
+		],
+		"description": "Надежный флагман Apple",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 14",
+			"memory": "128GB",
+			"ram": "6GB",
+			"display": "6.1 OLED",
+			"processor": "A15 Bionic",
+			"camera": "12MP + 12MP",
+			"battery": "3279mAh",
+			"os": "iOS 16",
+			"color": "Blue",
+			"year": "2022",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "15",
+		"name": "Samsung Galaxy Z Flip 5",
+		"category": "Смартфоны",
+		"price": 109990,
+		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243565",
+		"images": [
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243565",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243550",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243552"
+		],
+		"description": "Компактный складной смартфон",
+		"specifications": {
+			"brand": "Samsung",
+			"model": "Galaxy Z Flip 5",
+			"memory": "256GB",
+			"ram": "8GB",
+			"display": "6.7 Dynamic AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "12MP + 12MP",
+			"battery": "3700mAh",
+			"os": "Android 13",
+			"color": "Mint",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "16",
+		"name": "OnePlus Nord 3",
+		"category": "Смартфоны",
+		"price": 39990,
+		"image": "https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy013.png",
+		"images": [
+			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy013.png",
+			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy014.png",
+			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy015.png"
+		],
+		"description": "Мощный среднебюджетный смартфон",
+		"specifications": {
+			"brand": "OnePlus",
+			"model": "Nord 3",
+			"memory": "256GB",
+			"ram": "16GB",
+			"display": "6.74 AMOLED",
+			"processor": "Dimensity 9000",
+			"camera": "50MP + 8MP + 2MP",
+			"battery": "5000mAh",
+			"os": "Android 13",
+			"color": "Tempest Gray",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "17",
+		"name": "iPhone 13 mini",
+		"category": "Смартфоны",
+		"price": 59990,
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
+		"images": [
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
+			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-pink-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986"
+		],
+		"description": "Компактный премиальный смартфон",
+		"specifications": {
+			"brand": "Apple",
+			"model": "iPhone 13 mini",
+			"memory": "128GB",
+			"ram": "4GB",
+			"display": "5.4 OLED",
+			"processor": "A15 Bionic",
+			"camera": "12MP + 12MP",
+			"battery": "2438mAh",
+			"os": "iOS 15",
+			"color": "Starlight",
+			"year": "2021",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "18",
+		"name": "Xiaomi 13 Pro",
+		"category": "Смартфоны",
+		"price": 89990,
+		"image": "https://i02.appmifile.com/615_operator_sg/10/01/2023/ce8680e20685852fc814149963ed34c3.png",
+		"images": [
+			"https://i02.appmifile.com/615_operator_sg/10/01/2023/ce8680e20685852fc814149963ed34c3.png",
+			"https://i02.appmifile.com/726_operator_sg/10/01/2023/546f5bf1c3ba6f31ba3f4fcd5a36c9f7.png",
+			"https://i02.appmifile.com/279_operator_sg/10/01/2023/1a6cc6d0c5c60e42c5f35ec2e5a8c8b9.png"
+		],
+		"description": "Флагман с камерой Leica",
+		"specifications": {
+			"brand": "Xiaomi",
+			"model": "13 Pro",
+			"memory": "256GB",
+			"ram": "12GB",
+			"display": "6.73 AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "50MP + 50MP + 50MP",
+			"battery": "4820mAh",
+			"os": "Android 13",
+			"color": "Ceramic White",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "19",
+		"name": "Samsung Galaxy S23",
+		"category": "Смартфоны",
+		"price": 74990,
+		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863401",
+		"images": [
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863401",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzgceua-thumb-534863351",
+			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863376"
+		],
+		"description": "Компактный флагман Samsung",
+		"specifications": {
+			"brand": "Samsung",
+			"model": "Galaxy S23",
+			"memory": "256GB",
+			"ram": "8GB",
+			"display": "6.1 Dynamic AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "50MP + 12MP + 10MP",
+			"battery": "3900mAh",
+			"os": "Android 13",
+			"color": "Lavender",
+			"year": "2023",
+			"condition": "new"
+		}
+	},
+	{
+		"id": "20",
+		"name": "ASUS ROG Phone 7",
+		"category": "Смартфоны",
+		"price": 99990,
+		"image": "https://dlcdnwebimgs.asus.com/gain/107F4916-7D6C-4702-8277-B1C0FE645B86/w1000/h732",
+		"images": [
+			"https://dlcdnwebimgs.asus.com/gain/107F4916-7D6C-4702-8277-B1C0FE645B86/w1000/h732",
+			"https://dlcdnwebimgs.asus.com/gain/E06E1C7B-3D64-4B97-B0CB-4938489DE528/w1000/h732",
+			"https://dlcdnwebimgs.asus.com/gain/6DE7F297-8B60-414C-81BB-C927ADE80F13/w1000/h732"
+		],
+		"description": "Игровой смартфон с мощным охлаждением",
+		"specifications": {
+			"brand": "ASUS",
+			"model": "ROG Phone 7",
+			"memory": "512GB",
+			"ram": "16GB",
+			"display": "6.78 AMOLED",
+			"processor": "Snapdragon 8 Gen 2",
+			"camera": "50MP + 13MP + 5MP",
+			"battery": "6000mAh",
+			"os": "Android 13",
+			"color": "Storm White",
+			"year": "2023",
+			"condition": "new"
+		}
+	}
+]

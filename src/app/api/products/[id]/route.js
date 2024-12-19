@@ -1,19 +1,11 @@
-import clientPromise from '../../../../lib/mongodb'
+import { getProductById } from '@/lib/products'
 import { NextResponse } from 'next/server'
-import { ObjectId } from 'mongodb'
 
 export async function GET(request, { params }) {
     try {
-        const resolvedParams = await params
-        const { id } = resolvedParams
+        const id = params.id
+        const product = await getProductById(id)
         
-        const client = await clientPromise
-        const db = client.db('bartech')
-
-        const product = await db.collection('products').findOne({
-            _id: new ObjectId(id)
-        })
-
         if (!product) {
             return NextResponse.json(
                 { error: 'Product not found' },
@@ -22,10 +14,10 @@ export async function GET(request, { params }) {
         }
 
         return NextResponse.json({ product })
-    } catch (e) {
-        console.error(e)
+    } catch (error) {
+        console.error('Error in product API:', error)
         return NextResponse.json(
-            { error: 'Unable to fetch product' },
+            { error: 'Internal Server Error' },
             { status: 500 }
         )
     }

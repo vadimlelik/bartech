@@ -100,7 +100,6 @@ export default function ProductList({ id }) {
 					if (!response.ok) throw new Error('Failed to fetch')
 
 					const data = await response.json()
-					console.log('Received filters:', data.filters) // Добавляем отладку
 					setProducts(data.products || [])
 					setFilters(data.filters || {})
 					setTotalPages(Math.ceil((data.pagination?.total || 0) / ITEMS_PER_PAGE))
@@ -123,7 +122,6 @@ export default function ProductList({ id }) {
 	const handleAddToCart = (product) => {
 		const productWithPrice = {
 			...product,
-			price: product.variants[0]?.price || 0,
 			quantity: 1,
 		}
 		addToCart(productWithPrice)
@@ -140,16 +138,16 @@ export default function ProductList({ id }) {
 	}
 
 	const handleFavoriteClick = (product) => {
-		if (!product || !product._id) {
+		if (!product || !product.id) {
 			console.error('Invalid product:', product)
 			return
 		}
 
-		if (isInFavorites(product._id)) {
-			removeFromFavorites(product._id)
+		if (isInFavorites(product.id)) {
+			removeFromFavorites(product.id)
 			setSnackbarMessage('Товар удален из закладок')
 		} else {
-			addToFavorites(product._id)
+			addToFavorites(product.id)
 			setSnackbarMessage('Товар добавлен в закладки')
 		}
 		setSnackbarOpen(true)
@@ -236,7 +234,6 @@ export default function ProductList({ id }) {
 							{['brand', 'model', 'storage', 'memory', 'ram', 'processor'].map(
 								(filterName) => {
 									const values = filters[filterName + 's']
-									console.log(`Filter ${filterName}:`, values) // Отладка
 									return values && values.length > 0 ? (
 										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
 											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
@@ -266,7 +263,6 @@ export default function ProductList({ id }) {
 							{['display', 'camera', 'battery', 'os', 'color', 'condition', 'year'].map(
 								(filterName) => {
 									const values = filters[filterName + 's']
-									console.log(`Filter ${filterName}:`, values) // Отладка
 									return values && values.length > 0 ? (
 										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
 											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
@@ -296,281 +292,288 @@ export default function ProductList({ id }) {
 							{loading ? 'Loading...' : `Found: ${products.length} products`}
 						</Typography>
 
-						<Grid
-							container
-							spacing={2}
-							sx={{ mt: 2, width: '100%', margin: '0 auto' }}
-						>
-							{products.map((product) => (
+						{loading ? (
+							<Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+								<Typography>Загрузка...</Typography>
+							</Box>
+						) : products && Array.isArray(products) && products.length > 0 ? (
+							<>
 								<Grid
-									item
-									key={product._id}
-									sx={{
-										width: {
-											xs: '100%', // На мобильных - одна карточка
-											sm: '100%', // На планшетах - одна карточка
-											md: 'calc(33.333% - 16px)', // На десктопах - три карточки
-										},
-										margin: '8px',
-									}}
+									container
+									spacing={2}
+									sx={{ mt: 2, width: '100%', margin: '0 auto' }}
 								>
-									<Card
-										sx={{
-											height: '100%',
-											display: 'flex',
-											flexDirection: 'column',
-											position: 'relative',
-											transition: 'transform 0.2s, box-shadow 0.2s',
-											'&:hover': {
-												transform: 'translateY(-4px)',
-												boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-											},
-										}}
-									>
-										{/* Кнопки действий */}
-										<Box
+									{products.map((product) => product && (
+										<Grid
+											item
+											key={product.id || 'no-id'}
 											sx={{
-												position: 'absolute',
-												top: 8,
-												right: 8,
-												display: 'flex',
-												gap: '8px',
-												zIndex: 2,
+												width: {
+													xs: '100%',
+													sm: '100%',
+													md: 'calc(33.333% - 16px)',
+												},
+												margin: '8px',
 											}}
 										>
-											<IconButton
-												size='small'
+											<Card
 												sx={{
-													backgroundColor: 'background.paper',
-													boxShadow: 1,
-													'&:hover': {
-														backgroundColor: 'action.hover',
-													},
-													padding: '8px',
-												}}
-												onClick={(e) => {
-													e.preventDefault()
-													handleFavoriteClick(product)
-												}}
-												color={isInFavorites(product._id) ? 'error' : 'default'}
-											>
-												{isInFavorites(product._id) ? (
-													<FavoriteIcon />
-												) : (
-													<FavoriteBorderIcon />
-												)}
-											</IconButton>
-											<IconButton
-												size='small'
-												sx={{
-													backgroundColor: 'background.paper',
-													boxShadow: 1,
-													'&:hover': {
-														backgroundColor: 'action.hover',
-													},
-													padding: '8px',
-												}}
-												onClick={(e) => {
-													e.preventDefault()
-													if (compareItems.includes(product._id)) {
-														removeFromCompare(product._id)
-													} else {
-														addToCompare(product._id)
-													}
-												}}
-												color={
-													compareItems.includes(product._id)
-														? 'primary'
-														: 'default'
-												}
-											>
-												<CompareArrowsIcon />
-											</IconButton>
-										</Box>
-
-										<Link
-											href={`/products/${product._id}`}
-											style={{
-												textDecoration: 'none',
-												color: 'inherit',
-												display: 'flex',
-												flexDirection: 'column',
-												flexGrow: 1,
-											}}
-										>
-											{/* Изображение товара */}
-											<Box
-												sx={{
+													height: '100%',
+													display: 'flex',
+													flexDirection: 'column',
 													position: 'relative',
-													width: '100%',
-													pt: '100%', // Соотношение сторон 1:1
-													backgroundColor: 'background.paper',
-													borderRadius: '4px 4px 0 0',
-													overflow: 'hidden',
+													transition: 'transform 0.2s, box-shadow 0.2s',
+													'&:hover': {
+														transform: 'translateY(-4px)',
+														boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+													},
 												}}
 											>
+												{/* Кнопки действий */}
 												<Box
 													sx={{
 														position: 'absolute',
-														top: 0,
-														left: 0,
-														right: 0,
-														bottom: 0,
+														top: 8,
+														right: 8,
 														display: 'flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-														p: 2,
+														gap: '8px',
+														zIndex: 2,
 													}}
 												>
-													<Image
-														src={product.image || '/placeholder.jpg'}
-														alt={product.name}
-														fill
-														style={{
-															objectFit: 'contain',
+													<IconButton
+														size='small'
+														sx={{
+															backgroundColor: 'background.paper',
+															boxShadow: 1,
+															'&:hover': {
+																backgroundColor: 'action.hover',
+															},
 															padding: '8px',
 														}}
-													/>
+														onClick={(e) => {
+															e.preventDefault()
+															handleFavoriteClick(product)
+														}}
+														color={isInFavorites(product.id) ? 'error' : 'default'}
+													>
+														{isInFavorites(product.id) ? (
+															<FavoriteIcon />
+														) : (
+															<FavoriteBorderIcon />
+														)}
+													</IconButton>
+													<IconButton
+														size='small'
+														sx={{
+															backgroundColor: 'background.paper',
+															boxShadow: 1,
+															'&:hover': {
+																backgroundColor: 'action.hover',
+															},
+															padding: '8px',
+														}}
+														onClick={(e) => {
+															e.preventDefault()
+															if (compareItems.includes(product.id)) {
+																removeFromCompare(product.id)
+															} else {
+																addToCompare(product.id)
+															}
+														}}
+														color={
+															compareItems.includes(product.id)
+																? 'primary'
+																: 'default'
+														}
+													>
+														<CompareArrowsIcon />
+													</IconButton>
 												</Box>
-											</Box>
 
-											{/* Информация о товаре */}
-											<CardContent
-												sx={{
-													flexGrow: 1,
-													display: 'flex',
-													flexDirection: 'column',
-													gap: 1,
-													p: 2,
-												}}
-											>
-												<Typography
-													variant='h6'
-													component='h2'
-													sx={{
-														fontSize: '1rem',
-														fontWeight: 600,
-														mb: 1,
-														minHeight: '3rem',
-														display: '-webkit-box',
-														WebkitLineClamp: 2,
-														WebkitBoxOrient: 'vertical',
-														overflow: 'hidden',
-														textOverflow: 'ellipsis',
+												<Link
+													href={`/products/${product.id}`}
+													style={{
+														textDecoration: 'none',
+														color: 'inherit',
+														display: 'flex',
+														flexDirection: 'column',
+														flexGrow: 1,
 													}}
 												>
-													{product.name}
-												</Typography>
-
-												{/* Основные характеристики */}
-												<Stack spacing={1} sx={{ mb: 2 }}>
-													{product.specifications && (
-														<>
-															<Typography variant="body2" color="text.secondary">
-																Процессор: {product.specifications.processor}
-															</Typography>
-															<Stack direction="row" spacing={1} flexWrap="wrap">
-																<Chip
-																	label={`${product.specifications.memory} память`}
-																	size="small"
-																	sx={{ 
-																		fontSize: '0.75rem',
-																		bgcolor: 'primary.main',
-																		color: 'white'
-																	}}
-																/>
-																<Chip
-																	label={`${product.specifications.ram} ОЗУ`}
-																	size="small"
-																	sx={{ 
-																		fontSize: '0.75rem',
-																		bgcolor: 'secondary.main',
-																		color: 'white'
-																	}}
-																/>
-															</Stack>
-															<Typography variant="body2" color="text.secondary">
-																Экран: {product.specifications.display}
-															</Typography>
-															<Typography variant="body2" color="text.secondary">
-																Камера: {product.specifications.camera}
-															</Typography>
-														</>
-													)}
-												</Stack>
-
-												<Box sx={{ mt: 'auto', pt: 2 }}>
-													<Typography
-														variant='h5'
-														component='p'
+													{/* Изображение товара */}
+													<Box
 														sx={{
-															fontWeight: 700,
-															color: 'primary.main',
-															display: 'flex',
-															alignItems: 'center',
-															gap: 1,
+															position: 'relative',
+															width: '100%',
+															pt: '100%', // Соотношение сторон 1:1
+															backgroundColor: 'background.paper',
+															borderRadius: '4px 4px 0 0',
+															overflow: 'hidden',
 														}}
 													>
-														{product.variants[0]?.price
-															? `${product.variants[0].price.toLocaleString()} ₽`
-															: 'Цена по запросу'}
-													</Typography>
+														<Box
+															sx={{
+																position: 'absolute',
+																top: 0,
+																left: 0,
+																right: 0,
+																bottom: 0,
+																display: 'flex',
+																alignItems: 'center',
+																justifyContent: 'center',
+																p: 2,
+															}}
+														>
+															<Image
+																src={product.image || '/placeholder.jpg'}
+																alt={product.name}
+																fill
+																style={{
+																	objectFit: 'contain',
+																	padding: '8px',
+																}}
+															/>
+														</Box>
+													</Box>
 
-													<Typography
-														variant='body2'
-														color='text.secondary'
-														sx={{ mt: 0.5 }}
+													{/* Информация о товаре */}
+													<CardContent
+														sx={{
+															flexGrow: 1,
+															display: 'flex',
+															flexDirection: 'column',
+															gap: 1,
+															p: 2,
+														}}
 													>
-														{product.variants.length}{' '}
-														{product.variants.length === 1
-															? 'вариант'
-															: product.variants.length < 5
-															? 'варианта'
-															: 'вариантов'}
-													</Typography>
+														<Typography
+															variant='h6'
+															component='h2'
+															sx={{
+																fontSize: '1rem',
+																fontWeight: 600,
+																mb: 1,
+																minHeight: '3rem',
+																display: '-webkit-box',
+																WebkitLineClamp: 2,
+																WebkitBoxOrient: 'vertical',
+																overflow: 'hidden',
+																textOverflow: 'ellipsis',
+															}}
+														>
+															{product.name}
+														</Typography>
+
+														{/* Основные характеристики */}
+														<Stack spacing={1} sx={{ mb: 2 }}>
+															{product.specifications && (
+																<>
+																	<Typography variant="body2" color="text.secondary">
+																		Процессор: {product.specifications.processor || 'Нет данных'}
+																	</Typography>
+																	<Stack direction="row" spacing={1} flexWrap="wrap">
+																		<Chip
+																			label={`${product.specifications.memory || 'Нет данных'} память`}
+																			size="small"
+																			sx={{ 
+																				fontSize: '0.75rem',
+																				bgcolor: 'primary.main',
+																				color: 'white'
+																			}}
+																		/>
+																		<Chip
+																			label={`${product.specifications.ram || 'Нет данных'} ОЗУ`}
+																			size="small"
+																			sx={{ 
+																				fontSize: '0.75rem',
+																				bgcolor: 'secondary.main',
+																				color: 'white'
+																			}}
+																		/>
+																	</Stack>
+																	<Typography variant="body2" color="text.secondary">
+																		Экран: {product.specifications.display || 'Нет данных'}
+																	</Typography>
+																	<Typography variant="body2" color="text.secondary">
+																		Камера: {product.specifications.camera || 'Нет данных'}
+																	</Typography>
+																</>
+															)}
+														</Stack>
+
+														<Box sx={{ mt: 'auto', pt: 2 }}>
+															<Typography
+																variant='h5'
+																component='p'
+																sx={{
+																	fontWeight: 700,
+																	color: 'primary.main',
+																	display: 'flex',
+																	alignItems: 'center',
+																	gap: 1,
+																}}
+															>
+																{product.price
+																	? `${product.price.toLocaleString()} ₽`
+																	: 'Цена по запросу'}
+															</Typography>
+
+															<Typography
+																variant='body2'
+																color='text.secondary'
+																sx={{ mt: 0.5 }}
+															>
+																1 вариант
+															</Typography>
+														</Box>
+													</CardContent>
+												</Link>
+
+												{/* Кнопка добавления в корзину */}
+												<Box sx={{ p: 2, pt: 0 }}>
+													<Button
+														variant='contained'
+														fullWidth
+														onClick={(e) => {
+															e.preventDefault()
+															handleAddToCart(product)
+														}}
+														startIcon={<ShoppingCartIcon />}
+														sx={{
+															borderRadius: 2,
+															textTransform: 'none',
+															fontWeight: 600,
+														}}
+													>
+														В корзину
+													</Button>
 												</Box>
-											</CardContent>
-										</Link>
-
-										{/* Кнопка добавления в корзину */}
-										<Box sx={{ p: 2, pt: 0 }}>
-											<Button
-												variant='contained'
-												fullWidth
-												onClick={(e) => {
-													e.preventDefault()
-													handleAddToCart(product)
-												}}
-												startIcon={<ShoppingCartIcon />}
-												sx={{
-													borderRadius: 2,
-													textTransform: 'none',
-													fontWeight: 600,
-												}}
-											>
-												В корзину
-											</Button>
-										</Box>
-									</Card>
+											</Card>
+										</Grid>
+									))}
 								</Grid>
-							))}
-						</Grid>
 
-						<Box
-							sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}
-						>
-							<Pagination
-								count={totalPages}
-								page={currentPage}
-								onChange={(event, value) => {
-									const params = new URLSearchParams(searchParams.toString())
-									params.set('page', value)
-									router.push(`?${params.toString()}`)
-								}}
-								color='primary'
-								size='large'
-							/>
-						</Box>
+								<Box
+									sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}
+								>
+									<Pagination
+										count={totalPages}
+										page={currentPage}
+										onChange={(event, value) => {
+											const params = new URLSearchParams(searchParams.toString())
+											params.set('page', value)
+											router.push(`?${params.toString()}`)
+										}}
+										color='primary'
+										size='large'
+									/>
+								</Box>
+							</>
+						) : (
+							<Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+								<Typography>Товары не найдены</Typography>
+							</Box>
+						)}
 					</Grid>
 				</Grid>
 			</Stack>

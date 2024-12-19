@@ -6,16 +6,14 @@ import Footer from '@/components/Footer'
 
 async function getProduct(id) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`
-		)
+		const response = await fetch(`http://localhost:3000/api/products/${id}`)
 		if (!response.ok) {
-			const errorData = await response.json()
 			throw new Error('Failed to fetch product')
 		}
-		const data = await response.json()
-		return data.product
+		const product = await response.json()
+		return product
 	} catch (error) {
+		console.error('Error fetching product:', error)
 		return null
 	}
 }
