@@ -44,6 +44,13 @@ services:
       - nextjs-app
     restart: always
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - ./www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d cvirko-vadim.ru -d www.cvirko-vadim.ru --force-renewal
+
 volumes:
   mongodb_data:
   nextjs_build:
