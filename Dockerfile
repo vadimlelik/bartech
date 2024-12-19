@@ -6,12 +6,9 @@ WORKDIR /app
 # Устанавливаем необходимые инструменты
 RUN apk add --no-cache \
     mongodb-tools \
+    mongodb \
     curl \
-    netcat-openbsd && \
-    wget https://downloads.mongodb.com/compass/mongosh-1.8.0-linux-x64.tgz && \
-    tar -zxvf mongosh-1.8.0-linux-x64.tgz && \
-    cp mongosh-1.8.0-linux-x64/bin/mongosh /usr/local/bin/ && \
-    rm -rf mongosh-1.8.0-linux-x64.tgz mongosh-1.8.0-linux-x64
+    netcat-openbsd
 
 # Копируем package.json 
 COPY package*.json ./

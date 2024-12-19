@@ -12,7 +12,7 @@ done
 echo "MongoDB is up - executing initialization"
 
 # Check if data already exists
-CATEGORIES_COUNT=$(mongosh $MONGODB_URI --quiet --eval "db.categories.count()")
+CATEGORIES_COUNT=$(mongo $MONGODB_URI --quiet --eval "db.categories.count()")
 
 if [ "$CATEGORIES_COUNT" = "0" ]; then
     echo "Importing initial data..."
