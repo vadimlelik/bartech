@@ -87,105 +87,129 @@ export default function FavoritesPage() {
 
 	// Не рендерим ничего до монтирования компонента
 	if (!mounted) {
+		return null
+	}
+
+	if (loading) {
 		return (
-			<Container maxWidth='lg' sx={{ mt: 4, pb: 4 }}>
-				<Box
-					sx={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						minHeight: '200px',
-					}}
-				>
-					<CircularProgress />
-				</Box>
-			</Container>
+			<Box sx={{ 
+				minHeight: 'calc(100vh - 64px - 200px)',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}>
+				<CircularProgress />
+			</Box>
+		)
+	}
+
+	if (!products || products.length === 0) {
+		return (
+			<Box sx={{ 
+				minHeight: 'calc(100vh - 64px - 200px)',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				py: 8
+			}}>
+				<Container maxWidth="lg">
+					<Box sx={{ textAlign: 'center' }}>
+						<Typography variant="h4" gutterBottom>
+							Список избранного пуст
+						</Typography>
+						<Button
+							component={Link}
+							href="/"
+							variant="contained"
+							color="primary"
+							sx={{ mt: 2 }}
+						>
+							Вернуться к покупкам
+						</Button>
+					</Box>
+				</Container>
+			</Box>
 		)
 	}
 
 	return (
-		<Container maxWidth='lg' sx={{ mt: 4, pb: 4 }}>
-			{/* Плавающая панель с иконками навигации */}
-			{cartItems && cartItems.length > 0 && (
-				<Box
-					sx={{
-						position: 'fixed',
-						top: '50%',
-						right: 16,
-						transform: 'translateY(-50%)',
-						display: 'flex',
-						flexDirection: 'column',
-						gap: 2,
-						zIndex: 1000,
-					}}
-				>
-					<Link href='/cart'>
-						<Tooltip title='Перейти в корзину' placement='left'>
-							<IconButton
-								sx={{
-									backgroundColor: 'background.paper',
-									'&:hover': { backgroundColor: 'action.hover' },
-								}}
-							>
-								<Badge badgeContent={cartItems.length} color='primary'>
-									<ShoppingCartIcon />
-								</Badge>
-							</IconButton>
-						</Tooltip>
-					</Link>
-				</Box>
-			)}
-
-			{/* Снэкбар для уведомлений */}
-			<Snackbar
-				open={snackbarOpen}
-				autoHideDuration={3000}
-				onClose={() => setSnackbarOpen(false)}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-			>
-				<Alert
-					onClose={() => setSnackbarOpen(false)}
-					severity='success'
-					sx={{ width: '100%' }}
-				>
-					{snackbarMessage}
-				</Alert>
-			</Snackbar>
-
-			{/* Заголовок всегда виден */}
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					mb: 4,
-				}}
-			>
-				<Typography variant='h4'>Закладки</Typography>
-				{products && products.length > 0 && !loading && (
-					<Button
-						variant='outlined'
-						color='error'
-						onClick={clearFavorites}
-						startIcon={<DeleteIcon />}
+		<Box sx={{ 
+			minHeight: 'calc(100vh - 64px - 200px)',
+			display: 'flex',
+			flexDirection: 'column',
+			py: 4
+		}}>
+			<Container maxWidth="lg">
+				{/* Плавающая панель с иконками навигации */}
+				{cartItems && cartItems.length > 0 && (
+					<Box
+						sx={{
+							position: 'fixed',
+							top: '50%',
+							right: 16,
+							transform: 'translateY(-50%)',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2,
+							zIndex: 1000,
+						}}
 					>
-						Очистить все
-					</Button>
+						<Link href='/cart'>
+							<Tooltip title='Перейти в корзину' placement='left'>
+								<IconButton
+									sx={{
+										backgroundColor: 'background.paper',
+										'&:hover': { backgroundColor: 'action.hover' },
+									}}
+								>
+									<Badge badgeContent={cartItems.length} color='primary'>
+										<ShoppingCartIcon />
+									</Badge>
+								</IconButton>
+							</Tooltip>
+						</Link>
+					</Box>
 				)}
-			</Box>
 
-			{loading ? (
+				{/* Снэкбар для уведомлений */}
+				<Snackbar
+					open={snackbarOpen}
+					autoHideDuration={3000}
+					onClose={() => setSnackbarOpen(false)}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+				>
+					<Alert
+						onClose={() => setSnackbarOpen(false)}
+						severity='success'
+						sx={{ width: '100%' }}
+					>
+						{snackbarMessage}
+					</Alert>
+				</Snackbar>
+
+				{/* Заголовок всегда виден */}
 				<Box
 					sx={{
 						display: 'flex',
-						justifyContent: 'center',
+						justifyContent: 'space-between',
 						alignItems: 'center',
-						minHeight: '200px',
+						mb: 4,
 					}}
 				>
-					<CircularProgress />
+					<Typography variant='h4'>Закладки</Typography>
+					{products && products.length > 0 && !loading && (
+						<Button
+							variant='outlined'
+							color='error'
+							onClick={clearFavorites}
+							startIcon={<DeleteIcon />}
+						>
+							Очистить все
+						</Button>
+					)}
 				</Box>
-			) : products && products.length > 0 ? (
+
 				<Grid container spacing={2}>
 					{products.map((product) => (
 						<Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
@@ -263,24 +287,7 @@ export default function FavoritesPage() {
 						</Grid>
 					))}
 				</Grid>
-			) : (
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						gap: 2,
-						py: 8,
-					}}
-				>
-					<Typography variant='h6' color='text.secondary'>
-						В закладках пока нет товаров
-					</Typography>
-					<Button variant='contained' component={Link} href='/'>
-						Перейти к покупкам
-					</Button>
-				</Box>
-			)}
-		</Container>
+			</Container>
+		</Box>
 	)
 }

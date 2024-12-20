@@ -10,8 +10,9 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
-export default function CategoryCard({ id, name, image, description }) {
+export default function CategoryCard({ category }) {
     const router = useRouter()
+    const { id, name, image, description } = category
 
     return (
         <Card 
@@ -49,12 +50,11 @@ export default function CategoryCard({ id, name, image, description }) {
                 <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                     <Typography 
                         gutterBottom 
-                        variant="h5" 
-                        component="h2" 
-                        align="center"
+                        variant="h6" 
+                        component="h2"
                         sx={{ 
-                            fontWeight: 'bold',
-                            color: 'primary.main',
+                            textAlign: 'center',
+                            fontWeight: 'bold'
                         }}
                     >
                         {name}
@@ -63,8 +63,10 @@ export default function CategoryCard({ id, name, image, description }) {
                         <Typography 
                             variant="body2" 
                             color="text.secondary"
-                            align="center"
-                            sx={{ mt: 'auto' }}
+                            sx={{ 
+                                textAlign: 'center',
+                                mt: 'auto' 
+                            }}
                         >
                             {description}
                         </Typography>

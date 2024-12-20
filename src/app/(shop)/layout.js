@@ -1,21 +1,11 @@
-'use client'
-
-import { Box } from '@mui/material'
-import CompareBar from '@/components/CompareBar'
+import MainLayout from './main-layout'
+import ComparePanel from '@/components/ComparePanel'
 
 export default function ShopLayout({ children }) {
-	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				minHeight: '100vh',
-			}}
-		>
-			<Box component='main' sx={{ flex: 1 }}>
-				{children}
-			</Box>
-			<CompareBar />
-		</Box>
-	)
+    return (
+        <MainLayout>
+            {children}
+            <ComparePanel />
+        </MainLayout>
+    )
 }
