@@ -2,13 +2,10 @@ import React from 'react'
 import styles from './paymentPage.module.css'
 import Dropdown from '@/app/components/Dropdown/Dropdown'
 import Image from 'next/image'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 const PageDelivery = () => {
 	return (
 		<div className={styles.page}>
-			<Header />
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<div className={styles.text}>
@@ -80,7 +77,6 @@ const PageDelivery = () => {
 					</div>
 				</div>
 			</main>
-			<Footer />
 		</div>
 	)
 }

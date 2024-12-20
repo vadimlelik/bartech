@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
 	Grid,
@@ -22,6 +22,16 @@ import {
 	Alert,
 	Paper,
 	Slide,
+	Drawer,
+	List,
+	ListItem,
+	ListItemText,
+	Checkbox,
+	FormGroup,
+	FormControlLabel,
+	Divider,
+	CircularProgress,
+	Skeleton,
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -29,601 +39,492 @@ import { useCompareStore } from '../../../store/compare'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import { useCartStore } from '../../../store/cart'
-import { useFavoritesStore } from '../../../store/favorites'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import TuneIcon from '@mui/icons-material/Tune'
 
-const ITEMS_PER_PAGE = 12
-
-export default function ProductList({ id }) {
-	const [mounted, setMounted] = useState(false)
-	const [loading, setLoading] = useState(false)
-	const [products, setProducts] = useState([])
-	const [totalPages, setTotalPages] = useState(0)
-	const [snackbarOpen, setSnackbarOpen] = useState(false)
-	const [snackbarMessage, setSnackbarMessage] = useState('')
-	const [currentPage, setCurrentPage] = useState(1)
-	const [sortBy, setSortBy] = useState('name')
-	const [sortOrder, setSortOrder] = useState('asc')
-	const [searchTerm, setSearchTerm] = useState('')
-	const [filters, setFilters] = useState({})
-	const [selectedFilters, setSelectedFilters] = useState({
-		memory: '',
-		ram: '',
-		display: '',
-		processor: '',
-		color: '',
-		condition: '',
-		year: '',
-		brand: '',
-		model: '',
-		os: '',
-		battery: '',
-		camera: '',
-		storage: '',
-	})
-
+export default function ProductList({ categoryId }) {
 	const router = useRouter()
 	const searchParams = useSearchParams()
+	const [products, setProducts] = useState([])
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(null)
+	const [sortBy, setSortBy] = useState('name')
+	const [sort, setSort] = useState('asc')
+	const [page, setPage] = useState(1)
+	const [searchTerm, setSearchTerm] = useState('')
+	const [totalPages, setTotalPages] = useState(1)
 	const { compareItems, addToCompare, removeFromCompare } = useCompareStore()
-	const { cartItems, addToCart } = useCartStore()
-	const { favorites, addToFavorites, removeFromFavorites, isInFavorites } =
-		useFavoritesStore()
+	const [snackbarOpen, setSnackbarOpen] = useState(false)
+	const [snackbarMessage, setSnackbarMessage] = useState('')
+	const [favorites, setFavorites] = useState([])
+	const [drawerOpen, setDrawerOpen] = useState(false)
+	const [availableFilters, setAvailableFilters] = useState({})
+	const [activeFilters, setActiveFilters] = useState({})
+	const [previewFilters, setPreviewFilters] = useState({})
+	const [previewCount, setPreviewCount] = useState(null)
+	const [isPreviewLoading, setIsPreviewLoading] = useState(false)
 
 	useEffect(() => {
-		setMounted(true)
+		const savedFavorites = localStorage.getItem('favorites')
+		if (savedFavorites) {
+			setFavorites(JSON.parse(savedFavorites))
+		}
 	}, [])
 
-	useEffect(() => {
-		if (mounted) {
-			const fetchProducts = async () => {
-				setLoading(true)
-				try {
-					const page = searchParams.get('page') || 1
-					setCurrentPage(Number(page))
-
-					// Строим URL с параметрами
-					const queryParams = new URLSearchParams({
-						categoryId: id,
-						page: page,
-						sort: sortOrder,
-						sortBy: sortBy,
-						search: searchTerm,
-					})
-
-					// Добавляем все активные фильтры
-					Object.entries(selectedFilters).forEach(([key, value]) => {
-						if (value) queryParams.append(key, value)
-					})
-
-					const response = await fetch(`/api/products?${queryParams}`)
-					if (!response.ok) throw new Error('Failed to fetch')
-
-					const data = await response.json()
-					setProducts(data.products || [])
-					setFilters(data.filters || {})
-					setTotalPages(Math.ceil((data.pagination?.total || 0) / ITEMS_PER_PAGE))
-				} catch (error) {
-					setSnackbarMessage('Ошибка при загрузке товаров')
-					setSnackbarOpen(true)
-				} finally {
-					setLoading(false)
-				}
-			}
-
-			fetchProducts()
-		}
-	}, [currentPage, sortBy, sortOrder, searchTerm, selectedFilters, mounted])
-
-	if (!mounted) {
-		return null
-	}
-
-	const handleAddToCart = (product) => {
-		const productWithPrice = {
-			...product,
-			quantity: 1,
-		}
-		addToCart(productWithPrice)
-		setSnackbarMessage('Товар добавлен в корзину')
-		setSnackbarOpen(true)
-	}
-
-	const handleSnackbarClose = () => {
-		setSnackbarOpen(false)
-	}
-
-	const handleCompareClick = () => {
-		router.push('/compare')
-	}
-
-	const handleFavoriteClick = (product) => {
-		if (!product || !product.id) {
-			console.error('Invalid product:', product)
-			return
-		}
-
-		if (isInFavorites(product.id)) {
-			removeFromFavorites(product.id)
-			setSnackbarMessage('Товар удален из закладок')
-		} else {
-			addToFavorites(product.id)
-			setSnackbarMessage('Товар добавлен в закладки')
-		}
-		setSnackbarOpen(true)
+	const toggleFavorite = (productId) => {
+		const newFavorites = favorites.includes(productId)
+			? favorites.filter((id) => id !== productId)
+			: [...favorites, productId]
+		setFavorites(newFavorites)
+		localStorage.setItem('favorites', JSON.stringify(newFavorites))
 	}
 
 	const handleSortChange = (event) => {
-		const [newSortBy, newSortOrder] = event.target.value.split('-')
-		setSortBy(newSortBy)
-		setSortOrder(newSortOrder)
+		setSortBy(event.target.value)
+		setPage(1)
+		updateUrl({ sortBy: event.target.value })
 	}
 
-	const handleFilterChange = (filterName, value) => {
-		setSelectedFilters((prev) => ({
-			...prev,
-			[filterName]: value,
-		}))
+	const handleOrderChange = (event) => {
+		setSort(event.target.value)
+		setPage(1)
+		updateUrl({ sort: event.target.value })
+	}
+
+	const handlePageChange = (event, value) => {
+		setPage(value)
+		updateUrl({ page: value })
 	}
 
 	const handleSearch = (event) => {
 		setSearchTerm(event.target.value)
+		setPage(1)
+		updateUrl({ search: event.target.value, page: 1 })
 	}
 
-	const handlePageChange = (event, value) => {
-		const params = new URLSearchParams(searchParams.toString())
-		params.set('page', value)
-		router.push(`?${params.toString()}`)
-	}
-
-	const getFilterLabel = (filterName) => {
-		const labels = {
-			brand: 'Бренд',
-			model: 'Модель',
-			memory: 'Память',
-			ram: 'Оперативная память',
-			processor: 'Процессор',
-			display: 'Дисплей',
-			color: 'Цвет',
-			condition: 'Состояние',
-			os: 'Операционная система',
-			battery: 'Аккумулятор',
-			camera: 'Камера',
-			storage: 'Количество памяти'
+	const handleFilterChange = async (field, value) => {
+		const newFilters = { ...previewFilters }
+		if (newFilters[field] === value) {
+			delete newFilters[field]
+		} else {
+			newFilters[field] = value
 		}
+		setPreviewFilters(newFilters)
+
+		// Получаем предварительный подсчет
+		setIsPreviewLoading(true)
+		try {
+			const params = new URLSearchParams({
+				categoryId,
+				...newFilters,
+			})
+			const response = await fetch(`/api/products?${params}`)
+			const data = await response.json()
+			setPreviewCount(data.pagination.total)
+		} catch (error) {
+			console.error('Error fetching preview count:', error)
+		}
+		setIsPreviewLoading(false)
+	}
+
+	const applyFilters = () => {
+		setActiveFilters(previewFilters)
+		setPage(1)
+		updateUrl({ ...previewFilters, page: 1 })
+		setDrawerOpen(false)
+	}
+
+	const resetFilters = () => {
+		setPreviewFilters({})
+		setActiveFilters({})
+		setPreviewCount(null)
+		updateUrl({ page: 1 })
+	}
+
+	const updateUrl = (params) => {
+		const currentParams = new URLSearchParams(searchParams.toString())
+		Object.entries(params).forEach(([key, value]) => {
+			if (value) {
+				currentParams.set(key, value)
+			} else {
+				currentParams.delete(key)
+			}
+		})
+		router.push(`?${currentParams.toString()}`)
+	}
+
+	useEffect(() => {
+		const fetchProducts = async () => {
+			try {
+				setLoading(true)
+				console.log('Fetching products with categoryId:', categoryId)
+				const params = new URLSearchParams({
+					categoryId,
+					sort,
+					sortBy,
+					page: page.toString(),
+					search: searchTerm,
+					...activeFilters,
+				})
+				console.log('Request URL:', `/api/products?${params}`)
+				const response = await fetch(`/api/products?${params}`)
+				if (!response.ok) {
+					throw new Error('Не удалось загрузить продукты')
+				}
+				const data = await response.json()
+				console.log('Received data:', data)
+				setProducts(data.products)
+				setTotalPages(data.pagination.pages)
+				setAvailableFilters(data.filters)
+			} catch (err) {
+				console.error('Error fetching products:', err)
+				setError(err.message)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		if (categoryId) {
+			fetchProducts()
+		}
+	}, [categoryId, sort, sortBy, page, searchTerm, activeFilters])
+
+	const handleCompareToggle = (product) => {
+		if (compareItems.some((item) => item.id === product.id)) {
+			removeFromCompare(product.id)
+			setSnackbarMessage('Товар удален из сравнения')
+		} else {
+			if (compareItems.length >= 4) {
+				setSnackbarMessage('Можно сравнивать максимум 4 товара')
+			} else {
+				addToCompare(product)
+				setSnackbarMessage('Товар добавлен к сравнению')
+			}
+		}
+		setSnackbarOpen(true)
+	}
+
+	const filterSections = [
+		{ key: 'memory', label: 'Память' },
+		{ key: 'ram', label: 'Оперативная память' },
+		{ key: 'processor', label: 'Процессор' },
+		{ key: 'display', label: 'Дисплей' },
+		{ key: 'camera', label: 'Камера' },
+		{ key: 'battery', label: 'Аккумулятор' },
+		{ key: 'os', label: 'Операционная система' },
+		{ key: 'color', label: 'Цвет' },
+		{ key: 'year', label: 'Год выпуска' },
+	]
+
+	const ProductSkeleton = () => (
+		<Grid item xs={12} sm={6} md={4}>
+			<Card sx={{ height: '100%' }}>
+				<Skeleton variant='rectangular' height={300} />
+				<CardContent>
+					<Skeleton variant='text' height={40} />
+					<Skeleton variant='text' height={30} />
+					<Stack direction='row' spacing={1} sx={{ mt: 2 }}>
+						<Skeleton variant='rectangular' width='60%' height={40} />
+						<Skeleton variant='circular' width={40} height={40} />
+						<Skeleton variant='circular' width={40} height={40} />
+					</Stack>
+				</CardContent>
+			</Card>
+		</Grid>
+	)
+
+	if (error) {
 		return (
-			labels[filterName] ||
-			filterName.charAt(0).toUpperCase() + filterName.slice(1)
+			<Box sx={{ textAlign: 'center', py: 4 }}>
+				<Typography color='error'>{error}</Typography>
+			</Box>
 		)
 	}
 
 	return (
-		<Box sx={{ position: 'relative', minHeight: '100vh', pb: 10 }}>
-			<Stack spacing={2} sx={{ mb: 4 }}>
-				<Grid container spacing={2}>
-					<Grid item xs={12} md={3}>
-						<Paper sx={{ p: 2, mb: 2 }}>
-							<FormControl fullWidth sx={{ mb: 2 }}>
-								<InputLabel>Сортировка</InputLabel>
-								<Select
-									value={`${sortBy}-${sortOrder}`}
-									onChange={handleSortChange}
-									label='Сортировка'
-								>
-									<MenuItem value='name-asc'>По названию (А-Я)</MenuItem>
-									<MenuItem value='name-desc'>По названию (Я-А)</MenuItem>
-									<MenuItem value='price-asc'>По цене (возрастание)</MenuItem>
-									<MenuItem value='price-desc'>По цене (убывание)</MenuItem>
-									<MenuItem value='year-desc'>По году (сначала новые)</MenuItem>
-									<MenuItem value='year-asc'>По году (сначала старые)</MenuItem>
-								</Select>
-							</FormControl>
-
-							<TextField
-								fullWidth
-								label='Поиск'
-								value={searchTerm}
-								onChange={handleSearch}
-								sx={{ mb: 2 }}
+		<>
+			<Paper elevation={3} sx={{ p: 2, mb: 3 }}>
+				<Stack
+					direction={{ xs: 'column', sm: 'row' }}
+					spacing={2}
+					alignItems='center'
+				>
+					<TextField
+						label='Поиск'
+						variant='outlined'
+						value={searchTerm}
+						onChange={handleSearch}
+						sx={{ flexGrow: 1 }}
+					/>
+					<FormControl sx={{ minWidth: 120 }}>
+						<InputLabel>Сортировать по</InputLabel>
+						<Select
+							value={sortBy}
+							onChange={handleSortChange}
+							label='Сортировать по'
+						>
+							<MenuItem value='name'>Названию</MenuItem>
+							<MenuItem value='price'>Цене</MenuItem>
+						</Select>
+					</FormControl>
+					<FormControl sx={{ minWidth: 120 }}>
+						<InputLabel>Порядок</InputLabel>
+						<Select value={sort} onChange={handleOrderChange} label='Порядок'>
+							<MenuItem value='asc'>По возрастанию</MenuItem>
+							<MenuItem value='desc'>По убыванию</MenuItem>
+						</Select>
+					</FormControl>
+					<Button
+						variant='outlined'
+						startIcon={<TuneIcon />}
+						onClick={() => setDrawerOpen(true)}
+						color={
+							Object.keys(activeFilters).length > 0 ? 'primary' : 'inherit'
+						}
+					>
+						Фильтры
+						{Object.keys(activeFilters).length > 0 && (
+							<Chip
+								label={Object.keys(activeFilters).length}
+								size='small'
+								color='primary'
+								sx={{ ml: 1 }}
 							/>
+						)}
+					</Button>
+				</Stack>
+			</Paper>
 
-							{/* Основные фильтры */}
-							<Typography variant='subtitle1' sx={{ mb: 1 }}>
-								Основные характеристики
-							</Typography>
-							{['brand', 'model', 'storage', 'memory', 'ram', 'processor'].map(
-								(filterName) => {
-									const values = filters[filterName + 's']
-									return values && values.length > 0 ? (
-										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
-											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
-											<Select
-												value={selectedFilters[filterName] || ''}
-												onChange={(e) =>
-													handleFilterChange(filterName, e.target.value)
-												}
-												label={getFilterLabel(filterName)}
-											>
-												<MenuItem value=''>Все</MenuItem>
-												{values.map((value) => (
-													<MenuItem key={value} value={value}>
-														{value}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									) : null
-								}
-							)}
-
-							{/* Дополнительные фильтры */}
-							<Typography variant='subtitle1' sx={{ mb: 1, mt: 2 }}>
-								Дополнительные характеристики
-							</Typography>
-							{['display', 'camera', 'battery', 'os', 'color', 'condition', 'year'].map(
-								(filterName) => {
-									const values = filters[filterName + 's']
-									return values && values.length > 0 ? (
-										<FormControl key={filterName} fullWidth sx={{ mb: 2 }}>
-											<InputLabel>{getFilterLabel(filterName)}</InputLabel>
-											<Select
-												value={selectedFilters[filterName] || ''}
-												onChange={(e) =>
-													handleFilterChange(filterName, e.target.value)
-												}
-												label={getFilterLabel(filterName)}
-											>
-												<MenuItem value=''>Все</MenuItem>
-												{values.map((value) => (
-													<MenuItem key={value} value={value}>
-														{value}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									) : null
-								}
-							)}
-						</Paper>
-					</Grid>
-
-					<Grid item xs={12} md={9}>
-						<Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
-							{loading ? 'Loading...' : `Found: ${products.length} products`}
-						</Typography>
-
-						{loading ? (
-							<Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-								<Typography>Загрузка...</Typography>
-							</Box>
-						) : products && Array.isArray(products) && products.length > 0 ? (
-							<>
-								<Grid
-									container
-									spacing={2}
-									sx={{ mt: 2, width: '100%', margin: '0 auto' }}
+			<Drawer
+				anchor='right'
+				open={drawerOpen}
+				onClose={() => {
+					setPreviewFilters(activeFilters)
+					setPreviewCount(null)
+					setDrawerOpen(false)
+				}}
+				PaperProps={{
+					sx: { width: { xs: '100%', sm: 400 } },
+				}}
+			>
+				<Box sx={{ p: 2 }}>
+					<Stack
+						direction='row'
+						justifyContent='space-between'
+						alignItems='center'
+						sx={{ mb: 2 }}
+					>
+						<Typography variant='h6'>Фильтры</Typography>
+						{Object.keys(previewFilters).length > 0 && (
+							<Button variant='text' onClick={resetFilters}>
+								Сбросить все
+							</Button>
+						)}
+					</Stack>
+					<Divider sx={{ mb: 2 }} />
+					<List>
+						{filterSections.map(
+							({ key, label }) =>
+								availableFilters[key]?.length > 0 && (
+									<ListItem
+										key={key}
+										sx={{ flexDirection: 'column', alignItems: 'flex-start' }}
+									>
+										<Typography variant='subtitle1' sx={{ mb: 1 }}>
+											{label}
+										</Typography>
+										<FormGroup>
+											{availableFilters[key].map((value) => (
+												<FormControlLabel
+													key={value}
+													control={
+														<Checkbox
+															checked={previewFilters[key] === value}
+															onChange={() => handleFilterChange(key, value)}
+														/>
+													}
+													label={value}
+												/>
+											))}
+										</FormGroup>
+										<Divider sx={{ my: 2, width: '100%' }} />
+									</ListItem>
+								)
+						)}
+					</List>
+					{(previewCount !== null || isPreviewLoading) && (
+						<Paper
+							elevation={3}
+							sx={{
+								p: 2,
+								position: 'sticky',
+								bottom: 16,
+								mt: 2,
+								backgroundColor: 'background.paper',
+								zIndex: 1,
+							}}
+						>
+							<Stack spacing={2}>
+								{isPreviewLoading ? (
+									<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+										<CircularProgress size={24} />
+									</Box>
+								) : (
+									<Typography>Найдено товаров: {previewCount}</Typography>
+								)}
+								<Button
+									variant='contained'
+									onClick={applyFilters}
+									disabled={isPreviewLoading}
+									fullWidth
 								>
-									{products.map((product) => product && (
-										<Grid
-											item
-											key={product.id || 'no-id'}
-											sx={{
-												width: {
-													xs: '100%',
-													sm: '100%',
-													md: 'calc(33.333% - 16px)',
-												},
-												margin: '8px',
-											}}
+									Показать результаты
+								</Button>
+							</Stack>
+						</Paper>
+					)}
+				</Box>
+			</Drawer>
+
+			<Grid container spacing={3}>
+				{loading
+					? Array.from(new Array(6)).map((_, index) => (
+							<ProductSkeleton key={index} />
+					  ))
+					: products.map((product) => (
+							<Grid item xs={12} sm={6} md={4} key={product.id}>
+								<Card
+									sx={{
+										height: '100%',
+										display: 'flex',
+										flexDirection: 'column',
+										position: 'relative',
+									}}
+								>
+									<Box
+										sx={{
+											position: 'relative',
+											width: '100%',
+											pt: '100%',
+										}}
+									>
+										<Link href={`/products/${product.id}`}>
+											<Image
+												src={product.image}
+												alt={product.name}
+												fill
+												style={{
+													objectFit: 'contain',
+													padding: '20px',
+												}}
+											/>
+										</Link>
+									</Box>
+									<CardContent
+										sx={{
+											flexGrow: 1,
+											display: 'flex',
+											flexDirection: 'column',
+										}}
+									>
+										<Link
+											href={`/products/${product.id}`}
+											style={{ textDecoration: 'none', color: 'inherit' }}
 										>
-											<Card
+											<Typography
+												gutterBottom
+												variant='h6'
+												component='h2'
 												sx={{
-													height: '100%',
-													display: 'flex',
-													flexDirection: 'column',
-													position: 'relative',
-													transition: 'transform 0.2s, box-shadow 0.2s',
-													'&:hover': {
-														transform: 'translateY(-4px)',
-														boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-													},
+													overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													display: '-webkit-box',
+													WebkitLineClamp: 2,
+													WebkitBoxOrient: 'vertical',
+													minHeight: '3.6em',
+													textDecoration: 'none',
 												}}
 											>
-												{/* Кнопки действий */}
-												<Box
-													sx={{
-														position: 'absolute',
-														top: 8,
-														right: 8,
-														display: 'flex',
-														gap: '8px',
-														zIndex: 2,
-													}}
-												>
-													<IconButton
-														size='small'
-														sx={{
-															backgroundColor: 'background.paper',
-															boxShadow: 1,
-															'&:hover': {
-																backgroundColor: 'action.hover',
-															},
-															padding: '8px',
-														}}
-														onClick={(e) => {
-															e.preventDefault()
-															handleFavoriteClick(product)
-														}}
-														color={isInFavorites(product.id) ? 'error' : 'default'}
-													>
-														{isInFavorites(product.id) ? (
-															<FavoriteIcon />
-														) : (
-															<FavoriteBorderIcon />
-														)}
-													</IconButton>
-													<IconButton
-														size='small'
-														sx={{
-															backgroundColor: 'background.paper',
-															boxShadow: 1,
-															'&:hover': {
-																backgroundColor: 'action.hover',
-															},
-															padding: '8px',
-														}}
-														onClick={(e) => {
-															e.preventDefault()
-															if (compareItems.includes(product.id)) {
-																removeFromCompare(product.id)
-															} else {
-																addToCompare(product.id)
-															}
-														}}
-														color={
-															compareItems.includes(product.id)
-																? 'primary'
-																: 'default'
-														}
-													>
-														<CompareArrowsIcon />
-													</IconButton>
-												</Box>
+												{product.name}
+											</Typography>
+										</Link>
+										<Typography
+											variant='h5'
+											color='primary'
+											sx={{ mt: 'auto', mb: 2, fontWeight: 'bold' }}
+										>
+											{product.price.toLocaleString()} ₽
+										</Typography>
+										<Stack
+											direction='row'
+											spacing={1}
+											alignItems='center'
+											justifyContent='space-between'
+										>
+											<Button
+												variant='contained'
+												component={Link}
+												href={`/products/${product.id}`}
+												fullWidth
+											>
+												Подробнее
+											</Button>
+											<IconButton
+												onClick={() => handleCompareToggle(product)}
+												color={
+													compareItems.some((item) => item.id === product.id)
+														? 'primary'
+														: 'default'
+												}
+											>
+												<CompareArrowsIcon />
+											</IconButton>
+											<IconButton
+												onClick={() => toggleFavorite(product.id)}
+												color={
+													favorites.includes(product.id) ? 'error' : 'default'
+												}
+											>
+												{favorites.includes(product.id) ? (
+													<FavoriteIcon />
+												) : (
+													<FavoriteBorderIcon />
+												)}
+											</IconButton>
+										</Stack>
+									</CardContent>
+								</Card>
+							</Grid>
+					  ))}
+			</Grid>
 
-												<Link
-													href={`/products/${product.id}`}
-													style={{
-														textDecoration: 'none',
-														color: 'inherit',
-														display: 'flex',
-														flexDirection: 'column',
-														flexGrow: 1,
-													}}
-												>
-													{/* Изображение товара */}
-													<Box
-														sx={{
-															position: 'relative',
-															width: '100%',
-															pt: '100%', // Соотношение сторон 1:1
-															backgroundColor: 'background.paper',
-															borderRadius: '4px 4px 0 0',
-															overflow: 'hidden',
-														}}
-													>
-														<Box
-															sx={{
-																position: 'absolute',
-																top: 0,
-																left: 0,
-																right: 0,
-																bottom: 0,
-																display: 'flex',
-																alignItems: 'center',
-																justifyContent: 'center',
-																p: 2,
-															}}
-														>
-															<Image
-																src={product.image || '/placeholder.jpg'}
-																alt={product.name}
-																fill
-																style={{
-																	objectFit: 'contain',
-																	padding: '8px',
-																}}
-															/>
-														</Box>
-													</Box>
-
-													{/* Информация о товаре */}
-													<CardContent
-														sx={{
-															flexGrow: 1,
-															display: 'flex',
-															flexDirection: 'column',
-															gap: 1,
-															p: 2,
-														}}
-													>
-														<Typography
-															variant='h6'
-															component='h2'
-															sx={{
-																fontSize: '1rem',
-																fontWeight: 600,
-																mb: 1,
-																minHeight: '3rem',
-																display: '-webkit-box',
-																WebkitLineClamp: 2,
-																WebkitBoxOrient: 'vertical',
-																overflow: 'hidden',
-																textOverflow: 'ellipsis',
-															}}
-														>
-															{product.name}
-														</Typography>
-
-														{/* Основные характеристики */}
-														<Stack spacing={1} sx={{ mb: 2 }}>
-															{product.specifications && (
-																<>
-																	<Typography variant="body2" color="text.secondary">
-																		Процессор: {product.specifications.processor || 'Нет данных'}
-																	</Typography>
-																	<Stack direction="row" spacing={1} flexWrap="wrap">
-																		<Chip
-																			label={`${product.specifications.memory || 'Нет данных'} память`}
-																			size="small"
-																			sx={{ 
-																				fontSize: '0.75rem',
-																				bgcolor: 'primary.main',
-																				color: 'white'
-																			}}
-																		/>
-																		<Chip
-																			label={`${product.specifications.ram || 'Нет данных'} ОЗУ`}
-																			size="small"
-																			sx={{ 
-																				fontSize: '0.75rem',
-																				bgcolor: 'secondary.main',
-																				color: 'white'
-																			}}
-																		/>
-																	</Stack>
-																	<Typography variant="body2" color="text.secondary">
-																		Экран: {product.specifications.display || 'Нет данных'}
-																	</Typography>
-																	<Typography variant="body2" color="text.secondary">
-																		Камера: {product.specifications.camera || 'Нет данных'}
-																	</Typography>
-																</>
-															)}
-														</Stack>
-
-														<Box sx={{ mt: 'auto', pt: 2 }}>
-															<Typography
-																variant='h5'
-																component='p'
-																sx={{
-																	fontWeight: 700,
-																	color: 'primary.main',
-																	display: 'flex',
-																	alignItems: 'center',
-																	gap: 1,
-																}}
-															>
-																{product.price
-																	? `${product.price.toLocaleString()} ₽`
-																	: 'Цена по запросу'}
-															</Typography>
-
-															<Typography
-																variant='body2'
-																color='text.secondary'
-																sx={{ mt: 0.5 }}
-															>
-																1 вариант
-															</Typography>
-														</Box>
-													</CardContent>
-												</Link>
-
-												{/* Кнопка добавления в корзину */}
-												<Box sx={{ p: 2, pt: 0 }}>
-													<Button
-														variant='contained'
-														fullWidth
-														onClick={(e) => {
-															e.preventDefault()
-															handleAddToCart(product)
-														}}
-														startIcon={<ShoppingCartIcon />}
-														sx={{
-															borderRadius: 2,
-															textTransform: 'none',
-															fontWeight: 600,
-														}}
-													>
-														В корзину
-													</Button>
-												</Box>
-											</Card>
-										</Grid>
-									))}
-								</Grid>
-
-								<Box
-									sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}
-								>
-									<Pagination
-										count={totalPages}
-										page={currentPage}
-										onChange={(event, value) => {
-											const params = new URLSearchParams(searchParams.toString())
-											params.set('page', value)
-											router.push(`?${params.toString()}`)
-										}}
-										color='primary'
-										size='large'
-									/>
-								</Box>
-							</>
-						) : (
-							<Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-								<Typography>Товары не найдены</Typography>
-							</Box>
-						)}
-					</Grid>
-				</Grid>
-			</Stack>
+			{totalPages > 1 && (
+				<Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+					<Pagination
+						count={totalPages}
+						page={page}
+						onChange={handlePageChange}
+						color='primary'
+					/>
+				</Box>
+			)}
 
 			<Snackbar
 				open={snackbarOpen}
 				autoHideDuration={3000}
-				onClose={handleSnackbarClose}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+				onClose={() => setSnackbarOpen(false)}
+				TransitionComponent={Slide}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 			>
 				<Alert
-					onClose={handleSnackbarClose}
+					onClose={() => setSnackbarOpen(false)}
 					severity='success'
+					variant='filled'
 					sx={{ width: '100%' }}
 				>
 					{snackbarMessage}
 				</Alert>
 			</Snackbar>
-
-			<Slide direction='up' in={compareItems.length >= 2}>
-				<Paper
-					elevation={4}
-					sx={{
-						position: 'fixed',
-						bottom: 20,
-						left: '50%',
-						transform: 'translateX(-50%)',
-						zIndex: 1000,
-						p: 2,
-						borderRadius: 2,
-						bgcolor: 'primary.main',
-						color: 'white',
-						display: 'flex',
-						alignItems: 'center',
-						gap: 2,
-					}}
-				>
-					<Typography>
-						Выбрано {compareItems.length} товара для сравнения
-					</Typography>
-					<Button
-						variant='contained'
-						color='secondary'
-						onClick={handleCompareClick}
-						startIcon={<CompareArrowsIcon />}
-					>
-						Сравнить
-					</Button>
-				</Paper>
-			</Slide>
-		</Box>
+		</>
 	)
 }

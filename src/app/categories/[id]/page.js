@@ -1,55 +1,111 @@
 import { Container, Grid, Typography, Box } from '@mui/material'
 import BackButton from './BackButton'
 import ProductList from './ProductList'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import { getCategoryById } from '@/lib/categories'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params }) {
-	const { id } = await params
-	const categoryName = id.charAt(0).toUpperCase() + id.slice(1)
+    try {
+        // Дожидаемся разрешения всего объекта params
+        const resolvedParams = await Promise.resolve(params)
+        const { id } = resolvedParams
 
-	return {
-		title: `${categoryName} - Телефоны`,
-		description: `Купить телефоны ${categoryName} в нашем магазине`,
-	}
+        console.log('Category Metadata - Params:', resolvedParams)
+        console.log('Category Metadata - ID:', id)
+
+        if (!id) {
+            console.log('Category Metadata - No ID provided')
+            return {
+                title: 'Категория не найдена',
+                description: 'Запрашиваемая категория не найдена'
+            }
+        }
+
+        const category = await getCategoryById(id)
+        console.log('Category Metadata - Found category:', category)
+
+        if (!category) {
+            console.log('Category Metadata - Category not found')
+            return {
+                title: 'Категория не найдена',
+                description: 'Запрашиваемая категория не найдена'
+            }
+        }
+
+        const metadata = {
+            title: `${category.name} - Телефоны`,
+            description: `Купить телефоны ${category.name} в нашем магазине`,
+        }
+        console.log('Category Metadata - Generated:', metadata)
+        return metadata
+    } catch (error) {
+        console.error('Error generating category metadata:', error)
+        return {
+            title: 'Ошибка',
+            description: 'Произошла ошибка при загрузке категории'
+        }
+    }
 }
 
 export default async function CategoryPage({ params }) {
-	const { id } = await params
+    try {
+        // Дожидаемся разрешения всего объекта params
+        const resolvedParams = await Promise.resolve(params)
+        const { id } = resolvedParams
 
-	const categoryName = id.charAt(0).toUpperCase() + id.slice(1)
+        console.log('Category Page - Params:', resolvedParams)
+        console.log('Category Page - ID:', id)
 
-	return (
-		<>
-			<Header />
-			<Box
-				sx={{
-					minHeight: '100vh',
-					background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-					py: 4,
-				}}
-			>
-				<Container maxWidth='lg' sx={{ py: 4 }}>
-					<BackButton />
+        if (!id) {
+            console.log('Category Page - No ID provided')
+            notFound()
+        }
 
-					<Typography
-						variant='h4'
-						component='h1'
-						gutterBottom
-						sx={{
-							fontWeight: 'bold',
-							color: 'primary.main',
-							textAlign: 'center',
-							mb: 4,
-						}}
-					>
-						{categoryName}
-					</Typography>
+        const category = await getCategoryById(id)
+        console.log('Category Page - Found category:', category)
 
-					<ProductList id={id} />
-				</Container>
-			</Box>
-			<Footer />
-		</>
-	)
+        if (!category) {
+            console.log('Category Page - Category not found')
+            notFound()
+        }
+
+        return (
+            <main>
+                <Box
+                    sx={{
+                        minHeight: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    <Container sx={{ py: 4, flex: 1 }}>
+                        <BackButton />
+                        <Typography
+                            variant="h4"
+                            component="h1"
+                            gutterBottom
+                            align="center"
+                            sx={{ mb: 4 }}
+                        >
+                            {category.name}
+                        </Typography>
+                        {category.description && (
+                            <Typography
+                                variant="body1"
+                                color="text.secondary"
+                                align="center"
+                                sx={{ mb: 4 }}
+                            >
+                                {category.description}
+                            </Typography>
+                        )}
+                        <ProductList categoryId={category.id} />
+                    </Container>
+                </Box>
+            </main>
+        )
+    } catch (error) {
+        console.error('Error in CategoryPage:', error)
+        notFound()
+    }
 }

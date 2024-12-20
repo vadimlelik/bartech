@@ -1,0 +1,27 @@
+[
+  {
+    "id": "smartphones",
+    "name": "Смартфоны",
+    "image": "/images/categories/smartphones.webp"
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "image": "/images/categories/apple.webp"
+  },
+  {
+    "id": "samsung",
+    "name": "Samsung",
+    "image": "/images/categories/samsung.webp"
+  },
+  {
+    "id": "huawei",
+    "name": "Huawei",
+    "image": "/images/categories/huawei.webp"
+  },
+  {
+    "id": "xiaomi",
+    "name": "Xiaomi",
+    "image": "/images/categories/xiaomi.webp"
+  }
+]

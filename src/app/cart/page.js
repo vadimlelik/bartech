@@ -1,222 +1,257 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState } from 'react'
 import {
+	Box,
 	Container,
 	Typography,
-	Card,
-	CardContent,
-	CardMedia,
 	Button,
 	IconButton,
-	Box,
 	Grid,
+	Card,
+	CardContent,
+	TextField,
 	Divider,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	Paper,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemSecondaryAction,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import DeleteIcon from '@mui/icons-material/Delete'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { useCartStore } from '@/store/cart'
 import Image from 'next/image'
-import { formatPrice } from '../../utils/formatPrice'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCartStore } from '@/store/cart'
 
-export default function Cart() {
-	const { cartItems, updateQuantity, removeFromCart, getCartTotal } =
+const EXCHANGE_RATE_BYN = 3.35 // Курс белорусского рубля к российскому
+
+export default function CartPage() {
+	const router = useRouter()
+	const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } =
 		useCartStore()
-	const [mounted, setMounted] = useState(false)
-	const [localCartItems, setLocalCartItems] = useState([])
+	const [promoCode, setPromoCode] = useState('')
 
-	useEffect(() => {
-		setMounted(true)
-		setLocalCartItems(cartItems)
-	}, [cartItems])
-
-	if (!mounted) {
-		return null
+	const handleQuantityChange = (productId, newQuantity) => {
+		if (newQuantity > 0) {
+			updateQuantity(productId, newQuantity)
+		}
 	}
 
-	if (localCartItems.length === 0) {
+	const cartTotal = getCartTotal()
+	const cartTotalBYN = (cartTotal * EXCHANGE_RATE_BYN).toFixed(2)
+
+	if (!cartItems.length) {
 		return (
-			<div
-				style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
-			>
-				<Header />
-				<Container
-					maxWidth='md'
-					sx={{ mt: 4, textAlign: 'center', flexGrow: 1 }}
-				>
-					<Paper elevation={3} sx={{ p: 4 }}>
-						<ShoppingCartIcon sx={{ fontSize: 60, color: 'grey.500', mb: 2 }} />
-						<Typography variant='h5' gutterBottom>
-							Корзина пуста
-						</Typography>
-						<Button
-							component={Link}
-							href='/'
-							variant='contained'
-							startIcon={<ArrowBackIcon />}
-							sx={{ mt: 2 }}
-						>
-							Продолжить покупки
-						</Button>
-					</Paper>
-				</Container>
-				<Footer />
-			</div>
+			<Container maxWidth='lg' sx={{ py: 8 }}>
+				<Box sx={{ textAlign: 'center' }}>
+					<Typography variant='h4' gutterBottom>
+						Корзина пуста
+					</Typography>
+					<Button component={Link} href='/' variant='contained' sx={{ mt: 2 }}>
+						Перейти к покупкам
+					</Button>
+				</Box>
+			</Container>
 		)
 	}
 
-	const totalPrice = getCartTotal()
-
 	return (
-		<>
-			<Header />
-			<Container maxWidth='lg' sx={{ mt: 4 }}>
-				<Typography variant='h4' gutterBottom sx={{ mb: 4 }}>
-					Корзина
-				</Typography>
-				<Grid container spacing={3}>
-					<Grid item xs={12} md={8}>
-						<List>
-							{localCartItems.map((item) => {
-								const itemId = item._id || item.id
-								const totalItemPrice = item.price * item.quantity
+		<Container maxWidth='lg' sx={{ py: 4 }}>
+			<Typography variant='h4' gutterBottom>
+				Корзина
+			</Typography>
 
-								return (
-									<Card key={itemId} sx={{ mb: 2 }}>
-										<Grid container>
-											<Grid item xs={12} sm={4}>
-												<CardMedia
-													component='img'
-													height='200'
-													image={item.image}
-													alt={item.name}
-													sx={{ objectFit: 'contain' }}
-												/>
-											</Grid>
-											<Grid item xs={12} sm={8}>
-												<CardContent>
+			<Grid container spacing={4}>
+				<Grid item xs={12} md={8}>
+					<TableContainer component={Paper}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Товар</TableCell>
+									<TableCell align='right'>Цена</TableCell>
+									<TableCell align='center'>Количество</TableCell>
+									<TableCell align='right'>Сумма</TableCell>
+									<TableCell></TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{cartItems.map((item) => {
+									const itemTotal = item.price * item.quantity
+									const itemTotalBYN = (itemTotal * EXCHANGE_RATE_BYN).toFixed(
+										2
+									)
+
+									return (
+										<TableRow key={item.id}>
+											<TableCell>
+												<Box sx={{ display: 'flex', alignItems: 'center' }}>
+													<Box
+														sx={{
+															position: 'relative',
+															width: 80,
+															height: 80,
+															mr: 2,
+														}}
+													>
+														<Image
+															src={item.image}
+															alt={item.name}
+															fill
+															style={{ objectFit: 'contain' }}
+															unoptimized
+														/>
+													</Box>
 													<Link
-														href={`/products/${itemId}`}
+														href={`/products/${item.id}`}
 														style={{
 															textDecoration: 'none',
 															color: 'inherit',
 														}}
 													>
-														<Typography
-															variant='h6'
-															component='div'
-															gutterBottom
-														>
+														<Typography variant='subtitle1'>
 															{item.name}
 														</Typography>
 													</Link>
-
-													<Typography
-														variant='body2'
-														color='text.secondary'
-														sx={{ mb: 2 }}
+												</Box>
+											</TableCell>
+											<TableCell align='right'>
+												<Typography variant='body1'>
+													{(item.price * 3.35).toFixed(2)} BYN
+												</Typography>
+											</TableCell>
+											<TableCell align='center'>
+												<Box
+													sx={{
+														display: 'flex',
+														alignItems: 'center',
+														justifyContent: 'center',
+													}}
+												>
+													<IconButton
+														size='small'
+														onClick={() =>
+															handleQuantityChange(item.id, item.quantity - 1)
+														}
 													>
-														{item.description}
+														<RemoveIcon />
+													</IconButton>
+													<Typography sx={{ mx: 2 }}>
+														{item.quantity}
 													</Typography>
-
-													<Box sx={{ mb: 2 }}>
-														<Typography variant='h6' color='primary'>
-															{formatPrice(item.price)} ₽
-														</Typography>
-														<Typography variant='body2' color='text.secondary'>
-															Рассрочка от{' '}
-															{formatPrice(Math.ceil(item.price / 12))}/мес
-														</Typography>
-													</Box>
-
-													<Box
-														sx={{
-															display: 'flex',
-															alignItems: 'center',
-															justifyContent: 'space-between',
-														}}
+													<IconButton
+														size='small'
+														onClick={() =>
+															handleQuantityChange(item.id, item.quantity + 1)
+														}
 													>
-														<Box sx={{ display: 'flex', alignItems: 'center' }}>
-															<IconButton
-																onClick={() =>
-																	updateQuantity(
-																		itemId,
-																		Math.max(1, item.quantity - 1)
-																	)
-																}
-																size='small'
-															>
-																<RemoveIcon />
-															</IconButton>
-															<Typography sx={{ mx: 2 }}>
-																{item.quantity}
-															</Typography>
-															<IconButton
-																onClick={() =>
-																	updateQuantity(itemId, item.quantity + 1)
-																}
-																size='small'
-															>
-																<AddIcon />
-															</IconButton>
-														</Box>
+														<AddIcon />
+													</IconButton>
+												</Box>
+											</TableCell>
+											<TableCell align='right'>
+												<Typography variant='body1'>
+													{(item.price * item.quantity * 3.35).toFixed(2)} BYN
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<IconButton
+													onClick={() => removeFromCart(item.id)}
+													color='error'
+												>
+													<DeleteIcon />
+												</IconButton>
+											</TableCell>
+										</TableRow>
+									)
+								})}
+							</TableBody>
+						</Table>
+					</TableContainer>
 
-														<Box sx={{ display: 'flex', alignItems: 'center' }}>
-															<Typography variant='body1'>
-																{formatPrice(item.price * item.quantity)}
-															</Typography>
-															<IconButton
-																onClick={() => removeFromCart(itemId)}
-																color='error'
-															>
-																<DeleteIcon />
-															</IconButton>
-														</Box>
-													</Box>
-												</CardContent>
-											</Grid>
-										</Grid>
-									</Card>
-								)
-							})}
-						</List>
-					</Grid>
-					<Grid item xs={12} md={4}>
-						<Paper elevation={3} sx={{ p: 3 }}>
+					<Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+						<Button
+							variant='outlined'
+							color='error'
+							onClick={clearCart}
+							startIcon={<DeleteIcon />}
+						>
+							Очистить корзину
+						</Button>
+					</Box>
+				</Grid>
+
+				<Grid item xs={12} md={4}>
+					<Card>
+						<CardContent>
 							<Typography variant='h6' gutterBottom>
 								Итого
 							</Typography>
+							<Box sx={{ mb: 3 }}>
+								<TextField
+									fullWidth
+									label='Промокод'
+									value={promoCode}
+									onChange={(e) => setPromoCode(e.target.value)}
+									size='small'
+								/>
+							</Box>
 							<Divider sx={{ my: 2 }} />
-							<Typography variant='h6'>
-								Итого: {formatPrice(totalPrice)}
-							</Typography>
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'space-between',
+									mb: 2,
+								}}
+							>
+								<Typography>Товары ({cartItems.length}):</Typography>
+								<Box sx={{ textAlign: 'right' }}>
+									<Typography variant='h6'>
+										{(cartTotal * 3.35).toFixed(2)} BYN
+									</Typography>
+								</Box>
+							</Box>
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'space-between',
+									mb: 2,
+								}}
+							>
+								<Typography>Доставка:</Typography>
+								<Typography>Бесплатно</Typography>
+							</Box>
+							<Divider sx={{ my: 2 }} />
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'space-between',
+									mb: 3,
+								}}
+							>
+								<Typography variant='h6'>К оплате:</Typography>
+								<Box sx={{ textAlign: 'right' }}>
+									<Typography variant='h6'>
+										{(cartTotal * 3.35).toFixed(2)} BYN
+									</Typography>
+								</Box>
+							</Box>
 							<Button
-								component={Link}
-								href='/checkout'
 								variant='contained'
-								color='primary'
 								fullWidth
-								sx={{ mt: 3 }}
 								size='large'
+								onClick={() => router.push('/checkout')}
 							>
 								Оформить заказ
 							</Button>
-						</Paper>
-					</Grid>
+						</CardContent>
+					</Card>
 				</Grid>
-				<Footer />
-			</Container>
-		</>
+			</Grid>
+		</Container>
 	)
 }

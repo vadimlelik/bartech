@@ -5,42 +5,50 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
         
-        // Получаем все возможные фильтры
-        const filterFields = [
-            'memory', 'ram', 'display', 'processor', 
-            'color', 'condition', 'year', 'brand', 
-            'model', 'os', 'battery', 'camera', 'storage'
-        ]
+        const params = {
+            categoryId: searchParams.get('categoryId'),
+            search: searchParams.get('search'),
+            sort: searchParams.get('sort') || 'asc',
+            sortBy: searchParams.get('sortBy') || 'name',
+            page: parseInt(searchParams.get('page') || '1'),
+            limit: parseInt(searchParams.get('limit') || '12'),
+            ids: searchParams.get('ids')?.split(',') || [],
+            filters: {}
+        }
 
-        // Получаем все параметры из URL
-        const categoryId = searchParams.get('categoryId')
-        const search = searchParams.get('search')
-        const sort = searchParams.get('sort') || 'asc'
-        const sortBy = searchParams.get('sortBy') || 'name'
-        const page = parseInt(searchParams.get('page')) || 1
-        const limit = parseInt(searchParams.get('limit')) || 12
-        const ids = searchParams.getAll('ids')
+        console.log('API Request params:', params)
 
-        // Собираем значения фильтров из параметров запроса
-        const filters = {}
+        // Собираем все возможные фильтры
+        const filterFields = ['memory', 'ram', 'processor', 'display', 'camera', 'battery', 'os', 'color', 'year']
         filterFields.forEach(field => {
             const value = searchParams.get(field)
-            if (value) filters[field] = value
+            if (value) params.filters[field] = value
         })
 
-        // Получаем продукты из JSON файла
-        const result = await getProducts({
-            categoryId,
-            search,
-            sort,
-            sortBy,
-            page,
-            limit,
-            ids,
-            filters
+        const result = await getProducts(params)
+        console.log('API Response:', {
+            products: result.products.length,
+            filters: Object.keys(result.filters),
+            pagination: result.pagination
         })
 
-        return NextResponse.json(result)
+        if (!result) {
+            return NextResponse.json(
+                { error: 'Products not found' },
+                { status: 404 }
+            )
+        }
+
+        return NextResponse.json({
+            products: result.products || [],
+            filters: result.filters || {},
+            pagination: {
+                total: result.pagination?.total || 0,
+                page: result.pagination?.page || 1,
+                limit: result.pagination?.limit || 12,
+                pages: result.pagination?.pages || 1
+            }
+        })
     } catch (error) {
         console.error('Error in products API:', error)
         return NextResponse.json(

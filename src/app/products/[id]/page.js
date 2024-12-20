@@ -1,31 +1,9 @@
 import { Container } from '@mui/material'
 import ProductDetails from './ProductDetails'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-
-async function getProduct(id) {
-	try {
-		const response = await fetch(`http://localhost:3000/api/products/${id}`)
-		if (!response.ok) {
-			throw new Error('Failed to fetch product')
-		}
-		const product = await response.json()
-		return product
-	} catch (error) {
-		console.error('Error fetching product:', error)
-		return null
-	}
-}
-
-function getCategoryLabel(categoryId) {
-	const categories = {
-		iphone: 'iPhone',
-		samsung: 'Samsung',
-		xiaomi: 'Xiaomi',
-	}
-	return categories[categoryId] || categoryId
-}
+import { getProductById } from '@/lib/products'
+import { getCategoryById } from '@/lib/categories'
+import { notFound } from 'next/navigation'
 
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
@@ -33,54 +11,68 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-	const resolvedParams = await params
-	const { id } = resolvedParams
-	if (!id) return { title: 'Товар не найден' }
+    const resolvedParams = await Promise.resolve(params)
+    const { id } = resolvedParams
 
-	const product = await getProduct(id)
-	if (!product) return { title: 'Товар не найден' }
+    const product = await getProductById(id)
+    if (!product) {
+        return {
+            title: 'Товар не найден',
+            description: 'Запрашиваемый товар не найден в магазине',
+        }
+    }
 
-	console.log('product', product)
-
-	return {
-		title: `${product.name} - Bartech`,
-		description: product.description || 'Описание товара отсутствует',
-	}
+    return {
+        title: `${product.name} - Купить в магазине`,
+        description: product.description || '',
+    }
 }
 
 export default async function ProductPage({ params }) {
-	const resolvedParams = await params
-	const { id } = resolvedParams
+    const resolvedParams = await Promise.resolve(params)
+    const { id } = resolvedParams
 
-	const product = await getProduct(id)
+    console.log('Debug - Product Page:')
+    console.log('1. Resolved Params:', resolvedParams)
+    console.log('2. Product ID:', id)
 
-	if (!product) {
-		return (
-			<div>
-				<h1>Товар не найден</h1>
-				<p>ID товара: {id}</p>
-			</div>
-		)
-	}
+    const product = await getProductById(id)
+    console.log('3. Found Product:', product)
 
-	const breadcrumbs = [
-		{ label: 'Главная', href: '/' },
-		{ label: 'Категории', href: '/categories' },
-		{
-			label: getCategoryLabel(product.categoryId),
-			href: `/categories/${product.categoryId}`,
-		},
-		{ label: product.name, href: null },
-	]
+    if (!product) {
+        console.log('4. Product not found, redirecting to 404')
+        notFound()
+    }
 
-	return (
-		<>
-			<Header />
-			<Container maxWidth='lg' sx={{ py: 4 }}>
-				<Breadcrumbs items={breadcrumbs} />
-				<ProductDetails product={product} />
-			</Container>
-			<Footer />
-		</>
-	)
+    const category = await getCategoryById(product.category)
+    console.log('5. Found Category:', category)
+
+    if (!category) {
+        console.log('6. Category not found, redirecting to 404')
+        notFound()
+    }
+
+    const breadcrumbs = [
+        {
+            label: 'Главная',
+            href: '/',
+        },
+        {
+            label: category.name,
+            href: `/categories/${category.id}`,
+        },
+        {
+            label: product.name,
+            href: `/products/${product.id}`,
+        },
+    ]
+
+    return (
+        <main>
+            <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
+                <Breadcrumbs items={breadcrumbs} />
+                <ProductDetails product={product} />
+            </Container>
+        </main>
+    )
 }

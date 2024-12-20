@@ -1,180 +1,334 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-	Container,
-	Paper,
-	Typography,
-	TextField,
-	RadioGroup,
-	FormControlLabel,
-	Radio,
-	Button,
-	Box,
-	Alert,
+    Container,
+    Typography,
+    Box,
+    Grid,
+    Paper,
+    TextField,
+    Button,
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    Stepper,
+    Step,
+    StepLabel,
 } from '@mui/material'
+import Image from 'next/image'
 import { useCartStore } from '@/store/cart'
+import { useRouter } from 'next/navigation'
 
-const phoneRegex = /^(\+375|375|80)?(29|25|44|33)(\d{3})(\d{2})(\d{2})$/
+// Регулярные выражения для валидации
+const PHONE_REGEX = /^(\+375|375|80)?(29|25|44|33)(\d{3})(\d{2})(\d{2})$/
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+const NAME_REGEX = /^[A-Za-zА-Яа-яЁё\s-]{2,50}$/
 
 export default function CheckoutPage() {
-	const { cartItems, getCartTotal, clearCart } = useCartStore()
-	const [deliveryType, setDeliveryType] = useState('pickup')
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		watch,
-	} = useForm()
+    const router = useRouter()
+    const { cartItems, getCartTotal, clearCart } = useCartStore()
+    const [activeStep, setActiveStep] = useState(0)
+    
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        getValues,
+    } = useForm({
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            address: '',
+            city: '',
+            zipCode: '',
+        },
+    })
 
-	const onSubmit = async (data) => {
-		// Подготовка данных для Bitrix24
-		const bitrixData = {
-			TITLE: 'Новый заказ с сайта',
-			NAME: data.fullName,
-			PHONE: [{ VALUE: data.phone, VALUE_TYPE: 'WORK' }],
-			ADDRESS:
-				deliveryType === 'delivery'
-					? {
-							CITY: data.city,
-							STREET: data.street,
-							HOUSE: data.house,
-					  }
-					: 'Самовывоз',
-			COMMENTS: `Тип доставки: ${
-				deliveryType === 'delivery' ? 'Доставка' : 'Самовывоз'
-			}`,
-			PRODUCTS: cartItems.map((item) => ({
-				PRODUCT_NAME: item.name,
-				PRICE: item.price,
-				QUANTITY: item.quantity,
-			})),
-			TOTAL: getCartTotal(),
-		}
+    useEffect(() => {
+        if (cartItems.length === 0) {
+            router.push('/')
+        }
+    }, [cartItems, router])
 
-		try {
-			const response = await fetch('/api/create-order', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(bitrixData),
-			})
+    const steps = ['Корзина', 'Данные доставки', 'Подтверждение']
 
-			if (response.ok) {
-				clearCart()
-				// Редирект на страницу успешного оформления
-				window.location.href = '/order-success'
-			} else {
-				throw new Error('Failed to create order')
-			}
-		} catch (error) {
-			console.error('Error creating order:', error)
-			// Показать ошибку пользователю
-		}
-	}
+    const handleNext = () => {
+        if (activeStep === 1) {
+            // Проверяем валидность формы перед переходом к подтверждению
+            const isValid = Object.keys(errors).length === 0
+            if (!isValid) {
+                return
+            }
+        }
+        setActiveStep((prev) => prev + 1)
+    }
 
-	return (
-		<Container maxWidth='md' sx={{ py: 4 }}>
-			<Paper elevation={3} sx={{ p: 4 }}>
-				<Typography variant='h4' gutterBottom>
-					Оформление заказа
-				</Typography>
+    const handleBack = () => {
+        setActiveStep((prev) => prev - 1)
+    }
 
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<TextField
-						fullWidth
-						label='ФИО'
-						margin='normal'
-						{...register('fullName', { required: 'ФИО обязательно' })}
-						error={!!errors.fullName}
-						helperText={errors.fullName?.message}
-					/>
+    const onSubmit = async (data) => {
+        console.log('Order submitted:', {
+            items: cartItems,
+            totalPrice: getCartTotal(),
+            customerInfo: data,
+        })
+        clearCart()
+        router.push('/thank-you')
+    }
 
-					<TextField
-						fullWidth
-						label='Телефон'
-						margin='normal'
-						{...register('phone', {
-							required: 'Телефон обязателен',
-							pattern: {
-								value: phoneRegex,
-								message: 'Введите корректный номер телефона для Беларуси',
-							},
-						})}
-						error={!!errors.phone}
-						helperText={errors.phone?.message}
-					/>
+    const renderCartItems = () => (
+        <List>
+            {cartItems.map((item) => (
+                <ListItem key={item.id}>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <Image
+                                src={item.image}
+                                alt={item.name}
+                                width={40}
+                                height={40}
+                                style={{ objectFit: 'contain' }}
+                                unoptimized
+                            />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={item.name}
+                        secondary={`${item.quantity} x ${(item.price * 3.35).toFixed(2)} BYN`}
+                    />
+                </ListItem>
+            ))}
+        </List>
+    )
 
-					<RadioGroup
-						value={deliveryType}
-						onChange={(e) => setDeliveryType(e.target.value)}
-						sx={{ my: 2 }}
-					>
-						<FormControlLabel
-							value='pickup'
-							control={<Radio />}
-							label='Самовывоз'
-						/>
-						<FormControlLabel
-							value='delivery'
-							control={<Radio />}
-							label='Доставка (Бесплатно)'
-						/>
-					</RadioGroup>
+    const renderDeliveryForm = () => (
+        <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Имя"
+                        error={!!errors.firstName}
+                        helperText={errors.firstName?.message}
+                        {...register('firstName', {
+                            required: 'Имя обязательно',
+                            pattern: {
+                                value: NAME_REGEX,
+                                message: 'Введите корректное имя',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Фамилия"
+                        error={!!errors.lastName}
+                        helperText={errors.lastName?.message}
+                        {...register('lastName', {
+                            required: 'Фамилия обязательна',
+                            pattern: {
+                                value: NAME_REGEX,
+                                message: 'Введите корректную фамилию',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Email"
+                        type="email"
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                        {...register('email', {
+                            required: 'Email обязателен',
+                            pattern: {
+                                value: EMAIL_REGEX,
+                                message: 'Введите корректный email',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Телефон"
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
+                        {...register('phone', {
+                            required: 'Телефон обязателен',
+                            pattern: {
+                                value: PHONE_REGEX,
+                                message: 'Введите корректный номер телефона',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Адрес"
+                        error={!!errors.address}
+                        helperText={errors.address?.message}
+                        {...register('address', {
+                            required: 'Адрес обязателен',
+                            minLength: {
+                                value: 5,
+                                message: 'Адрес должен быть не менее 5 символов',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Город"
+                        error={!!errors.city}
+                        helperText={errors.city?.message}
+                        {...register('city', {
+                            required: 'Город обязателен',
+                            minLength: {
+                                value: 2,
+                                message: 'Название города должно быть не менее 2 символов',
+                            },
+                        })}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        fullWidth
+                        label="Индекс"
+                        error={!!errors.zipCode}
+                        helperText={errors.zipCode?.message}
+                        {...register('zipCode', {
+                            required: 'Индекс обязателен',
+                            pattern: {
+                                value: /^\d{6}$/,
+                                message: 'Введите корректный индекс (6 цифр)',
+                            },
+                        })}
+                    />
+                </Grid>
+            </Grid>
+        </Box>
+    )
 
-					{deliveryType === 'delivery' && (
-						<Box sx={{ mt: 2 }}>
-							<TextField
-								fullWidth
-								label='Город'
-								margin='normal'
-								{...register('city', {
-									required: 'Город обязателен при доставке',
-								})}
-								error={!!errors.city}
-								helperText={errors.city?.message}
-							/>
-							<TextField
-								fullWidth
-								label='Улица'
-								margin='normal'
-								{...register('street', {
-									required: 'Улица обязательна при доставке',
-								})}
-								error={!!errors.street}
-								helperText={errors.street?.message}
-							/>
-							<TextField
-								fullWidth
-								label='Дом'
-								margin='normal'
-								{...register('house', {
-									required: 'Номер дома обязателен при доставке',
-								})}
-								error={!!errors.house}
-								helperText={errors.house?.message}
-							/>
-						</Box>
-					)}
+    const renderConfirmation = () => {
+        const formData = getValues()
+        return (
+            <Box>
+                <Typography variant="h6" gutterBottom>
+                    Подтверждение заказа
+                </Typography>
+                <Typography variant="body1" paragraph>
+                    Пожалуйста, проверьте данные заказа:
+                </Typography>
+                <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
+                    <Typography variant="subtitle1" gutterBottom>
+                        Данные доставки:
+                    </Typography>
+                    <Typography>
+                        {formData.firstName} {formData.lastName}
+                    </Typography>
+                    <Typography>{formData.email}</Typography>
+                    <Typography>{formData.phone}</Typography>
+                    <Typography>
+                        {formData.address}, {formData.city}, {formData.zipCode}
+                    </Typography>
+                </Paper>
+                <Paper variant="outlined" sx={{ p: 2 }}>
+                    <Typography variant="subtitle1" gutterBottom>
+                        Товары:
+                    </Typography>
+                    {renderCartItems()}
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h6">
+                        Итого: {(getCartTotal() * 3.35).toFixed(2)} BYN
+                    </Typography>
+                </Paper>
+            </Box>
+        )
+    }
 
-					<Box sx={{ mt: 3 }}>
-						<Typography variant='h6' gutterBottom>
-							Итого к оплате: {getCartTotal().toLocaleString()} ₽
-						</Typography>
-						<Button
-							type='submit'
-							variant='contained'
-							color='primary'
-							size='large'
-							fullWidth
-						>
-							Оформить заказ
-						</Button>
-					</Box>
-				</form>
-			</Paper>
-		</Container>
-	)
+    const getStepContent = (step) => {
+        switch (step) {
+            case 0:
+                return (
+                    <>
+                        {renderCartItems()}
+                        <Typography variant="h6" align="right">
+                            Итого: {(getCartTotal() * 3.35).toFixed(2)} BYN
+                        </Typography>
+                    </>
+                )
+            case 1:
+                return renderDeliveryForm()
+            case 2:
+                return renderConfirmation()
+            default:
+                return 'Неизвестный шаг'
+        }
+    }
+
+    if (cartItems.length === 0) {
+        return null
+    }
+
+    return (
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Оформление заказа
+            </Typography>
+            <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+                {steps.map((label) => (
+                    <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+            <Paper sx={{ p: 3 }}>
+                {getStepContent(activeStep)}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                    {activeStep !== 0 && (
+                        <Button onClick={handleBack} sx={{ mr: 1 }}>
+                            Назад
+                        </Button>
+                    )}
+                    {activeStep === steps.length - 1 ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSubmit(onSubmit)}
+                        >
+                            Оформить заказ
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleNext}
+                        >
+                            Далее
+                        </Button>
+                    )}
+                </Box>
+            </Paper>
+        </Container>
+    )
 }

@@ -1,91 +1,34 @@
-import { Container, Typography, Box } from '@mui/material'
-import Grid2 from '@mui/material/Grid2'
+import { Container, Grid, Typography } from '@mui/material'
 import CategoryCard from './components/CategoryCard'
-import clientPromise from '../lib/mongodb'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import { getCategories } from '../lib/categories'
 
 export const metadata = {
-	title: 'Магазин телефонов - Главная страница',
-	description:
-		'Купить телефоны различных брендов: iPhone, Samsung, Xiaomi и другие',
-}
-
-async function getCategories() {
-	try {
-		const client = await clientPromise
-		const db = client.db('bartech')
-
-		const categories = await db.collection('categories').find({}).toArray()
-		console.log('Categories fetched:', categories)
-
-		return JSON.parse(JSON.stringify(categories))
-	} catch (error) {
-		console.error('Error fetching categories:', error)
-		return []
-	}
+    title: 'Магазин телефонов - Главная страница',
+    description: 'Купить телефоны различных брендов: iPhone, Samsung, Xiaomi и другие',
 }
 
 export default async function Home() {
-	const categories = await getCategories()
+    const categories = await getCategories()
 
-	return (
-		<>
-			<Header />
-			<Box
-				sx={{
-					minHeight: '100vh',
-					background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-					py: 4,
-				}}
-			>
-				<Container
-					maxWidth='lg'
-					sx={{
-						py: 4,
-						px: { xs: 2, sm: 3, md: 4 },
-					}}
-				>
-					<Typography
-						variant='h3'
-						component='h1'
-						align='center'
-						gutterBottom
-						sx={{
-							fontWeight: 600,
-							color: '#1a237e',
-							mb: 4,
-							fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
-							textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-						}}
-					>
-						Категории товаров
-					</Typography>
-					<Grid2
-						container
-						spacing={3}
-						columns={2} 
-						sx={{ 
-							mt: 2,
-							justifyContent: 'center' 
-						}}
-					>
-						{categories.map((category) => (
-							<Grid2 
-								key={category._id} 
-								xs={2} 
-								sm={1} 
-								sx={{
-									maxWidth: '500px' 
-								}}
-							>
-								<CategoryCard category={category} />
-							</Grid2>
-						))}
-					</Grid2>
-				</Container>
-			</Box>
-			<Footer />
-		</>
-	)
+    return (
+        <main>
+            <Container sx={{ py: 4, minHeight: '100vh' }}>
+                <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
+                    Категории товаров
+                </Typography>
+                <Grid container spacing={4}>
+                    {categories.map((category) => (
+                        <Grid item xs={12} sm={6} md={4} key={category.id}>
+                            <CategoryCard
+                                id={category.id}
+                                name={category.name}
+                                image={category.image}
+                                description={category.description}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </main>
+    )
 }

@@ -1,12 +1,9 @@
-import Header from '@/components/Header'
 import styles from './contactPage.module.css'
 import React from 'react'
-import Footer from '@/components/Footer'
 
 const Contacts = () => {
 	return (
 		<div>
-			<Header />
 			<div className={styles.page}>
 				<main className={styles.main}>
 					<div className={styles.container}>
@@ -27,7 +24,6 @@ const Contacts = () => {
 					</div>
 				</main>
 			</div>
-			<Footer />
 		</div>
 	)
 }

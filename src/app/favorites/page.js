@@ -50,7 +50,7 @@ export default function FavoritesPage() {
 				}
 
 				const params = new URLSearchParams()
-				favorites.forEach((id) => params.append('ids', id))
+				params.set('ids', favorites.join(','))
 
 				const response = await fetch(`/api/products?${params.toString()}`)
 				const data = await response.json()
@@ -64,7 +64,7 @@ export default function FavoritesPage() {
 
 				// Сортируем продукты в том же порядке, что и в избранном
 				const orderedProducts = favorites
-					.map((id) => data.products.find((p) => p._id === id))
+					.map((id) => data.products.find((p) => p.id === id))
 					.filter(Boolean)
 				setProducts(orderedProducts)
 			} catch (error) {
@@ -80,16 +80,7 @@ export default function FavoritesPage() {
 	}, [favorites, mounted])
 
 	const handleAddToCart = (product) => {
-		if (!product.variants || product.variants.length === 0) {
-			return
-		}
-
-		const productWithPrice = {
-			...product,
-			price: product.variants[0].price || 0,
-			quantity: 1,
-		}
-		addToCart(productWithPrice)
+		addToCart(product)
 		setSnackbarMessage('Товар добавлен в корзину')
 		setSnackbarOpen(true)
 	}
@@ -197,104 +188,97 @@ export default function FavoritesPage() {
 			) : products && products.length > 0 ? (
 				<Grid container spacing={2}>
 					{products.map((product) => (
-						<Grid item key={product._id} xs={12} sm={6} md={4} lg={3}>
-							<Card
-								sx={{
-									height: '100%',
-									display: 'flex',
-									flexDirection: 'column',
-									cursor: 'pointer',
-									transition: 'transform 0.2s, box-shadow 0.2s',
-									'&:hover': {
-										transform: 'translateY(-4px)',
-										boxShadow: 4,
-									},
-								}}
-							>
-								<Link
-									href={`/products/${product.id || product._id}`}
-									style={{
-										textDecoration: 'none',
-										color: 'inherit',
-										display: 'flex',
-										flexDirection: 'column',
-										flexGrow: 1,
+						<Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+							<Card>
+								<Box
+									sx={{
+										position: 'relative',
+										width: '100%',
+										pt: '100%',
 									}}
 								>
-									<Box sx={{ position: 'relative', pt: '100%' }}>
-										{product.images && product.images[0] && (
-											<Image
-												src={product.images[0]}
-												alt={product.name}
-												fill
-												style={{ objectFit: 'contain' }}
-												priority
-											/>
-										)}
-									</Box>
-									<CardContent sx={{ flexGrow: 1 }}>
-										<Typography variant='h6' component='h2' gutterBottom>
-											{product.name}
-										</Typography>
+									<Link href={`/products/${product.id}`}>
+										<Image
+											src={product.image}
+											alt={product.name}
+											fill
+											style={{
+												objectFit: 'contain',
+												padding: '20px',
+											}}
+										/>
+									</Link>
+								</Box>
+								<CardContent>
+									<Link
+										href={`/products/${product.id}`}
+										style={{ textDecoration: 'none', color: 'inherit' }}
+									>
 										<Typography
-											variant='body2'
-											color='text.secondary'
-											paragraph
-										>
-											{product.description}
-										</Typography>
-										<Box
+											gutterBottom
+											variant='h6'
+											component='h2'
 											sx={{
-												display: 'flex',
-												justifyContent: 'space-between',
-												alignItems: 'center',
-												mt: 'auto',
+												overflow: 'hidden',
+												textOverflow: 'ellipsis',
+												display: '-webkit-box',
+												WebkitLineClamp: 2,
+												WebkitBoxOrient: 'vertical',
+												minHeight: '3.6em',
 											}}
 										>
-											<Typography variant='h6' color='primary'>
-												{product.variants && product.variants[0]
-													? `$${product.variants[0].price}`
-													: 'Price not available'}
-											</Typography>
-											<Box>
-												<IconButton
-													onClick={(e) => {
-														e.preventDefault() // Предотвращаем переход по ссылке
-														handleAddToCart(product)
-													}}
-													color='primary'
-													aria-label='add to cart'
-												>
-													<ShoppingCartIcon />
-												</IconButton>
-												<IconButton
-													onClick={(e) => {
-														e.preventDefault() // Предотвращаем переход по ссылке
-														removeFromFavorites(product._id)
-													}}
-													color='error'
-													aria-label='remove from favorites'
-												>
-													<DeleteIcon />
-												</IconButton>
-											</Box>
-										</Box>
-									</CardContent>
-								</Link>
+											{product.name}
+										</Typography>
+									</Link>
+									<Typography
+										variant='h5'
+										color='primary'
+										sx={{ fontWeight: 'bold', mb: 2 }}
+									>
+										{product.price.toLocaleString()} ₽
+									</Typography>
+									<Box
+										sx={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											gap: 1,
+										}}
+									>
+										<Button
+											variant='contained'
+											onClick={() => handleAddToCart(product)}
+											fullWidth
+										>
+											В корзину
+										</Button>
+										<IconButton
+											onClick={() => removeFromFavorites(product.id)}
+											color='error'
+										>
+											<DeleteIcon />
+										</IconButton>
+									</Box>
+								</CardContent>
 							</Card>
 						</Grid>
 					))}
 				</Grid>
 			) : (
-				<Box sx={{ textAlign: 'center', py: 4 }}>
-					<Typography variant='h6' gutterBottom>
-						У вас пока нет товаров в закладках
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						gap: 2,
+						py: 8,
+					}}
+				>
+					<Typography variant='h6' color='text.secondary'>
+						В закладках пока нет товаров
 					</Typography>
-					<Link href='/'>
-						<Button variant='contained' color='primary' sx={{ mt: 2 }}>
-							Перейти к покупкам
-						</Button>
-					</Link>
+					<Button variant='contained' component={Link} href='/'>
+						Перейти к покупкам
+					</Button>
 				</Box>
 			)}
 		</Container>
