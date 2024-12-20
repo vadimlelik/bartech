@@ -1,33 +1,14 @@
 services:
-  mongodb:
-    image: mongo:6.0.13
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb_data:/data/db
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 40s
-    restart: always
-
   nextjs-app:
     build: .
     ports:
       - '3000:3000'
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/bartech
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://cvirko-vadim.ru
     volumes:
       - nextjs_build:/app/.next
       - ./data:/app/data:ro
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    command: sh docker-init.sh
     restart: always
 
   certbot:
@@ -55,5 +36,4 @@ services:
     restart: always
 
 volumes:
-  mongodb_data:
   nextjs_build:
