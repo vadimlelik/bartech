@@ -1,7 +1,6 @@
 'use client'
 
 import { Box } from '@mui/material'
-import Footer from '@/shared/ui/footer/Footer'
 
 export default function LandingLayout({ children }) {
     return (
@@ -10,12 +9,11 @@ export default function LandingLayout({ children }) {
                 display: 'flex',
                 flexDirection: 'column',
                 minHeight: '100vh',
+                bgcolor: 'black',
+                color: 'white'
             }}
         >
-            <Box component="main" sx={{ flex: 1 }}>
-                {children}
-            </Box>
-            <Footer isLanding={true} />
+            {children}
         </Box>
     )
 }
