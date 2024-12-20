@@ -1,9 +1,11 @@
 'use client'
 
 import { Box } from '@mui/material'
-import Footer from '@/shared/ui/footer/Footer'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import CompareBar from '@/components/CompareBar'
 
-export default function LandingLayout({ children }) {
+export default function ShopLayout({ children }) {
     return (
         <Box
             sx={{
@@ -12,10 +14,12 @@ export default function LandingLayout({ children }) {
                 minHeight: '100vh',
             }}
         >
+            <Header />
             <Box component="main" sx={{ flex: 1 }}>
                 {children}
             </Box>
-            <Footer isLanding={true} />
+            <CompareBar />
+            <Footer />
         </Box>
     )
 }

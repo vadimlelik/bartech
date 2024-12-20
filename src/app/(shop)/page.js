@@ -1,6 +1,6 @@
 import { Container, Grid, Typography } from '@mui/material'
 import CategoryCard from './components/CategoryCard'
-import { getCategories } from '../lib/categories'
+import { getCategories } from '@/lib/categories'
 
 export const metadata = {
     title: 'Магазин телефонов - Главная страница',

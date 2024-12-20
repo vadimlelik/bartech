@@ -1,16 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Inter, Roboto } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from '@/theme'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { Box } from '@mui/material'
-import CompareBar from '@/components/CompareBar'
-import { metadata } from './metadata'
 import Script from 'next/script'
 
 const roboto = Roboto({
@@ -120,12 +116,7 @@ export default function RootLayout({ children }) {
                             minHeight: '100vh',
                         }}
                     >
-                        <Header />
-                        <Box component="main" sx={{ flex: 1 }}>
-                            {children}
-                        </Box>
-                        <CompareBar />
-                        <Footer />
+                        {children}
                     </Box>
                 </ThemeProvider>
                 <noscript>

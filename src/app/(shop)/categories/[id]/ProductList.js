@@ -35,7 +35,7 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useCompareStore } from '../../../store/compare'
+import { useCompareStore } from '@/store/compare'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'

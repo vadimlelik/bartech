@@ -3,9 +3,8 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './ThankYou.module.css'
-
-import { PIXEL } from '../../../data/pixel.js'
 import { useSearchParams } from 'next/navigation'
+import { PIXEL } from '@/data/pixel'
 
 const ThankYouPage = () => {
 	const searchParams = useSearchParams()
