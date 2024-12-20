@@ -47,20 +47,15 @@ export default async function ProductPage({ params }) {
     const category = await getCategoryById(product.category)
     console.log('5. Found Category:', category)
 
-    if (!category) {
-        console.log('6. Category not found, redirecting to 404')
-        notFound()
-    }
-
     const breadcrumbs = [
         {
             label: 'Главная',
             href: '/',
         },
-        {
+        ...(category ? [{
             label: category.name,
             href: `/categories/${category.id}`,
-        },
+        }] : []),
         {
             label: product.name,
             href: `/products/${product.id}`,
