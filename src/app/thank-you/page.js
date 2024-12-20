@@ -1,44 +1,68 @@
 'use client'
 
-import { Container, Typography, Button, Box, Paper } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import styles from './ThankYou.module.css'
 
-export default function ThankYouPage() {
-    const router = useRouter()
+import { PIXEL } from '../../../data/pixel.js'
+import { useSearchParams } from 'next/navigation'
 
-    return (
-        <Container maxWidth="sm" sx={{ py: 8 }}>
-            <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 3,
-                    }}
-                >
-                    <CheckCircleOutlineIcon
-                        color="success"
-                        sx={{ fontSize: 64 }}
-                    />
-                    <Typography variant="h4" component="h1">
-                        Спасибо за заказ!
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        Ваш заказ успешно оформлен. Мы свяжемся с вами в ближайшее
-                        время для подтверждения заказа.
-                    </Typography>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => router.push('/')}
-                        sx={{ mt: 2 }}
-                    >
-                        Вернуться на главную
-                    </Button>
-                </Box>
-            </Paper>
-        </Container>
-    )
+const ThankYouPage = () => {
+	const searchParams = useSearchParams()
+	const source = searchParams.get('source')
+
+	useEffect(() => {
+		if (source) {
+			const pixelId = PIXEL[source]
+
+			console.log(pixelId)
+
+			if (window.ttq) {
+				window.ttq.load(pixelId)
+				window.ttq.page()
+			}
+		}
+	}, [source])
+
+	return (
+		<div className={styles.container}>
+			<motion.h1
+				className={styles.title}
+				initial={{ y: -100, opacity: 0 }}
+				animate={{ y: 0, opacity: 1 }}
+				transition={{ duration: 1 }}
+			>
+				Спасибо за отправку формы!
+			</motion.h1>
+
+			{/* Подзаголовок с анимацией */}
+			<motion.p
+				className={styles.subtitle}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ delay: 1, duration: 1 }}
+			>
+				Мы получили ваши данные и скоро свяжемся с вами.
+			</motion.p>
+
+			{/* Анимация благодарности */}
+			<motion.div
+				className={styles.animationContainer}
+				initial={{ scale: 0 }}
+				animate={{ scale: 1 }}
+				transition={{ duration: 0.8, delay: 1.5 }}
+			>
+				<motion.div
+					className={styles.heart}
+					initial={{ scale: 1 }}
+					animate={{ scale: [1, 1.2, 1] }}
+					transition={{ repeat: Infinity, duration: 1.5 }}
+				>
+					❤️
+				</motion.div>
+			</motion.div>
+		</div>
+	)
 }
+
+export default ThankYouPage
