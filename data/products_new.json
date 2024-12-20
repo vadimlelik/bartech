@@ -57,12 +57,12 @@
 		"id": "3",
 		"name": "iPhone 14 Pro",
 		"category": "Смартфоны",
-		"price": 7248,
-		"image": "/images/iPhone_14 Pro.jpg",
+		"price": 3500,
+		"image": "/images/iphone-14-pro.jpeg",
 		"images": [
-			"/images/iPhone_14 Pro1.jpg",
-			"/images/iPhone_14 Pro2.jpg",
-			"/images/iPhone_14 Pro3.jpg"
+			"/images/iphone-14-pro1.jpeg",
+			"/images/iphone-14-pro2.jpeg",
+			"/images/iphone-14-pro3.webp"
 		],
 		"description": "Смартфон Apple с Dynamic Island",
 		"specifications": {
@@ -84,10 +84,10 @@
 		"id": "4",
 		"name": "Google Pixel 8 Pro",
 		"category": "Смартфоны",
-		"price": 89990,
-		"image": "/images/Google_Pixel_8_Pro.jpg",
+		"price": 2598,
+		"image": "/images/Google_Pixel_8_Pro1.jpeg",
 		"images": [
-			"/images/Google_Pixel_8_Pro1.jpg",
+			"/images/Google_Pixel_8_Pro1.jpeg",
 			"/images/Google_Pixel_8_Pro2.jpg",
 			"/images/Google_Pixel_8_Pro3.jpg"
 		],
@@ -111,12 +111,12 @@
 		"id": "5",
 		"name": "OnePlus 11",
 		"category": "Смартфоны",
-		"price": 69990,
-		"image": "/images/OnePlus_11.jpg",
+		"price": 2300,
+		"image": "/images/OnePlus_11.jpeg",
 		"images": [
-			"/images/OnePlus_11.jpg",
-			"/images/OnePlus_11_1.jpg",
-			"/images/OnePlus_11_2.jpg"
+			"/images/OnePlus_11_1.jpeg",
+			"/images/OnePlus_11_2.jpeg",
+			"/images/OnePlus_11.jpeg"
 		],
 		"description": "Мощный флагман с быстрой зарядкой",
 		"specifications": {
@@ -138,12 +138,12 @@
 		"id": "6",
 		"name": "iPhone 13",
 		"category": "Смартфоны",
-		"price": 69990,
-		"image": "/images/iphone-13-model-unselect-gallery-1-202207.jpg",
+		"price": 2599,
+		"image": "/images/iphone-13.jpeg",
 		"images": [
-			"/images/iphone-13-model-unselect-gallery-1-202207.jpg",
-			"/images/iphone-13-model-unselect-gallery-2-202207.jpg",
-			"/images/iphone-13-model-unselect-gallery-3-202207.jpg"
+			"/images/iphone-13.jpeg",
+			"/images/iphone-13-2.webp",
+			"/images/iphone-13-3.jpg"
 		],
 		"description": "Надежный смартфон Apple",
 		"specifications": {
@@ -165,12 +165,12 @@
 		"id": "7",
 		"name": "Samsung Galaxy A54",
 		"category": "Смартфоны",
-		"price": 39990,
-		"image": "/images/samsung-galaxy-a54-model-unselect-gallery-1-202207.jpg",
+		"price": 1260,
+		"image": "/images/samsung-galaxy-a54.jpeg",
 		"images": [
-			"/images/samsung-galaxy-a54-model-unselect-gallery-1-202207.jpg",
-			"/images/samsung-galaxy-a54-model-unselect-gallery-2-202207.jpg",
-			"/images/samsung-galaxy-a54-model-unselect-gallery-3-202207.jpg"
+			"/images/samsung-galaxy-a54.jpeg",
+			"/images/samsung-galaxy-a54-1.jpg",
+			"/images/samsung-galaxy-a54-2.jpeg"
 		],
 		"description": "Популярный смартфон среднего класса",
 		"specifications": {
@@ -193,11 +193,11 @@
 		"name": "Xiaomi 13T Pro",
 		"category": "Смартфоны",
 		"price": 59990,
-		"image": "/images/xiaomi-13t-pro-model-unselect-gallery-1-202207.jpg",
+		"image": "/images/xiaomi-13t-pro-model.jpg",
 		"images": [
-			"/images/xiaomi-13t-pro-model-unselect-gallery-1-202207.jpg",
-			"/images/xiaomi-13t-pro-model-unselect-gallery-2-202207.jpg",
-			"/images/xiaomi-13t-pro-model-unselect-gallery-3-202207.jpg"
+			"/images/xiaomi-13t-pro-model.jpg",
+			"/images/xiaomi-13t-pro-model-2.jpeg",
+			"/images/xiaomi-13t-pro-model-3.png"
 		],
 		"description": "Мощный смартфон с отличной камерой",
 		"specifications": {
