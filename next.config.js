@@ -15,7 +15,7 @@ const nextConfig = {
 	},
 	experimental: {
 		serverActions: {
-			bodySizeLimit: '2mb'
+			bodySizeLimit: '2mb',
 		},
 	},
 	async rewrites() {
@@ -30,6 +30,18 @@ const nextConfig = {
 			},
 			{
 				source: '/tv1/:path*',
+				destination: '/:path*',
+			},
+			{
+				source: '/1phonefree/:path*',
+				destination: '/:path*',
+			},
+			{
+				source: '/50discount/:path*',
+				destination: '/:path*',
+			},
+			{
+				source: '/phone2/:path*',
 				destination: '/:path*',
 			},
 		]

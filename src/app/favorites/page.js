@@ -235,7 +235,7 @@ export default function FavoritesPage() {
 										color='primary'
 										sx={{ fontWeight: 'bold', mb: 2 }}
 									>
-										{product.price.toLocaleString()} ₽
+										{product.price.toFixed(2)} BYN
 									</Typography>
 									<Box
 										sx={{

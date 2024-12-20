@@ -28,8 +28,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/store/cart'
 
-const EXCHANGE_RATE_BYN = 3.35 // Курс белорусского рубля к российскому
-
 export default function CartPage() {
 	const router = useRouter()
 	const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } =
@@ -43,7 +41,6 @@ export default function CartPage() {
 	}
 
 	const cartTotal = getCartTotal()
-	const cartTotalBYN = (cartTotal * EXCHANGE_RATE_BYN).toFixed(2)
 
 	if (!cartItems.length) {
 		return (
@@ -82,9 +79,6 @@ export default function CartPage() {
 							<TableBody>
 								{cartItems.map((item) => {
 									const itemTotal = item.price * item.quantity
-									const itemTotalBYN = (itemTotal * EXCHANGE_RATE_BYN).toFixed(
-										2
-									)
 
 									return (
 										<TableRow key={item.id}>
@@ -121,7 +115,7 @@ export default function CartPage() {
 											</TableCell>
 											<TableCell align='right'>
 												<Typography variant='body1'>
-													{(item.price * 3.35).toFixed(2)} BYN
+													{item.price.toFixed(2)} BYN
 												</Typography>
 											</TableCell>
 											<TableCell align='center'>
@@ -155,7 +149,7 @@ export default function CartPage() {
 											</TableCell>
 											<TableCell align='right'>
 												<Typography variant='body1'>
-													{(item.price * item.quantity * 3.35).toFixed(2)} BYN
+													{itemTotal.toFixed(2)} BYN
 												</Typography>
 											</TableCell>
 											<TableCell>
@@ -211,7 +205,7 @@ export default function CartPage() {
 								<Typography>Товары ({cartItems.length}):</Typography>
 								<Box sx={{ textAlign: 'right' }}>
 									<Typography variant='h6'>
-										{(cartTotal * 3.35).toFixed(2)} BYN
+										{cartTotal.toFixed(2)} BYN
 									</Typography>
 								</Box>
 							</Box>
@@ -236,7 +230,7 @@ export default function CartPage() {
 								<Typography variant='h6'>К оплате:</Typography>
 								<Box sx={{ textAlign: 'right' }}>
 									<Typography variant='h6'>
-										{(cartTotal * 3.35).toFixed(2)} BYN
+										{cartTotal.toFixed(2)} BYN
 									</Typography>
 								</Box>
 							</Box>

@@ -2,7 +2,7 @@
 	{
 		"id": "apple",
 		"name": "Apple",
-		"image": "/images/categories/apple.webp"
+		"image": "/images/iPhone_15 Pro_Max2.png"
 	},
 	{
 		"id": "samsung",
@@ -12,11 +12,11 @@
 	{
 		"id": "huawei",
 		"name": "Huawei",
-		"image": "/images/categories/huawei.webp"
+		"image": "/images/categories/huawei.jpg"
 	},
 	{
 		"id": "xiaomi",
 		"name": "Xiaomi",
-		"image": "/images/categories/xiaomi.webp"
+		"image": "/images/categories/xiaomi.jpeg"
 	}
 ]

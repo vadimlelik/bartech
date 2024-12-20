@@ -5,7 +5,7 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=https://cvirko-vadim.ru
+      - NEXT_PUBLIC_API_URL=http://45.12.238.117:5000
     volumes:
       - nextjs_build:/app/.next
       - ./data:/app/data:ro

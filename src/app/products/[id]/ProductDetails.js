@@ -78,10 +78,10 @@ function InstallmentCalculator({ price }) {
 				sx={{ mt: 4, mb: 2 }}
 			/>
 			<Typography variant='h5' color='primary' sx={{ mt: 3 }}>
-				Ежемесячный платеж: {Math.round(monthlyPayment).toLocaleString()} ₽
+				Ежемесячный платеж: {monthlyPayment.toFixed(2)} BYN
 			</Typography>
 			<Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
-				Общая сумма: {price.toLocaleString()} ₽
+				Общая сумма: {price.toFixed(2)} BYN
 			</Typography>
 			<Button variant='contained' fullWidth sx={{ mt: 3 }}>
 				Оформить рассрочку
@@ -185,7 +185,7 @@ function Delivery() {
 					</ListItemAvatar>
 					<ListItemText
 						primary='Бесплатная доставка'
-						secondary='При заказе от 5000 рублей'
+						secondary='При заказе от 1000 рублей'
 					/>
 				</ListItem>
 				<ListItem>
@@ -207,17 +207,6 @@ function Delivery() {
 					</ListItemAvatar>
 					<ListItemText primary='Срок доставки' secondary='1-3 рабочих дня' />
 				</ListItem>
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<LocationOnIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText
-						primary='Пункты выдачи'
-						secondary='Более 1000 пунктов выдачи по всей России'
-					/>
-				</ListItem>
 			</List>
 		</Box>
 	)
@@ -232,16 +221,44 @@ export default function ProductDetails({ product }) {
 	const { addToCompare, isInCompare } = useCompareStore()
 	const isFavorite = favorites.includes(product.id)
 
+	const specificationTranslations = {
+		brand: 'Бренд',
+		model: 'Модель',
+		year: 'Год выпуска',
+		color: 'Цвет',
+		memory: 'Память',
+		ram: 'Оперативная память',
+		processor: 'Процессор',
+		display: 'Дисплей',
+		camera: 'Камера',
+		battery: 'Аккумулятор',
+		os: 'Операционная система',
+	}
+
+	const translateSpecification = (key) => {
+		return specificationTranslations[key] || key
+	}
+
 	const handleImageClick = () => {
 		setImageDialogOpen(true)
 	}
 
-	const handlePrevImage = () => {
-		setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : 0))
+	const handlePrevImage = (e) => {
+		if (e) {
+			e.stopPropagation()
+		}
+		setCurrentImageIndex((prev) =>
+			prev > 0 ? prev - 1 : product.images.length - 1
+		)
 	}
 
-	const handleNextImage = () => {
-		setCurrentImageIndex((prev) => (prev < 0 ? 0 : prev + 1))
+	const handleNextImage = (e) => {
+		if (e) {
+			e.stopPropagation()
+		}
+		setCurrentImageIndex((prev) =>
+			prev < product.images.length - 1 ? prev + 1 : 0
+		)
 	}
 
 	const handleTabChange = (event, newValue) => {
@@ -257,15 +274,83 @@ export default function ProductDetails({ product }) {
 							position: 'relative',
 							width: '100%',
 							height: '500px',
+							cursor: 'pointer',
 						}}
+						onClick={handleImageClick}
 					>
 						<Image
-							src={product.image}
-							alt={product.name}
+							src={product.images[currentImageIndex]}
+							alt={`${product.name} - изображение ${currentImageIndex + 1}`}
 							fill
 							style={{ objectFit: 'contain' }}
 							unoptimized
+							priority
 						/>
+						<Box
+							sx={{
+								position: 'absolute',
+								bottom: 0,
+								left: 0,
+								right: 0,
+								display: 'flex',
+								justifyContent: 'space-between',
+								p: 2,
+								zIndex: 1,
+							}}
+						>
+							<IconButton
+								onClick={handlePrevImage}
+								sx={{
+									bgcolor: 'background.paper',
+									'&:hover': { bgcolor: 'background.paper' },
+								}}
+							>
+								<ArrowBackIcon />
+							</IconButton>
+							<IconButton
+								onClick={handleNextImage}
+								sx={{
+									bgcolor: 'background.paper',
+									'&:hover': { bgcolor: 'background.paper' },
+								}}
+							>
+								<ArrowForwardIcon />
+							</IconButton>
+						</Box>
+					</Box>
+					<Box
+						sx={{
+							display: 'flex',
+							gap: 2,
+							mt: 2,
+							justifyContent: 'center',
+						}}
+					>
+						{product.images.map((img, index) => (
+							<Box
+								key={index}
+								sx={{
+									width: 60,
+									height: 60,
+									position: 'relative',
+									cursor: 'pointer',
+									border:
+										index === currentImageIndex
+											? '2px solid primary.main'
+											: 'none',
+									opacity: index === currentImageIndex ? 1 : 0.7,
+								}}
+								onClick={() => setCurrentImageIndex(index)}
+							>
+								<Image
+									src={img}
+									alt={`${product.name} - миниатюра ${index + 1}`}
+									fill
+									style={{ objectFit: 'contain' }}
+									unoptimized
+								/>
+							</Box>
+						))}
 					</Box>
 				</Grid>
 				<Grid item xs={12} md={6}>
@@ -273,7 +358,7 @@ export default function ProductDetails({ product }) {
 						{product.name}
 					</Typography>
 					<Typography variant='h5' color='primary' gutterBottom>
-						{(product.price * 3.35).toFixed(2)} BYN
+						{product.price.toFixed(2)} BYN
 					</Typography>
 					<Typography variant='body1' color='text.secondary' paragraph>
 						{product.description}
@@ -338,7 +423,7 @@ export default function ProductDetails({ product }) {
 													scope='row'
 													sx={{ width: '30%' }}
 												>
-													{key}
+													{translateSpecification(key)}
 												</TableCell>
 												<TableCell>{value}</TableCell>
 											</TableRow>
@@ -400,8 +485,8 @@ export default function ProductDetails({ product }) {
 					</IconButton>
 					<Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
 						<Image
-							src={product.image}
-							alt={product.name}
+							src={product.images[currentImageIndex]}
+							alt={`${product.name} - изображение ${currentImageIndex + 1}`}
 							fill
 							style={{ objectFit: 'contain' }}
 						/>

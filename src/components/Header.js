@@ -152,7 +152,10 @@ export default function Header() {
 
 						{/* Иконки корзины и закладок */}
 						<Box sx={{ display: 'flex', gap: 1 }}>
-							<Link href='/favorites' style={{ textDecoration: 'none', color: 'inherit' }}>
+							<Link
+								href='/favorites'
+								style={{ textDecoration: 'none', color: 'inherit' }}
+							>
 								<Tooltip title='Закладки'>
 									<IconButton color='inherit'>
 										{mounted ? (
@@ -166,7 +169,10 @@ export default function Header() {
 								</Tooltip>
 							</Link>
 
-							<Link href='/cart' style={{ textDecoration: 'none', color: 'inherit' }}>
+							<Link
+								href='/cart'
+								style={{ textDecoration: 'none', color: 'inherit' }}
+							>
 								<Tooltip title='Корзина'>
 									<IconButton color='inherit'>
 										{mounted ? (

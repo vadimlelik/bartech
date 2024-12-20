@@ -453,7 +453,7 @@ export default function ProductList({ categoryId }) {
 											color='primary'
 											sx={{ mt: 'auto', mb: 2, fontWeight: 'bold' }}
 										>
-											{product.price.toLocaleString()} ₽
+											{product.price.toLocaleString()} BYN
 										</Typography>
 										<Stack
 											direction='row'

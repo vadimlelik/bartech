@@ -3,12 +3,12 @@
 		"id": "1",
 		"name": "iPhone 15 Pro Max",
 		"category": "Смартфоны",
-		"price": 159990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829506",
+		"price": 7248,
+		"image": "/images/iPhone_15 Pro_Max.jpg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829506",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-natural-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829496",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-blue-titanium-select?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692938829493"
+			"/images/iPhone_15 Pro_Max1.jpg",
+			"/images/iPhone_15 Pro_Max2.png",
+			"/images/iPhone_15 Pro_Max3.jpg"
 		],
 		"description": "Флагманский смартфон Apple с процессором A17 Pro",
 		"specifications": {
@@ -30,12 +30,12 @@
 		"id": "2",
 		"name": "Samsung Galaxy S23 Ultra",
 		"category": "Смартфоны",
-		"price": 129990,
-		"image": "https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkcmea-thumb-534863401",
+		"price": 7248,
+		"image": "/images/Samsung_Galaxy_S23_Ultra.jpeg",
 		"images": [
-			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkcmea-thumb-534863401",
-			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzgcmea-thumb-534863351",
-			"https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-ultra-s918-sm-s918bzkamea-thumb-534863376"
+			"/images/Samsung_Galaxy_S23_Ultra1.jpeg",
+			"/images/Samsung_Galaxy_S23_Ultra2.jpeg",
+			"/images/Samsung_Galaxy_S23_Ultra3.jpeg"
 		],
 		"description": "Флагманский смартфон Samsung с S Pen",
 		"specifications": {
@@ -57,12 +57,12 @@
 		"id": "3",
 		"name": "iPhone 14 Pro",
 		"category": "Смартфоны",
-		"price": 99990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617559",
+		"price": 7248,
+		"image": "/images/iPhone_14 Pro.jpg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617559",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617540",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-5-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660753617535"
+			"/images/iPhone_14 Pro1.jpg",
+			"/images/iPhone_14 Pro2.jpg",
+			"/images/iPhone_14 Pro3.jpg"
 		],
 		"description": "Смартфон Apple с Dynamic Island",
 		"specifications": {
@@ -85,11 +85,11 @@
 		"name": "Google Pixel 8 Pro",
 		"category": "Смартфоны",
 		"price": 89990,
-		"image": "https://lh3.googleusercontent.com/0QTqQyp_ArdV9XiMmW_ZGqRePfnNX_qYHGHNEyR_VaLYJRKpqEOj1tB7bExvYaB-_UQrP_kWrGDTb3qbKFvGwQw-jqLPghs=rw-e365-w1440",
+		"image": "/images/Google_Pixel_8_Pro.jpg",
 		"images": [
-			"https://lh3.googleusercontent.com/0QTqQyp_ArdV9XiMmW_ZGqRePfnNX_qYHGHNEyR_VaLYJRKpqEOj1tB7bExvYaB-_UQrP_kWrGDTb3qbKFvGwQw-jqLPghs=rw-e365-w1440",
-			"https://lh3.googleusercontent.com/kGmT6yj3qx6UGLc7UZo_P8Jt6ORO3X9d2JKP_UxKGzkYxbwJV4Jv5opcwWOvyDBDkKQXBUXFnbLKW0CBnJxhEBpXzQXYfSo=rw-e365-w1440",
-			"https://lh3.googleusercontent.com/TtBGPQmbmU9kbG2DIwFqxgWwqcV0Sf5BYl8ZL3vHjGABTBlsZfizuVYKC9DmZzfFNGvB7kyXi-vZjXKqcv0KoGXuEXlV1A=rw-e365-w1440"
+			"/images/Google_Pixel_8_Pro1.jpg",
+			"/images/Google_Pixel_8_Pro2.jpg",
+			"/images/Google_Pixel_8_Pro3.jpg"
 		],
 		"description": "Флагман Google с передовыми AI-функциями",
 		"specifications": {
@@ -112,11 +112,11 @@
 		"name": "OnePlus 11",
 		"category": "Смартфоны",
 		"price": 69990,
-		"image": "https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaqwjyaakaqmqxkpy013.png",
+		"image": "/images/OnePlus_11.jpg",
 		"images": [
-			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaqwjyaakaqmqxkpy013.png",
-			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8weabfhlaajt7mfbkxm283.png",
-			"https://image01.oneplus.net/ebp/202301/31/1-m00-47-01-ckgv4gsb8wkaupjmaajt7mfbkxm283.png"
+			"/images/OnePlus_11.jpg",
+			"/images/OnePlus_11_1.jpg",
+			"/images/OnePlus_11_2.jpg"
 		],
 		"description": "Мощный флагман с быстрой зарядкой",
 		"specifications": {
@@ -139,11 +139,11 @@
 		"name": "iPhone 13",
 		"category": "Смартфоны",
 		"price": 69990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
+		"image": "/images/iphone-13-model-unselect-gallery-1-202207.jpg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-2-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-model-unselect-gallery-3-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893619853"
+			"/images/iphone-13-model-unselect-gallery-1-202207.jpg",
+			"/images/iphone-13-model-unselect-gallery-2-202207.jpg",
+			"/images/iphone-13-model-unselect-gallery-3-202207.jpg"
 		],
 		"description": "Надежный смартфон Apple",
 		"specifications": {
@@ -166,11 +166,11 @@
 		"name": "Samsung Galaxy A54",
 		"category": "Смартфоны",
 		"price": 39990,
-		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917487",
+		"image": "/images/samsung-galaxy-a54-model-unselect-gallery-1-202207.jpg",
 		"images": [
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917487",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917474",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/sm-a546blvcxeu/gallery/uk-galaxy-a54-5g-sm-a546-sm-a546blvcxeu-thumb-535917476"
+			"/images/samsung-galaxy-a54-model-unselect-gallery-1-202207.jpg",
+			"/images/samsung-galaxy-a54-model-unselect-gallery-2-202207.jpg",
+			"/images/samsung-galaxy-a54-model-unselect-gallery-3-202207.jpg"
 		],
 		"description": "Популярный смартфон среднего класса",
 		"specifications": {
@@ -193,11 +193,11 @@
 		"name": "Xiaomi 13T Pro",
 		"category": "Смартфоны",
 		"price": 59990,
-		"image": "https://i02.appmifile.com/885_operator_sg/13/09/2023/b8d07e3e53e4a1e3de3f2c89d973c93e.png",
+		"image": "/images/xiaomi-13t-pro-model-unselect-gallery-1-202207.jpg",
 		"images": [
-			"https://i02.appmifile.com/885_operator_sg/13/09/2023/b8d07e3e53e4a1e3de3f2c89d973c93e.png",
-			"https://i02.appmifile.com/726_operator_sg/13/09/2023/546f5bf1c3ba6f31ba3f4fcd5a36c9f7.png",
-			"https://i02.appmifile.com/279_operator_sg/13/09/2023/1a6cc6d0c5c60e42c5f35ec2e5a8c8b9.png"
+			"/images/xiaomi-13t-pro-model-unselect-gallery-1-202207.jpg",
+			"/images/xiaomi-13t-pro-model-unselect-gallery-2-202207.jpg",
+			"/images/xiaomi-13t-pro-model-unselect-gallery-3-202207.jpg"
 		],
 		"description": "Мощный смартфон с отличной камерой",
 		"specifications": {
@@ -220,11 +220,11 @@
 		"name": "iPhone 12",
 		"category": "Смартфоны",
 		"price": 54990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
+		"image": "/images/iphone-12-finish-unselect-gallery-1-202207.jpg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-1-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-2-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-finish-unselect-gallery-3-202207?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1654893623574"
+			"/images/iphone-12-finish-unselect-gallery-1-202207.jpg",
+			"/images/iphone-12-finish-unselect-gallery-2-202207.jpg",
+			"/images/iphone-12-finish-unselect-gallery-3-202207.jpg"
 		],
 		"description": "Классический дизайн Apple",
 		"specifications": {
