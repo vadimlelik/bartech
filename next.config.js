@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true'
-
 const nextConfig = {
-	assetPrefix: isPhoneSubdomain ? 'https://cvirko-vadim.ru/' : '',
 	reactStrictMode: false,
 	images: {
 		remotePatterns: [
@@ -20,46 +17,38 @@ const nextConfig = {
 	},
 	async rewrites() {
 		return [
+			// Правила для продакшн домена
 			{
-				source: '/phone/:path*',
-				destination: '/:path*',
-			},
-			{
-				source: '/phone',
-				destination: '/',
-			},
-
-			{
-				source: '/tv1/:path*',
-				destination: '/:path*',
-			},
-			{
-				source: '/tv1',
-				destination: '/',
+				source: '/1phonefree',
+				destination: '/(pages)/(landing)/1phonefree',
 			},
 			{
 				source: '/1phonefree/:path*',
-				destination: '/:path*',
-			},
-			{
-				source: '/1phonefree',
-				destination: '/',
-			},
-			{
-				source: '/50discount/:path*',
-				destination: '/:path*',
-			},
-			{
-				source: '/50discount',
-				destination: '/',
-			},
-			{
-				source: '/phone2/:path*',
-				destination: '/:path*',
+				destination: '/(pages)/(landing)/1phonefree/:path*',
 			},
 			{
 				source: '/phone2',
-				destination: '/',
+				destination: '/(pages)/(landing)/phone2',
+			},
+			{
+				source: '/phone2/:path*',
+				destination: '/(pages)/(landing)/phone2/:path*',
+			},
+			{
+				source: '/tv1',
+				destination: '/(pages)/(landing)/tv1',
+			},
+			{
+				source: '/tv1/:path*',
+				destination: '/(pages)/(landing)/tv1/:path*',
+			},
+			{
+				source: '/50discount',
+				destination: '/(pages)/(landing)/50discount',
+			},
+			{
+				source: '/50discount/:path*',
+				destination: '/(pages)/(landing)/50discount/:path*',
 			},
 		]
 	},
