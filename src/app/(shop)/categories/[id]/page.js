@@ -3,6 +3,8 @@ import BackButton from './BackButton'
 import ProductList from './ProductList'
 import { getCategoryById } from '@/lib/categories'
 import { notFound } from 'next/navigation'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export async function generateMetadata({ params }) {
     try {
@@ -70,7 +72,8 @@ export default async function CategoryPage({ params }) {
         }
 
         return (
-            <main>
+            <>
+                <Header />
                 <Box
                     sx={{
                         minHeight: '100vh',
@@ -102,7 +105,8 @@ export default async function CategoryPage({ params }) {
                         <ProductList categoryId={category.id} />
                     </Container>
                 </Box>
-            </main>
+                <Footer />
+            </>
         )
     } catch (error) {
         console.error('Error in CategoryPage:', error)

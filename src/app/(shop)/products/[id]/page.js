@@ -1,6 +1,8 @@
-import { Container } from '@mui/material'
+import { Container, Box } from '@mui/material'
 import ProductDetails from './ProductDetails'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 import { getProductById } from '@/lib/products'
 import { getCategoryById } from '@/lib/categories'
 import { notFound } from 'next/navigation'
@@ -63,11 +65,15 @@ export default async function ProductPage({ params }) {
     ]
 
     return (
-        <main>
-            <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
-                <Breadcrumbs items={breadcrumbs} />
-                <ProductDetails product={product} />
-            </Container>
-        </main>
+        <>
+            <Header />
+            <Box component="main" sx={{ flex: 1 }}>
+                <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
+                    <Breadcrumbs items={breadcrumbs} />
+                    <ProductDetails product={product} />
+                </Container>
+            </Box>
+            <Footer />
+        </>
     )
 }
