@@ -28,21 +28,38 @@ const nextConfig = {
 				source: '/phone',
 				destination: '/',
 			},
+
 			{
 				source: '/tv1/:path*',
 				destination: '/:path*',
+			},
+			{
+				source: '/tv1',
+				destination: '/',
 			},
 			{
 				source: '/1phonefree/:path*',
 				destination: '/:path*',
 			},
 			{
+				source: '/1phonefree',
+				destination: '/',
+			},
+			{
 				source: '/50discount/:path*',
 				destination: '/:path*',
 			},
 			{
+				source: '/50discount',
+				destination: '/',
+			},
+			{
 				source: '/phone2/:path*',
 				destination: '/:path*',
+			},
+			{
+				source: '/phone2',
+				destination: '/',
 			},
 		]
 	},

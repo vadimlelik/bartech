@@ -64,16 +64,14 @@ const Tv = () => {
 	}, [])
 
 	const handleQuizSubmit = async (data) => {
-		console.log(data)
-
-		// axios
-		// 	.post(
-		// 		'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-		// 		data
-		// 	)
-		// 	.then(() => {
-		// 		router.push(`/thank-you?source=tv`)
-		// 	})
+		axios
+			.post(
+				'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+				data
+			)
+			.then(() => {
+				router.push(`/thank-you?source=tv`)
+			})
 	}
 
 	const closeQuiz = () => {

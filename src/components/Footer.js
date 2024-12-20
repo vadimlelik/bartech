@@ -199,7 +199,6 @@ export default function Footer() {
 										unoptimized
 									/>
 								</Box>
-								contacts
 							</Box>
 						</Box>
 					</Grid>
