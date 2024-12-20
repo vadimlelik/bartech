@@ -9,7 +9,7 @@ import Quiz from '@/app/(shop)/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-import { PIXEL } from '../../../../data/pixel'
+import { PIXEL } from '../../../data/pixel'
 
 const questions = [
 	{

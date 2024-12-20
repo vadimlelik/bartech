@@ -1,8 +1,6 @@
 import { Container, Box } from '@mui/material'
 import ProductDetails from './ProductDetails'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { getProductById } from '@/lib/products'
 import { getCategoryById } from '@/lib/categories'
 import { notFound } from 'next/navigation'
@@ -13,67 +11,59 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-    const resolvedParams = await Promise.resolve(params)
-    const { id } = resolvedParams
+    try {
+        const product = await getProductById(params.id)
 
-    const product = await getProductById(id)
-    if (!product) {
-        return {
-            title: 'Товар не найден',
-            description: 'Запрашиваемый товар не найден в магазине',
+        if (!product) {
+            return {
+                title: 'Продукт не найден',
+                description: 'Запрашиваемый продукт не найден'
+            }
         }
-    }
 
-    return {
-        title: `${product.name} - Купить в магазине`,
-        description: product.description || '',
+        return {
+            title: `${product.name} - Купить в магазине`,
+            description: product.description || `Купить ${product.name} в Минске с доставкой`
+        }
+    } catch (error) {
+        console.error('Error generating product metadata:', error)
+        return {
+            title: 'Ошибка',
+            description: 'Произошла ошибка при загрузке продукта'
+        }
     }
 }
 
 export default async function ProductPage({ params }) {
-    const resolvedParams = await Promise.resolve(params)
-    const { id } = resolvedParams
-
-    console.log('Debug - Product Page:')
-    console.log('1. Resolved Params:', resolvedParams)
-    console.log('2. Product ID:', id)
-
-    const product = await getProductById(id)
-    console.log('3. Found Product:', product)
-
+    const product = await getProductById(params.id)
+    
     if (!product) {
-        console.log('4. Product not found, redirecting to 404')
         notFound()
     }
 
     const category = await getCategoryById(product.category)
-    console.log('5. Found Category:', category)
 
     const breadcrumbs = [
-        {
+        { 
             label: 'Главная',
-            href: '/',
+            href: '/'
         },
-        ...(category ? [{
-            label: category.name,
-            href: `/categories/${category.id}`,
-        }] : []),
-        {
+        { 
+            label: category?.name || 'Категория',
+            href: `/categories/${category?.id}`
+        },
+        { 
             label: product.name,
-            href: `/products/${product.id}`,
-        },
+            href: `/products/${product.id}`
+        }
     ]
 
     return (
-        <>
-            <Header />
-            <Box component="main" sx={{ flex: 1 }}>
-                <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
-                    <Breadcrumbs items={breadcrumbs} />
-                    <ProductDetails product={product} />
-                </Container>
-            </Box>
-            <Footer />
-        </>
+        <Box component="main" sx={{ flex: 1 }}>
+            <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
+                <Breadcrumbs items={breadcrumbs} />
+                <ProductDetails product={product} />
+            </Container>
+        </Box>
     )
 }
