@@ -18,5 +18,20 @@
 		"id": "xiaomi",
 		"name": "Xiaomi",
 		"image": "/images/categories/xiaomi.jpeg"
+	},
+	{
+		"id": "honor",
+		"name": "Honor",
+		"image": "/images/categories/honor.jpg"
+	},
+	{
+		"id": "infinix",
+		"name": "Infinix",
+		"image": "/images/categories/infinix.jpg"
+	},
+	{
+		"id": "poco",
+		"name": "POCO",
+		"image": "/images/categories/poco.jpg"
 	}
 ]
