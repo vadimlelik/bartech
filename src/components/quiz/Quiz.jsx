@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import MaskedPhoneInput from '../InputMask/InputMask'
 import styles from './Quiz.module.css'
-import Button from '../button/Button'
+import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask'
+import Button from '@/app/(shop)/components/button/Button'
 
 const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {

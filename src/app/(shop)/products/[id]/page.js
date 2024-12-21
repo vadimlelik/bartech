@@ -4,6 +4,8 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { getProductById } from '@/lib/products'
 import { getCategoryById } from '@/lib/categories'
 import { notFound } from 'next/navigation'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
@@ -11,59 +13,64 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-    try {
-        const product = await getProductById(params.id)
+	try {
+		const product = await getProductById(params.id)
 
-        if (!product) {
-            return {
-                title: 'Продукт не найден',
-                description: 'Запрашиваемый продукт не найден'
-            }
-        }
+		if (!product) {
+			return {
+				title: 'Продукт не найден',
+				description: 'Запрашиваемый продукт не найден',
+			}
+		}
 
-        return {
-            title: `${product.name} - Купить в магазине`,
-            description: product.description || `Купить ${product.name} в Минске с доставкой`
-        }
-    } catch (error) {
-        console.error('Error generating product metadata:', error)
-        return {
-            title: 'Ошибка',
-            description: 'Произошла ошибка при загрузке продукта'
-        }
-    }
+		return {
+			title: `${product.name} - Купить в магазине`,
+			description:
+				product.description || `Купить ${product.name} в Минске с доставкой`,
+		}
+	} catch (error) {
+		console.error('Error generating product metadata:', error)
+		return {
+			title: 'Ошибка',
+			description: 'Произошла ошибка при загрузке продукта',
+		}
+	}
 }
 
 export default async function ProductPage({ params }) {
-    const product = await getProductById(params.id)
-    
-    if (!product) {
-        notFound()
-    }
+	const product = await getProductById(params.id)
 
-    const category = await getCategoryById(product.category)
+	if (!product) {
+		notFound()
+	}
 
-    const breadcrumbs = [
-        { 
-            label: 'Главная',
-            href: '/'
-        },
-        { 
-            label: category?.name || 'Категория',
-            href: `/categories/${category?.id}`
-        },
-        { 
-            label: product.name,
-            href: `/products/${product.id}`
-        }
-    ]
+	const category = await getCategoryById(product.category)
 
-    return (
-        <Box component="main" sx={{ flex: 1 }}>
-            <Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
-                <Breadcrumbs items={breadcrumbs} />
-                <ProductDetails product={product} />
-            </Container>
-        </Box>
-    )
+	const breadcrumbs = [
+		{
+			label: 'Главная',
+			href: '/',
+		},
+		{
+			label: category?.name || 'Категория',
+			href: `/categories/${category?.id}`,
+		},
+		{
+			label: product.name,
+			href: `/products/${product.id}`,
+		},
+	]
+
+	return (
+		<>
+			<Header />
+			<Box component='main' sx={{ flex: 1 }}>
+				<Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
+					<Breadcrumbs items={breadcrumbs} />
+					<ProductDetails product={product} />
+				</Container>
+			</Box>
+			<Footer />
+		</>
+	)
 }

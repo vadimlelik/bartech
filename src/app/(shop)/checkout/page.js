@@ -24,6 +24,8 @@ import {
 import Image from 'next/image'
 import { useCartStore } from '@/store/cart'
 import { useRouter } from 'next/navigation'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 // Регулярные выражения для валидации
 const PHONE_REGEX = /^(\+375|375|80)?(29|25|44|33)(\d{3})(\d{2})(\d{2})$/
@@ -353,46 +355,50 @@ export default function CheckoutPage() {
 	}
 
 	return (
-		<Container maxWidth='md' sx={{ py: 4 }}>
-			<Typography variant='h4' align='center' gutterBottom>
-				Оформление заказа
-			</Typography>
-			<Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-				{steps.map((label) => (
-					<Step key={label}>
-						<StepLabel>{label}</StepLabel>
-					</Step>
-				))}
-			</Stepper>
-			<Paper sx={{ p: 3 }}>
-				{submitError && (
-					<Alert severity='error' sx={{ mb: 2 }}>
-						{submitError}
-					</Alert>
-				)}
-				{getStepContent(activeStep)}
-				<Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-					{activeStep !== 0 && (
-						<Button onClick={handleBack} sx={{ mr: 1 }}>
-							Назад
-						</Button>
+		<>
+			<Header />
+			<Container maxWidth='md' sx={{ py: 4 }}>
+				<Typography variant='h4' align='center' gutterBottom>
+					Оформление заказа
+				</Typography>
+				<Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+					{steps.map((label) => (
+						<Step key={label}>
+							<StepLabel>{label}</StepLabel>
+						</Step>
+					))}
+				</Stepper>
+				<Paper sx={{ p: 3 }}>
+					{submitError && (
+						<Alert severity='error' sx={{ mb: 2 }}>
+							{submitError}
+						</Alert>
 					)}
-					{activeStep === steps.length - 1 ? (
-						<Button
-							variant='contained'
-							color='primary'
-							onClick={handleSubmit(onSubmit)}
-							disabled={!isValid}
-						>
-							Оформить заказ
-						</Button>
-					) : (
-						<Button variant='contained' color='primary' onClick={handleNext}>
-							Далее
-						</Button>
-					)}
-				</Box>
-			</Paper>
-		</Container>
+					{getStepContent(activeStep)}
+					<Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+						{activeStep !== 0 && (
+							<Button onClick={handleBack} sx={{ mr: 1 }}>
+								Назад
+							</Button>
+						)}
+						{activeStep === steps.length - 1 ? (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleSubmit(onSubmit)}
+								disabled={!isValid}
+							>
+								Оформить заказ
+							</Button>
+						) : (
+							<Button variant='contained' color='primary' onClick={handleNext}>
+								Далее
+							</Button>
+						)}
+					</Box>
+				</Paper>
+			</Container>
+			<Footer />
+		</>
 	)
 }

@@ -6,13 +6,13 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
 import styles from './phonePage.module.css'
 import Image from 'next/image'
-import Button from '@/app/(shop)/components/button/Button'
-import Quiz from '@/app/(shop)/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { PIXEL } from '@/data/pixel'
 
 import 'swiper/css'
+import { Button } from '@mui/material'
+import Quiz from '@/components/quiz/Quiz'
 
 const images = [
 	'/tel/tel1.jpg',
