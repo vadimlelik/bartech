@@ -328,11 +328,11 @@
 		"name": "Google Pixel 7a",
 		"category": "Смартфоны",
 		"price": 1420,
-		"image": "/images/Google Pixel 7a.webp",
+		"image": "/images/pixel_7a_04.jpg",
 		"images": [
-			"/images/Google Pixel 7a.webp",
-			"/images/Google Pixel 7a.webp",
-			"/images/Google Pixel 7a.webp"
+			"/images/pixel_7a_1.jpg",
+			"/images/pixel_7a_04.jpg",
+			"/images/pixel_7a_044.jpg"
 		],
 		"description": "Доступный Google с отличной камерой",
 		"specifications": {
@@ -354,12 +354,13 @@
 		"id": "14",
 		"name": "iPhone 14",
 		"category": "Смартфоны",
-		"price": 79990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
+		"price": 3200,
+		"image": "/images/iphone-14-pro.jpeg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-1-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-2-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-model-unselect-gallery-3-202209?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1660689596976"
+			"/images/iphone-14-pro.jpeg",
+			"/images/iphone-14-pro1.jpeg",
+			"/images/iphone-14-pro2.jpeg",
+			"/images/iphone-14-pro3.webp"
 		],
 		"description": "Надежный флагман Apple",
 		"specifications": {
@@ -381,12 +382,12 @@
 		"id": "15",
 		"name": "Samsung Galaxy Z Flip 5",
 		"category": "Смартфоны",
-		"price": 109990,
-		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243565",
+		"price": 2490,
+		"image": "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
 		"images": [
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243565",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243550",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-flip5-f731-sm-f731bzaaeua-thumb-537243552"
+			"/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
+			"/images/Galaxy-Z-Flip5-2.webp",
+			"/images/Galaxy-Z-Flip5-2.webp"
 		],
 		"description": "Компактный складной смартфон",
 		"specifications": {
@@ -408,12 +409,12 @@
 		"id": "16",
 		"name": "OnePlus Nord 3",
 		"category": "Смартфоны",
-		"price": 39990,
-		"image": "https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy013.png",
+		"price": 1399,
+		"image": "/images/OnePlus Nord 3.webp",
 		"images": [
-			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy013.png",
-			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy014.png",
-			"https://image01.oneplus.net/ebp/202306/13/1-m00-51-01-rb8bzmqiw6oaesyhaanqxmqxkpy015.png"
+			"/images/OnePlus Nord 3.webp",
+			"/images/OnePlus Nord-1.png",
+			"/images/OnePlus Nord 3.webp"
 		],
 		"description": "Мощный среднебюджетный смартфон",
 		"specifications": {
@@ -435,12 +436,12 @@
 		"id": "17",
 		"name": "iPhone 13 mini",
 		"category": "Смартфоны",
-		"price": 59990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
+		"price": 2825,
+		"image": "/images/iphone-13.jpeg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-pink-select-2021?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1645572315986"
+			"/images/iphone-13-2.webp",
+			"/images/iphone-13-3.jpg",
+			"/images/iphone-13.jpeg"
 		],
 		"description": "Компактный премиальный смартфон",
 		"specifications": {
@@ -462,12 +463,12 @@
 		"id": "18",
 		"name": "Xiaomi 13 Pro",
 		"category": "Смартфоны",
-		"price": 89990,
-		"image": "https://i02.appmifile.com/615_operator_sg/10/01/2023/ce8680e20685852fc814149963ed34c3.png",
+		"price": 1034,
+		"image": "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
 		"images": [
-			"https://i02.appmifile.com/615_operator_sg/10/01/2023/ce8680e20685852fc814149963ed34c3.png",
-			"https://i02.appmifile.com/726_operator_sg/10/01/2023/546f5bf1c3ba6f31ba3f4fcd5a36c9f7.png",
-			"https://i02.appmifile.com/279_operator_sg/10/01/2023/1a6cc6d0c5c60e42c5f35ec2e5a8c8b9.png"
+			"/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
+			"/images/smartfon-xiaomi-13-pro-2.jpeg",
+			"/images/smartfon-xiaomi-13-pro-3.webp"
 		],
 		"description": "Флагман с камерой Leica",
 		"specifications": {
@@ -489,12 +490,12 @@
 		"id": "19",
 		"name": "Samsung Galaxy S23",
 		"category": "Смартфоны",
-		"price": 74990,
-		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863401",
+		"price": 2885,
+		"image": "/images/S23-Colors.jpg",
 		"images": [
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863401",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzgceua-thumb-534863351",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2302/gallery/uk-galaxy-s23-s911-sm-s911bzaceua-thumb-534863376"
+			"/images/S23-Colors.jpg",
+			"/images/product_color_cream.avif",
+			"/images/sm-s911_galaxys23_1-3.jpg"
 		],
 		"description": "Компактный флагман Samsung",
 		"specifications": {
@@ -508,33 +509,6 @@
 			"battery": "3900mAh",
 			"os": "Android 13",
 			"color": "Lavender",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "20",
-		"name": "ASUS ROG Phone 7",
-		"category": "Смартфоны",
-		"price": 99990,
-		"image": "https://dlcdnwebimgs.asus.com/gain/107F4916-7D6C-4702-8277-B1C0FE645B86/w1000/h732",
-		"images": [
-			"https://dlcdnwebimgs.asus.com/gain/107F4916-7D6C-4702-8277-B1C0FE645B86/w1000/h732",
-			"https://dlcdnwebimgs.asus.com/gain/E06E1C7B-3D64-4B97-B0CB-4938489DE528/w1000/h732",
-			"https://dlcdnwebimgs.asus.com/gain/6DE7F297-8B60-414C-81BB-C927ADE80F13/w1000/h732"
-		],
-		"description": "Игровой смартфон с мощным охлаждением",
-		"specifications": {
-			"brand": "ASUS",
-			"model": "ROG Phone 7",
-			"memory": "512GB",
-			"ram": "16GB",
-			"display": "6.78 AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 13MP + 5MP",
-			"battery": "6000mAh",
-			"os": "Android 13",
-			"color": "Storm White",
 			"year": "2023",
 			"condition": "new"
 		}
