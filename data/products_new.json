@@ -192,12 +192,12 @@
 		"id": "8",
 		"name": "Xiaomi 13T Pro",
 		"category": "Смартфоны",
-		"price": 59990,
-		"image": "/images/xiaomi-13t-pro-model.jpg",
+		"price": 1990,
+		"image": "/images/Xiaomi-13T.jpg",
 		"images": [
-			"/images/xiaomi-13t-pro-model.jpg",
-			"/images/xiaomi-13t-pro-model-2.jpeg",
-			"/images/xiaomi-13t-pro-model-3.png"
+			"/images/Xiaomi-13T.jpg",
+			"/images/Xiaomi-13T-1.jpg",
+			"/images/Xiaomi-13T-2.jpeg"
 		],
 		"description": "Мощный смартфон с отличной камерой",
 		"specifications": {
@@ -219,12 +219,12 @@
 		"id": "9",
 		"name": "iPhone 12",
 		"category": "Смартфоны",
-		"price": 54990,
-		"image": "/images/iphone-12-finish-unselect-gallery-1-202207.jpg",
+		"price": 1990,
+		"image": "/images/iphone-12-3.jpg",
 		"images": [
-			"/images/iphone-12-finish-unselect-gallery-1-202207.jpg",
-			"/images/iphone-12-finish-unselect-gallery-2-202207.jpg",
-			"/images/iphone-12-finish-unselect-gallery-3-202207.jpg"
+			"/images/iphone-12-3.jpg",
+			"/images/iphone-12.webp",
+			"/images/iphone-12-2.jpeg"
 		],
 		"description": "Классический дизайн Apple",
 		"specifications": {
