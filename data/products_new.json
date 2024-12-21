@@ -246,12 +246,12 @@
 		"id": "10",
 		"name": "Nothing Phone 2",
 		"category": "Смартфоны",
-		"price": 69990,
-		"image": "https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-full-packshot-1.png",
+		"price": 2699,
+		"image": "/images/Nothing Phone 2-1.jpg",
 		"images": [
-			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-full-packshot-1.png",
-			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-light-full-packshot-1.png",
-			"https://image.nothing.tech/cms/wp-content/uploads/2023/07/phone-2-dark-back.png"
+			"/images/Nothing Phone 2-1.jpg",
+			"/images/Nothing Phone 2-2.jpg",
+			"/images/Nothing Phone 2.jpg"
 		],
 		"description": "Инновационный дизайн с Glyph интерфейсом",
 		"specifications": {
@@ -273,12 +273,12 @@
 		"id": "11",
 		"name": "iPhone 15",
 		"category": "Смартфоны",
-		"price": 89990,
-		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-pink?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
+		"price": 4150,
+		"image": "/images/iPhone_15 Pro_Max.jpg",
 		"images": [
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-pink?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-blue?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672",
-			"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-storage-select-202309-6-7inch-yellow?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1692924212672"
+			"/images/iPhone_15 Pro_Max.jpg",
+			"/images/iPhone_15 Pro_Max2.png",
+			"/images/iPhone_15 Pro_Max3.jpg"
 		],
 		"description": "Новый iPhone с Dynamic Island",
 		"specifications": {
@@ -300,12 +300,12 @@
 		"id": "12",
 		"name": "Samsung Galaxy Z Fold 5",
 		"category": "Смартфоны",
-		"price": 179990,
-		"image": "https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243469",
+		"price": 4390,
+		"image": "/images/Samsung Galaxy Z Fold 5.webp",
 		"images": [
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243469",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243454",
-			"https://images.samsung.com/is/image/samsung/p6pim/uk/2307/gallery/uk-galaxy-z-fold5-f946-sm-f946bzaaeua-thumb-537243456"
+			"/images/Samsung Galaxy Z Fold 5.webp",
+			"/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.webp",
+			"/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.png"
 		],
 		"description": "Складной смартфон нового поколения",
 		"specifications": {
@@ -327,12 +327,12 @@
 		"id": "13",
 		"name": "Google Pixel 7a",
 		"category": "Смартфоны",
-		"price": 44990,
-		"image": "https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
+		"price": 1420,
+		"image": "/images/Google Pixel 7a.webp",
 		"images": [
-			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
-			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440",
-			"https://lh3.googleusercontent.com/Z5ihgaSP9K_w0s5lHQ1PLkQHRBPxXi4rHe0Qh7c3_KXHlhKd_L_HQj_ZpgF_JID1KkXBCwgPl6G-Yw8vBQt1wCGELWw8hg=rw-e365-w1440"
+			"/images/Google Pixel 7a.webp",
+			"/images/Google Pixel 7a.webp",
+			"/images/Google Pixel 7a.webp"
 		],
 		"description": "Доступный Google с отличной камерой",
 		"specifications": {
