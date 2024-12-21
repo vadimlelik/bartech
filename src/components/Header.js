@@ -28,6 +28,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import ContactsIcon from '@mui/icons-material/Contacts'
+import RateReviewIcon from '@mui/icons-material/RateReview'
 import { useCartStore } from '../store/cart'
 import { useFavoritesStore } from '../store/favorites'
 
@@ -48,6 +49,7 @@ export default function Header() {
 			href: '/payment_delivery',
 			icon: <LocalShippingIcon />,
 		},
+		{ text: 'Отзывы', href: '/reviews', icon: <RateReviewIcon /> },
 		{ text: 'Контакты', href: '/contacts', icon: <ContactsIcon /> },
 	]
 

@@ -51,6 +51,14 @@ export default function Footer() {
 							paragraph
 							sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
 						>
+							Регистрационный номер в Торговом реестре Республики Беларусь: 732062
+						</Typography>
+						<Typography
+							variant='body2'
+							color='text.secondary'
+							paragraph
+							sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
+						>
 							Юридический и почтовый адрес: 220068, г. Минск, ул. Червякова, д.
 							60, пом. 179
 						</Typography>
