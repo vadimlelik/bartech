@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 
+const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true'
+
 const nextConfig = {
+	assetPrefix: isPhoneSubdomain ? 'https://cvirko-vadim.ru/' : '',
 	reactStrictMode: false,
-	compiler: {
-		styledComponents: true
-	},
 	images: {
 		remotePatterns: [
 			{
@@ -21,44 +21,16 @@ const nextConfig = {
 	async rewrites() {
 		return [
 			{
-				source: '/:path*',
-				has: [
-					{
-						type: 'host',
-						value: 'phone2.cvirko-vadim.ru',
-					},
-				],
-				destination: '/phone2/:path*',
+				source: '/phone/:path*',
+				destination: '/:path*',
 			},
 			{
-				source: '/:path*',
-				has: [
-					{
-						type: 'host',
-						value: 'tv1.cvirko-vadim.ru',
-					},
-				],
-				destination: '/tv1/:path*',
+				source: '/phone',
+				destination: '/',
 			},
 			{
-				source: '/:path*',
-				has: [
-					{
-						type: 'host',
-						value: '1phonefree.cvirko-vadim.ru',
-					},
-				],
-				destination: '/1phonefree/:path*',
-			},
-			{
-				source: '/:path*',
-				has: [
-					{
-						type: 'host',
-						value: '50discount.cvirko-vadim.ru',
-					},
-				],
-				destination: '/50discount/:path*',
+				source: '/tv1/:path*',
+				destination: '/:path*',
 			},
 		]
 	},
