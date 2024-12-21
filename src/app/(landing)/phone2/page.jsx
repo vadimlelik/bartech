@@ -11,8 +11,8 @@ import { useRouter } from 'next/navigation'
 import { PIXEL } from '@/data/pixel'
 
 import 'swiper/css'
-import { Button } from '@mui/material'
 import Quiz from '@/components/quiz/Quiz'
+import Button from '@/app/(shop)/components/button/Button'
 
 const images = [
 	'/tel/tel1.jpg',

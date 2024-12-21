@@ -1,8 +1,24 @@
+'use client'
 import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import styles from './Quiz.module.css'
 import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask'
-import Button from '@/app/(shop)/components/button/Button'
+import {
+	QuizOverlay,
+	QuizContainer,
+	CloseButton,
+	ProgressBarContainer,
+	ProgressBar,
+	QuestionContainer,
+	InputContainer,
+	RadioContainer,
+	RadioLabel,
+	CheckboxContainer,
+	CheckboxLabel,
+	CustomInput,
+	ErrorText,
+	Navigation,
+	NavButton,
+} from './QuizStyles'
 
 const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {
@@ -75,124 +91,81 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 				})
 				.join('\n')
 
-			const formattedData = {
-				FIELDS: {
-					TITLE: 'Новая заявка с Quiz',
+			const formData = {
+				fields: {
+					TITLE: 'Заявка на телефон',
 					COMMENTS: formattedComments,
-					PHONE: [
-						{
-							VALUE: data.question4 || 'Не указан',
-							VALUE_TYPE: 'WORK',
-						},
-					],
-					STATUS_ID: 'NEW',
-					SOURCE_ID: 'WEB',
 				},
 			}
-			try {
-				await onSubmit(formattedData)
-			} catch (error) {
-				setValidationError('Не удалось отправить данные, попробуйте позже.')
-			}
-		})()
+
+			await onSubmit(formData)
+		})(e)
 	}
 
 	if (!isOpen) return null
 
 	return (
-		<div className={styles.quizOverlay}>
-			<div className={styles.quizContainer}>
-				<button
-					className={styles.closeButton}
-					onClick={() => {
-						onClose()
-						setCurrentQuestion(0)
-					}}
-				>
-					✖
-				</button>
+		<QuizOverlay>
+			<QuizContainer>
+				<CloseButton onClick={onClose}>✕</CloseButton>
 
-				<form onSubmit={handleFormSubmit} className={styles.form}>
-					<div className={styles.progressBarContainer}>
-						<div
-							className={styles.progressBar}
-							style={{ width: `${progress}%` }}
-						></div>
-					</div>
-					<div className={styles.questionContainer}>
-						<h2>{questions[currentQuestion].question}</h2>
-						<div className={styles.inputContainer}>
+				<ProgressBarContainer>
+					<ProgressBar $progress={progress} />
+				</ProgressBarContainer>
+
+				<form onSubmit={handleFormSubmit}>
+					<QuestionContainer>
+						<h3>{questions[currentQuestion].question}</h3>
+						<InputContainer>
 							{questions[currentQuestion].type === 'radio' ? (
 								questions[currentQuestion].options.map((option) => (
-									<div key={option.value} className={styles.radioContainer}>
+									<RadioContainer key={option.value}>
 										<Controller
 											name={`question${questions[currentQuestion].id}`}
 											control={control}
+											defaultValue=''
 											rules={{ required: 'Это поле обязательно' }}
 											render={({ field }) => (
-												<>
-													<input
-														{...field}
-														type='radio'
-														value={option.value}
-														id={`radio-${option.value}`}
-														className={styles.radioInput}
-														onFocus={handleFieldInteraction}
-														onChange={(e) => {
-															handleFieldInteraction()
-															field.onChange(e)
-														}}
-													/>
-													<label
-														htmlFor={`radio-${option.value}`}
-														className={styles.radioLabel}
-													>
-														{option.label}
-													</label>
-												</>
+												<RadioLabel
+													$isChecked={field.value === option.value}
+													onClick={() => {
+														handleFieldInteraction()
+														field.onChange(option.value)
+													}}
+												>
+													{option.label}
+												</RadioLabel>
 											)}
 										/>
-									</div>
+									</RadioContainer>
 								))
 							) : questions[currentQuestion].type === 'checkbox' ? (
 								questions[currentQuestion].options.map((option) => (
-									<div key={option.value} className={styles.checkboxContainer}>
+									<CheckboxContainer key={option.value}>
 										<Controller
 											name={`question${questions[currentQuestion].id}`}
 											control={control}
 											defaultValue={[]}
 											rules={{ required: 'Это поле обязательно' }}
-											render={({ field }) => (
-												<>
-													<input
-														{...field}
-														type='checkbox'
-														value={option.value}
-														id={`checkbox-${option.value}`}
-														className={styles.checkboxInput}
-														onFocus={handleFieldInteraction}
-														onChange={(e) => {
+											render={({ field }) => {
+												const isChecked = field.value.includes(option.value)
+												return (
+													<CheckboxLabel
+														$isChecked={isChecked}
+														onClick={() => {
 															handleFieldInteraction()
-															const value = e.target.value
-															if (field.value.includes(value)) {
-																field.onChange(
-																	field.value.filter((v) => v !== value)
-																)
-															} else {
-																field.onChange([...field.value, value])
-															}
+															const newValue = isChecked
+																? field.value.filter((v) => v !== option.value)
+																: [...field.value, option.value]
+															field.onChange(newValue)
 														}}
-													/>
-													<label
-														htmlFor={`checkbox-${option.value}`}
-														className={styles.checkboxLabel}
 													>
 														{option.label}
-													</label>
-												</>
-											)}
+													</CheckboxLabel>
+												)
+											}}
 										/>
-									</div>
+									</CheckboxContainer>
 								))
 							) : (
 								<Controller
@@ -223,32 +196,21 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									)}
 								/>
 							)}
-						</div>
-						{validationError && (
-							<span className={styles.error}>{validationError}</span>
-						)}
-					</div>
-					<div className={styles.navigation}>
+						</InputContainer>
+						{validationError && <ErrorText>{validationError}</ErrorText>}
+					</QuestionContainer>
+					<Navigation>
 						{currentQuestion < questions.length - 1 ? (
-							<Button
-								type='button'
-								onClick={nextQuestion}
-								label='Далее'
-								color='orange'
-								className={styles.navButton}
-							/>
+							<NavButton type='button' onClick={nextQuestion}>
+								Далее
+							</NavButton>
 						) : (
-							<Button
-								type='submit'
-								label='Отправить'
-								color='orange'
-								className={styles.navButton}
-							/>
+							<NavButton type='submit'>Отправить</NavButton>
 						)}
-					</div>
+					</Navigation>
 				</form>
-			</div>
-		</div>
+			</QuizContainer>
+		</QuizOverlay>
 	)
 }
 

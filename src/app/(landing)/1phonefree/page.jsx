@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from 'react'
 import styles from './phoneFreePage.module.css'
-import Button from '@/app/(shop)/components/button/Button'
 import LogoIcon from '@/app/(shop)/components/Logo/Logo'
 import Image from 'next/image'
-import Quiz from '@/app/(shop)/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 import { PIXEL } from '../../../data/pixel'
+import Quiz from '@/components/quiz/Quiz'
+import Button from '@/app/(shop)/components/button/Button'
 
 const questions = [
 	{

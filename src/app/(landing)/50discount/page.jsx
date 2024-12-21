@@ -2,13 +2,13 @@
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer'
 import Marquee from '@/app/(shop)/components/Marquee/Marquee'
 import styles from './discountPage.module.css'
-import Button from '@/app/(shop)/components/button/Button'
 import { useEffect, useState } from 'react'
-import Quiz from '@/app/(shop)/components/quiz/Quiz'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { PIXEL } from '@/data/pixel'
 import Loading from '@/app/loading'
+import Button from '@/app/(shop)/components/button/Button'
+import Quiz from '@/components/quiz/Quiz'
 
 const questions = [
 	{
