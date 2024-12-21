@@ -3,33 +3,46 @@ import CategoryCard from './components/CategoryCard'
 import { getCategories } from '@/lib/categories'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import CategoryCarousel from '@/components/CategoryCarousel/CategoryCarousel'
+import Features from '@/components/Features/Features'
 
 export const metadata = {
-	title: 'Магазин телефонов - Главная страница',
-	description: 'Купить телефон в рассрочку',
+    title: 'Магазин телефонов - Главная страница',
+    description: 'Купить телефон в рассрочку',
 }
 
 export default async function Home() {
-	const categories = await getCategories()
+    const categories = await getCategories()
 
-	return (
-		<>
-			<Header />
-			<Box component='main' sx={{ flex: 1 }}>
-				<Container sx={{ py: 4 }}>
-					<Typography variant='h4' component='h1' gutterBottom>
-						Категории
-					</Typography>
-					<Grid container spacing={3}>
-						{categories.map((category) => (
-							<Grid item xs={12} sm={6} md={4} key={category.id}>
-								<CategoryCard category={category} />
-							</Grid>
-						))}
-					</Grid>
-				</Container>
-			</Box>
-			<Footer />
-		</>
-	)
+    return (
+        <>
+            <Header />
+            <Box component='main' sx={{ flex: 1 }}>
+                <CategoryCarousel />
+                <Features />
+                <Container sx={{ py: 4 }}>
+                    <Typography 
+                        variant='h4' 
+                        component='h2' 
+                        gutterBottom 
+                        sx={{
+                            textAlign: 'center',
+                            mb: 4,
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Категории товаров
+                    </Typography>
+                    <Grid container spacing={3}>
+                        {categories.map((category) => (
+                            <Grid item xs={12} sm={6} md={4} key={category.id}>
+                                <CategoryCard category={category} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
+            </Box>
+            <Footer />
+        </>
+    )
 }
