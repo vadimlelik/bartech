@@ -7,7 +7,16 @@ const nextConfig = {
     },
     images: {
         unoptimized: true,
-        domains: ['cvirko-vadim.ru', 'phone.cvirko-vadim.ru', 'phone2.cvirko-vadim.ru'],
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: '**.cvirko-vadim.ru',
+            },
+            {
+                protocol: 'https',
+                hostname: '**.cvirko-vadim.ru',
+            }
+        ],
     },
     experimental: {
         serverActions: {
@@ -15,9 +24,7 @@ const nextConfig = {
         },
     },
     output: 'standalone',
-    async assetPrefix() {
-        return;
-    },
+    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://phone.cvirko-vadim.ru' : '',
     async rewrites() {
         return [
             {
