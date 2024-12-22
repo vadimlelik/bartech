@@ -7,24 +7,10 @@ const nextConfig = {
     },
     images: {
         unoptimized: true,
-        remotePatterns: [
-            {
-                protocol: 'http',
-                hostname: '**.cvirko-vadim.ru',
-            },
-            {
-                protocol: 'https',
-                hostname: '**.cvirko-vadim.ru',
-            }
-        ],
-    },
-    experimental: {
-        serverActions: {
-            bodySizeLimit: '2mb',
-        },
+        domains: ['phone.cvirko-vadim.ru', 'phone2.cvirko-vadim.ru'],
     },
     output: 'standalone',
-    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://phone.cvirko-vadim.ru' : '',
+    basePath: '',
     async rewrites() {
         return [
             {
@@ -36,6 +22,26 @@ const nextConfig = {
                     },
                 ],
                 destination: '/phone2/:path*',
+            },
+            {
+                source: '/_next/:path*',
+                has: [
+                    {
+                        type: 'host',
+                        value: 'phone2.cvirko-vadim.ru',
+                    },
+                ],
+                destination: '/_next/:path*',
+            },
+            {
+                source: '/images/:path*',
+                has: [
+                    {
+                        type: 'host',
+                        value: 'phone2.cvirko-vadim.ru',
+                    },
+                ],
+                destination: '/images/:path*',
             },
             {
                 source: '/:path*',
