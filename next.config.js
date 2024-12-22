@@ -12,11 +12,15 @@ const nextConfig = {
 				hostname: '**',
 			},
 		],
+		unoptimized: true,
 	},
 	experimental: {
 		serverActions: {
 			bodySizeLimit: '2mb',
 		},
+	},
+	async assetPrefix() {
+		return;
 	},
 	async rewrites() {
 		return [
