@@ -1,18 +1,42 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    reactStrictMode: false,
-    compiler: {
-        styledComponents: true,
-    },
+    output: 'standalone',
+    poweredByHeader: false,
+    compress: true,
+
+    // Asset configuration
+    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://phone.cvirko-vadim.ru' : '',
+    
+    // Image configuration
     images: {
         unoptimized: true,
         domains: ['phone.cvirko-vadim.ru', 'phone2.cvirko-vadim.ru'],
     },
-    output: 'standalone',
-    basePath: '',
+
+    // Rewrite rules for subdomains
     async rewrites() {
         return [
+            {
+                source: '/_next/static/:path*',
+                has: [
+                    {
+                        type: 'host',
+                        value: '(.*).cvirko-vadim.ru',
+                    },
+                ],
+                destination: '/_next/static/:path*',
+            },
+            {
+                source: '/images/:path*',
+                has: [
+                    {
+                        type: 'host',
+                        value: '(.*).cvirko-vadim.ru',
+                    },
+                ],
+                destination: '/images/:path*',
+            },
             {
                 source: '/:path*',
                 has: [
@@ -22,26 +46,6 @@ const nextConfig = {
                     },
                 ],
                 destination: '/phone2/:path*',
-            },
-            {
-                source: '/_next/:path*',
-                has: [
-                    {
-                        type: 'host',
-                        value: 'phone2.cvirko-vadim.ru',
-                    },
-                ],
-                destination: '/_next/:path*',
-            },
-            {
-                source: '/images/:path*',
-                has: [
-                    {
-                        type: 'host',
-                        value: 'phone2.cvirko-vadim.ru',
-                    },
-                ],
-                destination: '/images/:path*',
             },
             {
                 source: '/:path*',
@@ -76,3 +80,5 @@ const nextConfig = {
         ]
     },
 }
+
+module.exports = nextConfig
