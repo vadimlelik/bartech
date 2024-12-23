@@ -1238,11 +1238,11 @@
 		"name": "Xiaomi 14 Pro",
 		"category": "Смартфоны",
 		"price": 2999,
-		"image": "/images/xiaomi/14pro.jpg",
+		"image": "/images/xiaomi/Xiaomi 14 Pro.jpg",
 		"images": [
-			"/images/xiaomi/14pro_1.jpg",
-			"/images/xiaomi/14pro_2.jpg",
-			"/images/xiaomi/14pro_3.jpg"
+			"/images/xiaomi/Xiaomi 14 Pro-2.jpg",
+			"/images/xiaomi/Xiaomi 14 Pro.jpg",
+			"/images/xiaomi/Xiaomi 14 Pro-3.webp"
 		],
 		"description": "Флагманский смартфон с камерой Leica и чипом Snapdragon 8 Gen 3",
 		"specifications": {
@@ -1262,11 +1262,11 @@
 		"name": "Redmi Note 13 Pro+",
 		"category": "Смартфоны",
 		"price": 1199,
-		"image": "/images/xiaomi/note13proplus.jpg",
+		"image": "/images/xiaomi/Redmi Note 13 Pro+-1.avif",
 		"images": [
-			"/images/xiaomi/note13proplus_1.jpg",
-			"/images/xiaomi/note13proplus_2.jpg",
-			"/images/xiaomi/note13proplus_3.jpg"
+			"/images/xiaomi/Redmi Note 13 Pro+-2.jpeg",
+			"/images/xiaomi/Redmi Note 13 Pro+.jpg",
+			"/images/xiaomi/Redmi Note 13 Pro+-1.avif"
 		],
 		"description": "Мощный смартфон среднего класса с 200MP камерой",
 		"specifications": {
@@ -1286,11 +1286,11 @@
 		"name": "POCO F5 Pro",
 		"category": "Смартфоны",
 		"price": 1499,
-		"image": "/images/xiaomi/pocof5pro.jpg",
+		"image": "/images/POCO/POCO F5 Pro-2.webp",
 		"images": [
-			"/images/xiaomi/pocof5pro_1.jpg",
-			"/images/xiaomi/pocof5pro_2.jpg",
-			"/images/xiaomi/pocof5pro_3.jpg"
+			"/images/POCO/POCO F5 Pro.jpg",
+			"/images/POCO/POCO F5 Pro.webp",
+			"/images/POCO/POCO F5 Pro-2.webp"
 		],
 		"description": "Флагманский киллер с топовым процессором",
 		"specifications": {
@@ -1310,11 +1310,11 @@
 		"name": "Xiaomi 13T Pro",
 		"category": "Смартфоны",
 		"price": 1899,
-		"image": "/images/xiaomi/13tpro.jpg",
+		"image": "/images/xiaomi/Xiaomi 13T Pro.jpg",
 		"images": [
-			"/images/xiaomi/13tpro_1.jpg",
-			"/images/xiaomi/13tpro_2.jpg",
-			"/images/xiaomi/13tpro_3.jpg"
+			"/images/xiaomi/Xiaomi 13T Pro-2.webp",
+			"/images/xiaomi/Xiaomi 13T Pro.jpg",
+			"/images/xiaomi/Xiaomi 13T Pro-1.jpg"
 		],
 		"description": "Производительный смартфон с камерой Leica",
 		"specifications": {
@@ -1334,11 +1334,11 @@
 		"name": "Redmi Note 12 Pro",
 		"category": "Смартфоны",
 		"price": 899,
-		"image": "/images/xiaomi/note12pro.jpg",
+		"image": "/images/xiaomi/Redmi Note 12 Pro-2.webp",
 		"images": [
-			"/images/xiaomi/note12pro_1.jpg",
-			"/images/xiaomi/note12pro_2.jpg",
-			"/images/xiaomi/note12pro_3.jpg"
+			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
+			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
+			"/images/xiaomi/Redmi Note 12 Pro.webp"
 		],
 		"description": "Популярный смартфон среднего класса",
 		"specifications": {
@@ -1354,39 +1354,15 @@
 		"categoryId": "xiaomi"
 	},
 	{
-		"id": "xiaomi6",
-		"name": "POCO X5 Pro",
-		"category": "Смартфоны",
-		"price": 999,
-		"image": "/images/xiaomi/pocox5pro.jpg",
-		"images": [
-			"/images/xiaomi/pocox5pro_1.jpg",
-			"/images/xiaomi/pocox5pro_2.jpg",
-			"/images/xiaomi/pocox5pro_3.jpg"
-		],
-		"description": "Производительный смартфон с отличным экраном",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "POCO X5 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 778G",
-			"camera": "108MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
 		"id": "xiaomi7",
 		"name": "Redmi 12",
 		"category": "Смартфоны",
 		"price": 599,
-		"image": "/images/xiaomi/redmi12.jpg",
+		"image": "/images/xiaomi/Redmi 12-1.jpg",
 		"images": [
-			"/images/xiaomi/redmi12_1.jpg",
-			"/images/xiaomi/redmi12_2.jpg",
-			"/images/xiaomi/redmi12_3.jpg"
+			"/images/xiaomi/Redmi 12-3.png",
+			"/images/xiaomi/Redmi 12.png",
+			"/images/xiaomi/Redmi 12-1.jpg"
 		],
 		"description": "Доступный смартфон с хорошими характеристиками",
 		"specifications": {
@@ -1402,39 +1378,15 @@
 		"categoryId": "xiaomi"
 	},
 	{
-		"id": "xiaomi8",
-		"name": "POCO M5s",
-		"category": "Смартфоны",
-		"price": 699,
-		"image": "/images/xiaomi/pocom5s.jpg",
-		"images": [
-			"/images/xiaomi/pocom5s_1.jpg",
-			"/images/xiaomi/pocom5s_2.jpg",
-			"/images/xiaomi/pocom5s_3.jpg"
-		],
-		"description": "Бюджетный смартфон с AMOLED экраном",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "POCO M5s",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.43 AMOLED",
-			"processor": "Helio G95",
-			"camera": "64MP + 8MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
 		"id": "xiaomi9",
 		"name": "Redmi Note 12",
 		"category": "Смартфоны",
 		"price": 699,
-		"image": "/images/xiaomi/note12.jpg",
+		"image": "/images/xiaomi/Redmi Note 12-1.jpg",
 		"images": [
-			"/images/xiaomi/note12_1.jpg",
-			"/images/xiaomi/note12_2.jpg",
-			"/images/xiaomi/note12_3.jpg"
+			"/images/xiaomi/Redmi Note 12-3.jpg",
+			"/images/xiaomi/Redmi Note 12.png",
+			"/images/xiaomi/Redmi Note 12-1.jpg"
 		],
 		"description": "Сбалансированный смартфон с AMOLED экраном",
 		"specifications": {
@@ -1454,11 +1406,11 @@
 		"name": "Redmi A2+",
 		"category": "Смартфоны",
 		"price": 299,
-		"image": "/images/xiaomi/redmia2plus.jpg",
+		"image": "/images/xiaomi/Redmi A2+-3.jpg",
 		"images": [
-			"/images/xiaomi/redmia2plus_1.jpg",
-			"/images/xiaomi/redmia2plus_2.jpg",
-			"/images/xiaomi/redmia2plus_3.jpg"
+			"/images/xiaomi/Redmi A2+-1.jpeg",
+			"/images/xiaomi/Redmi A2+.jpg",
+			"/images/xiaomi/Redmi A2+-3.jpg"
 		],
 		"description": "Ультрабюджетный смартфон с большим экраном",
 		"specifications": {
