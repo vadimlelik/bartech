@@ -1282,30 +1282,6 @@
 		"categoryId": "xiaomi"
 	},
 	{
-		"id": "xiaomi3",
-		"name": "POCO F5 Pro",
-		"category": "Смартфоны",
-		"price": 1499,
-		"image": "/images/POCO/POCO F5 Pro-2.webp",
-		"images": [
-			"/images/POCO/POCO F5 Pro.jpg",
-			"/images/POCO/POCO F5 Pro.webp",
-			"/images/POCO/POCO F5 Pro-2.webp"
-		],
-		"description": "Флагманский киллер с топовым процессором",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "POCO F5 Pro",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "64MP + 8MP + 2MP",
-			"battery": "5160 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
 		"id": "xiaomi4",
 		"name": "Xiaomi 13T Pro",
 		"category": "Смартфоны",
@@ -1430,11 +1406,11 @@
 		"name": "POCO F5 Pro",
 		"category": "Смартфоны",
 		"price": 1499,
-		"image": "/images/poco/f5pro.jpg",
+		"image": "/images/poco/POCO F5 Pro-2.webp",
 		"images": [
-			"/images/poco/f5pro_1.jpg",
-			"/images/poco/f5pro_2.jpg",
-			"/images/poco/f5pro_3.jpg"
+			"/images/poco/POCO F5 Pro.jpg",
+			"/images/poco/POCO F5 Pro.webp",
+			"/images/poco/POCO F5 Pro-2.webp"
 		],
 		"description": "Флагманский смартфон с топовым процессором Snapdragon 8+ Gen 1",
 		"specifications": {
@@ -1454,11 +1430,11 @@
 		"name": "POCO F5",
 		"category": "Смартфоны",
 		"price": 1199,
-		"image": "/images/poco/f5.jpg",
+		"image": "/images/poco/POCO F5-1.jpg",
 		"images": [
-			"/images/poco/f5_1.jpg",
-			"/images/poco/f5_2.jpg",
-			"/images/poco/f5_3.jpg"
+			"/images/poco/POCO F5.avif",
+			"/images/poco/POCO F5-1.jpg",
+			"/images/poco/POCO F5-3.webp"
 		],
 		"description": "Мощный смартфон с процессором Snapdragon 7+ Gen 2",
 		"specifications": {
@@ -1478,11 +1454,11 @@
 		"name": "POCO X6 Pro",
 		"category": "Смартфоны",
 		"price": 999,
-		"image": "/images/poco/x6pro.jpg",
+		"image": "/images/poco/POCO X6 Pro-1.jpg",
 		"images": [
-			"/images/poco/x6pro_1.jpg",
-			"/images/poco/x6pro_2.jpg",
-			"/images/poco/x6pro_3.jpg"
+			"/images/poco/POCO X6 Pro-2.jpeg",
+			"/images/poco/POCO X6 Pro-1.jpg",
+			"/images/poco/POCO X6 Pro.jpg"
 		],
 		"description": "Производительный смартфон среднего класса",
 		"specifications": {
@@ -1502,11 +1478,11 @@
 		"name": "POCO X5 Pro",
 		"category": "Смартфоны",
 		"price": 899,
-		"image": "/images/poco/x5pro.jpg",
+		"image": "/images/POCO/POCO X5 Pro.jpg",
 		"images": [
-			"/images/poco/x5pro_1.jpg",
-			"/images/poco/x5pro_2.jpg",
-			"/images/poco/x5pro_3.jpg"
+			"/images/POCO/POCO X5 Pro-3.png",
+			"/images/POCO/POCO X5 Pro-2.webp",
+			"/images/POco/POCO X5 Pro.jpg"
 		],
 		"description": "Смартфон с отличным экраном и камерой 108MP",
 		"specifications": {
@@ -1526,11 +1502,11 @@
 		"name": "POCO X5",
 		"category": "Смартфоны",
 		"price": 799,
-		"image": "/images/poco/x5.jpg",
+		"image": "/images/POCO/POCO X5-2.jpg",
 		"images": [
-			"/images/poco/x5_1.jpg",
-			"/images/poco/x5_2.jpg",
-			"/images/poco/x5_3.jpg"
+			"/images/POCO/POCO X5-2.jpg",
+			"/images/POCO/POCO X5-3.png",
+			"/images/POCO/POCO X5-2.jpg"
 		],
 		"description": "Доступный смартфон с 5G и AMOLED экраном",
 		"specifications": {
@@ -1550,11 +1526,11 @@
 		"name": "POCO M6 Pro",
 		"category": "Смартфоны",
 		"price": 699,
-		"image": "/images/poco/m6pro.jpg",
+		"image": "/images/poco/POCO M6 Pro-2.jpg",
 		"images": [
-			"/images/poco/m6pro_1.jpg",
-			"/images/poco/m6pro_2.jpg",
-			"/images/poco/m6pro_3.jpg"
+			"/images/poco/POCO M6 Pro-2.jpg",
+			"/images/poco/POCO M6 Pro.png",
+			"/images/poco/POCO M6 Pro-2.jpg"
 		],
 		"description": "Бюджетный смартфон с хорошей производительностью",
 		"specifications": {
@@ -1574,11 +1550,11 @@
 		"name": "POCO M5s",
 		"category": "Смартфоны",
 		"price": 599,
-		"image": "/images/poco/m5s.jpg",
+		"image": "/images/poco/POCO M5s-2.webp",
 		"images": [
-			"/images/poco/m5s_1.jpg",
-			"/images/poco/m5s_2.jpg",
-			"/images/poco/m5s_3.jpg"
+			"/images/poco/POCO M5s-3.jpg",
+			"/images/poco/POCO M5s.jpg",
+			"/images/poco/POCO M5s-2.webp"
 		],
 		"description": "Доступный смартфон с AMOLED экраном",
 		"specifications": {
@@ -1598,11 +1574,11 @@
 		"name": "POCO M5",
 		"category": "Смартфоны",
 		"price": 499,
-		"image": "/images/poco/m5.jpg",
+		"image": "/images/poco/POCO M5.jpg",
 		"images": [
-			"/images/poco/m5_1.jpg",
-			"/images/poco/m5_2.jpg",
-			"/images/poco/m5_3.jpg"
+			"/images/poco/POCO M5-1.jpg",
+			"/images/poco/POCO M5.jpg",
+			"/images/poco/POCO M5-1.jpg"
 		],
 		"description": "Бюджетный игровой смартфон",
 		"specifications": {
@@ -1622,11 +1598,11 @@
 		"name": "POCO C55",
 		"category": "Смартфоны",
 		"price": 399,
-		"image": "/images/poco/c55.jpg",
+		"image": "/images/poco/POCO C55-2.jpg",
 		"images": [
-			"/images/poco/c55_1.jpg",
-			"/images/poco/c55_2.jpg",
-			"/images/poco/c55_3.jpg"
+			"/images/poco/POCO C55-3.jpg",
+			"/images/poco/POCO C55.jpg",
+			"/images/poco/POCO C55-2.jpg"
 		],
 		"description": "Ультрабюджетный смартфон с большим экраном",
 		"specifications": {
@@ -1646,11 +1622,11 @@
 		"name": "POCO C51",
 		"category": "Смартфоны",
 		"price": 299,
-		"image": "/images/poco/c51.jpg",
+		"image": "/images/poco/POCO C51-2.jpg",
 		"images": [
-			"/images/poco/c51_1.jpg",
-			"/images/poco/c51_2.jpg",
-			"/images/poco/c51_3.jpg"
+			"/images/poco/POCO C51-3.jpeg",
+			"/images/poco/POCO C51.jpg",
+			"/images/poco/POCO C51-2.jpg"
 		],
 		"description": "Самый доступный смартфон POCO",
 		"specifications": {
