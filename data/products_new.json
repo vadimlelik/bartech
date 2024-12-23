@@ -1430,11 +1430,11 @@
 		"name": "POCO F5",
 		"category": "Смартфоны",
 		"price": 1199,
-		"image": "/images/poco/POCO F5-1.jpg",
+		"image": "/images/POCO/POCO F5-1.jpg",
 		"images": [
-			"/images/poco/POCO F5.avif",
-			"/images/poco/POCO F5-1.jpg",
-			"/images/poco/POCO F5-3.webp"
+			"/images/POCO/POCO F5.avif",
+			"/images/POCO/POCO F5-1.jpg",
+			"/images/POCO/POCO F5-3.webp"
 		],
 		"description": "Мощный смартфон с процессором Snapdragon 7+ Gen 2",
 		"specifications": {
@@ -1454,11 +1454,11 @@
 		"name": "POCO X6 Pro",
 		"category": "Смартфоны",
 		"price": 999,
-		"image": "/images/poco/POCO X6 Pro-1.jpg",
+		"image": "/images/POCO/POCO X6 Pro-1.jpg",
 		"images": [
-			"/images/poco/POCO X6 Pro-2.jpeg",
-			"/images/poco/POCO X6 Pro-1.jpg",
-			"/images/poco/POCO X6 Pro.jpg"
+			"/images/POCO/POCO X6 Pro-2.jpeg",
+			"/images/POCO/POCO X6 Pro-1.jpg",
+			"/images/POCO/POCO X6 Pro.jpg"
 		],
 		"description": "Производительный смартфон среднего класса",
 		"specifications": {
@@ -1528,9 +1528,9 @@
 		"price": 699,
 		"image": "/images/poco/POCO M6 Pro-2.jpg",
 		"images": [
-			"/images/poco/POCO M6 Pro-2.jpg",
-			"/images/poco/POCO M6 Pro.png",
-			"/images/poco/POCO M6 Pro-2.jpg"
+			"/images/POCO/POCO M6 Pro-2.jpg",
+			"/images/POCO/POCO M6 Pro.png",
+			"/images/POCO/POCO M6 Pro-2.jpg"
 		],
 		"description": "Бюджетный смартфон с хорошей производительностью",
 		"specifications": {
@@ -1552,9 +1552,9 @@
 		"price": 599,
 		"image": "/images/poco/POCO M5s-2.webp",
 		"images": [
-			"/images/poco/POCO M5s-3.jpg",
-			"/images/poco/POCO M5s.jpg",
-			"/images/poco/POCO M5s-2.webp"
+			"/images/POCO/POCO M5s-3.jpg",
+			"/images/POCO/POCO M5s.jpg",
+			"/images/POCO/POCO M5s-2.webp"
 		],
 		"description": "Доступный смартфон с AMOLED экраном",
 		"specifications": {
@@ -1576,9 +1576,9 @@
 		"price": 499,
 		"image": "/images/poco/POCO M5.jpg",
 		"images": [
-			"/images/poco/POCO M5-1.jpg",
-			"/images/poco/POCO M5.jpg",
-			"/images/poco/POCO M5-1.jpg"
+			"/images/POCO/POCO M5-1.jpg",
+			"/images/POCO/POCO M5.jpg",
+			"/images/POCO/POCO M5-1.jpg"
 		],
 		"description": "Бюджетный игровой смартфон",
 		"specifications": {
