@@ -54,8 +54,10 @@ export default function ProductList({ categoryId }) {
 	const [page, setPage] = useState(1)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [totalPages, setTotalPages] = useState(1)
-	const { compareItems, addToCompare, removeFromCompare, isInCompare } = useCompareStore()
-	const { addToFavorites, removeFromFavorites, isInFavorites } = useFavoritesStore()
+	const { compareItems, addToCompare, removeFromCompare, isInCompare } =
+		useCompareStore()
+	const { addToFavorites, removeFromFavorites, isInFavorites } =
+		useFavoritesStore()
 	const [snackbarOpen, setSnackbarOpen] = useState(false)
 	const [snackbarMessage, setSnackbarMessage] = useState('')
 	const [drawerOpen, setDrawerOpen] = useState(false)
@@ -465,15 +467,15 @@ export default function ProductList({ categoryId }) {
 											</Button>
 											<IconButton
 												onClick={() => handleCompareToggle(product)}
-												color={
-													isInCompare(product.id) ? 'primary' : 'default'
-												}
+												color={isInCompare(product.id) ? 'primary' : 'default'}
 											>
 												<CompareArrowsIcon />
 											</IconButton>
 											<IconButton
 												onClick={() => handleFavoriteClick(product.id)}
-												color={isInFavorites(product.id) ? 'primary' : 'default'}
+												color={
+													isInFavorites(product.id) ? 'primary' : 'default'
+												}
 											>
 												{isInFavorites(product.id) ? (
 													<FavoriteIcon />
