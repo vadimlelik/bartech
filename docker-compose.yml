@@ -5,7 +5,7 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://45.12.238.117:5000
+      - NEXT_PUBLIC_API_URL=https://178.172.138.214
     volumes:
       - nextjs_build:/app/.next
       - ./data:/app/data:ro
@@ -16,7 +16,7 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./www:/var/www/certbot
-    command: certonly --standalone --preferred-challenges http --email your-email@example.com --agree-tos --no-eff-email -d cvirko-vadim.ru -d www.cvirko-vadim.ru --force-renewal
+    command: certonly --standalone --preferred-challenges http --email your-email@example.com --agree-tos --no-eff-email -d technobar.by -d www.technobar.by --force-renewal
     network_mode: host
 
   nginx:
