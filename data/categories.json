@@ -22,16 +22,16 @@
 	{
 		"id": "honor",
 		"name": "Honor",
-		"image": "/images/categories/honor.jpg"
+		"image": "/images/honor/honor.png"
 	},
 	{
 		"id": "infinix",
 		"name": "Infinix",
-		"image": "/images/categories/infinix.jpg"
+		"image": "/images/infinix/infinix.webp"
 	},
 	{
 		"id": "poco",
 		"name": "POCO",
-		"image": "/images/categories/poco.jpg"
+		"image": "/images/poco/xiaomi-poco-x6.jpg"
 	}
 ]
