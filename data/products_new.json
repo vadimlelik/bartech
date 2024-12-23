@@ -518,9 +518,9 @@
 		"name": "Honor Magic6 Pro",
 		"category": "Смартфоны",
 		"price": 2899,
-		"image": "/images/honor/Honor Magic6 Pro-1.jpeg",
+		"image": "/images/honor/Honor Magic6 Pro-3.jpg",
 		"images": [
-			"/images/honor/Honor Magic6 Pro-1.jpeg",
+			"/images/honor/Honor Magic6 Pro-1.jpg",
 			"/images/honor/Honor Magic6 Pro-3.jpg",
 			"/images/honor/Honor Magic6 Pro.webp"
 		],
@@ -1526,7 +1526,7 @@
 		"name": "POCO M6 Pro",
 		"category": "Смартфоны",
 		"price": 699,
-		"image": "/images/poco/POCO M6 Pro-2.jpg",
+		"image": "/images/POCO/POCO M6 Pro.png",
 		"images": [
 			"/images/POCO/POCO M6 Pro-2.jpg",
 			"/images/POCO/POCO M6 Pro.png",
@@ -1550,7 +1550,7 @@
 		"name": "POCO M5s",
 		"category": "Смартфоны",
 		"price": 599,
-		"image": "/images/poco/POCO M5s-2.webp",
+		"image": "/images/POCO/POCO M5s.jpg",
 		"images": [
 			"/images/POCO/POCO M5s-3.jpg",
 			"/images/POCO/POCO M5s.jpg",
@@ -1574,7 +1574,7 @@
 		"name": "POCO M5",
 		"category": "Смартфоны",
 		"price": 499,
-		"image": "/images/poco/POCO M5.jpg",
+		"image": "/images/POCO/POCO M5-1.jpg",
 		"images": [
 			"/images/POCO/POCO M5-1.jpg",
 			"/images/POCO/POCO M5.jpg",
