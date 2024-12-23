@@ -1262,11 +1262,11 @@
 		"name": "Redmi Note 13 Pro+",
 		"category": "Смартфоны",
 		"price": 1199,
-		"image": "/images/xiaomi/Redmi Note 13 Pro+-1.avif",
+		"image": "/images/xiaomi/Redmi Note 13 Pro2.jpg",
 		"images": [
-			"/images/xiaomi/Redmi Note 13 Pro+-2.jpeg",
-			"/images/xiaomi/Redmi Note 13 Pro+.jpg",
-			"/images/xiaomi/Redmi Note 13 Pro+-1.avif"
+			"/images/xiaomi/Redmi Note 13 Pro2.jpg",
+			"/images/xiaomi/Redmi Note 13 Pro3.jpeg",
+			"/images/xiaomi/Redmi Note13Pro1.avif"
 		],
 		"description": "Мощный смартфон среднего класса с 200MP камерой",
 		"specifications": {
@@ -1310,7 +1310,7 @@
 		"name": "Redmi Note 12 Pro",
 		"category": "Смартфоны",
 		"price": 899,
-		"image": "/images/xiaomi/Redmi Note 12 Pro-2.webp",
+		"image": "/images/xiaomi/Redmi Note 12 Pro-3.webp",
 		"images": [
 			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
 			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
@@ -1382,11 +1382,11 @@
 		"name": "Redmi A2+",
 		"category": "Смартфоны",
 		"price": 299,
-		"image": "/images/xiaomi/Redmi A2+-3.jpg",
+		"image": "/images/xiaomi/RedmiA2_1.jpeg",
 		"images": [
-			"/images/xiaomi/Redmi A2+-1.jpeg",
-			"/images/xiaomi/Redmi A2+.jpg",
-			"/images/xiaomi/Redmi A2+-3.jpg"
+			"/images/xiaomi/RedmiA2_1.jpeg",
+			"/images/xiaomi/RedmiA2_2.jpg",
+			"/images/xiaomi/RedmiA2-3.jpg"
 		],
 		"description": "Ультрабюджетный смартфон с большим экраном",
 		"specifications": {
@@ -1406,11 +1406,11 @@
 		"name": "POCO F5 Pro",
 		"category": "Смартфоны",
 		"price": 1499,
-		"image": "/images/poco/POCO F5 Pro-2.webp",
+		"image": "/images/POCO/POCO F5 Pro-2.webp",
 		"images": [
-			"/images/poco/POCO F5 Pro.jpg",
-			"/images/poco/POCO F5 Pro.webp",
-			"/images/poco/POCO F5 Pro-2.webp"
+			"/images/POCO/POCO F5 Pro.jpg",
+			"/images/POCO/POCO F5 Pro.webp",
+			"/images/POCO/POCO F5 Pro-2.webp"
 		],
 		"description": "Флагманский смартфон с топовым процессором Snapdragon 8+ Gen 1",
 		"specifications": {
@@ -1598,11 +1598,11 @@
 		"name": "POCO C55",
 		"category": "Смартфоны",
 		"price": 399,
-		"image": "/images/poco/POCO C55-2.jpg",
+		"image": "/images/POCO/POCO C55-2.jpg",
 		"images": [
-			"/images/poco/POCO C55-3.jpg",
-			"/images/poco/POCO C55.jpg",
-			"/images/poco/POCO C55-2.jpg"
+			"/images/POCO/POCO C55-3.jpg",
+			"/images/POCO/POCO C55.jpg",
+			"/images/POCO/POCO C55-2.jpg"
 		],
 		"description": "Ультрабюджетный смартфон с большим экраном",
 		"specifications": {
@@ -1622,11 +1622,11 @@
 		"name": "POCO C51",
 		"category": "Смартфоны",
 		"price": 299,
-		"image": "/images/poco/POCO C51-2.jpg",
+		"image": "/images/POCO/POCO C51-2.jpg",
 		"images": [
-			"/images/poco/POCO C51-3.jpeg",
-			"/images/poco/POCO C51.jpg",
-			"/images/poco/POCO C51-2.jpg"
+			"/images/POCO/POCO C51-3.jpeg",
+			"/images/POCO/POCO C51.jpg",
+			"/images/POCO/POCO C51-2.jpg"
 		],
 		"description": "Самый доступный смартфон POCO",
 		"specifications": {
