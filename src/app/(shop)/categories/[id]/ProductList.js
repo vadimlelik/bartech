@@ -36,6 +36,7 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { useCompareStore } from '@/store/compare'
+import { useFavoritesStore } from '@/store/favorites'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -53,10 +54,10 @@ export default function ProductList({ categoryId }) {
 	const [page, setPage] = useState(1)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [totalPages, setTotalPages] = useState(1)
-	const { compareItems, addToCompare, removeFromCompare } = useCompareStore()
+	const { compareItems, addToCompare, removeFromCompare, isInCompare } = useCompareStore()
+	const { addToFavorites, removeFromFavorites, isInFavorites } = useFavoritesStore()
 	const [snackbarOpen, setSnackbarOpen] = useState(false)
 	const [snackbarMessage, setSnackbarMessage] = useState('')
-	const [favorites, setFavorites] = useState([])
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const [availableFilters, setAvailableFilters] = useState({})
 	const [activeFilters, setActiveFilters] = useState({})
@@ -65,19 +66,40 @@ export default function ProductList({ categoryId }) {
 	const [isPreviewLoading, setIsPreviewLoading] = useState(false)
 
 	useEffect(() => {
-		const savedFavorites = localStorage.getItem('favorites')
-		if (savedFavorites) {
-			setFavorites(JSON.parse(savedFavorites))
+		const fetchProducts = async () => {
+			try {
+				setLoading(true)
+				console.log('Fetching products with categoryId:', categoryId)
+				const params = new URLSearchParams({
+					categoryId,
+					sort,
+					sortBy,
+					page: page.toString(),
+					search: searchTerm,
+					...activeFilters,
+				})
+				console.log('Request URL:', `/api/products?${params}`)
+				const response = await fetch(`/api/products?${params}`)
+				if (!response.ok) {
+					throw new Error('Не удалось загрузить продукты')
+				}
+				const data = await response.json()
+				console.log('Received data:', data)
+				setProducts(data.products)
+				setTotalPages(data.pagination.pages)
+				setAvailableFilters(data.filters)
+			} catch (err) {
+				console.error('Error fetching products:', err)
+				setError(err.message)
+			} finally {
+				setLoading(false)
+			}
 		}
-	}, [])
 
-	const toggleFavorite = (productId) => {
-		const newFavorites = favorites.includes(productId)
-			? favorites.filter((id) => id !== productId)
-			: [...favorites, productId]
-		setFavorites(newFavorites)
-		localStorage.setItem('favorites', JSON.stringify(newFavorites))
-	}
+		if (categoryId) {
+			fetchProducts()
+		}
+	}, [categoryId, sort, sortBy, page, searchTerm, activeFilters])
 
 	const handleSortChange = (event) => {
 		setSortBy(event.target.value)
@@ -153,44 +175,8 @@ export default function ProductList({ categoryId }) {
 		router.push(`?${currentParams.toString()}`)
 	}
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				setLoading(true)
-				console.log('Fetching products with categoryId:', categoryId)
-				const params = new URLSearchParams({
-					categoryId,
-					sort,
-					sortBy,
-					page: page.toString(),
-					search: searchTerm,
-					...activeFilters,
-				})
-				console.log('Request URL:', `/api/products?${params}`)
-				const response = await fetch(`/api/products?${params}`)
-				if (!response.ok) {
-					throw new Error('Не удалось загрузить продукты')
-				}
-				const data = await response.json()
-				console.log('Received data:', data)
-				setProducts(data.products)
-				setTotalPages(data.pagination.pages)
-				setAvailableFilters(data.filters)
-			} catch (err) {
-				console.error('Error fetching products:', err)
-				setError(err.message)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		if (categoryId) {
-			fetchProducts()
-		}
-	}, [categoryId, sort, sortBy, page, searchTerm, activeFilters])
-
 	const handleCompareToggle = (product) => {
-		if (compareItems.some((item) => item.id === product.id)) {
+		if (isInCompare(product.id)) {
 			removeFromCompare(product.id)
 			setSnackbarMessage('Товар удален из сравнения')
 		} else {
@@ -202,6 +188,14 @@ export default function ProductList({ categoryId }) {
 			}
 		}
 		setSnackbarOpen(true)
+	}
+
+	const handleFavoriteClick = (productId) => {
+		if (isInFavorites(productId)) {
+			removeFromFavorites(productId)
+		} else {
+			addToFavorites(productId)
+		}
 	}
 
 	const filterSections = [
@@ -472,20 +466,16 @@ export default function ProductList({ categoryId }) {
 											<IconButton
 												onClick={() => handleCompareToggle(product)}
 												color={
-													compareItems.some((item) => item.id === product.id)
-														? 'primary'
-														: 'default'
+													isInCompare(product.id) ? 'primary' : 'default'
 												}
 											>
 												<CompareArrowsIcon />
 											</IconButton>
 											<IconButton
-												onClick={() => toggleFavorite(product.id)}
-												color={
-													favorites.includes(product.id) ? 'error' : 'default'
-												}
+												onClick={() => handleFavoriteClick(product.id)}
+												color={isInFavorites(product.id) ? 'primary' : 'default'}
 											>
-												{favorites.includes(product.id) ? (
+												{isInFavorites(product.id) ? (
 													<FavoriteIcon />
 												) : (
 													<FavoriteBorderIcon />
