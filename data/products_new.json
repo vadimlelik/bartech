@@ -518,11 +518,11 @@
 		"name": "Honor Magic6 Pro",
 		"category": "Смартфоны",
 		"price": 2899,
-		"image": "/images/honor/magic6pro.jpg",
+		"image": "/images/honor/Honor Magic6 Pro-1.jpeg",
 		"images": [
-			"/images/honor/magic6pro_1.jpg",
-			"/images/honor/magic6pro_2.jpg",
-			"/images/honor/magic6pro_3.jpg"
+			"/images/honor/Honor Magic6 Pro-1.jpeg",
+			"/images/honor/Honor Magic6 Pro-3.jpg",
+			"/images/honor/Honor Magic6 Pro.webp"
 		],
 		"description": "Флагманский смартфон Honor с передовыми технологиями и мощной камерой",
 		"specifications": {
@@ -542,11 +542,11 @@
 		"name": "Honor 90",
 		"category": "Смартфоны",
 		"price": 1099,
-		"image": "/images/honor/90.jpg",
+		"image": "/images/honor/Honor 90-1.jpg",
 		"images": [
-			"/images/honor/90_1.jpg",
-			"/images/honor/90_2.jpg",
-			"/images/honor/90_3.jpg"
+			"/images/honor/Honor 90-3.png",
+			"/images/honor/Honor 90.png",
+			"/images/honor/Honor 90-1.jpg"
 		],
 		"description": "Стильный смартфон с отличной камерой и ярким экраном",
 		"specifications": {
@@ -566,11 +566,11 @@
 		"name": "Honor Magic V2",
 		"category": "Смартфоны",
 		"price": 3499,
-		"image": "/images/honor/magicv2.jpg",
+		"image": "/images/honor/Honor Magic V2-2.webp",
 		"images": [
-			"/images/honor/magicv2_1.jpg",
-			"/images/honor/magicv2_2.jpg",
-			"/images/honor/magicv2_3.jpg"
+			"/images/honor/Honor Magic V2-2.webp",
+			"/images/honor/Honor Magic V2-3.jpg",
+			"/images/honor/Honor Magic V2.png"
 		],
 		"description": "Инновационный складной смартфон с передовыми технологиями",
 		"specifications": {
@@ -590,11 +590,11 @@
 		"name": "Honor X9a",
 		"category": "Смартфоны",
 		"price": 799,
-		"image": "/images/honor/x9a.jpg",
+		"image": "/images/honor/Honor X9a-2.jpeg",
 		"images": [
-			"/images/honor/x9a_1.jpg",
-			"/images/honor/x9a_2.jpg",
-			"/images/honor/x9a_3.jpg"
+			"/images/honor/Honor X9a-2.jpeg",
+			"/images/honor/Honor X9a-3.webp",
+			"/images/honor/Honor X9a.jpeg"
 		],
 		"description": "Надежный смартфон среднего класса с отличной автономностью",
 		"specifications": {
@@ -614,11 +614,11 @@
 		"name": "Honor 70",
 		"category": "Смартфоны",
 		"price": 899,
-		"image": "/images/honor/70.jpg",
+		"image": "/images/honor/Honor 70.jpg",
 		"images": [
-			"/images/honor/70_1.jpg",
-			"/images/honor/70_2.jpg",
-			"/images/honor/70_3.jpg"
+			"/images/honor/Honor 70.jpg",
+			"/images/honor/Honor 70-3.jpg",
+			"/images/honor/Honor 70-2.jpeg"
 		],
 		"description": "Элегантный смартфон с продвинутой камерой и быстрой зарядкой",
 		"specifications": {
@@ -638,11 +638,11 @@
 		"name": "Honor X8",
 		"category": "Смартфоны",
 		"price": 599,
-		"image": "/images/honor/x8.jpg",
+		"image": "/images/honor/Honor X8-2.jpg",
 		"images": [
-			"/images/honor/x8_1.jpg",
-			"/images/honor/x8_2.jpg",
-			"/images/honor/x8_3.jpg"
+			"/images/honor/Honor X8-3.jpg",
+			"/images/honor/Honor X8-2.jpg",
+			"/images/honor/Honor X8.png"
 		],
 		"description": "Доступный смартфон с хорошим соотношением цена-качество",
 		"specifications": {
@@ -662,11 +662,11 @@
 		"name": "Honor Magic5 Pro",
 		"category": "Смартфоны",
 		"price": 2499,
-		"image": "/images/honor/magic5pro.jpg",
+		"image": "/images/honor/Honor Magic6 Pro.webp",
 		"images": [
-			"/images/honor/magic5pro_1.jpg",
-			"/images/honor/magic5pro_2.jpg",
-			"/images/honor/magic5pro_3.jpg"
+			"/images/honor/Honor Magic6 Pro.webp",
+			"/images/honor/Honor Magic6 Pro-3.jpg",
+			"/images/honor/Honor Magic6 Pro-1.jpg"
 		],
 		"description": "Флагманский смартфон с продвинутой системой камер",
 		"specifications": {
@@ -686,11 +686,11 @@
 		"name": "Honor 90 Lite",
 		"category": "Смартфоны",
 		"price": 699,
-		"image": "/images/honor/90lite.jpg",
+		"image": "/images/honor/Honor 90 Lite-2.webp",
 		"images": [
-			"/images/honor/90lite_1.jpg",
-			"/images/honor/90lite_2.jpg",
-			"/images/honor/90lite_3.jpg"
+			"/images/honor/Honor 90 Lite-3.png",
+			"/images/honor/Honor 90 Lite-2.webp",
+			"/images/honor/Honor 90 Lite.png"
 		],
 		"description": "Облегченная версия популярного Honor 90 с отличными характеристиками",
 		"specifications": {
@@ -710,11 +710,11 @@
 		"name": "Honor X7a",
 		"category": "Смартфоны",
 		"price": 499,
-		"image": "/images/honor/x7a.jpg",
+		"image": "/images/honor/Honor X7a-3.jpg",
 		"images": [
-			"/images/honor/x7a_1.jpg",
-			"/images/honor/x7a_2.jpg",
-			"/images/honor/x7a_3.jpg"
+			"/images/honor/Honor X7a-21.jpeg",
+			"/images/honor/Honor X7a-3.jpg",
+			"/images/honor/Honor X7a.jpg"
 		],
 		"description": "Бюджетный смартфон с большим аккумулятором",
 		"specifications": {
@@ -734,11 +734,11 @@
 		"name": "Honor X6",
 		"category": "Смартфоны",
 		"price": 449,
-		"image": "/images/honor/x6.jpg",
+		"image": "/images/honor/Honor X6.avif",
 		"images": [
-			"/images/honor/x6_1.jpg",
-			"/images/honor/x6_2.jpg",
-			"/images/honor/x6_3.jpg"
+			"/images/honor/Honor X6-3.webp",
+			"/images/honor/Honor X6-2.jpg",
+			"/images/honor/Honor X6.avif"
 		],
 		"description": "Доступный смартфон с тройной камерой и большим экраном",
 		"specifications": {
