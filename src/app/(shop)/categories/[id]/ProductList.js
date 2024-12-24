@@ -32,6 +32,8 @@ import {
 	Divider,
 	CircularProgress,
 	Skeleton,
+	Rating,
+	Tooltip,
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -42,6 +44,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import TuneIcon from '@mui/icons-material/Tune'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import PaymentIcon from '@mui/icons-material/Payment'
 
 export default function ProductList({ categoryId }) {
 	const router = useRouter()
@@ -86,7 +91,16 @@ export default function ProductList({ categoryId }) {
 					throw new Error('Не удалось загрузить продукты')
 				}
 				const data = await response.json()
-				console.log('Received data:', data)
+				console.log('Received products with details:', data.products.map(p => ({
+					id: p.id,
+					name: p.name,
+					display: p.display,
+					processor: p.processor,
+					ram: p.ram,
+					storage: p.storage,
+					camera: p.camera,
+					battery: p.battery
+				})))
 				setProducts(data.products)
 				setTotalPages(data.pagination.pages)
 				setAvailableFilters(data.filters)
@@ -239,7 +253,13 @@ export default function ProductList({ categoryId }) {
 
 	return (
 		<>
-			<Paper elevation={3} sx={{ p: 2, mb: 3 }}>
+			{error && (
+				<Alert severity='error' sx={{ mb: 2 }}>
+					{error}
+				</Alert>
+			)}
+
+			<Box sx={{ mb: 3 }}>
 				<Stack
 					direction={{ xs: 'column', sm: 'row' }}
 					spacing={2}
@@ -289,7 +309,7 @@ export default function ProductList({ categoryId }) {
 						)}
 					</Button>
 				</Stack>
-			</Paper>
+			</Box>
 
 			<Drawer
 				anchor='right'
@@ -382,19 +402,91 @@ export default function ProductList({ categoryId }) {
 				</Box>
 			</Drawer>
 
-			<Grid container spacing={3}>
-				{loading
-					? Array.from(new Array(6)).map((_, index) => (
-							<ProductSkeleton key={index} />
-					  ))
-					: products.map((product) => (
-							<Grid item xs={12} sm={6} md={4} key={product.id}>
-								<Card
+			{loading ? (
+				<Grid container spacing={3}>
+					{[...Array(6)].map((_, index) => (
+						<Grid item xs={12} sm={6} md={4} key={index}>
+							<Skeleton
+								variant='rectangular'
+								height={400}
+								sx={{ borderRadius: 2 }}
+							/>
+						</Grid>
+					))}
+				</Grid>
+			) : (
+				<Grid container spacing={3}>
+					{products.map((product) => (
+						<Grid item xs={12} sm={6} md={4} key={product.id}>
+							<Card
+								sx={{
+									height: '100%',
+									display: 'flex',
+									flexDirection: 'column',
+									position: 'relative',
+									transition: 'transform 0.2s, box-shadow 0.2s',
+									'&:hover': {
+										transform: 'translateY(-4px)',
+										boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+									},
+								}}
+							>
+								<Box
 									sx={{
-										height: '100%',
+										position: 'absolute',
+										top: 8,
+										right: 8,
+										zIndex: 1,
+										display: 'flex',
+										gap: 1,
+									}}
+								>
+									<Tooltip title='Добавить в сравнение'>
+										<IconButton
+											size='small'
+											onClick={(e) => {
+												e.preventDefault()
+												handleCompareToggle(product)
+											}}
+											sx={{
+												bgcolor: 'background.paper',
+												'&:hover': { bgcolor: 'action.hover' },
+											}}
+										>
+											<CompareArrowsIcon
+												color={isInCompare(product.id) ? 'primary' : 'action'}
+											/>
+										</IconButton>
+									</Tooltip>
+									<Tooltip title='Добавить в избранное'>
+										<IconButton
+											size='small'
+											onClick={(e) => {
+												e.preventDefault()
+												handleFavoriteClick(product)
+											}}
+											sx={{
+												bgcolor: 'background.paper',
+												'&:hover': { bgcolor: 'action.hover' },
+											}}
+										>
+											{isInFavorites(product.id) ? (
+												<FavoriteIcon color='error' />
+											) : (
+												<FavoriteBorderIcon />
+											)}
+										</IconButton>
+									</Tooltip>
+								</Box>
+
+								<Link
+									href={`/products/${product.id}`}
+									style={{
+										textDecoration: 'none',
+										color: 'inherit',
 										display: 'flex',
 										flexDirection: 'column',
-										position: 'relative',
+										flexGrow: 1,
 									}}
 								>
 									<Box
@@ -402,93 +494,189 @@ export default function ProductList({ categoryId }) {
 											position: 'relative',
 											width: '100%',
 											pt: '100%',
+											bgcolor: 'background.paper',
 										}}
 									>
-										<Link href={`/products/${product.id}`}>
-											<Image
-												src={product.image}
-												alt={product.name}
-												fill
-												style={{
-													objectFit: 'contain',
-													padding: '20px',
-												}}
-											/>
-										</Link>
+										<Image
+											src={product.image}
+											alt={product.name}
+											fill
+											style={{
+												objectFit: 'contain',
+												padding: '20px',
+											}}
+											priority={true}
+										/>
 									</Box>
-									<CardContent
-										sx={{
-											flexGrow: 1,
-											display: 'flex',
-											flexDirection: 'column',
-										}}
-									>
-										<Link
-											href={`/products/${product.id}`}
-											style={{ textDecoration: 'none', color: 'inherit' }}
-										>
-											<Typography
-												gutterBottom
-												variant='h6'
-												component='h2'
-												sx={{
-													overflow: 'hidden',
-													textOverflow: 'ellipsis',
-													display: '-webkit-box',
-													WebkitLineClamp: 2,
-													WebkitBoxOrient: 'vertical',
-													minHeight: '3.6em',
-													textDecoration: 'none',
-												}}
-											>
-												{product.name}
-											</Typography>
-										</Link>
+
+									<CardContent sx={{ flexGrow: 1, pt: 2 }}>
+										<Box sx={{ mb: 1 }}>
+											{product.isNew && (
+												<Chip
+													label='Новинка'
+													color='primary'
+													size='small'
+													sx={{ mr: 1, mb: 1 }}
+												/>
+											)}
+											{product.discount > 0 && (
+												<Chip
+													label={`-${product.discount}%`}
+													color='error'
+													size='small'
+													sx={{ mb: 1 }}
+												/>
+											)}
+										</Box>
+
 										<Typography
-											variant='h5'
-											color='primary'
-											sx={{ mt: 'auto', mb: 2, fontWeight: 'bold' }}
+											variant='h6'
+											component='h3'
+											gutterBottom
+											sx={{
+												fontSize: '1rem',
+												fontWeight: 500,
+												minHeight: '3rem',
+												display: '-webkit-box',
+												WebkitLineClamp: 2,
+												WebkitBoxOrient: 'vertical',
+												overflow: 'hidden',
+											}}
 										>
-											{product.price.toLocaleString()} BYN
+											{product.name}
 										</Typography>
+
+										<Box sx={{ mb: 2 }}>
+											<Rating
+												value={product.rating || 0}
+												readOnly
+												size='small'
+												precision={0.5}
+											/>
+											<Typography
+												variant='body2'
+												color='text.secondary'
+												sx={{ mt: 1 }}
+											>
+												{product.description}
+											</Typography>
+
+											{/* Основные характеристики */}
+											{product.specifications && (
+												<List dense sx={{ mt: 1, '& .MuiListItem-root': { px: 0 } }}>
+													{product.specifications.display && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Дисплей:</strong> {product.specifications.display}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+													{product.specifications.processor && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Процессор:</strong> {product.specifications.processor}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+													{product.specifications.ram && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Память:</strong> {product.specifications.ram}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+													{product.specifications.memory && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Накопитель:</strong> {product.specifications.memory}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+													{product.specifications.camera && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Камера:</strong> {product.specifications.camera}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+													{product.specifications.battery && (
+														<ListItem>
+															<ListItemText
+																primary={
+																	<Typography variant="body2" component="span">
+																		<strong>Аккумулятор:</strong> {product.specifications.battery}
+																	</Typography>
+																}
+															/>
+														</ListItem>
+													)}
+												</List>
+											)}
+										</Box>
+
 										<Stack
 											direction='row'
 											spacing={1}
-											alignItems='center'
-											justifyContent='space-between'
+											sx={{ mb: 2 }}
 										>
-											<Button
-												variant='contained'
-												component={Link}
-												href={`/products/${product.id}`}
-												fullWidth
-											>
-												Подробнее
-											</Button>
-											<IconButton
-												onClick={() => handleCompareToggle(product)}
-												color={isInCompare(product.id) ? 'primary' : 'default'}
-											>
-												<CompareArrowsIcon />
-											</IconButton>
-											<IconButton
-												onClick={() => handleFavoriteClick(product.id)}
-												color={
-													isInFavorites(product.id) ? 'primary' : 'default'
-												}
-											>
-												{isInFavorites(product.id) ? (
-													<FavoriteIcon />
-												) : (
-													<FavoriteBorderIcon />
-												)}
-											</IconButton>
+											<Tooltip title='Бесплатная доставка'>
+												<LocalShippingIcon color='primary' fontSize='small' />
+											</Tooltip>
+											<Tooltip title='Официальная гарантия'>
+												<VerifiedIcon color='primary' fontSize='small' />
+											</Tooltip>
+											<Tooltip title='Рассрочка'>
+												<PaymentIcon color='primary' fontSize='small' />
+											</Tooltip>
 										</Stack>
+
+										<Box sx={{ mt: 'auto' }}>
+											{product.oldPrice && (
+												<Typography
+													variant='body2'
+													color='text.secondary'
+													sx={{
+														textDecoration: 'line-through',
+													}}
+												>
+													{product.oldPrice.toLocaleString()} BYN
+												</Typography>
+											)}
+											<Typography
+												variant='h6'
+												color='primary'
+												sx={{ fontWeight: 'bold' }}
+											>
+												{product.price.toLocaleString()} BYN
+											</Typography>
+										</Box>
 									</CardContent>
-								</Card>
-							</Grid>
-					  ))}
-			</Grid>
+								</Link>
+							</Card>
+						</Grid>
+					))}
+				</Grid>
+			)}
 
 			{totalPages > 1 && (
 				<Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>

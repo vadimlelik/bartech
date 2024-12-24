@@ -55,7 +55,6 @@ export default async function CategoryPage({ params }) {
 
 		return (
 			<>
-				<Header />
 				<Box
 					sx={{
 						minHeight: '100vh',
@@ -71,7 +70,6 @@ export default async function CategoryPage({ params }) {
 						<ProductList categoryId={category.id} />
 					</Container>
 				</Box>
-				<Footer />
 			</>
 		)
 	} catch (error) {
