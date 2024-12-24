@@ -22,8 +22,6 @@ import Link from 'next/link'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import Image from 'next/image'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 export default function FavoritesPage() {
 	const [products, setProducts] = useState([])
@@ -141,7 +139,6 @@ export default function FavoritesPage() {
 
 	return (
 		<>
-			<Header />
 			<Box
 				sx={{
 					minHeight: 'calc(100vh - 64px - 200px)',
@@ -299,7 +296,6 @@ export default function FavoritesPage() {
 					</Grid>
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	)
 }
