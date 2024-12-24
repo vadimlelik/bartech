@@ -6,9 +6,6 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://178.172.138.214
-    volumes:
-      - nextjs_build:/app/.next
-      - ./data:/app/data:ro
     restart: always
 
   certbot:
@@ -16,8 +13,9 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./www:/var/www/certbot
-    command: certonly --standalone --preferred-challenges http --email your-email@example.com --agree-tos --no-eff-email -d technobar.by -d www.technobar.by --force-renewal
-    network_mode: host
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d technobar.by -d www.technobar.by --force-renewal
+    depends_on:
+      - nginx
 
   nginx:
     image: nginx:latest
@@ -30,7 +28,6 @@ services:
       - ./logs/nginx:/var/log/nginx
       - ./www:/var/www/certbot
     depends_on:
-      - certbot
       - nextjs-app
     restart: always
 
