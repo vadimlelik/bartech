@@ -5,13 +5,10 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import BusinessIcon from '@mui/icons-material/Business'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 export default function Contacts() {
 	return (
 		<>
-			<Header />
 			<Container maxWidth='lg' sx={{ py: 6 }}>
 				<Paper elevation={0} sx={{ p: { xs: 2, md: 4 } }}>
 					<Typography
@@ -136,7 +133,6 @@ export default function Contacts() {
 					</Grid>
 				</Paper>
 			</Container>
-			<Footer />
 		</>
 	)
 }

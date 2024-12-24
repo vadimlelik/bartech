@@ -4,8 +4,6 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { getProductById } from '@/lib/products'
 import { getCategoryById } from '@/lib/categories'
 import { notFound } from 'next/navigation'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
@@ -63,14 +61,12 @@ export default async function ProductPage({ params }) {
 
 	return (
 		<>
-			<Header />
 			<Box component='main' sx={{ flex: 1 }}>
 				<Container maxWidth='lg' sx={{ py: 4, minHeight: '100vh' }}>
-					<Breadcrumbs items={breadcrumbs} />
+					{/* <Breadcrumbs items={breadcrumbs} /> */}
 					<ProductDetails product={product} />
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	)
 }

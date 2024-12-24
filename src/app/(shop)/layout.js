@@ -5,10 +5,10 @@ import Footer from '@/components/Footer'
 export default function ShopLayout({ children }) {
 	return (
 		<>
-			{/* <Header /> */}
+			<Header />
 			{children}
 			<ComparePanel />
-			{/* <Footer /> */}
+			<Footer />
 		</>
 	)
 }
