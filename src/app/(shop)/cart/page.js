@@ -47,7 +47,6 @@ export default function CartPage() {
 	if (!cartItems.length) {
 		return (
 			<>
-				<Header />
 				<Box
 					sx={{
 						minHeight: 'calc(100vh - 64px - 200px)', // Adjust based on your header and footer heights
@@ -75,15 +74,12 @@ export default function CartPage() {
 						</Box>
 					</Container>
 				</Box>
-				<Footer />
 			</>
 		)
 	}
 
 	return (
 		<>
-			<Header />
-
 			<Box
 				sx={{
 					minHeight: 'calc(100vh - 64px - 200px)', // Adjust based on your header and footer heights
@@ -288,7 +284,6 @@ export default function CartPage() {
 					</Grid>
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	)
 }

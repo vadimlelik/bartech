@@ -1,8 +1,6 @@
 import { Container, Grid, Typography, Box } from '@mui/material'
 import CategoryCard from './components/CategoryCard'
 import { getCategories } from '@/lib/categories'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import CategoryCarousel from '@/components/CategoryCarousel/CategoryCarousel'
 import Features from '@/components/Features/Features'
 

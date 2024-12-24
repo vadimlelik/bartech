@@ -168,8 +168,8 @@
 		"price": 1260,
 		"image": "/images/samsung-galaxy-a54.jpeg",
 		"images": [
-			"/images/samsung-galaxy-a54.jpeg",
-			"/images/samsung-galaxy-a54-1.jpg",
+			"/images/samsung-galaxy-a54-1.jpeg",
+			"/images/samsung-galaxy-a54-2.jpg",
 			"/images/samsung-galaxy-a54-2.jpeg"
 		],
 		"description": "Популярный смартфон среднего класса",
@@ -1482,7 +1482,7 @@
 		"images": [
 			"/images/POCO/POCO X5 Pro-3.png",
 			"/images/POCO/POCO X5 Pro-2.webp",
-			"/images/POco/POCO X5 Pro.jpg"
+			"/images/POCO/POCO X5 Pro.jpg"
 		],
 		"description": "Смартфон с отличным экраном и камерой 108MP",
 		"specifications": {

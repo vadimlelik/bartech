@@ -356,7 +356,6 @@ export default function CheckoutPage() {
 
 	return (
 		<>
-			<Header />
 			<Container maxWidth='md' sx={{ py: 4 }}>
 				<Typography variant='h4' align='center' gutterBottom>
 					Оформление заказа
@@ -398,7 +397,6 @@ export default function CheckoutPage() {
 					</Box>
 				</Paper>
 			</Container>
-			<Footer />
 		</>
 	)
 }

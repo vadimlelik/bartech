@@ -48,7 +48,6 @@ export default function ComparePage() {
 
 	return (
 		<>
-			<Header />
 			<Container sx={{ py: 4 }}>
 				<Typography variant='h4' gutterBottom>
 					Сравнение товаров
@@ -119,7 +118,6 @@ export default function ComparePage() {
 					</Table>
 				</TableContainer>
 			</Container>
-			<Footer />
 		</>
 	)
 }

@@ -357,20 +357,114 @@ export default function ProductDetails({ product }) {
 					<Typography variant='h4' gutterBottom>
 						{product.name}
 					</Typography>
-					<Typography variant='h5' color='primary' gutterBottom>
-						{product.price.toFixed(2)} BYN
-					</Typography>
+
+					<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+						<Chip
+							label='В наличии'
+							color='success'
+							size='small'
+							sx={{ ml: 2 }}
+						/>
+					</Box>
+
+					<Box sx={{ mb: 3 }}>
+						<Typography variant='h5' color='primary' component='span'>
+							{product.price.toFixed(2)} BYN
+						</Typography>
+						{product.oldPrice && (
+							<Typography
+								variant='h6'
+								color='text.secondary'
+								sx={{
+									textDecoration: 'line-through',
+									ml: 2,
+								}}
+								component='span'
+							>
+								{product.oldPrice.toFixed(2)} BYN
+							</Typography>
+						)}
+					</Box>
+
+					<Box
+						sx={{ mb: 3, backgroundColor: 'grey.50', p: 2, borderRadius: 1 }}
+					>
+						<Typography variant='subtitle1' gutterBottom>
+							Основные характеристики:
+						</Typography>
+						<Grid container spacing={2}>
+							{product.specifications &&
+								Object.entries(product.specifications)
+									.slice(0, 6)
+									.map(([key, value]) => (
+										<Grid item xs={12} sm={6} key={key}>
+											<Box sx={{ display: 'flex', gap: 1 }}>
+												<Typography variant='body2' color='text.secondary'>
+													{translateSpecification(key)}:
+												</Typography>
+												<Typography variant='body2'>{value}</Typography>
+											</Box>
+										</Grid>
+									))}
+						</Grid>
+					</Box>
+
 					<Typography variant='body1' color='text.secondary' paragraph>
 						{product.description}
 					</Typography>
+
+					<Box sx={{ mb: 4 }}>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<Paper sx={{ p: 2, height: '100%' }}>
+									<Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+										<LocalShippingIcon color='primary' sx={{ mr: 1 }} />
+										<Typography variant='subtitle1'>
+											Быстрая доставка
+										</Typography>
+									</Box>
+									<Typography variant='body2' color='text.secondary'>
+										Доставка по Минску в течение 24 часов
+									</Typography>
+								</Paper>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<Paper sx={{ p: 2, height: '100%' }}>
+									<Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+										<PaymentIcon color='primary' sx={{ mr: 1 }} />
+										<Typography variant='subtitle1'>Удобная оплата</Typography>
+									</Box>
+									<Typography variant='body2' color='text.secondary'>
+										Наличными, картой или в рассрочку
+									</Typography>
+								</Paper>
+							</Grid>
+						</Grid>
+					</Box>
+
 					<Stack direction='row' spacing={2} sx={{ mb: 4 }}>
 						<Button
 							variant='contained'
 							size='large'
 							onClick={() => addToCart(product)}
 							fullWidth
+							sx={{
+								height: 48,
+								fontSize: '1.1rem',
+							}}
 						>
 							В корзину
+						</Button>
+						<Button
+							variant='outlined'
+							size='large'
+							onClick={() => setTabValue(2)} // Переход к вкладке рассрочки
+							sx={{
+								height: 48,
+								fontSize: '1.1rem',
+							}}
+						>
+							Купить в рассрочку
 						</Button>
 						<IconButton
 							onClick={() =>
@@ -379,6 +473,7 @@ export default function ProductDetails({ product }) {
 									: addToFavorites(product.id)
 							}
 							color={isFavorite ? 'error' : 'default'}
+							sx={{ height: 48, width: 48 }}
 						>
 							{isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
 						</IconButton>
@@ -390,6 +485,7 @@ export default function ProductDetails({ product }) {
 								}
 							}}
 							color={isInCompare(product.id) ? 'primary' : 'default'}
+							sx={{ height: 48, width: 48 }}
 						>
 							<CompareArrowsIcon />
 						</IconButton>
