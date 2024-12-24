@@ -9,6 +9,9 @@ COPY package*.json ./
 # Очистка кэша npm перед установкой зависимостей
 RUN npm cache clean --force && npm install
 
+# Создаем необходимые директории
+RUN mkdir -p /app/data /app/public /app/.next
+
 # Копируем исходный код приложения
 COPY . .
 

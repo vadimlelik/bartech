@@ -6,6 +6,8 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://178.172.138.214
+    volumes:
+      - ./data:/app/data:ro
     restart: always
 
   certbot:
@@ -27,6 +29,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./logs/nginx:/var/log/nginx
       - ./www:/var/www/certbot
+      - ./public:/app/public
     depends_on:
       - nextjs-app
     restart: always
