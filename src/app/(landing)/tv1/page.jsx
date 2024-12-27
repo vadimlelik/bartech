@@ -151,7 +151,7 @@ const Tv = () => {
 									className={styles.avatar}
 								/>
 							</div>
-							<div className='reviewsItemText'>
+							<div className={styles.reviewsItemText}>
 								<p className={styles.reviewsItemTitle}>Сергей, 32</p>
 								<p className={styles.reviewsItemDescription}>
 									Приобрел TCL 55 диагонали – отличное соотношение цены и

@@ -14,7 +14,6 @@ import {
 	RadioLabel,
 	CheckboxContainer,
 	CheckboxLabel,
-	CustomInput,
 	ErrorText,
 	Navigation,
 	NavButton,
@@ -24,7 +23,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 	const {
 		control,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		trigger,
 		watch,
 		setValue,
@@ -173,10 +172,12 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 									control={control}
 									defaultValue=''
 									rules={{
-										required: 'Это поле обязательно',
-										pattern: {
-											value: /^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/,
-											message: 'Введите корректный номер телефона',
+										validate: (value) => {
+											if (!value || value === '+375') return 'Пожалуйста, ответьте на все вопросы.';
+											if (!/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(value)) {
+												return 'Введите корректный номер телефона';
+											}
+											return true;
 										},
 									}}
 									render={({ field, fieldState }) => (
@@ -185,27 +186,45 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 											placeholder='+375 (__) ___-__-__'
 											value={field.value || '+375'}
 											onChange={(e) => {
-												handleFieldInteraction()
-												field.onChange(e)
+												handleFieldInteraction();
+												field.onChange(e);
+												if (/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(e)) {
+													setValidationError('');
+												}
 											}}
-											onBlur={field.onBlur}
-											error={
-												fieldState.invalid ? fieldState.error.message : null
-											}
+											onBlur={(e) => {
+												field.onBlur();
+												if (!e.target.value || e.target.value === '+375') {
+													setValidationError('Пожалуйста, ответьте на все вопросы.');
+												} else if (/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(e.target.value)) {
+													setValidationError('');
+												}
+											}}
+											error={validationError || (fieldState.error?.message && !(/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(field.value)))}
+											disabled={isSubmitting}
 										/>
 									)}
 								/>
 							)}
 						</InputContainer>
-						{validationError && <ErrorText>{validationError}</ErrorText>}
+						{validationError && currentQuestion < questions.length - 1 && <ErrorText>{validationError}</ErrorText>}
 					</QuestionContainer>
 					<Navigation>
 						{currentQuestion < questions.length - 1 ? (
-							<NavButton type='button' onClick={nextQuestion}>
+							<NavButton
+								type='button'
+								onClick={nextQuestion}
+								disabled={isSubmitting}
+							>
 								Далее
 							</NavButton>
 						) : (
-							<NavButton type='submit'>Отправить</NavButton>
+							<NavButton
+								type='submit'
+								disabled={isSubmitting}
+							>
+								{isSubmitting ? 'Отправка...' : 'Отправить'}
+							</NavButton>
 						)}
 					</Navigation>
 				</form>

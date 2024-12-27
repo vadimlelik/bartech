@@ -123,8 +123,8 @@
 	text-align: center;
 }
 .reviewsItemDescription {
+	color: #000;
 	font-size: 18px;
-	font-weight: 300;
 }
 .reviewsItemImg {
 	top: 0px;
@@ -137,6 +137,7 @@
 	overflow: hidden;
 	border-radius: 50%;
 }
+
 .avatar {
 	object-fit: cover;
 	width: 100%;

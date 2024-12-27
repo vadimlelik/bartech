@@ -2,7 +2,7 @@ import React from 'react'
 import MaskedInput from 'react-text-mask'
 import './InputMask.css'
 
-const MaskedPhoneInput = ({ value, onChange, error }) => {
+const MaskedPhoneInput = ({ value, onChange, error, disabled }) => {
 	const phoneMask = [
 		'+',
 		'3',
@@ -33,6 +33,7 @@ const MaskedPhoneInput = ({ value, onChange, error }) => {
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
 				placeholder='+375 (__) ___-__-__'
+				disabled={disabled}
 			/>
 			{error && <span className='error-message'>{error}</span>}
 		</div>
