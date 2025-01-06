@@ -1,33 +1,13 @@
 services:
-  mongodb:
-    image: mongo:6.0.13
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb_data:/data/db
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 40s
-    restart: always
-
   nextjs-app:
     build: .
     ports:
       - '3000:3000'
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/bartech
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=https://cvirko-vadim.ru
+      - NEXT_PUBLIC_API_URL=https://178.172.138.214
     volumes:
-      - nextjs_build:/app/.next
       - ./data:/app/data:ro
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    command: sh docker-init.sh
     restart: always
 
   certbot:
@@ -35,9 +15,9 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./www:/var/www/certbot
-    command: certonly --standalone --preferred-challenges http --email your-email@example.com --agree-tos --no-eff-email -d cvirko-vadim.ru -d www.cvirko-vadim.ru --force-renewal
-    ports:
-      - "80:80"
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d technobar.by -d www.technobar.by --force-renewal
+    depends_on:
+      - nginx
 
   nginx:
     image: nginx:latest
@@ -49,11 +29,10 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./logs/nginx:/var/log/nginx
       - ./www:/var/www/certbot
+      - ./public:/app/public
     depends_on:
-      - certbot
       - nextjs-app
     restart: always
 
 volumes:
-  mongodb_data:
   nextjs_build:

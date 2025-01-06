@@ -1,41 +1,33 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export const useCompareStore = create(
     persist(
         (set, get) => ({
             compareItems: [],
-
-            addToCompare: (productId) => {
-                set((state) => {
-                    if (state.compareItems.length >= 3) {
-                        return state
-                    }
-                    if (!state.compareItems.includes(productId)) {
-                        return {
-                            compareItems: [...state.compareItems, productId]
-                        }
-                    }
-                    return state
-                })
+            addToCompare: (product) => {
+                const { compareItems } = get();
+                if (compareItems.length >= 4) {
+                    return false;
+                }
+                if (!compareItems.find(item => item.id === product.id)) {
+                    set({ compareItems: [...compareItems, product] });
+                    return true;
+                }
+                return false;
             },
-
-            removeFromCompare: (productId) => {
+            removeFromCompare: (productId) =>
                 set((state) => ({
-                    compareItems: state.compareItems.filter(id => id !== productId)
-                }))
-            },
-
+                    compareItems: state.compareItems.filter((item) => item.id !== productId),
+                })),
+            clearCompare: () => set({ compareItems: [] }),
             isInCompare: (productId) => {
-                return get().compareItems.includes(productId)
-            },
-
-            clearCompare: () => {
-                set({ compareItems: [] })
+                const { compareItems } = get();
+                return compareItems.some(item => item.id === productId);
             }
         }),
         {
-            name: 'compare-storage'
+            name: 'compare-storage',
         }
     )
-)
+);

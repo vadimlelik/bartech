@@ -1,0 +1,205 @@
+.page {
+	padding-top: 50px;
+	padding-bottom: 50px;
+	background-color: #000000;
+	flex-grow: 1;
+}
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.logoIcon {
+	max-width: 220px;
+	width: 220px;
+}
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.intro {
+	text-align: center;
+	margin-bottom: 150px;
+}
+.content {
+	margin-bottom: 150px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 50px;
+}
+
+.image {
+	flex: 1 1 45%;
+	max-width: 45%;
+}
+
+.info {
+	flex: 1 1 45%;
+	max-width: 45%;
+	text-align: center;
+}
+
+.img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: 8px;
+	object-fit: cover;
+}
+.title {
+	font-size: 48px;
+	margin-bottom: 16px;
+	color: #ffffff;
+}
+.title span {
+	color: #fbcb01;
+}
+.description {
+	font-size: 26px;
+	color: #ffffff;
+}
+.infoTitle {
+	font-size: 42px;
+	color: #ffffff;
+}
+.infoTitle span {
+	color: #fbcb01;
+}
+.infoDescription {
+	margin: 0px;
+	padding: 0px;
+	display: flex;
+	flex-direction: column;
+	align-items: baseline;
+}
+.infoDescriptionItem {
+	margin-top: 30px;
+	color: #ffffff;
+}
+.infoDescriptionItem::before {
+	content: '';
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-image: url('/iconCheck.svg');
+	background-size: contain;
+	margin-right: 10px;
+}
+
+.btnArrow::before {
+	position: absolute;
+	left: -100px;
+	top: -25px;
+	content: '';
+	display: inline-block;
+	width: 46px;
+	height: 76px;
+	background-image: url('/iconArrow.svg');
+	background-size: cover;
+}
+.reviews {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	padding-bottom: 30px;
+}
+
+.reviewsItem {
+	flex: 1 1 33%;
+	max-width: 32%;
+	position: relative;
+	border-radius: 38px;
+	border: none;
+	padding: 50px 20px;
+	background-color: #fbcb01;
+}
+.reviewsItemTitle {
+	font-size: 22px;
+	text-align: center;
+}
+.reviewsItemDescription {
+	color: #000;
+	font-size: 18px;
+}
+.reviewsItemImg {
+	top: 0px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.avatar {
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+}
+
+@media (max-width: 1050px) {
+	.reviews {
+		justify-content: center;
+		gap: 5px;
+	}
+
+	.reviewsItem {
+		flex: 1 1 100%;
+		max-width: 100%;
+		margin-bottom: 70px;
+	}
+}
+@media (max-width: 768px) {
+	.logoIcon {
+		max-width: 180px;
+		width: 180px;
+	}
+	.page {
+		padding-top: 15px;
+		padding-bottom: 25px;
+	}
+	.title {
+		font-size: 32px;
+	}
+	.description {
+		font-size: 20px;
+		margin-bottom: 25px;
+	}
+	.intro {
+		margin-bottom: 25px;
+	}
+	.infoTitle {
+		font-size: 32px;
+	}
+
+	.infoDescriptionItem {
+		margin-top: 10px;
+		font-size: 14px;
+	}
+	.content {
+		flex-direction: column;
+	}
+	.info,
+	.image {
+		max-width: 100%;
+		flex: 1 1 100%;
+	}
+}
+@media (max-width: 416px) {
+	.infoDescriptionItem {
+		margin-top: 5px;
+		font-size: 11px;
+	}
+}
+@media (max-width: 460px) {
+	.btnArrow::before {
+		left: -55px;
+	}
+}
