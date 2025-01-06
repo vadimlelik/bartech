@@ -207,11 +207,15 @@ export default function ProductList({ categoryId }) {
 	}
 
 	const handleFavoriteClick = (productId) => {
+		console.log('Handling favorite click for product:', productId) // Debug log
 		if (isInFavorites(productId)) {
 			removeFromFavorites(productId)
+			setSnackbarMessage('Товар удален из избранного')
 		} else {
 			addToFavorites(productId)
+			setSnackbarMessage('Товар добавлен в избранное')
 		}
+		setSnackbarOpen(true)
 	}
 
 	const filterSections = [
@@ -463,7 +467,9 @@ export default function ProductList({ categoryId }) {
 											size='small'
 											onClick={(e) => {
 												e.preventDefault()
-												handleFavoriteClick(product)
+												e.stopPropagation()
+												console.log('Favorite button clicked for product:', product.id) // Debug log
+												handleFavoriteClick(product.id)
 											}}
 											sx={{
 												bgcolor: 'background.paper',

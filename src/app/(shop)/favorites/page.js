@@ -1,26 +1,24 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useFavoritesStore } from '@/store/favorites'
 import { useCartStore } from '@/store/cart'
 import {
-	Box,
+	Container,
+	Grid,
+	Typography,
 	Card,
 	CardContent,
-	Grid,
-	IconButton,
-	Typography,
 	Button,
-	CircularProgress,
-	Container,
+	Box,
+	IconButton,
 	Snackbar,
 	Alert,
-	Badge,
-	Tooltip,
+	CircularProgress,
 } from '@mui/material'
-import Link from 'next/link'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import Link from 'next/link'
 import Image from 'next/image'
 
 export default function FavoritesPage() {
@@ -28,274 +26,150 @@ export default function FavoritesPage() {
 	const [loading, setLoading] = useState(true)
 	const [snackbarOpen, setSnackbarOpen] = useState(false)
 	const [snackbarMessage, setSnackbarMessage] = useState('')
-	const [mounted, setMounted] = useState(false)
-	const { favorites, removeFromFavorites, clearFavorites } = useFavoritesStore()
-	const { cartItems, addToCart } = useCartStore()
-
-	// Эффект для обработки монтирования компонента
-	useEffect(() => {
-		setMounted(true)
-	}, [])
+	const { favorites, removeFromFavorites } = useFavoritesStore()
+	const { addToCart } = useCartStore()
 
 	useEffect(() => {
-		if (!mounted) return
-
 		const fetchProducts = async () => {
 			setLoading(true)
+			console.log('Current favorites:', favorites)
+
 			try {
 				if (!favorites || favorites.length === 0) {
+					console.log('No favorites found')
 					setProducts([])
-					setLoading(false)
 					return
 				}
 
-				const params = new URLSearchParams()
-				params.set('ids', favorites.join(','))
-
-				const response = await fetch(`/api/products?${params.toString()}`)
+				// Fetch all products at once
+				const response = await fetch('/api/products')
+				if (!response.ok) {
+					throw new Error('Failed to fetch products')
+				}
 				const data = await response.json()
+				console.log('API response:', data) // Log the full response
 
-				if (!data.products || !Array.isArray(data.products)) {
-					setProducts([])
-					setSnackbarMessage('Ошибка при загрузке товаров')
-					setSnackbarOpen(true)
-					return
-				}
+				// Check if data.products exists and is an array
+				const allProducts = data.products || []
+				console.log('All products:', allProducts)
 
-				// Сортируем продукты в том же порядке, что и в избранном
-				const orderedProducts = favorites
-					.map((id) => data.products.find((p) => p.id === id))
-					.filter(Boolean)
-				setProducts(orderedProducts)
+				// Filter products that are in favorites
+				const favoriteProducts = allProducts.filter(product => 
+					product && product.id && favorites.includes(product.id)
+				)
+				console.log('Filtered favorite products:', favoriteProducts)
+
+				setProducts(favoriteProducts)
 			} catch (error) {
+				console.error('Error fetching products:', error)
 				setSnackbarMessage('Ошибка при загрузке товаров')
 				setSnackbarOpen(true)
-				setProducts([])
 			} finally {
 				setLoading(false)
 			}
 		}
 
 		fetchProducts()
-	}, [favorites, mounted])
+	}, [favorites])
+
+	const handleRemoveFromFavorites = (productId) => {
+		console.log('Removing from favorites:', productId)
+		removeFromFavorites(productId)
+		setSnackbarMessage('Товар удален из избранного')
+		setSnackbarOpen(true)
+	}
 
 	const handleAddToCart = (product) => {
+		console.log('Adding to cart:', product)
+		if (!product) return
 		addToCart(product)
 		setSnackbarMessage('Товар добавлен в корзину')
 		setSnackbarOpen(true)
 	}
 
-	// Не рендерим ничего до монтирования компонента
-	if (!mounted) {
-		return null
-	}
-
 	if (loading) {
 		return (
-			<Box
-				sx={{
-					minHeight: 'calc(100vh - 64px - 200px)',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}
-			>
+			<Container sx={{ py: 4, textAlign: 'center' }}>
 				<CircularProgress />
-			</Box>
+			</Container>
 		)
 	}
 
 	if (!products || products.length === 0) {
 		return (
-			<Box
-				sx={{
-					minHeight: 'calc(100vh - 64px - 200px)',
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'center',
-					py: 8,
-				}}
-			>
-				<Container maxWidth='lg'>
-					<Box sx={{ textAlign: 'center' }}>
-						<Typography variant='h4' gutterBottom>
-							Список избранного пуст
-						</Typography>
-						<Button
-							component={Link}
-							href='/'
-							variant='contained'
-							color='primary'
-							sx={{ mt: 2 }}
-						>
-							Вернуться к покупкам
-						</Button>
-					</Box>
-				</Container>
-			</Box>
+			<Container sx={{ py: 4, textAlign: 'center' }}>
+				<Typography variant="h5" gutterBottom>
+					В избранном пока нет товаров
+				</Typography>
+				<Button component={Link} href="/" variant="contained" color="primary" sx={{ mt: 2 }}>
+					Перейти к покупкам
+				</Button>
+			</Container>
 		)
 	}
 
 	return (
-		<>
-			<Box
-				sx={{
-					minHeight: 'calc(100vh - 64px - 200px)',
-					display: 'flex',
-					flexDirection: 'column',
-					py: 4,
-				}}
-			>
-				<Container maxWidth='lg'>
-					{/* Плавающая панель с иконками навигации */}
-					{cartItems && cartItems.length > 0 && (
-						<Box
-							sx={{
-								position: 'fixed',
-								top: '50%',
-								right: 16,
-								transform: 'translateY(-50%)',
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 2,
-								zIndex: 1000,
-							}}
-						>
-							<Link href='/cart'>
-								<Tooltip title='Перейти в корзину' placement='left'>
+		<Container sx={{ py: 4 }}>
+			<Typography variant="h4" gutterBottom>
+				Избранное ({products.length})
+			</Typography>
+			<Grid container spacing={3}>
+				{products.map((product) => (
+					<Grid item xs={12} sm={6} md={4} key={product.id}>
+						<Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+							<Box sx={{ position: 'relative', width: '100%', pt: '100%' }}>
+								<Link href={`/products/${product.id}`}>
+									<Image
+										src={product.image || '/placeholder.jpg'}
+										alt={product.name}
+										fill
+										style={{
+											objectFit: 'contain',
+											padding: '20px',
+										}}
+									/>
+								</Link>
+							</Box>
+							<CardContent sx={{ flexGrow: 1 }}>
+								<Typography gutterBottom variant="h6" component="h2">
+									{product.name}
+								</Typography>
+								<Typography variant="h6" color="primary" gutterBottom>
+									{product.price?.toLocaleString()} BYN
+								</Typography>
+								<Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+									<Button
+										variant="contained"
+										startIcon={<ShoppingCartIcon />}
+										onClick={() => handleAddToCart(product)}
+									>
+										В корзину
+									</Button>
 									<IconButton
-										sx={{
-											backgroundColor: 'background.paper',
-											'&:hover': { backgroundColor: 'action.hover' },
-										}}
+										color="error"
+										onClick={() => handleRemoveFromFavorites(product.id)}
 									>
-										<Badge badgeContent={cartItems.length} color='primary'>
-											<ShoppingCartIcon />
-										</Badge>
+										<DeleteIcon />
 									</IconButton>
-								</Tooltip>
-							</Link>
-						</Box>
-					)}
-
-					{/* Снэкбар для уведомлений */}
-					<Snackbar
-						open={snackbarOpen}
-						autoHideDuration={3000}
-						onClose={() => setSnackbarOpen(false)}
-						anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-					>
-						<Alert
-							onClose={() => setSnackbarOpen(false)}
-							severity='success'
-							sx={{ width: '100%' }}
-						>
-							{snackbarMessage}
-						</Alert>
-					</Snackbar>
-
-					{/* Заголовок всегда виден */}
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							mb: 4,
-						}}
-					>
-						<Typography variant='h4'>Закладки</Typography>
-						{products && products.length > 0 && !loading && (
-							<Button
-								variant='outlined'
-								color='error'
-								onClick={clearFavorites}
-								startIcon={<DeleteIcon />}
-							>
-								Очистить все
-							</Button>
-						)}
-					</Box>
-
-					<Grid container spacing={2}>
-						{products.map((product) => (
-							<Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-								<Card>
-									<Box
-										sx={{
-											position: 'relative',
-											width: '100%',
-											pt: '100%',
-										}}
-									>
-										<Link href={`/products/${product.id}`}>
-											<Image
-												src={product.image}
-												alt={product.name}
-												fill
-												style={{
-													objectFit: 'contain',
-													padding: '20px',
-												}}
-											/>
-										</Link>
-									</Box>
-									<CardContent>
-										<Link
-											href={`/products/${product.id}`}
-											style={{ textDecoration: 'none', color: 'inherit' }}
-										>
-											<Typography
-												gutterBottom
-												variant='h6'
-												component='h2'
-												sx={{
-													overflow: 'hidden',
-													textOverflow: 'ellipsis',
-													display: '-webkit-box',
-													WebkitLineClamp: 2,
-													WebkitBoxOrient: 'vertical',
-													minHeight: '3.6em',
-												}}
-											>
-												{product.name}
-											</Typography>
-										</Link>
-										<Typography
-											variant='h5'
-											color='primary'
-											sx={{ fontWeight: 'bold', mb: 2 }}
-										>
-											{product.price.toFixed(2)} BYN
-										</Typography>
-										<Box
-											sx={{
-												display: 'flex',
-												justifyContent: 'space-between',
-												gap: 1,
-											}}
-										>
-											<Button
-												variant='contained'
-												onClick={() => handleAddToCart(product)}
-												fullWidth
-											>
-												В корзину
-											</Button>
-											<IconButton
-												onClick={() => removeFromFavorites(product.id)}
-												color='error'
-											>
-												<DeleteIcon />
-											</IconButton>
-										</Box>
-									</CardContent>
-								</Card>
-							</Grid>
-						))}
+								</Box>
+							</CardContent>
+						</Card>
 					</Grid>
-				</Container>
-			</Box>
-		</>
+				))}
+			</Grid>
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={3000}
+				onClose={() => setSnackbarOpen(false)}
+			>
+				<Alert
+					onClose={() => setSnackbarOpen(false)}
+					severity="success"
+					sx={{ width: '100%' }}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
+		</Container>
 	)
 }
