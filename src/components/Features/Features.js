@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Box, Container, Grid, Typography, Paper } from '@mui/material'
-import { LocalShipping, CheckCircle, Payment, Timeline } from '@mui/icons-material'
+import React from 'react';
+import { Box, Container, Grid, Typography, Paper } from '@mui/material';
+import { LocalShipping, CheckCircle, Payment, Timeline } from '@mui/icons-material';
 
 const features = [
     {
@@ -25,12 +25,12 @@ const features = [
         title: 'Доступные платежи',
         description: 'Ежемесячный платеж от 29,99 руб.',
     },
-]
+];
 
 export default function Features() {
     return (
-        <Box 
-            sx={{ 
+        <Box
+            sx={{
                 py: 6,
                 backgroundColor: 'background.default',
             }}
@@ -95,5 +95,5 @@ export default function Features() {
                 </Grid>
             </Container>
         </Box>
-    )
+    );
 }

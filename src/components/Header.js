@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import {
 	AppBar,
 	Toolbar,
@@ -17,30 +17,30 @@ import {
 	ListItemText,
 	ListItemIcon,
 	Divider,
-} from '@mui/material'
-import Link from 'next/link'
-import Image from 'next/image'
-import PhoneIcon from '@mui/icons-material/Phone'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import MenuIcon from '@mui/icons-material/Menu'
-import StorefrontIcon from '@mui/icons-material/Storefront'
-import LocalShippingIcon from '@mui/icons-material/LocalShipping'
-import ContactsIcon from '@mui/icons-material/Contacts'
-import RateReviewIcon from '@mui/icons-material/RateReview'
-import { useCartStore } from '../store/cart'
-import { useFavoritesStore } from '../store/favorites'
+} from '@mui/material';
+import Link from 'next/link';
+import Image from 'next/image';
+import PhoneIcon from '@mui/icons-material/Phone';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MenuIcon from '@mui/icons-material/Menu';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import { useCartStore } from '../store/cart';
+import { useFavoritesStore } from '../store/favorites';
 
 export default function Header() {
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-	const [mounted, setMounted] = useState(false)
-	const { cartItems } = useCartStore()
-	const { favorites } = useFavoritesStore()
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [mounted, setMounted] = useState(false);
+	const { cartItems } = useCartStore();
+	const { favorites } = useFavoritesStore();
 
 	useEffect(() => {
-		setMounted(true)
-	}, [])
+		setMounted(true);
+	}, []);
 
 	const menuItems = [
 		{ text: 'Каталог', href: '/', icon: <StorefrontIcon /> },
@@ -51,11 +51,11 @@ export default function Header() {
 		},
 		{ text: 'Отзывы', href: '/reviews', icon: <RateReviewIcon /> },
 		{ text: 'Контакты', href: '/contacts', icon: <ContactsIcon /> },
-	]
+	];
 
 	const toggleMobileMenu = () => {
-		setMobileMenuOpen(!mobileMenuOpen)
-	}
+		setMobileMenuOpen(!mobileMenuOpen);
+	};
 
 	return (
 		<AppBar position='sticky' color='default' elevation={1}>
@@ -236,5 +236,5 @@ export default function Header() {
 				</Box>
 			</Drawer>
 		</AppBar>
-	)
+	);
 }

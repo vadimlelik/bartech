@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Roboto } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import theme from '@/theme'
-import { Box } from '@mui/material'
-import Script from 'next/script'
-import StyledComponentsRegistry from './registry'
+import { useEffect } from 'react';
+import { Roboto } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from '@/theme';
+import { Box } from '@mui/material';
+import Script from 'next/script';
+import StyledComponentsRegistry from './registry';
 
 const roboto = Roboto({
-    subsets: ['latin'],
-    weight: ['300', '400', '500', '700'],
-    display: 'swap',
-})
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  display: 'swap',
+});
 
 export default function RootLayout({ children }) {
-    useEffect(() => {
-        // Yandex.Metrika counter
-        const script = document.createElement('script')
-        script.text = `
+  useEffect(() => {
+    // Yandex.Metrika counter
+    const script = document.createElement('script');
+    script.text = `
             (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
             m[i].l=1*new Date();
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -32,72 +32,63 @@ export default function RootLayout({ children }) {
                 accurateTrackBounce:true,
                 webvisor:true
             });
-        `
-        document.head.appendChild(script)
+        `;
+    document.head.appendChild(script);
 
-        return () => {
-            document.head.removeChild(script)
-        }
-    }, [])
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
-    return (
-        <html lang="ru" className={roboto.className}>
-            <head>
-                <meta
-                    name="description"
-                    content="Купить технику в Минске с доставкой"
-                />
-                <meta
-                    name="keywords"
-                    content="техника, электроника, купить технику в минске, купить электронику в минске"
-                />
-                <meta name="author" content="Bartech" />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1.0"
-                />
-                <meta name="theme-color" content="#000000" />
-                <meta name="robots" content="index, follow" />
-                <meta
-                    property="og:title"
-                    content="Bartech - Интернет-магазин техники"
-                />
-                <meta
-                    property="og:description"
-                    content="Купить технику в Минске с доставкой"
-                />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://bartech.by" />
-                <meta
-                    property="og:image"
-                    content="https://bartech.by/logo.png"
-                />
-                <meta property="og:site_name" content="Bartech" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta
-                    name="twitter:title"
-                    content="Bartech - Интернет-магазин техники"
-                />
-                <meta
-                    name="twitter:description"
-                    content="Купить технику в Минске с доставкой"
-                />
-                <meta
-                    name="twitter:image"
-                    content="https://bartech.by/logo.png"
-                />
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="apple-touch-icon" href="/logo192.png" />
-                <link rel="manifest" href="/manifest.json" />
-                <Script
-                    strategy="afterInteractive"
-                    src={`https://www.googletagmanager.com/gtag/js?id=G-${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
-                />
-                <Script
-                    id="google-analytics"
-                    strategy="afterInteractive"
-                    dangerouslySetInnerHTML={{
-                        __html: `
+  return (
+    <html lang="ru" className={roboto.className}>
+      <head>
+        <meta
+          name="description"
+          content="Купить технику в Минске с доставкой"
+        />
+        <meta
+          name="keywords"
+          content="техника, электроника, купить технику в минске, купить электронику в минске"
+        />
+        <meta name="author" content="Bartech" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="robots" content="index, follow" />
+        <meta
+          property="og:title"
+          content="Bartech - Интернет-магазин техники"
+        />
+        <meta
+          property="og:description"
+          content="Купить технику в Минске с доставкой"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bartech.by" />
+        <meta property="og:image" content="https://bartech.by/logo.png" />
+        <meta property="og:site_name" content="Bartech" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Bartech - Интернет-магазин техники"
+        />
+        <meta
+          name="twitter:description"
+          content="Купить технику в Минске с доставкой"
+        />
+        <meta name="twitter:image" content="https://bartech.by/logo.png" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/logo192.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
                             window.dataLayer = window.dataLayer || [];
                             function gtag(){dataLayer.push(arguments);}
                             gtag('js', new Date());
@@ -105,37 +96,37 @@ export default function RootLayout({ children }) {
                             page_path: window.location.pathname,
                             });
                         `,
-                    }}
-                />
-                <noscript>
-                    <div>
-                        <img
-                            src="https://mc.yandex.ru/watch/95649721"
-                            style={{
-                                position: 'absolute',
-                                left: '-9999px',
-                            }}
-                            alt=""
-                        />
-                    </div>
-                </noscript>
-            </head>
-            <body>
-                <StyledComponentsRegistry>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Box
-                            sx={{
-                                minHeight: '100vh',
-                                display: 'flex',
-                                flexDirection: 'column',
-                            }}
-                        >
-                            {children}
-                        </Box>
-                    </ThemeProvider>
-                </StyledComponentsRegistry>
-            </body>
-        </html>
-    )
+          }}
+        />
+        <noscript>
+          <div>
+            <img
+              src="https://mc.yandex.ru/watch/95649721"
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+              }}
+              alt=""
+            />
+          </div>
+        </noscript>
+      </head>
+      <body>
+        <StyledComponentsRegistry>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box
+              sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {children}
+            </Box>
+          </ThemeProvider>
+        </StyledComponentsRegistry>
+      </body>
+    </html>
+  );
 }

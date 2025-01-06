@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 import {
     Box,
     Container,
@@ -11,9 +11,9 @@ import {
     Rating,
     Grid,
     Divider,
-} from '@mui/material'
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale'
+} from '@mui/material';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 const reviews = [
     {
@@ -106,7 +106,7 @@ const reviews = [
         text: 'Прекрасный магазин! Купила Samsung Galaxy S23+ в рассрочку. Консультант помог с выбором, подробно рассказал о характеристиках. Одобрение рассрочки заняло буквально 20 минут. Очень довольна покупкой и сервисом!',
         avatar: '/images/avatars/avatar10.jpg'
     }
-]
+];
 
 export default function Reviews() {
     return (
@@ -135,7 +135,7 @@ export default function Reviews() {
                         mx: 'auto'
                     }}
                 >
-                    Мы ценим каждого клиента и стремимся предоставить лучший сервис. 
+                    Мы ценим каждого клиента и стремимся предоставить лучший сервис.
                     Ознакомьтесь с отзывами покупателей о нашем магазине.
                 </Typography>
 
@@ -171,7 +171,7 @@ export default function Reviews() {
                                     </Box>
 
                                     <Rating value={review.rating} readOnly sx={{ mb: 1 }} />
-                                    
+
                                     <Typography
                                         variant="subtitle1"
                                         color="primary"
@@ -192,5 +192,5 @@ export default function Reviews() {
                 </Grid>
             </Container>
         </Box>
-    )
+    );
 }

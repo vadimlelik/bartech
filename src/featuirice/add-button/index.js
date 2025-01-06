@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useCartStore } from '@/store/cart'
-import { Button } from '@mui/material'
+import { useCartStore } from '@/store/cart';
+import { Button } from '@mui/material';
 
 export default function CartButton({ phone }) {
-	const { addToCart } = useCartStore()
+	const { addToCart } = useCartStore();
 
 	return (
 		<Button
@@ -14,5 +14,5 @@ export default function CartButton({ phone }) {
 		>
 			Добавить в корзину
 		</Button>
-	)
+	);
 }

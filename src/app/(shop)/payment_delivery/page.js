@@ -1,8 +1,8 @@
-import { Container, Typography, Box, Paper, Grid, Divider } from '@mui/material'
-import LocalShippingIcon from '@mui/icons-material/LocalShipping'
-import PaymentIcon from '@mui/icons-material/Payment'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import SecurityIcon from '@mui/icons-material/Security'
+import { Container, Typography, Box, Paper, Grid, Divider } from '@mui/material';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PaymentIcon from '@mui/icons-material/Payment';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SecurityIcon from '@mui/icons-material/Security';
 
 export default function PaymentDelivery() {
 	return (
@@ -142,5 +142,5 @@ export default function PaymentDelivery() {
 				</Box>
 			</Paper>
 		</Container>
-	)
+	);
 }

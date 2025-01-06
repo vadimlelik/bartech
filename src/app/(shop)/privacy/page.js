@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Paper } from '@mui/material'
+import { Container, Typography, Box, Paper } from '@mui/material';
 
 export default function Privacy() {
 	return (
@@ -94,5 +94,5 @@ export default function Privacy() {
 				</Box>
 			</Paper>
 		</Container>
-	)
+	);
 }

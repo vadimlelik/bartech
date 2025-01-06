@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
     Card,
@@ -7,15 +7,15 @@ import {
     CardMedia,
     Typography,
     Box,
-} from '@mui/material'
-import { useRouter } from 'next/navigation'
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export default function CategoryCard({ category }) {
-    const router = useRouter()
-    const { id, name, image, description } = category
+    const router = useRouter();
+    const { id, name, image, description } = category;
 
     return (
-        <Card 
+        <Card
             elevation={3}
             sx={{
                 height: '100%',
@@ -27,7 +27,7 @@ export default function CategoryCard({ category }) {
                 },
             }}
         >
-            <CardActionArea 
+            <CardActionArea
                 onClick={() => router.push(`/categories/${id}`)}
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
             >
@@ -48,11 +48,11 @@ export default function CategoryCard({ category }) {
                     />
                 </Box>
                 <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Typography 
-                        gutterBottom 
-                        variant="h6" 
+                    <Typography
+                        gutterBottom
+                        variant="h6"
                         component="h2"
-                        sx={{ 
+                        sx={{
                             textAlign: 'center',
                             fontWeight: 'bold'
                         }}
@@ -60,12 +60,12 @@ export default function CategoryCard({ category }) {
                         {name}
                     </Typography>
                     {description && (
-                        <Typography 
-                            variant="body2" 
+                        <Typography
+                            variant="body2"
                             color="text.secondary"
-                            sx={{ 
+                            sx={{
                                 textAlign: 'center',
-                                mt: 'auto' 
+                                mt: 'auto'
                             }}
                         >
                             {description}
@@ -74,5 +74,5 @@ export default function CategoryCard({ category }) {
                 </CardContent>
             </CardActionArea>
         </Card>
-    )
+    );
 }

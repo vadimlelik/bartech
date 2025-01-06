@@ -1,10 +1,10 @@
-'use client'
-import { Button } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+'use client';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function BackButton() {
-    const router = useRouter()
+    const router = useRouter();
 
     return (
         <Button
@@ -16,5 +16,5 @@ export default function BackButton() {
         >
             Назад к категориям
         </Button>
-    )
+    );
 }

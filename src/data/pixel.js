@@ -4,4 +4,4 @@ export const PIXEL = {
 	phoneFree: 'CT0VK0BC77U38DURRS9G',
 	phone: 'CT0V22RC77U9L9BMFI4G',
 	phone1: 'CT27AUJC77U74JDQQ38G',
-}
+};

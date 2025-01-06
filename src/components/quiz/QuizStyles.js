@@ -1,5 +1,5 @@
-'use client'
-import styled from 'styled-components'
+'use client';
+import styled from 'styled-components';
 
 export const QuizOverlay = styled.div`
   position: fixed;
@@ -12,7 +12,7 @@ export const QuizOverlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-`
+`;
 
 export const QuizContainer = styled.div`
   background: #fff;
@@ -29,7 +29,7 @@ export const QuizContainer = styled.div`
     margin-bottom: 1rem;
     font-size: 1.2rem;
   }
-`
+`;
 
 export const CloseButton = styled.button`
   position: absolute;
@@ -46,7 +46,7 @@ export const CloseButton = styled.button`
   &:hover {
     color: #ff6600;
   }
-`
+`;
 
 export const ProgressBarContainer = styled.div`
   width: 100%;
@@ -55,27 +55,27 @@ export const ProgressBarContainer = styled.div`
   border-radius: 5px;
   margin-bottom: 1rem;
   overflow: hidden;
-`
+`;
 
 export const ProgressBar = styled.div`
   height: 100%;
   background: #ff6600;
   transition: width 0.3s ease;
   width: ${props => props.$progress}%;
-`
+`;
 
 export const QuestionContainer = styled.div`
   margin-bottom: 1.5rem;
   color: #333;
-`
+`;
 
 export const InputContainer = styled.div`
   margin-top: 1rem;
-`
+`;
 
 export const RadioContainer = styled.div`
   margin-bottom: 1rem;
-`
+`;
 
 export const RadioLabel = styled.label`
   display: flex;
@@ -95,11 +95,11 @@ export const RadioLabel = styled.label`
     border-color: #ff6600;
     background: ${props => props.$isChecked ? '#ff6600' : '#fff8f3'};
   }
-`
+`;
 
 export const CheckboxContainer = styled.div`
   margin-bottom: 1rem;
-`
+`;
 
 export const CheckboxLabel = styled.label`
   display: flex;
@@ -120,7 +120,7 @@ export const CheckboxLabel = styled.label`
     border-color: #ff6600;
     background: ${props => props.$isChecked ? '#ff6600' : '#fff8f3'};
   }
-`
+`;
 
 export const CustomInput = styled.input`
   width: 100%;
@@ -139,20 +139,20 @@ export const CustomInput = styled.input`
   &::placeholder {
     color: #999;
   }
-`
+`;
 
 export const ErrorText = styled.span`
   color: #dc3545;
   font-size: 0.875rem;
   margin-top: 0.5rem;
   display: block;
-`
+`;
 
 export const Navigation = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1.5rem;
-`
+`;
 
 export const NavButton = styled.button`
   background-color: #ff6600;
@@ -173,4 +173,4 @@ export const NavButton = styled.button`
     background-color: #ccc;
     cursor: not-allowed;
   }
-`
+`;

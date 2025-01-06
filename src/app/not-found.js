@@ -1,5 +1,5 @@
-import { Container, Typography, Button, Box } from '@mui/material'
-import Link from 'next/link'
+import { Container, Typography, Button, Box } from '@mui/material';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
@@ -29,5 +29,5 @@ export default function NotFound() {
         </Button>
       </Box>
     </Container>
-  )
+  );
 }

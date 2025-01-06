@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { Box, Paper, Typography, Button, MobileStepper } from '@mui/material'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
-import Image from 'next/image'
-import Link from 'next/link'
+import React, { useState, useEffect } from 'react';
+import { Box, Paper, Typography, Button, MobileStepper } from '@mui/material';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const slides = [
 	{
@@ -40,32 +40,32 @@ const slides = [
 		color: '#d32f2f',
 		buttonText: 'Смотреть все акции',
 	},
-]
+];
 
 export default function CategoryCarousel() {
-	const [activeStep, setActiveStep] = useState(0)
-	const maxSteps = slides.length
-	const [autoPlay, setAutoPlay] = useState(true)
+	const [activeStep, setActiveStep] = useState(0);
+	const maxSteps = slides.length;
+	const [autoPlay, setAutoPlay] = useState(true);
 
 	useEffect(() => {
-		let timer
+		let timer;
 		if (autoPlay) {
 			timer = setInterval(() => {
-				setActiveStep((prevStep) => (prevStep + 1) % maxSteps)
-			}, 6000) // Увеличил время показа до 6 секунд, чтобы люди успевали прочитать текст
+				setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
+			}, 6000); // Увеличил время показа до 6 секунд, чтобы люди успевали прочитать текст
 		}
-		return () => clearInterval(timer)
-	}, [autoPlay, maxSteps])
+		return () => clearInterval(timer);
+	}, [autoPlay, maxSteps]);
 
 	const handleNext = () => {
-		setActiveStep((prevStep) => (prevStep + 1) % maxSteps)
-	}
+		setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
+	};
 
 	const handleBack = () => {
-		setActiveStep((prevStep) => (prevStep - 1 + maxSteps) % maxSteps)
-	}
+		setActiveStep((prevStep) => (prevStep - 1 + maxSteps) % maxSteps);
+	};
 
-	const currentSlide = slides[activeStep]
+	const currentSlide = slides[activeStep];
 
 	return (
 		<Box
@@ -241,5 +241,5 @@ export default function CategoryCarousel() {
 				backButton={null}
 			/>
 		</Box>
-	)
+	);
 }

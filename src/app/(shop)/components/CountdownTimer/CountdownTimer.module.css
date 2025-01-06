@@ -1,42 +1,42 @@
 /* styles/CountdownTimer.module.css */
 .timer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1rem;
-	margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
 }
 
 .timerItem {
-	text-align: center;
-	font-size: 5rem;
-	font-weight: bold;
-	background: #000;
-	color: #fff;
-	padding: 2rem;
-	border-radius: 8px;
+  text-align: center;
+  font-size: 5rem;
+  font-weight: bold;
+  background: #000;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
 }
 
 .label {
-	display: block;
-	margin-top: 0.5rem;
-	font-size: 0.875rem;
-	font-weight: normal;
-	color: #ddd;
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: normal;
+  color: #ddd;
 }
 
 @media (max-width: 768px) {
-	.timer {
-		gap: 0.5rem;
-	}
+  .timer {
+    gap: 0.5rem;
+  }
 
-	.timerItem {
-		font-size: 1.2rem;
-		padding: 0.8rem;
-		width: 60px;
-	}
+  .timerItem {
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    width: 60px;
+  }
 
-	.label {
-		font-size: 0.75rem;
-	}
+  .label {
+    font-size: 0.5rem;
+  }
 }

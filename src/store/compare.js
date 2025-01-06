@@ -1,20 +1,20 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export const useCompareStore = create(
     persist(
         (set, get) => ({
             compareItems: [],
             addToCompare: (product) => {
-                const { compareItems } = get()
+                const { compareItems } = get();
                 if (compareItems.length >= 4) {
-                    return false
+                    return false;
                 }
                 if (!compareItems.find(item => item.id === product.id)) {
-                    set({ compareItems: [...compareItems, product] })
-                    return true
+                    set({ compareItems: [...compareItems, product] });
+                    return true;
                 }
-                return false
+                return false;
             },
             removeFromCompare: (productId) =>
                 set((state) => ({
@@ -22,12 +22,12 @@ export const useCompareStore = create(
                 })),
             clearCompare: () => set({ compareItems: [] }),
             isInCompare: (productId) => {
-                const { compareItems } = get()
-                return compareItems.some(item => item.id === productId)
+                const { compareItems } = get();
+                return compareItems.some(item => item.id === productId);
             }
         }),
         {
             name: 'compare-storage',
         }
     )
-)
+);
