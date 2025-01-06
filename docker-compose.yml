@@ -5,7 +5,7 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=https://178.172.138.214
+      - NEXT_PUBLIC_API_URL=https://cvirko-vadim.ru
     volumes:
       - ./data:/app/data:ro
     restart: always
@@ -15,7 +15,7 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d technobar.by -d www.technobar.by --force-renewal
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d cvirko-vadim.ru -d www.cvirko-vadim.ru --force-renewal
     depends_on:
       - nginx
 
