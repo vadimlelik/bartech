@@ -6,14 +6,14 @@ export function middleware(request) {
 
   // Карта соответствия поддоменов и путей
   const subdomainMap = {
-    'phone2.cvirko-vadim.ru': '/phone2',
-    'tv1.cvirko-vadim.ru': '/tv1',
-    '1phonefree.cvirko-vadim.ru': '/1phonefree',
-    '50discount.cvirko-vadim.ru': '/50discount',
-    'phone.cvirko-vadim.ru': '/phone',
-    'phone3.cvirko-vadim.ru': '/phone3',
-    'phone4.cvirko-vadim.ru': '/phone4',
-    'phone5.cvirko-vadim.ru': '/phone5',
+    'phone2.technobar.by': '/phone2',
+    'tv1.technobar.by': '/tv1',
+    '1phonefree.technobar.by': '/1phonefree',
+    '50discount.technobar.by': '/50discount',
+    'phone.technobar.by': '/phone',
+    'phone3.technobar.by': '/phone3',
+    'phone4.technobar.by': '/phone4',
+    'phone5.technobar.by': '/phone5',
   };
 
   // Проверяем, есть ли поддомен в нашей карте
