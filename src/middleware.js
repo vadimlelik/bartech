@@ -1,15 +1,24 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const hostname = req.headers.get('host'); // Например, phone.cvirko-vadim.ru
-  const subdomain = hostname.split('.')[0]; // Извлекаем поддомен (phone)
+  const hostname = req.headers.get('host'); // Получаем хост (например, phone.cvirko-vadim.ru)
+  const url = req.nextUrl.clone();
 
-  if (subdomain === 'phone') {
-    // Перенаправляем запросы поддомена phone на папку /phone
-    req.nextUrl.pathname = `/phone${req.nextUrl.pathname}`;
-    return NextResponse.rewrite(req.nextUrl);
+  // Пропускаем запросы к статическим файлам
+  if (
+    url.pathname.startsWith('/_next') ||
+    url.pathname.startsWith('/styles') ||
+    url.pathname.startsWith('/logo')
+  ) {
+    return NextResponse.next();
   }
 
-  // Для других поддоменов или основного домена ничего не делаем
-  return NextResponse.next();
+  const subdomain = hostname.split('.')[0]; // Извлекаем поддомен (например, 'phone')
+
+  if (subdomain === 'phone') {
+    url.pathname = `/phone${url.pathname}`; // Перенаправляем запросы на /phone
+    return NextResponse.rewrite(url);
+  }
+
+  return NextResponse.next(); // Для всех остальных запросов
 }
