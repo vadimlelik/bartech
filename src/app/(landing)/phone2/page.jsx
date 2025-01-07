@@ -38,15 +38,6 @@ const questions = [
     ],
   },
   {
-    id: 2,
-    question: 'Работаете ли Вы на последнем рабочем месте более 3-х месяцев?',
-    type: 'radio',
-    options: [
-      { value: 'yes', label: 'Да' },
-      { value: 'no', label: 'Нет' },
-    ],
-  },
-  {
     id: 3,
     question: 'На какой ежемесячный платеж Вы рассчитываете?',
     type: 'radio',
