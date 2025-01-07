@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const hostname = req.headers.get('host'); // Получаем хост (например, sub.example.com)
-  const subdomain = hostname.split('.')[0]; // Извлекаем поддомен (sub)
+  const hostname = req.headers.get('host'); // Например, phone.cvirko-vadim.ru
+  const subdomain = hostname.split('.')[0]; // Извлекаем поддомен (phone)
 
-  if (subdomain && subdomain !== 'www' && subdomain !== 'cvirko-vadim.ru') {
-    req.nextUrl.pathname = `/${subdomain}${req.nextUrl.pathname}`;
+  if (subdomain === 'phone') {
+    // Перенаправляем запросы поддомена phone на папку /phone
+    req.nextUrl.pathname = `/phone${req.nextUrl.pathname}`;
     return NextResponse.rewrite(req.nextUrl);
   }
 
-  // Для основного домена продолжаем обработку
+  // Для других поддоменов или основного домена ничего не делаем
   return NextResponse.next();
 }

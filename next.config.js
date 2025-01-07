@@ -1,39 +1,38 @@
 /** @type {import('next').NextConfig} */
-
-const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true';
-
 const nextConfig = {
-  assetPrefix: isPhoneSubdomain ? 'https://cvirko-vadim.ru' : '',
-  reactStrictMode: false,
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-  },
+  reactStrictMode: true,
   experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
+    appDir: true,
   },
   async rewrites() {
     return [
       {
         source: '/phone/:path*',
-        destination: '/:path*',
+        destination: '/phone/:path*',
       },
+    ];
+  },
+  async headers() {
+    return [
       {
-        source: '/phone',
-        destination: '/',
-      },
-      {
-        source: '/tv1/:path*',
-        destination: '/:path*',
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
       },
     ];
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
