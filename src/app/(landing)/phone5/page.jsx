@@ -27,32 +27,9 @@ export default function Phone5() {
 
   const questions = [
     {
-      id: 1,
-      question: 'Выберите бренд телефона',
-      type: 'checkbox',
-      options: [
-        { value: 'Xiaomi', label: 'Xiaomi' },
-        { value: 'Samsung', label: 'Samsung' },
-        { value: 'Apple', label: 'Apple' },
-        { value: 'Huawei', label: 'Huawei' },
-        { value: 'Redmi', label: 'Redmi' },
-        { value: 'Phone armor', label: 'Броне телефон' },
-      ],
-    },
-    {
-      id: 3,
-      question: 'На какой ежемесячный платеж Вы рассчитываете?',
-      type: 'radio',
-      options: [
-        { value: 'от 30 до 50 BYN/мес', label: 'от 30 до 50 BYN/мес' },
-        { value: 'от 50 до 100 BYN/мес', label: 'от 50 до 100 BYN/мес' },
-        { value: 'от 100 до 200 BYN/мес', label: 'от 100 до 200 BYN/мес' },
-        { value: 'от 200 BYN/мес', label: 'от 200 BYN/мес' },
-      ],
-    },
-    {
       id: 4,
-      question: 'Введите ваш номер телефона',
+      question:
+        'Оставьте заявку сейчас и получите Повербанк в подарок 🎁 🎁 🎁',
       type: 'text',
     },
   ];

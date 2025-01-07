@@ -113,9 +113,9 @@ export default function Phone4() {
           </h2>
 
           <ul className={styles.benefits}>
-            <li>✓ Рассрочку одобряем всем</li>
-            <li>✓ Без справок о доходах</li>
-            <li>✓ Без первого взноса и переплат</li>
+            <li> Рассрочку одобряем всем</li>
+            <li> Без справок о доходах</li>
+            <li> Без первого взноса и переплат</li>
           </ul>
 
           <div className={styles.timerBlock}>
