@@ -23,7 +23,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     trigger,
     watch,
     setValue,
@@ -31,6 +31,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [validationError, setValidationError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const watchedFields = watch();
 
@@ -97,7 +98,9 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
         },
       };
 
-      await onSubmit(formData);
+      await onSubmit(formData).then(() => {
+        setIsSubmitting(true);
+      });
     })(e);
   };
 

@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #6e6767 0%, #b6a5a5 100%);
+  background: linear-gradient(135deg, #000000 0%, #8f8282 100%);
   color: white;
   padding: 2rem 1rem;
   position: relative;
@@ -51,7 +51,6 @@
   border-radius: 2px;
 }
 
-/* Hero Section */
 .heroSection {
   background: rgba(255, 255, 255, 0.98);
   border-radius: 30px;
@@ -66,7 +65,9 @@
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
 }
-
+.reviewsSubtitle {
+  color: #323435;
+}
 .heroSection:hover {
   transform: translateY(-5px);
   box-shadow:
@@ -203,6 +204,10 @@
 }
 
 @media (max-width: 767px) {
+  .timerBlock {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
   .heroImage {
     max-width: 100%;
     margin-top: 2rem;
@@ -457,8 +462,8 @@
   }
 
   .reviewsSection .sectionTitle {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .reviewsGrid {
@@ -473,7 +478,9 @@
 
   .reviewText {
     font-size: 1rem;
+    margin: 0.5rem 0;
     line-height: 1.5;
+    padding: 0 0.5rem;
   }
 
   .reviewAuthor {
@@ -549,22 +556,24 @@
   }
 
   .mainTitle {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .heroSection,
   .advantagesSection {
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 1.5rem;
     gap: 2rem;
   }
 
   .heroTitle {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
   }
 
   .sectionTitle {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-align: center;
   }
 
@@ -579,8 +588,9 @@
   }
 
   .benefits li {
-    font-size: 1rem;
-    padding: 0.8rem 1.2rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .advantageItem {

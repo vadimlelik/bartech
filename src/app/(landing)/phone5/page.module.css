@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #6e6767 0%, #b6a5a5 100%);
+  background: linear-gradient(135deg, #272626 0%, #454040 100%);
   padding: 2rem 1rem;
 }
 
@@ -23,8 +23,12 @@
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .main {
@@ -94,7 +98,7 @@
 }
 
 .inStock {
-  color: #4CAF50;
+  color: #4caf50;
   margin-left: 1rem;
   font-size: 0.9rem;
 }
@@ -214,7 +218,9 @@
   margin-bottom: 0.5rem;
 }
 
-.barFull, .barPartial, .barEmpty {
+.barFull,
+.barPartial,
+.barEmpty {
   flex: 1;
   height: 8px;
   border-radius: 4px;
@@ -277,6 +283,9 @@
 
   .header h1 {
     font-size: 2rem;
+  }
+  .timerSection {
+    padding: 0.5rem;
   }
 }
 
