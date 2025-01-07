@@ -5,7 +5,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['cvirko-vadim.ru', 'phone.cvirko-vadim.ru'], // Добавьте ваши домены
+    domains: ['cvirko-vadim.ru', '*.cvirko-vadim.ru'], // Добавьте ваши домены
   },
 };
 
