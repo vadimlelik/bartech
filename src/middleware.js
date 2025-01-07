@@ -11,9 +11,9 @@ export function middleware(request) {
     '1phonefree.cvirko-vadim.ru': '/1phonefree',
     '50discount.cvirko-vadim.ru': '/50discount',
     'phone.cvirko-vadim.ru': '/phone',
-    'phon3.cvirko-vadim.ru': '/phone3',
-    'phon4.cvirko-vadim.ru': '/phone4',
-    'phon5.cvirko-vadim.ru': '/phone5',
+    'phone3.cvirko-vadim.ru': '/phone3',
+    'phone4.cvirko-vadim.ru': '/phone4',
+    'phone5.cvirko-vadim.ru': '/phone5',
   };
 
   // Проверяем, есть ли поддомен в нашей карте
