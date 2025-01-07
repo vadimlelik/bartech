@@ -9,6 +9,7 @@ import theme from '@/theme';
 import { Box } from '@mui/material';
 import Script from 'next/script';
 import StyledComponentsRegistry from './registry';
+import { loadTikTokPixel } from '@/shared/utils';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -18,25 +19,41 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }) {
   useEffect(() => {
+    // Initialize TikTok Pixel
+    loadTikTokPixel('YOUR_PIXEL_ID_HERE');
+
     // Yandex.Metrika counter
     const script = document.createElement('script');
     script.text = `
-            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-            ym(95649721, "init", {
-                clickmap:true,
-                trackLinks:true,
-                accurateTrackBounce:true,
-                webvisor:true
-            });
-        `;
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+      ym(99038681, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+      });
+    `;
     document.head.appendChild(script);
+
+    // Add noscript element for Yandex Metrika
+    const noscript = document.createElement('noscript');
+    const div = document.createElement('div');
+    const img = document.createElement('img');
+    img.src = 'https://mc.yandex.ru/watch/99038681';
+    img.style.position = 'absolute';
+    img.style.left = '-9999px';
+    img.alt = '';
+    div.appendChild(img);
+    noscript.appendChild(div);
+    document.body.appendChild(noscript);
 
     return () => {
       document.head.removeChild(script);
+      document.body.removeChild(noscript);
     };
   }, []);
 
@@ -98,18 +115,6 @@ export default function RootLayout({ children }) {
                         `,
           }}
         />
-        <noscript>
-          <div>
-            <img
-              src="https://mc.yandex.ru/watch/95649721"
-              style={{
-                position: 'absolute',
-                left: '-9999px',
-              }}
-              alt=""
-            />
-          </div>
-        </noscript>
       </head>
       <body>
         <StyledComponentsRegistry>

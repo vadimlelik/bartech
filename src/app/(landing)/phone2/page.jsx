@@ -73,7 +73,7 @@ const Phone2 = () => {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone1');
+        router.push('/thank-you?source=phone');
       });
   };
 
