@@ -13,6 +13,8 @@ const ThankYouPage = () => {
   useEffect(() => {
     if (source) {
       const pixelId = PIXEL[source];
+      console.log(pixelId);
+      console.log(source);
 
       if (window.ttq) {
         window.ttq.load(pixelId);
