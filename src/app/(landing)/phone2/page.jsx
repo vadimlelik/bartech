@@ -61,7 +61,7 @@ const Phone2 = () => {
 
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.phone1);
+      window.ttq.load(PIXEL.phone2);
       window.ttq.page();
     }
   }, []);

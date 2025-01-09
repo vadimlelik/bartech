@@ -7,12 +7,21 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
+import { PIXEL } from '@/data/pixel';
 
 export default function Phone5() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const router = useRouter();
 
   const [now, setNow] = useState(null);
+
+
+    useEffect(() => {
+      if (window.ttq) {
+        window.ttq.load(PIXEL.phone5);
+        window.ttq.page();
+      }
+    }, []);
 
   const handleQuizSubmit = async (data) => {
     axios

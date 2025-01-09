@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
+import { PIXEL } from '@/data/pixel';
 
 export default function Phone3() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -63,6 +64,13 @@ export default function Phone3() {
   useEffect(() => {
     setNow(Date.now());
   }, []);
+
+    useEffect(() => {
+      if (window.ttq) {
+        window.ttq.load(PIXEL.phone3);
+        window.ttq.page();
+      }
+    }, []);
   if (!now) return <Loading />;
 
   return (
