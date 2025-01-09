@@ -228,6 +228,40 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
             {validationError && currentQuestion < questions.length - 1 && (
               <ErrorText>{validationError}</ErrorText>
             )}
+            {currentQuestion === questions.length - 1 && (
+              <div style={{ 
+                marginTop: '15px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px'
+              }}>
+                <Controller
+                  name="consent"
+                  control={control}
+                  defaultValue={true}
+                  render={({ field: { value } }) => (
+                    <>
+                      <input
+                        type="checkbox"
+                        checked={true}
+                        readOnly
+                        style={{ 
+                          marginTop: '4px',
+                          cursor: 'default'
+                        }}
+                      />
+                      <span style={{ 
+                        fontSize: '14px',
+                        color: '#666',
+                        lineHeight: '1.4'
+                      }}>
+                        Даю согласие на обработку персональных данных
+                      </span>
+                    </>
+                  )}
+                />
+              </div>
+            )}
           </QuestionContainer>
           <Navigation>
             {currentQuestion < questions.length - 1 ? (

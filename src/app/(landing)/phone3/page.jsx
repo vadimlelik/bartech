@@ -18,7 +18,7 @@ export default function Phone3() {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone');
+        router.push('/thank-you?source=phone3');
       });
   };
   const closeQuiz = () => {

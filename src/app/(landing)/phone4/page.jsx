@@ -63,7 +63,7 @@ export default function Phone4() {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone');
+        router.push('/thank-you?source=phone4');
       });
   };
 

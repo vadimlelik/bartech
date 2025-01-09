@@ -21,7 +21,7 @@ export default function Phone5() {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone');
+        router.push('/thank-you?source=phone5');
       });
   };
 
