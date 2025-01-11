@@ -1,0 +1,438 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: hidden;
+  background: #1a1a1a;
+  min-height: 100vh;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ffd700;
+  padding: 8px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.discountBanner {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+  font-weight: bold;
+  color: #000;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.mainSection {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.textContent {
+  text-align: center;
+}
+
+.textContent:first-child {
+  margin-bottom: 20px;
+}
+
+.imageContainer {
+  margin-bottom: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 28px;
+  margin: 0;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  color: #fff;
+}
+
+.benefits li {
+  margin-bottom: 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.surveyText {
+  font-size: 16px;
+  margin: 20px 0;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.priceButton {
+  background: #6a1b9a;
+  color: white;
+  border: none;
+  padding: 15px 0;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.timer {
+  margin: 20px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.timer p {
+  margin-bottom: 10px;
+}
+
+.advantagesSection {
+  padding: 20px;
+  margin-bottom: 30px;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.advantagesImage {
+  margin-bottom: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.advantagesList {
+  color: #000;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #000;
+}
+
+.advantageItem {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.advantageNumber {
+  background: #2196f3;
+  color: white;
+  min-width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.advantageItem h3 {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.advantageItem p {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.reviewsSection {
+  padding: 20px;
+}
+
+.reviewsTitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.reviewsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reviewCard {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.reviewText {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.reviewAuthor {
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: 0 30px;
+  }
+
+  .mainSection {
+    padding-top: 60px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+
+  .imageContainer {
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+
+  .benefits {
+    max-width: 600px;
+    margin: 30px auto;
+  }
+
+  .benefits li {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .surveyText {
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+
+  .priceButton {
+    max-width: 400px;
+    margin: 30px auto;
+    font-size: 20px;
+    padding: 20px;
+  }
+
+  .advantagesSection {
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 720px;
+  }
+
+  .advantagesImage {
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+
+  .sectionTitle {
+    font-size: 32px;
+  }
+
+  .advantageItem {
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+
+  .advantageItem h3 {
+    font-size: 20px;
+  }
+
+  .advantageItem p {
+    font-size: 18px;
+  }
+
+  .reviewsSection {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+
+  .reviewsTitle {
+    font-size: 32px;
+    margin-bottom: 40px;
+  }
+
+  .reviewsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .reviewCard {
+    padding: 20px;
+  }
+
+  .reviewText {
+    font-size: 16px;
+  }
+
+  .reviewAuthor {
+    font-size: 16px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1025px) {
+  .container {
+    padding: 0 40px;
+  }
+
+  .mainSection {
+    padding-top: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .textContent:first-child {
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+  }
+
+  .imageContainer {
+    margin: 0;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .benefits {
+    text-align: left;
+  }
+
+  .benefits li {
+    font-size: 20px;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+  }
+
+  .surveyText {
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 30px;
+  }
+
+  .priceButton {
+    margin: 30px 0;
+    font-size: 20px;
+    padding: 20px 40px;
+    width: auto;
+  }
+
+  .advantagesSection {
+    padding: 60px;
+    margin: 60px auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .advantagesImage {
+    margin: 0;
+  }
+
+  .sectionTitle {
+    font-size: 36px;
+    text-align: left;
+  }
+
+  .advantageItem h3 {
+    font-size: 24px;
+  }
+
+  .advantageItem p {
+    font-size: 18px;
+  }
+
+  .reviewsSection {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 0;
+  }
+
+  .reviewsTitle {
+    font-size: 36px;
+    margin-bottom: 60px;
+  }
+
+  .reviewsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .reviewCard {
+    padding: 30px;
+  }
+
+  .reviewText {
+    font-size: 16px;
+  }
+
+  .reviewAuthor {
+    font-size: 16px;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .mainSection {
+    padding-top: 50px;
+  }
+
+  .imageContainer img,
+  .advantagesImage img {
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .benefits li {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}

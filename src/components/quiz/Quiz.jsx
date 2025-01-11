@@ -72,7 +72,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
     const allValid = await trigger();
     if (!allValid) {
-      setValidationError('Пожалуйста, ответьте на все вопросы.');
+      setValidationError('Пожалуйста, ответьте на все вопрос.');
       return;
     }
 
@@ -177,7 +177,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
                   rules={{
                     validate: (value) => {
                       if (!value || value === '+375')
-                        return 'Пожалуйста, ответьте на все вопросы.';
+                        return 'Пожалуйста, ответьте на все вопрос.';
                       if (
                         !/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(value)
                       ) {
@@ -202,7 +202,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
                         field.onBlur();
                         if (!e.target.value || e.target.value === '+375') {
                           setValidationError(
-                            'Пожалуйста, ответьте на все вопросы.'
+                            'Пожалуйста, ответьте на все вопрос.'
                           );
                         } else if (
                           /^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(
@@ -229,12 +229,14 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
               <ErrorText>{validationError}</ErrorText>
             )}
             {currentQuestion === questions.length - 1 && (
-              <div style={{ 
-                marginTop: '15px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '10px'
-              }}>
+              <div
+                style={{
+                  marginTop: '15px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                }}
+              >
                 <Controller
                   name="consent"
                   control={control}
@@ -245,16 +247,18 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
                         type="checkbox"
                         checked={true}
                         readOnly
-                        style={{ 
+                        style={{
                           marginTop: '4px',
-                          cursor: 'default'
+                          cursor: 'default',
                         }}
                       />
-                      <span style={{ 
-                        fontSize: '14px',
-                        color: '#666',
-                        lineHeight: '1.4'
-                      }}>
+                      <span
+                        style={{
+                          fontSize: '14px',
+                          color: '#666',
+                          lineHeight: '1.4',
+                        }}
+                      >
                         Даю согласие на обработку персональных данных
                       </span>
                     </>
