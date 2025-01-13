@@ -56,6 +56,18 @@ const nextConfig = {
         source: '/50discount/:path*',
         destination: '/:path*',
       },
+      {
+        source: '/phone6/:path*',
+        destination: '/:path*',
+      },
+      {
+        source: '/shockproof_phone/:path*',
+        destination: '/:path*',
+      },
+      {
+        source: '/laptop/:path*',
+        destination: '/:path*',
+      },
     ];
   },
 };

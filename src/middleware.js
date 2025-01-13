@@ -14,6 +14,9 @@ export function middleware(request) {
     'phone3.technobar.by': '/phone3',
     'phone4.technobar.by': '/phone4',
     'phone5.technobar.by': '/phone5',
+    'phone6.technobar.by': '/phone6',
+    'shockproof_phone.technobar.by': '/shockproof_phone',
+    'laptop.technobar.by': '/laptop',
   };
 
   // Проверяем, есть ли поддомен в нашей карте
