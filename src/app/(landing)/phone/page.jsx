@@ -7,7 +7,7 @@ import LogoIcon from '@/app/(shop)/components/Logo/Logo';
 import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 import Quiz from '@/components/quiz/Quiz';
 
 const questions = [
@@ -49,6 +49,7 @@ const Phone = () => {
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.phone);
+      window.ttq.load(PIXEL_2.phone);
       window.ttq.page();
     }
   }, []);

@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const advantages = [
   {
@@ -78,6 +79,14 @@ export default function ShockproofPhone() {
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.shockproof);
+      window.ttq.load(PIXEL_2.shockproof);
+      window.ttq.page();
+    }
   }, []);
 
   const handleQuizSubmit = async (data) => {

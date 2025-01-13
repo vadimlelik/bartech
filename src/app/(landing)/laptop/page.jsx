@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const advantages = [
   {
@@ -65,9 +66,17 @@ export default function Laptop() {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone4');
+        router.push('/thank-you?source=laptop');
       });
   };
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.laptop);
+      window.ttq.load(PIXEL_2.laptop);
+
+      window.ttq.page();
+    }
+  }, []);
 
   const questions = [
     {

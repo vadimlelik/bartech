@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const advantages = [
   {
@@ -57,6 +58,14 @@ export default function Phone6() {
 
   useEffect(() => {
     setNow(Date.now());
+  }, []);
+
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.phone6);
+      window.ttq.load(PIXEL_2.phone6);
+      window.ttq.page();
+    }
   }, []);
 
   const handleQuizSubmit = async (data) => {

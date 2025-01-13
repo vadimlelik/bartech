@@ -8,7 +8,7 @@ import styles from './phonePage.module.css';
 import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 import 'swiper/css';
 import Quiz from '@/components/quiz/Quiz';
@@ -62,6 +62,7 @@ const Phone2 = () => {
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.phone2);
+      window.ttq.load(PIXEL_2.phone2);
       window.ttq.page();
     }
   }, []);

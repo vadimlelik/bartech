@@ -7,7 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const reviews = [
   {
@@ -65,7 +65,7 @@ export default function Phone4() {
         data
       )
       .then(() => {
-        router.push('/thank-you?source=phone4');
+        router.push('/thank-you?source=phone3');
       });
   };
 
@@ -112,6 +112,7 @@ export default function Phone4() {
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.phone3);
+      window.ttq.load(PIXEL_2.phone3);
       window.ttq.page();
     }
   }, []);
