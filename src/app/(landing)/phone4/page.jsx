@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { PIXEL } from '@/data/pixel';
 
 const reviews = [
   {
@@ -51,6 +52,12 @@ export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const router = useRouter();
 
+    useEffect(() => {
+      if (window.ttq) {
+        window.ttq.load(PIXEL.phone4);
+        window.ttq.page();
+      }
+    }, []);
   const [now, setNow] = useState(null);
   useEffect(() => {
     setNow(Date.now());

@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { PIXEL } from '@/data/pixel';
 
 const reviews = [
   {
@@ -52,6 +53,7 @@ export default function Phone4() {
   const router = useRouter();
 
   const [now, setNow] = useState(null);
+
   useEffect(() => {
     setNow(Date.now());
   }, []);
@@ -107,6 +109,12 @@ export default function Phone4() {
     },
   ];
 
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.phone3);
+      window.ttq.page();
+    }
+  }, []);
   if (!now) return <Loading />;
 
   return (
