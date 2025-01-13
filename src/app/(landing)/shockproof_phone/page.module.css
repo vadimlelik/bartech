@@ -1,0 +1,331 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  background: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.header {
+  background: #1a1a1a;
+  padding: 20px;
+  text-align: center;
+}
+
+.mainTitle {
+  color: white;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.mainSection {
+  padding: 20px;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.textContent {
+  text-align: left;
+}
+
+.title {
+  font-size: 28px;
+  margin: 0 0 20px;
+  font-weight: bold;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.checkmarkItem {
+  margin-bottom: 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  color: #1a1a1a;
+  position: relative;
+  padding-left: 30px;
+}
+
+.checkmarkItem::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.timerSection {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.timerSection p {
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.surveyText {
+  font-size: 16px;
+  margin: 20px 0;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.priceButton {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+  margin: 20px 0;
+  transition: background-color 0.3s ease;
+}
+
+.priceButton:hover {
+  background: #45a049;
+  transform: scale(1.02);
+}
+
+.imageContainer {
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mainImage,
+.featuresImage {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.mainImage:hover,
+.featuresImage:hover {
+  transform: scale(1.05);
+}
+
+.advantagesSection {
+  padding: 40px 20px;
+  margin: 30px 0;
+  background: #f9f9f9;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: slideUp 1s forwards;
+}
+
+.advantagesList {
+  margin-top: 30px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.advantageItem {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.advantageNumber {
+  background: #2196f3;
+  color: white;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.advantageItem h3 {
+  margin: 0 0 10px;
+  color: #1a1a1a;
+  font-size: 18px;
+}
+
+.advantageItem p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.reviewsSection {
+  padding: 40px 20px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.reviewsTitle {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.reviewsGrid {
+  display: grid;
+  gap: 20px;
+}
+
+.reviewCard {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.reviewText {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mainTitle {
+    font-size: 32px;
+  }
+
+  .mainSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .checkmarkItem {
+    font-size: 18px;
+  }
+
+  .advantagesSection {
+    padding: 60px 40px;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .priceButton {
+    width: auto;
+    padding: 15px 40px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1025px) {
+  .mainTitle {
+    font-size: 36px;
+  }
+
+  .mainSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 60px;
+  }
+
+  .title {
+    font-size: 42px;
+  }
+
+  .checkmarkItem {
+    font-size: 20px;
+  }
+
+  .advantagesSection {
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .sectionTitle {
+    font-size: 36px;
+    text-align: left;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .priceButton {
+    width: auto;
+    padding: 15px 50px;
+  }
+
+  .advantageItem:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+  }
+}
