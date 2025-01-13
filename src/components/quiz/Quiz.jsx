@@ -95,6 +95,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
         fields: {
           TITLE: 'Заявка на телефон',
           COMMENTS: formattedComments,
+          // PHONE: [{ VALUE: data.customerInfo.phone, VALUE_TYPE: 'WORK' }],
         },
       };
 

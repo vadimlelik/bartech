@@ -40,13 +40,13 @@ const reviews = [
     id: 2,
     author: 'Сергей, Минск',
     text: 'Мне срочно понадобился новый телефон, и я решил заказать его в данном интернет-магазине. Меня приятно удивили как доступные цены и условия. Samsung S24+. Доставили прямо на дом, все проверили, помогли настроить. Пользуюсь телефоном уже месяц, никаких проблем не возникло. Спасибо за оперативность и низкие цены!',
-    image: '/phone_comment-2_img.webp',
+    image: '/commentLogo-3.webp',
   },
   {
     id: 3,
     author: 'Ольга, Мозырь',
     text: 'Я давно хотела приобрести новый iPhone, но не было возможности купить его сразу. Здесь с рассрочкой все прошло отлично! Сумму не пожалела ни секунду! Телефон доставили в течении 2 дней, еще и наушники в подарок. Очень довольна покупкой и сервисом, большое спасибо!',
-    image: '/phone_comment-3_img.webp',
+    image: '/commentLogo-1.jpg',
   },
 ];
 
@@ -132,7 +132,7 @@ export default function Phone6() {
 
         <div className={styles.imageContainer}>
           <Image
-            src="/phone_img-1.jpg"
+            src="/phone4_img-2.webp"
             alt="Телефоны"
             width={500}
             height={400}
@@ -148,7 +148,8 @@ export default function Phone6() {
 
         <div className={styles.textContent}>
           <p className={styles.surveyText}>
-            Пройдите тест за 5 минут и заберите телефон в рассрочку со скидкой -50%
+            Пройдите тест за 5 минут и заберите телефон в рассрочку со скидкой
+            -50%
           </p>
 
           <button
@@ -172,7 +173,7 @@ export default function Phone6() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/phone_img-2.webp"
+            src="/Xiaomi-Redmi-14C.jpg"
             alt="Телефоны"
             width={500}
             height={1000}

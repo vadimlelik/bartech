@@ -18,7 +18,7 @@ const reviews = [
   {
     name: 'Сергей, 34 года',
     text: 'Спасибо менеджеру Виталию. Помогал мне подобрать телефон, который подходит под все мои нужды. Платеж небольшой, плачу с комфортом. Одобрили быстро! СПАСИБО',
-    image: '/commentLogo-2.webp',
+    image: '/phone_comment_img.jpg',
   },
   {
     name: 'Анастасия, 42 года',
@@ -52,12 +52,12 @@ export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const router = useRouter();
 
-    useEffect(() => {
-      if (window.ttq) {
-        window.ttq.load(PIXEL.phone4);
-        window.ttq.page();
-      }
-    }, []);
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.phone4);
+      window.ttq.page();
+    }
+  }, []);
   const [now, setNow] = useState(null);
   useEffect(() => {
     setNow(Date.now());
@@ -146,7 +146,7 @@ export default function Phone4() {
 
         <div className={styles.heroImage}>
           <Image
-            src="/tel/tel2.jpg"
+            src="/phone4_img-2.webp"
             alt="Смартфоны"
             width={500}
             height={400}
@@ -157,7 +157,12 @@ export default function Phone4() {
 
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
-          <Image src="/phone.jpg" alt="Смартфоны" width={500} height={400} />
+          <Image
+            src="/phone4_img.png"
+            alt="Смартфоны"
+            width={500}
+            height={400}
+          />
         </div>
 
         <div className={styles.advantagesList}>

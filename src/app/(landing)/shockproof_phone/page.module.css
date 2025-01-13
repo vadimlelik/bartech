@@ -56,10 +56,10 @@
 }
 
 .checkmarkItem::before {
-  content: "✓";
+  content: '✓';
   position: absolute;
   left: 0;
-  color: #4CAF50;
+  color: #4caf50;
   font-weight: bold;
   font-size: 20px;
 }
@@ -82,7 +82,7 @@
 }
 
 .priceButton {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   border: none;
   padding: 15px 30px;
@@ -279,6 +279,45 @@
   }
 }
 
+@media (max-width: 763px) {
+  .mainSection {
+    padding-top: 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .checkmarkItem {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .benefits {
+    margin: 10px 0px;
+  }
+  .title {
+    text-align: center;
+    font-size: 24px;
+  }
+  .advantagesSection {
+    padding: 15px 10px;
+    margin: 10px 0px;
+  }
+  .priceButton {
+    padding: 12px 15px;
+    margin: 10px 0px;
+  }
+  .header {
+    padding: 10px;
+  }
+  .mainTitle {
+    font-size: 20px;
+  }
+  .sectionTitle {
+    margin-bottom: 10px;
+  }
+  .reviewsTitle {
+    margin-bottom: 15px;
+  }
+}
 /* Desktop Styles */
 @media (min-width: 1025px) {
   .mainTitle {

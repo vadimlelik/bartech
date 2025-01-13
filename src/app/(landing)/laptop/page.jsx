@@ -115,8 +115,7 @@ export default function Laptop() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.discountBanner}>
-          СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% •
-          СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50%
+          СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% •
         </div>
       </div>
 

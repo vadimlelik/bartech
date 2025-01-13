@@ -39,17 +39,17 @@ const reviews = [
   {
     id: 1,
     text: 'Отличный смартфон для путешествий или работы в тяжелых условиях, можно не бояться того, что ребенок уронит его в ванной, со своими параметрами справляется на ура. Приятная особенность - защита от воды, пыли, грязи и стекло сапфир!!! Камера ночного видения работает фото отличные. Советую!',
-    image: '/shockproof_review1.jpg',
+    image: '/shockproof_phone_comment_2.webp',
   },
   {
     id: 2,
     text: 'Скорее отличная. И что имне совсем понравило, так это настоящее живое издение, а бы сказал это настроенный ПНЖ. Надо было брать 16гб версию, так как я металлоискатель, телефон работает очень долго. Брать можно смело. Сервис отличный, оперфоны даже, уже иду в 3 тур со временем, не это разные! Можно вести походную съемку. Если вы фанат рыбалки, охоты и туризма, то этот смартфон для вас. Магазин рекомендую!',
-    image: '/shockproof_review2.jpg',
+    image: '/shockproof_phone_comment_3.webp',
   },
   {
     id: 3,
     text: 'Неубиваемый телефон, хорошая защита. Большой аккумулятор. Камера хорошо снимает вообще огонь! Особенно со всех падал от земли до и на стройке, и тем самым машина в минус 20, и до плюса. Все отлично работает. Доставка быстрая, дают гарантию, закидывают помощь по всем вопросам - спасибо!',
-    image: '/shockproof_review3.jpg',
+    image: '/shockproof_phone_comment.webp',
   },
 ];
 
@@ -61,7 +61,7 @@ export default function ShockproofPhone() {
 
   useEffect(() => {
     setNow(Date.now());
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -136,16 +136,19 @@ export default function ShockproofPhone() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.mainTitle}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h1>
+        <h1 className={styles.mainTitle}>
+          Противоударные телефоны
+          <br />в Рассрочку со скидкой -50%
+        </h1>
       </div>
 
-      <div className={styles.mainSection} id="mainSection" data-animate="fade-in">
+      <div
+        className={styles.mainSection}
+        id="mainSection"
+        data-animate="fade-in"
+      >
         <div className={styles.textContent}>
-          <h2 className={styles.title}>
-            Противоударные телефоны
-            <br />
-            в Рассрочку со скидкой -50%
-          </h2>
+          <h2 className={styles.title}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h2>
 
           <ul className={styles.benefits}>
             {benefits.map((benefit, index) => (
@@ -161,7 +164,8 @@ export default function ShockproofPhone() {
           </div>
 
           <p className={styles.surveyText}>
-            Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом скидки -50%
+            Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
+            скидки -50%
           </p>
 
           <button
@@ -174,7 +178,7 @@ export default function ShockproofPhone() {
 
         <div className={styles.imageContainer}>
           <Image
-            src="/shockproof_main.jpg"
+            src="/shockproof_phone_img.jpg"
             alt="Противоударный телефон"
             width={500}
             height={400}
@@ -184,14 +188,14 @@ export default function ShockproofPhone() {
         </div>
       </div>
 
-      <div 
-        className={styles.advantagesSection} 
-        id="advantagesSection" 
+      <div
+        className={styles.advantagesSection}
+        id="advantagesSection"
         data-animate="slide-up"
       >
         <div className={styles.advantagesImage}>
           <Image
-            src="/shockproof_features.jpg"
+            src="/shockproof_phone_img-2.jpg"
             alt="Особенности противоударного телефона"
             width={500}
             height={400}
@@ -203,8 +207,8 @@ export default function ShockproofPhone() {
           <h2 className={styles.sectionTitle}>Преимущества нашего магазина</h2>
 
           {advantages.map((advantage, index) => (
-            <div 
-              key={advantage.id} 
+            <div
+              key={advantage.id}
               className={`${styles.advantageItem} ${styles.fadeIn}`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
@@ -225,7 +229,7 @@ export default function ShockproofPhone() {
         </div>
       </div>
 
-      <div 
+      <div
         className={styles.reviewsSection}
         id="reviewsSection"
         data-animate="fade-in"
@@ -233,8 +237,8 @@ export default function ShockproofPhone() {
         <h2 className={styles.reviewsTitle}>ОТЗЫВЫ НАШИХ ПОКУПАТЕЛЕЙ</h2>
         <div className={styles.reviewsGrid}>
           {reviews.map((review, index) => (
-            <div 
-              key={review.id} 
+            <div
+              key={review.id}
               className={`${styles.reviewCard} ${styles.fadeIn}`}
               style={{ animationDelay: `${index * 0.3}s` }}
             >

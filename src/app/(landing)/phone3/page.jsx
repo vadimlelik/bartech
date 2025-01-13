@@ -13,7 +13,7 @@ const reviews = [
   {
     name: 'Максим, 29 лет',
     text: 'Спасибо магазину за телефон! Много думала! В итоге купила в рассрочку. Посоветовала подруга Ваш магазин - буду всем рекомендовать.',
-    image: '/commentLogo-1.jpg',
+    image: '/phone_comment_img.jpg',
   },
   {
     name: 'Сергей, 34 года',
@@ -156,10 +156,16 @@ export default function Phone4() {
         <div className={styles.heroImage}>
           <Image
             src="/img_phone4.png"
-            alt="Смартфоны"
+            alt="Телефоны"
             width={500}
-            height={400}
+            height={1000}
             priority
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '20px',
+            }}
           />
         </div>
       </div>
@@ -167,7 +173,7 @@ export default function Phone4() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/img_phone4_2.webp"
+            src="/Xiaomi-Redmi-14C.jpg"
             alt="Смартфоны"
             width={500}
             height={1000}

@@ -15,13 +15,12 @@ export default function Phone5() {
 
   const [now, setNow] = useState(null);
 
-
-    useEffect(() => {
-      if (window.ttq) {
-        window.ttq.load(PIXEL.phone5);
-        window.ttq.page();
-      }
-    }, []);
+  useEffect(() => {
+    if (window.ttq) {
+      window.ttq.load(PIXEL.phone5);
+      window.ttq.page();
+    }
+  }, []);
 
   const handleQuizSubmit = async (data) => {
     axios
@@ -91,14 +90,11 @@ export default function Phone5() {
                 <span className={styles.inStock}>В наличии</span>
               </div>
             </div>
-
             <p className={styles.colorOption}>Цвет: любой по запросу</p>
-
             <div className={styles.timerSection}>
               <p>Спешите! Акция заканчивается через</p>
               <CountdownTimer />
             </div>
-
             <button
               className={styles.actionButton}
               onClick={() => setIsQuizOpen(true)}
@@ -106,7 +102,6 @@ export default function Phone5() {
               Узнать цену →
             </button>
           </div>
-
           <div className={styles.productImage}>
             <Image
               src="/Xiaomi-Redmi-14C.jpg"
@@ -201,7 +196,7 @@ export default function Phone5() {
             <div className={styles.review}>
               <div className={styles.reviewHeader}>
                 <Image
-                  src="/commentLogo-4.jpg"
+                  src="/commentLogo-1.jpg"
                   alt="Евгений"
                   width={50}
                   height={50}
