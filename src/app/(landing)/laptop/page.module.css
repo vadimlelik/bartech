@@ -72,6 +72,10 @@
   color: #fff;
 }
 
+.benefits li p {
+  color: red;
+}
+
 .benefits li {
   margin-bottom: 15px;
   font-size: 16px;

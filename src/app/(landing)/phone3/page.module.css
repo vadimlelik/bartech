@@ -175,14 +175,9 @@
 }
 
 .heroImage img {
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  object-fit: contain;
-  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.heroImage:hover img {
-  transform: scale(1.05) rotate(-2deg);
+  object-fit: cover;
 }
 
 @media (min-width: 1400px) {
@@ -265,11 +260,7 @@
 .advantagesImage img {
   max-width: 100%;
   height: auto;
-  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.advantagesImage:hover img {
-  transform: scale(1.08);
+  object-fit: contain;
 }
 
 .advantagesList {
@@ -537,17 +528,7 @@
 .actionButton:active {
   transform: translateY(1px);
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* 
 
 /* Media Queries */
 @media (max-width: 768px) {
