@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from './ThankYou.module.css';
 import { useSearchParams } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const ThankYouPage = () => {
   const searchParams = useSearchParams();
@@ -13,9 +13,11 @@ const ThankYouPage = () => {
   useEffect(() => {
     if (source) {
       const pixelId = PIXEL[source];
+      const pixelId_2 = PIXEL_2[source];
 
       if (window.ttq) {
         window.ttq.load(pixelId);
+        window.ttq.load(pixelId_2);
         window.ttq.page();
       }
     }
