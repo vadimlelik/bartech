@@ -9,6 +9,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import toast from 'react-hot-toast'; // Добавьте импорт библиотеки toast
 
 import 'swiper/css';
 import Quiz from '@/components/quiz/Quiz';
@@ -68,14 +69,22 @@ const Phone2 = () => {
   }, []);
 
   const handleQuizSubmit = async (data) => {
-    axios
-      .post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
-      )
-      .then(() => {
-        router.push('/thank-you?source=phone2');
-      });
+    try {
+      await axios
+        .post(
+          'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+          data
+        )
+        .then(() => {
+          setIsQuizOpen(false);
+          toast.success('Заявка успешно отправлена!');
+          router.push('/thank-you?source=phone2');
+        });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Ошибка при отправке заявки. Попробуйте еще раз.');
+      throw error; // Прокидываем ошибку дальше для обработки в компоненте Quiz
+    }
   };
 
   const closeQuiz = () => {

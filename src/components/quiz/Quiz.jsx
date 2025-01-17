@@ -72,36 +72,57 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
     const allValid = await trigger();
     if (!allValid) {
-      setValidationError('Пожалуйста, ответьте на все вопрос.');
+      setValidationError('Пожалуйста, ответьте на все вопросы.');
       return;
     }
 
     handleSubmit(async (data) => {
-      const formattedComments = questions
-        .map((question) => {
-          const answer = data[`question${question.id}`];
-          if (!answer) return `${question.question}: Не указан`;
+      setIsSubmitting(true);
+      setValidationError('');
 
-          if (question.type === 'checkbox') {
-            const answers = Array.isArray(answer) ? answer : [answer];
-            return `${question.question}: ${answers.join(', ')}`;
-          }
+      try {
+        const formattedComments = questions
+          .map((question) => {
+            const answer = data[`question${question.id}`];
+            if (!answer) return `${question.question}: Не указан`;
 
-          return `${question.question}: ${answer}`;
-        })
-        .join('\n');
+            if (question.type === 'checkbox') {
+              const answers = Array.isArray(answer) ? answer : [answer];
+              return `${question.question}: ${answers.join(', ')}`;
+            }
 
-      const formData = {
-        fields: {
-          TITLE: 'Заявка на телефон',
-          COMMENTS: formattedComments,
-          // PHONE: [{ VALUE: data.customerInfo.phone, VALUE_TYPE: 'WORK' }],
-        },
-      };
+            return `${question.question}: ${answer}`;
+          })
+          .join('\n');
 
-      await onSubmit(formData).then(() => {
-        setIsSubmitting(true);
-      });
+        const phoneQuestion = questions.find(q => q.type === 'text');
+        const phoneNumber = phoneQuestion ? data[`question${phoneQuestion.id}`] : null;
+
+        const formattedPhone = phoneNumber ? phoneNumber.replace(/[^\d+]/g, '') : '';
+
+        const pageUrl = window.location.pathname;
+        const pageName = pageUrl.split('/').filter(Boolean).pop();
+
+        const formData = {
+          fields: {
+            TITLE: `Заявка на телефон (${pageName})`,
+            COMMENTS: formattedComments,
+            PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
+            SOURCE_ID: 'WEB',
+            SOURCE_DESCRIPTION: `Quiz Form - ${pageName}`,
+            STATUS_ID: 'NEW',
+            OPENED: 'Y',
+            TYPE_ID: 'CALLBACK',
+            UF_CRM_1705470523: pageUrl,
+          },
+        };
+
+        await onSubmit(formData);
+      } catch (error) {
+        setValidationError('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      } finally {
+        setIsSubmitting(false);
+      }
     })(e);
   };
 
@@ -275,10 +296,13 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
                 onClick={nextQuestion}
                 disabled={isSubmitting}
               >
-                Далее
+                {isSubmitting ? 'Подождите...' : 'Далее'}
               </NavButton>
             ) : (
-              <NavButton type="submit" disabled={isSubmitting}>
+              <NavButton
+                type="submit"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? 'Отправка...' : 'Отправить'}
               </NavButton>
             )}
