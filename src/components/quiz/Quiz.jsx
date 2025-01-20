@@ -95,10 +95,14 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
           })
           .join('\n');
 
-        const phoneQuestion = questions.find(q => q.type === 'text');
-        const phoneNumber = phoneQuestion ? data[`question${phoneQuestion.id}`] : null;
+        const phoneQuestion = questions.find((q) => q.type === 'text');
+        const phoneNumber = phoneQuestion
+          ? data[`question${phoneQuestion.id}`]
+          : null;
 
-        const formattedPhone = phoneNumber ? phoneNumber.replace(/[^\d+]/g, '') : '';
+        const formattedPhone = phoneNumber
+          ? phoneNumber.replace(/[^\d+]/g, '')
+          : '';
 
         const pageUrl = window.location.pathname;
         const pageName = pageUrl.split('/').filter(Boolean).pop();
@@ -119,7 +123,9 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
 
         await onSubmit(formData);
       } catch (error) {
-        setValidationError('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+        setValidationError(
+          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+        );
       } finally {
         setIsSubmitting(false);
       }
@@ -299,10 +305,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
                 {isSubmitting ? 'Подождите...' : 'Далее'}
               </NavButton>
             ) : (
-              <NavButton
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <NavButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Отправка...' : 'Отправить'}
               </NavButton>
             )}

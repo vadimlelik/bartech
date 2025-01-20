@@ -157,6 +157,7 @@ const Phone2 = () => {
         onClose={closeQuiz}
         questions={questions}
         onSubmit={handleQuizSubmit}
+        successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
       />
     </div>
   );

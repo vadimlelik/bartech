@@ -8,6 +8,7 @@ import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import toast from 'react-hot-toast';
 
 const reviews = [
   {
@@ -65,8 +66,14 @@ export default function Phone4() {
         data
       )
       .then(() => {
+        setIsQuizOpen(false);
+        toast.success('Заявка успешно отправлена!');
         router.push('/thank-you?source=phone3');
       });
+  };
+
+  const closeQuiz = () => {
+    setIsQuizOpen(false);
   };
 
   const questions = [
@@ -270,7 +277,7 @@ export default function Phone4() {
 
       <Quiz
         isOpen={isQuizOpen}
-        onClose={() => setIsQuizOpen(false)}
+        onClose={closeQuiz}
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
