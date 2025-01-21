@@ -292,6 +292,7 @@ export default function ShockproofPhone() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+        title="Броне Телефон"
       />
     </div>
   );

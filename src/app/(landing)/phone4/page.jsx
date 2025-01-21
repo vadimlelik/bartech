@@ -236,6 +236,7 @@ export default function Phone4() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+        title="Phone4"
       />
     </div>
   );

@@ -273,6 +273,7 @@ export default function Phone5() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+        title="Phone5"
       />
     </div>
   );

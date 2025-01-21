@@ -125,6 +125,7 @@ const PhoneFree = () => {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage={successMessage}
+        title="1 Телефон по цене одного"
       />
     </main>
   );

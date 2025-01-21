@@ -265,6 +265,7 @@ export default function Phone6() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+        title="phone6"
       />
     </div>
   );

@@ -211,6 +211,7 @@ const Tv = () => {
         onClose={closeQuiz}
         questions={questions}
         onSubmit={handleQuizSubmit}
+        title="TV"
       />
     </div>
   );

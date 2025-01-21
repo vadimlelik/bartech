@@ -158,6 +158,7 @@ const Phone2 = () => {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+        title="Phone2"
       />
     </div>
   );

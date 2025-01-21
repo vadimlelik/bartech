@@ -19,7 +19,7 @@ import {
   NavButton,
 } from './QuizStyles';
 
-const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
+const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
   const {
     control,
     handleSubmit,
@@ -104,20 +104,20 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit }) => {
           ? phoneNumber.replace(/[^\d+]/g, '')
           : '';
 
-        const pageUrl = window.location.pathname;
-        const pageName = pageUrl.split('/').filter(Boolean).pop();
+        // const pageUrl = window.location.pathname;
+        // const pageName = pageUrl.split('/').filter(Boolean).pop();
 
         const formData = {
           fields: {
-            TITLE: `Заявка на телефон (${pageName})`,
+            TITLE: `Заявка на телефон (${title})`,
             COMMENTS: formattedComments,
             PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
             SOURCE_ID: 'WEB',
-            SOURCE_DESCRIPTION: `Quiz Form - ${pageName}`,
+            SOURCE_DESCRIPTION: `Quiz Form - ${title}`,
             STATUS_ID: 'NEW',
             OPENED: 'Y',
             TYPE_ID: 'CALLBACK',
-            UF_CRM_1705470523: pageUrl,
+            UF_CRM_1705470523: title,
           },
         };
 

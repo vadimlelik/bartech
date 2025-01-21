@@ -254,6 +254,7 @@ const Phone = () => {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage={successMessage}
+        title="Phone"
       />
     </div>
   );

@@ -121,6 +121,7 @@ export default function DiscountPage() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage={successMessage}
+        title="discount50"
       />
     </div>
   );
