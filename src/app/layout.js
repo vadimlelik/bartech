@@ -10,6 +10,8 @@ import { Box } from '@mui/material';
 import Script from 'next/script';
 import StyledComponentsRegistry from './registry';
 import { loadTikTokPixel } from '@/shared/utils';
+import { usePathname } from 'next/navigation';
+import * as gtag from '@/lib/gtag';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -18,6 +20,8 @@ const roboto = Roboto({
 });
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
   useEffect(() => {
     // Initialize TikTok Pixel
     loadTikTokPixel('YOUR_PIXEL_ID_HERE');
@@ -56,6 +60,10 @@ export default function RootLayout({ children }) {
       document.body.removeChild(noscript);
     };
   }, []);
+
+  useEffect(() => {
+    gtag.pageview(pathname);
+  }, [pathname]);
 
   return (
     <html lang="ru" className={roboto.className}>
@@ -99,20 +107,20 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/manifest.json" />
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
         />
         <Script
-          id="google-analytics"
+          id="gtag-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-                            window.dataLayer = window.dataLayer || [];
-                            function gtag(){dataLayer.push(arguments);}
-                            gtag('js', new Date());
-                            gtag('config', 'G-${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
-                            page_path: window.location.pathname,
-                            });
-                        `,
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){window.dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gtag.GA_TRACKING_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
           }}
         />
       </head>
