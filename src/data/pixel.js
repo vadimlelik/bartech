@@ -10,6 +10,7 @@ export const PIXEL = {
   phone6: 'CU29BDRC77U0A1RRB7R0',
   laptop: 'CU29BTJC77U1O46890KG',
   shockproof: 'CU29CCJC77U5K61FE54G',
+  bicycles: 'CUHHSNRC77U2U27B15QG',
 };
 
 export const PIXEL_2 = {
@@ -24,4 +25,5 @@ export const PIXEL_2 = {
   phone6: 'CU2H6R3C77UF0PUI59N0',
   laptop: 'CU2H7KRC77U1O4689E2G',
   shockproof: 'CU2H7UJC77U745U5TOVG',
+  bicycles: 'CUHHS7BC77UA8JMINIR0',
 };
