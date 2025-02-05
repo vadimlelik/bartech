@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
 import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
 import toast from 'react-hot-toast';
 
@@ -51,22 +51,42 @@ const advantages = [
 
 export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const params = useSearchParams();
   const [now, setNow] = useState(null);
+
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
 
   useEffect(() => {
     setNow(Date.now());
   }, []);
 
   const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
     axios
       .post(
         'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
+
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
       )
       .then(() => {
         setIsQuizOpen(false);
+        setIsLoading(false);
         toast.success('Заявка успешно отправлена!');
         router.push('/thank-you?source=phone3');
       });
@@ -278,6 +298,7 @@ export default function Phone4() {
       <Quiz
         isOpen={isQuizOpen}
         onClose={closeQuiz}
+        isLoading={isLoading}
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
