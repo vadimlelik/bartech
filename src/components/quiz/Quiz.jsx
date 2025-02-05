@@ -19,21 +19,23 @@ import {
   NavButton,
 } from './QuizStyles';
 
-const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
+const Quiz = ({
+  isOpen,
+  onClose,
+  questions,
+  onSubmit,
+  title = '',
+  isLoading,
+}) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
     trigger,
-    watch,
-    setValue,
   } = useForm();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [validationError, setValidationError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const watchedFields = watch();
 
   useEffect(() => {
     if (isOpen) {
@@ -77,7 +79,6 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
     }
 
     handleSubmit(async (data) => {
-      setIsSubmitting(true);
       setValidationError('');
 
       try {
@@ -104,11 +105,8 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
           ? phoneNumber.replace(/[^\d+]/g, '')
           : '';
 
-        // const pageUrl = window.location.pathname;
-        // const pageName = pageUrl.split('/').filter(Boolean).pop();
-
         const formData = {
-          fields: {
+          FIELDS: {
             TITLE: `Заявка на телефон (${title})`,
             COMMENTS: formattedComments,
             PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
@@ -126,8 +124,6 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
         setValidationError(
           'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
         );
-      } finally {
-        setIsSubmitting(false);
       }
     })(e);
   };
@@ -247,7 +243,7 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
                             field.value
                           ))
                       }
-                      disabled={isSubmitting}
+                      disabled={isLoading}
                     />
                   )}
                 />
@@ -297,16 +293,12 @@ const Quiz = ({ isOpen, onClose, questions, onSubmit, title = '' }) => {
           </QuestionContainer>
           <Navigation>
             {currentQuestion < questions.length - 1 ? (
-              <NavButton
-                type="button"
-                onClick={nextQuestion}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Подождите...' : 'Далее'}
+              <NavButton type="button" onClick={nextQuestion}>
+                {'Далее'}
               </NavButton>
             ) : (
-              <NavButton type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Отправка...' : 'Отправить'}
+              <NavButton type="submit" disabled={isLoading}>
+                {isLoading ? 'Отправка...' : 'Отправить'}
               </NavButton>
             )}
           </Navigation>
