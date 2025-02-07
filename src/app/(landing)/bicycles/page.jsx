@@ -1,20 +1,21 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import Loading from '@/app/loading';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import axios from 'axios';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
-import Loading from '@/app/loading';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
 const advantages = [
   {
     id: 1,
-    title: 'Своя рассрочка от магазина',
+    title: 'Выгодная рассрочка',
     description:
-      'Одобряем всем. Срок рассрочки до 5 лет без переплат. Не нужны справки о доходах, без банков и поручителей',
+      'Срок рассрочки до 5 лет без переплат. Не нужны справки о доходах. Без аванса и поручителей',
   },
   {
     id: 2,
@@ -33,51 +34,71 @@ const advantages = [
 const reviews = [
   {
     id: 1,
-    author: 'Ольга, г. Барановичи',
-    text: 'Ноутбук просто шикарный! Стильный дизайн, мощный процессор. Отлично подходит для работы и учебы. Photoshop, монтаж и все программы запускаются быстро. И экран большой, смотреть фильмы - одно удовольствие',
-    image: '/laptop_comment_img.jpg',
+    author: 'Игорь, Минск 30 лет',
+    text: 'Купил электровелосипед, и теперь не устаю от поездок на работу! Включаю мотор, и он помогает мне легко подниматься в гору и ехать быстрее. Теперь добираюсь до работы за половину времени!',
+    image: '/bicycles_img_1.webp',
   },
   {
     id: 2,
-    author: 'Иван, д. Воропаево',
-    text: 'Купил этот ноутбук полгода назад, и он стал моим верным помощником. Быстрый, удобный, батарея держит долго. Экран яркий, клавиатура удобная. Игры тоже без проблем. С этапом доставки тоже все хорошо. Рекомендую!',
-    image: '/laptop_comment-2_img.webp',
+    author: 'Ольга, Минск',
+    text: 'Очень довольна своим электровелосипедом! Езжу на нем в парк, в магазин, просто катаюсь по городу. Очень комфортно и весело! Батарея долго держит заряд, так что можно проехать далеко! Пользуюсь уже год, никаких проблем не возникло. Спасибо за оперативность и низкие цены!',
+    image: '/bicycles_img_2.webp',
   },
   {
     id: 3,
-    author: 'Антон, г.Минск',
-    text: 'Долго выбирал ноутбук, и не зря остановился на этом. Все что нужно для работы есть. Уже без малого год работает отлично, не тормозит не шумит! Батарея держит заряд до 5 часов, что очень удобно.',
-    image: '/laptop_comment-3_img.webp',
+    author: 'Максим, Мозырь',
+    text: 'Раньше ездил на машине, но решил пересесть на электровелосипед, чтобы помочь окружающей среде. Это отличный выбор для экологичного транспорта! К тому же, ездить на велосипеде очень приятно! Спасибо за качество и доступные цены!',
+    image: '/bicycles_img_3.webp',
   },
 ];
 
-export default function Laptop() {
+export default function Phone6() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [now, setNow] = useState(null);
   const router = useRouter();
+  const params = useSearchParams();
+
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
+
   useEffect(() => {
     setNow(Date.now());
   }, []);
 
-  const handleQuizSubmit = async (data) => {
-    axios
-      .post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
-      )
-      .then(() => {
-        router.push('/thank-you?source=bicycles');
-      });
-  };
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.bicycles);
-      window.ttq.load(PIXEL_2.bicycles);
-
+      window.ttq.load(PIXEL.phone6);
+      window.ttq.load(PIXEL_2.phone6);
       window.ttq.page();
     }
   }, []);
 
+  const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
+    axios
+      .post(
+        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
+      )
+      .then(() => {
+        setIsLoading(false);
+        router.push('/thank-you?source=phone6');
+      });
+  };
   const questions = [
     {
       id: 1,
@@ -97,15 +118,6 @@ export default function Laptop() {
     },
     {
       id: 2,
-      question: 'Выберите подарок',
-      type: 'radio',
-      options: [
-        { value: 'Мышка с сумкой', label: 'Мышка с сумкой 🖱' },
-        { value: 'Телефон', label: 'Телефон 📱' },
-      ],
-    },
-    {
-      id: 3,
       question: 'Рассчитать платежи с первым взносом или без?',
       type: 'radio',
       options: [
@@ -139,25 +151,14 @@ export default function Laptop() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.discountBanner}>
-          СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% •
-        </div>
-      </div>
+      <h1 className={styles.title}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h1>
 
-      <div className={styles.mainSection}>
-        <div className={styles.textContent}>
-          <h1 className={styles.title}>
-            Ноутбуки в Рассрочку
-            <br />
-            со Скидкой -50%
-          </h1>
-        </div>
-
+      <div className={styles.content}>
+        <h2>Электрический велосипед в Рассрочку со скидкой -50%</h2>
         <div className={styles.imageContainer}>
           <Image
-            src="/laptop_img-1.jpg"
-            alt="Ноутбуки"
+            src="/bicycles_img_4.webp"
+            alt="Телефоны"
             width={500}
             height={400}
             priority
@@ -169,57 +170,52 @@ export default function Laptop() {
             }}
           />
         </div>
-
         <div className={styles.textContent}>
-          <p className={styles.surveyText}>
-            Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
-            скидки -50%
-          </p>
+          <div className={styles.textContent}>
+            <p className={styles.surveyText}>
+              Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
+              скидки -50%
+            </p>
 
-          <button
-            className={styles.priceButton}
-            onClick={() => setIsQuizOpen(true)}
-          >
-            Узнать цену
-          </button>
+            <button
+              className={styles.priceButton}
+              onClick={() => setIsQuizOpen(true)}
+            >
+              Пройти тест
+            </button>
 
-          <div className={styles.timer}>
-            <CountdownTimer />
+            <div className={styles.timer}>
+              <CountdownTimer />
+            </div>
+
+            <ul className={styles.benefits}>
+              <li>✅ Рассрочку одобряем всем</li>
+              <li>✅ Без справок о доходах</li>
+              <li>✅ Без первого взноса и переплат</li>
+            </ul>
           </div>
-
-          <ul className={styles.benefits}>
-            <li>✅ Рассрочку одобряем всем</li>
-            <li>✅ Без справок о доходах</li>
-            <li>✅ Без первого взноса и переплат</li>
-            <li>
-              🎁 В подарок к каждому заказу: Новый телефон или мышка с сумкой !
-            </li>
-          </ul>
         </div>
       </div>
 
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/laptop_img-2.webp"
-            alt="Ноутбуки"
+            src="/bicycles_img_4.webp"
+            alt="Телефоны"
             width={500}
             height={1000}
             priority
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'contain',
+              objectFit: 'cover',
+              borderRadius: '20px',
             }}
           />
         </div>
 
         <div className={styles.advantagesList}>
-          <h2 className={styles.sectionTitle}>
-            Преимущества
-            <br />
-            нашего магазина
-          </h2>
+          <h2 className={styles.sectionTitle}>Преимущества нашего магазина</h2>
 
           {advantages.map((advantage, index) => (
             <div key={advantage.id} className={styles.advantageItem}>
@@ -235,7 +231,7 @@ export default function Laptop() {
             className={styles.priceButton}
             onClick={() => setIsQuizOpen(true)}
           >
-            Узнать цену
+            Пройти тест
           </button>
         </div>
       </div>
@@ -261,16 +257,18 @@ export default function Laptop() {
           className={styles.priceButton}
           onClick={() => setIsQuizOpen(true)}
         >
-          Узнать цену
+          Пройти тест
         </button>
       </div>
+
       <Quiz
         isOpen={isQuizOpen}
         onClose={() => setIsQuizOpen(false)}
+        isLoading={isLoading}
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="laptop"
+        title="phone6"
       />
     </div>
   );

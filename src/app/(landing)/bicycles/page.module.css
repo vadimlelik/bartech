@@ -1,10 +1,12 @@
 .container {
-  max-width: 1200px;
+  max-width: 1260px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0px 20px;
   overflow-x: hidden;
   background: #1a1a1a;
   min-height: 100vh;
+}
+.content {
 }
 
 .header {
@@ -28,10 +30,10 @@
 
 @keyframes marquee {
   0% {
-    transform: translateX(50%);
+    transform: translateX(30%);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-30%);
   }
 }
 
@@ -72,10 +74,6 @@
   color: #fff;
 }
 
-.benefits li p {
-  color: red;
-}
-
 .benefits li {
   margin-bottom: 15px;
   font-size: 16px;
@@ -93,7 +91,7 @@
 }
 
 .priceButton {
-  background: #6a1b9a;
+  background: #ff0000;
   color: white;
   border: none;
   padding: 15px 0;
