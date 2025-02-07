@@ -8,7 +8,6 @@ import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
-import toast from 'react-hot-toast';
 
 const reviews = [
   {
@@ -52,9 +51,9 @@ const advantages = [
 export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
-  const [now, setNow] = useState(null);
 
   const utm_source = params.get('utm_source');
   const utm_medium = params.get('utm_medium');
@@ -87,7 +86,6 @@ export default function Phone4() {
       .then(() => {
         setIsQuizOpen(false);
         setIsLoading(false);
-        toast.success('Заявка успешно отправлена!');
         router.push('/thank-you?source=phone3');
       });
   };

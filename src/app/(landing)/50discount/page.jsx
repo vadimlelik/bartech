@@ -4,8 +4,8 @@ import Marquee from '@/app/(shop)/components/Marquee/Marquee';
 import styles from './discountPage.module.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { PIXEL } from '@/data/pixel';
 import Loading from '@/app/loading';
 import Button from '@/app/(shop)/components/button/Button';
 import Quiz from '@/components/quiz/Quiz';
@@ -47,29 +47,48 @@ const questions = [
 export default function DiscountPage() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [now, setNow] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const params = useSearchParams();
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
   const router = useRouter();
 
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.discount50);
-      // window.ttq.load(PIXEL_2.discount50); нету
       window.ttq.page();
     }
   }, []);
 
+  const closeQuiz = () => {
+    setIsQuizOpen(false);
+  };
+
   const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
     axios
       .post(
         'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
       )
       .then(() => {
+        closeQuiz();
+        setIsLoading(false);
         router.push('/thank-you?source=discount50');
       });
-  };
-
-  const closeQuiz = () => {
-    setIsQuizOpen(false);
   };
 
   const successMessage = (
@@ -119,6 +138,7 @@ export default function DiscountPage() {
         isOpen={isQuizOpen}
         onClose={closeQuiz}
         questions={questions}
+        isLoading={isLoading}
         onSubmit={handleQuizSubmit}
         successMessage={successMessage}
         title="discount50"

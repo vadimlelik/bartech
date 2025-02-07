@@ -2,7 +2,7 @@
 import styles from './phoneFreePage.module.css';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Quiz from '@/components/quiz/Quiz';
 import LogoIcon from '@/app/(shop)/components/Logo/Logo';
@@ -43,6 +43,14 @@ const questions = [
 
 const PhoneFree = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const params = useSearchParams();
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
 
   const router = useRouter();
 
@@ -55,12 +63,23 @@ const PhoneFree = () => {
   }, []);
 
   const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
     axios
       .post(
         'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
       )
       .then(() => {
+        setIsLoading(false);
         router.push('/thank-you?source=phoneFree');
       });
   };
@@ -123,6 +142,7 @@ const PhoneFree = () => {
         isOpen={isQuizOpen}
         onClose={closeQuiz}
         questions={questions}
+        isLoading={isLoading}
         onSubmit={handleQuizSubmit}
         successMessage={successMessage}
         title="1 Телефон по цене одного"

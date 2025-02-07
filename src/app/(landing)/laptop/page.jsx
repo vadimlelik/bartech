@@ -5,7 +5,7 @@ import Image from 'next/image';
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
 import Loading from '@/app/loading';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
 
@@ -53,19 +53,41 @@ const reviews = [
 
 export default function Laptop() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [now, setNow] = useState(null);
   const router = useRouter();
+  const params = useSearchParams();
+
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
+
   useEffect(() => {
     setNow(Date.now());
   }, []);
 
   const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
+
     axios
       .post(
         'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        data
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
       )
       .then(() => {
+        setIsLoading(false);
         router.push('/thank-you?source=laptop');
       });
   };
@@ -267,6 +289,7 @@ export default function Laptop() {
       <Quiz
         isOpen={isQuizOpen}
         onClose={() => setIsQuizOpen(false)}
+        isLoading={isLoading}
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"

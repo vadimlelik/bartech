@@ -7,9 +7,9 @@ import { Autoplay } from 'swiper/modules';
 import styles from './phonePage.module.css';
 import Image from 'next/image';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
-import toast from 'react-hot-toast'; // Добавьте импорт библиотеки toast
+import toast from 'react-hot-toast';
 
 import 'swiper/css';
 import Quiz from '@/components/quiz/Quiz';
@@ -58,7 +58,16 @@ const questions = [
 
 const Phone2 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const params = useSearchParams();
+
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
 
   useEffect(() => {
     if (window.ttq) {
@@ -69,21 +78,29 @@ const Phone2 = () => {
   }, []);
 
   const handleQuizSubmit = async (data) => {
+    setIsLoading(true);
     try {
       await axios
         .post(
           'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-          data
+          {
+            FIELDS: {
+              ...data.FIELDS,
+              UTM_SOURCE: utm_source || '',
+              UTM_MEDIUM: utm_medium || '',
+              UTM_CAMPAIGN: utm_campaign || '',
+              UTM_CONTENT: utm_content || '',
+              UTM_TERM: ad + ttclid || '',
+            },
+          }
         )
         .then(() => {
           setIsQuizOpen(false);
-          toast.success('Заявка успешно отправлена!');
           router.push('/thank-you?source=phone2');
         });
     } catch (error) {
-      console.error('Error submitting form:', error);
       toast.error('Ошибка при отправке заявки. Попробуйте еще раз.');
-      throw error; // Прокидываем ошибку дальше для обработки в компоненте Quiz
+      throw error;
     }
   };
 
@@ -104,7 +121,6 @@ const Phone2 = () => {
               slidesPerView={1}
               navigation
               pagination={{ clickable: true }}
-              // autoplay={{ delay: 2000, disableOnInteraction: false }}
               className={styles.slider}
             >
               {images.map((src, index) => (
@@ -115,9 +131,9 @@ const Phone2 = () => {
                       alt={`Slide ${index + 1}`}
                       width={400}
                       height={300}
-                      objectFit="cover" // Сохраняет пропорции изображения
+                      objectFit="cover"
                       className={styles.image}
-                      priority={index === 0} // Приоритет для первого изображения
+                      priority={index === 0}
                     />
                   </div>
                 </SwiperSlide>
@@ -156,6 +172,7 @@ const Phone2 = () => {
         isOpen={isQuizOpen}
         onClose={closeQuiz}
         questions={questions}
+        isLoading={isLoading}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
         title="Phone2"
