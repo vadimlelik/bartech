@@ -68,6 +68,10 @@ const nextConfig = {
         source: '/laptop/:path*',
         destination: '/:path*',
       },
+      {
+        source: '/bicycles/:path*',
+        destination: '/:path*',
+      },
     ];
   },
 };

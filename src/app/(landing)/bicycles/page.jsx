@@ -152,9 +152,10 @@ export default function Phone6() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h1>
-
+      <h3 className={styles.subtitle}>
+        Электрический велосипед в Рассрочку со скидкой -50%
+      </h3>
       <div className={styles.content}>
-        <h2>Электрический велосипед в Рассрочку со скидкой -50%</h2>
         <div className={styles.imageContainer}>
           <Image
             src="/bicycles_img_4.webp"
@@ -170,30 +171,29 @@ export default function Phone6() {
             }}
           />
         </div>
+
         <div className={styles.textContent}>
-          <div className={styles.textContent}>
-            <p className={styles.surveyText}>
-              Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
-              скидки -50%
-            </p>
+          <p className={styles.surveyText}>
+            Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
+            скидки -50%
+          </p>
 
-            <button
-              className={styles.priceButton}
-              onClick={() => setIsQuizOpen(true)}
-            >
-              Пройти тест
-            </button>
+          <button
+            className={styles.priceButton}
+            onClick={() => setIsQuizOpen(true)}
+          >
+            Пройти тест
+          </button>
 
-            <div className={styles.timer}>
-              <CountdownTimer />
-            </div>
-
-            <ul className={styles.benefits}>
-              <li>✅ Рассрочку одобряем всем</li>
-              <li>✅ Без справок о доходах</li>
-              <li>✅ Без первого взноса и переплат</li>
-            </ul>
+          <div className={styles.timer}>
+            <CountdownTimer />
           </div>
+
+          <ul className={styles.benefits}>
+            <li>✅ Рассрочку одобряем всем</li>
+            <li>✅ Без справок о доходах</li>
+            <li>✅ Без первого взноса и переплат</li>
+          </ul>
         </div>
       </div>
 

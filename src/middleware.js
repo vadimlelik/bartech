@@ -17,6 +17,7 @@ export function middleware(request) {
     'phone6.technobar.by': '/phone6',
     'shockproof_phone.technobar.by': '/shockproof_phone',
     'laptop.technobar.by': '/laptop',
+    'bicycles.technobar.by': '/bicycles',
   };
 
   // Проверяем, есть ли поддомен в нашей карте
