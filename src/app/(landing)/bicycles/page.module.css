@@ -135,10 +135,14 @@
   border-radius: 20px;
 }
 
-.advantagesImage {
+/* .advantagesImage {
   margin-bottom: 20px;
   border-radius: 20px;
   overflow: hidden;
+} */
+.advantageItem img {
+  width: 100% !important;
+  height: auto !important;
 }
 
 .advantagesList {
@@ -270,10 +274,10 @@
     max-width: 720px;
   }
 
-  .advantagesImage {
+  /* .advantagesImage {
     max-width: 600px;
     margin: 0 auto 30px;
-  }
+  } */
 
   .sectionTitle {
     font-size: 32px;
@@ -382,9 +386,9 @@
     align-items: center;
   }
 
-  .advantagesImage {
+  /* .advantagesImage {
     margin: 0;
-  }
+  } */
 
   .sectionTitle {
     font-size: 36px;
@@ -448,5 +452,8 @@
   .benefits li {
     font-size: 18px;
     font-weight: bold;
+  }
+  .imageContainer {
+    margin: 0;
   }
 }

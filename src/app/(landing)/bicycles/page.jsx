@@ -96,7 +96,7 @@ export default function Phone6() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=phone6');
+        router.push('/thank-you?source=bicycles');
       });
   };
   const questions = [
@@ -151,14 +151,15 @@ export default function Phone6() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h1>
-      <h3 className={styles.subtitle}>
-        Электрический велосипед в Рассрочку со скидкой -50%
-      </h3>
+      <h1 className={styles.title}>
+        {' '}
+        Электрический велосипед в рассрочку со скидкой -50%!{' '}
+      </h1>
+      <h3 className={styles.subtitle}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h3>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <Image
-            src="/bicycles_img_4.webp"
+            src="/bicycles_img_6.jpg"
             alt="Телефоны"
             width={500}
             height={400}
@@ -166,7 +167,7 @@ export default function Phone6() {
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
+              objectFit: 'fill',
               borderRadius: '20px',
             }}
           />
@@ -202,13 +203,13 @@ export default function Phone6() {
           <Image
             src="/bicycles_img_4.webp"
             alt="Телефоны"
-            width={500}
-            height={1000}
+            width={600}
+            height={600}
             priority
             style={{
               width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              height: 'auto',
+              objectFit: 'fill',
               borderRadius: '20px',
             }}
           />
