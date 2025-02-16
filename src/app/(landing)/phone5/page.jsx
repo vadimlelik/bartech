@@ -81,9 +81,9 @@ export default function Phone5() {
       <main className={styles.main}>
         <div className={styles.header}>
           <h1>
-            Одобряем рассрочку всем.
+            Рассмотрение рассрочки от 15 минут
             <br />
-            Смартфон Xiaomi от 29 руб/мес.
+            Смартфон популярных брендов от 29 руб/мес.
           </h1>
         </div>
 
@@ -99,7 +99,7 @@ export default function Phone5() {
               Рассрочка под 0%
             </div>
 
-            <h2 className={styles.productTitle}>Xiaomi Redmi 14C</h2>
+            {/* <h2 className={styles.productTitle}>Xiaomi Redmi 14C</h2> */}
 
             <div className={styles.priceBlock}>
               <div className={styles.price}>
@@ -138,7 +138,7 @@ export default function Phone5() {
           <div className={styles.advantageItem}>
             <Image src="/check.png" alt="Одобрим всем" width={40} height={40} />
             <div className={styles.advantageContent}>
-              <h3>Одобрим всем!</h3>
+              <h3>Рассрочка доступна всем!</h3>
               <p>Рассрочка до 5 лет за 5 минут!</p>
             </div>
           </div>

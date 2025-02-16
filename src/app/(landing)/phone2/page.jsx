@@ -144,9 +144,7 @@ const Phone2 = () => {
             ТЕЛЕФОНЫ В РАССРОЧКУ СО СКИДКОЙ ДО 50%
           </h1>
           <ul className={styles.info}>
-            <li className={styles.infoItem}>
-              ✅ Одобряем всем без справок о доходах
-            </li>
+            <li className={styles.infoItem}>✅ Без справок о доходах</li>
             <li className={styles.infoItem}>✅ 0 рублей первый взнос</li>
             <li className={styles.infoItem}>✅ Всего от 29 руб/мес</li>
             <li className={styles.infoItem}>

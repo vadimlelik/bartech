@@ -6,15 +6,46 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
+        <div className={styles.text}>
+          ООО «Баратех» УНП: 193796252 <br /> Юридический и почтовый адрес:
+          220068, г. Минск, ул. Червякова, д. 60, пом. 179
+          <br /> +375257766462
+        </div>
         <div className={styles.content}>
-          <div className={styles.text}>
-            ООО «Баратех» УНП: 193796252 <br /> Юридический и почтовый адрес:
-            220068, г. Минск, ул. Червякова, д. 60, пом. 179
-            <br /> +375257766462
+          <div className={styles.offer}>
+            <ul className={styles['footer__offer__list']}>
+              <li className={styles['footer__offer__item']}>
+                <span className={styles.bold}>Время работы - </span> с 9:00 до
+                20:00 без выходных
+              </li>
+              <li className={styles['footer__offer__item']}>
+                Доставка бесплатная по РБ от 500 руб. суммы заказа.
+              </li>
+              <li className={styles['footer__offer__item']}>
+                <span className={styles.bold}>Сроки доставки:</span> по г
+                .Минску 1-2 рабочих дня. По Беларуси (Кроме Минска) 3-5 рабочих
+                дней.
+              </li>
+            </ul>
           </div>
           <div className={styles.offer}>
             <ul className={styles['footer__offer__list']}>
               <li className={styles['footer__offer__item']}>
+                <span className={styles.bold}>Условия рассрочки</span> - Банки
+                партнеры:
+                <br /> ОАО &quot;Банк Дабрабыт&quot;
+                <br /> ЗАО &quot;Сбербанк&quot;, <br />
+                ОАО &quot;Паритетбанк&quot;
+              </li>
+              <li className={styles['footer__offer__item']}>
+                Рассрочка предоставляеться на сроки 3 месяца, 6 месяцев, 12
+                месяцев, 18 месяцев.{' '}
+              </li>
+            </ul>
+          </div>
+          <div className={styles.offer}>
+            <ul>
+              <li>
                 <Link
                   className={styles['footer__offer__link']}
                   href={'pk'}
@@ -23,7 +54,7 @@ const Footer = () => {
                   Политика конфиденциальности
                 </Link>
               </li>
-              <li className={styles['footer__offer__item']}>
+              <li>
                 <Link
                   target="_blank"
                   className={styles['footer__offer__link']}
@@ -32,7 +63,7 @@ const Footer = () => {
                   Публичная оферта
                 </Link>
               </li>
-              <li className={styles['footer__offer__item']}>
+              <li>
                 <Link
                   target="_blank"
                   href={'guarantee'}
@@ -42,13 +73,13 @@ const Footer = () => {
                 </Link>
               </li>
 
-              <li className={styles['footer__offer__item']}>
+              <li>
                 <Link
                   className={styles['footer__offer__link']}
                   href={'/pass'}
                   target="_blank"
                 >
-                  Условия рассрочки и сертификация
+                  Сертификация и условия рассрочки
                 </Link>
               </li>
             </ul>

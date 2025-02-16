@@ -15,9 +15,9 @@ import Image from 'next/image';
 const Pass = () => {
   const images = [
     '/pass_img.png',
-    '/pass_slide2_img.png',
+    // '/pass_slide2_img.png',
     '/pass_slide3_img.png',
-    '/pass_slide4_img.png',
+    // '/pass_slide4_img.png',
     '/pass2_img.png',
   ];
 

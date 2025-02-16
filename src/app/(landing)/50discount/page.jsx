@@ -126,7 +126,7 @@ export default function DiscountPage() {
             БЕСПЛАТНАЯ ДОСТАВКА ПО ВСЕЙ БЕЛАРУСИ
           </li>
           <li className={styles.InfoItem}>БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ</li>
-          <li className={styles.InfoItem}>РАССРОЧКУ ОДОБРЯЕМ ВСЕМ</li>
+          <li className={styles.InfoItem}>РАССРОЧКУ ОТ 6 МЕСЯЦЕВ</li>
           <li className={styles.InfoItem}>
             БЕЗ ПОРУЧИТЕЛЕЙ И СПРАВОК О ДОХОДАХ
           </li>

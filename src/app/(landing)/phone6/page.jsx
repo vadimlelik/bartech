@@ -169,7 +169,7 @@ export default function Phone6() {
       <div className={styles.mainSection}>
         <div className={styles.textContent}>
           <h1 className={styles.title}>
-            Мобильные Телефоны в Рассрочку
+            Мобильные Телефоны в рассрочку
             <br />
             со скидкой до -50%
           </h1>
