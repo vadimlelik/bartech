@@ -72,7 +72,7 @@ const Footer = () => {
                   Возврат товара
                 </Link>
               </li>
-
+              {/* 
               <li>
                 <Link
                   className={styles['footer__offer__link']}
@@ -81,7 +81,7 @@ const Footer = () => {
                 >
                   Сертификация и условия рассрочки
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

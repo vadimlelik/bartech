@@ -71,8 +71,8 @@ export default function Phone6() {
 
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.phone6);
-      window.ttq.load(PIXEL_2.phone6);
+      window.ttq.load(PIXEL.bicycles);
+      window.ttq.load(PIXEL_2.bicycles);
       window.ttq.page();
     }
   }, []);
