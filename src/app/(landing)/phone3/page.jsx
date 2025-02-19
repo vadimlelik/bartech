@@ -162,8 +162,6 @@ export default function Phone4() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.mainTitle}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h1>
-
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h2 className={styles.heroTitle}>

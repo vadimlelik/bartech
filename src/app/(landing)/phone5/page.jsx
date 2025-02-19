@@ -138,7 +138,6 @@ export default function Phone5() {
           <div className={styles.advantageItem}>
             <Image src="/check.png" alt="Одобрим всем" width={40} height={40} />
             <div className={styles.advantageContent}>
-              <h3>Рассрочка доступна всем!</h3>
               <p>Рассрочка до 5 лет за 5 минут!</p>
             </div>
           </div>

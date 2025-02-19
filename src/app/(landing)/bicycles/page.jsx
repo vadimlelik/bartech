@@ -160,7 +160,7 @@ export default function Phone6() {
         {' '}
         Электрический велосипед в рассрочку со скидкой -50%!{' '}
       </h1>
-      <h3 className={styles.subtitle}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h3>
+
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <Image

@@ -193,8 +193,6 @@ export default function ShockproofPhone() {
         data-animate="fade-in"
       >
         <div className={styles.textContent}>
-          <h2 className={styles.title}>НАША РАССРОЧКА ДОСТУПНА ВСЕМ</h2>
-
           <ul className={styles.benefits}>
             {benefits.map((benefit, index) => (
               <li key={index} className={styles.checkmarkItem}>
