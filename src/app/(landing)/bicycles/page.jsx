@@ -1,7 +1,7 @@
 'use client';
 
 import Loading from '@/app/loading';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -73,6 +73,7 @@ export default function Phone6() {
     if (window.ttq) {
       window.ttq.load(PIXEL.bicycles);
       window.ttq.load(PIXEL_2.bicycles);
+      window.ttq.load(PIXEL_3.bicycles);
       window.ttq.page();
     }
   }, []);

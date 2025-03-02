@@ -5,7 +5,7 @@ import styles from './discountPage.module.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
 import Loading from '@/app/loading';
 import Button from '@/app/(shop)/components/button/Button';
 import Quiz from '@/components/quiz/Quiz';
@@ -60,6 +60,7 @@ export default function DiscountPage() {
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.discount50);
+      window.ttq.load(PIXEL_3.discount50);
       window.ttq.page();
     }
   }, []);

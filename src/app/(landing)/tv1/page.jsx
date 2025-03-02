@@ -7,7 +7,7 @@ import LogoIcon from '@/app/(shop)/components/Logo/Logo';
 import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_3 } from '@/data/pixel';
 import Quiz from '@/components/quiz/Quiz';
 
 const questions = [
@@ -59,6 +59,7 @@ const Tv = () => {
   useEffect(() => {
     if (window.ttq) {
       window.ttq.load(PIXEL.tv);
+      window.ttq.load(PIXEL_3.tv);
       window.ttq.page();
     }
   }, []);

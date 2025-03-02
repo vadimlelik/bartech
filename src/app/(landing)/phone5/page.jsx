@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
 
 export default function Phone5() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -28,6 +28,7 @@ export default function Phone5() {
     if (window.ttq) {
       window.ttq.load(PIXEL.phone5);
       window.ttq.load(PIXEL_2.phone5);
+      window.ttq.load(PIXEL_3.phone5);
       window.ttq.page();
     }
   }, []);

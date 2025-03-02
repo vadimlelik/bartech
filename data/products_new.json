@@ -1,1644 +1,1644 @@
 [
-	{
-		"id": "1",
-		"name": "iPhone 15 Pro Max",
-		"category": "Смартфоны",
-		"price": 7248,
-		"image": "/images/iPhone_15 Pro_Max.jpg",
-		"images": [
-			"/images/iPhone_15 Pro_Max1.jpg",
-			"/images/iPhone_15 Pro_Max2.png",
-			"/images/iPhone_15 Pro_Max3.jpg"
-		],
-		"description": "Флагманский смартфон Apple с процессором A17 Pro",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 15 Pro Max",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.7 OLED",
-			"processor": "A17 Pro",
-			"camera": "48MP + 12MP + 12MP",
-			"battery": "4422mAh",
-			"os": "iOS 17",
-			"color": "Natural Titanium",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "2",
-		"name": "Samsung Galaxy S23 Ultra",
-		"category": "Смартфоны",
-		"price": 7248,
-		"image": "/images/Samsung_Galaxy_S23_Ultra.jpeg",
-		"images": [
-			"/images/Samsung_Galaxy_S23_Ultra1.jpeg",
-			"/images/Samsung_Galaxy_S23_Ultra2.jpeg",
-			"/images/Samsung_Galaxy_S23_Ultra3.jpeg"
-		],
-		"description": "Флагманский смартфон Samsung с S Pen",
-		"specifications": {
-			"brand": "Samsung",
-			"model": "Galaxy S23 Ultra",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.8 AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "200MP + 12MP + 10MP + 10MP",
-			"battery": "5000mAh",
-			"os": "Android 13",
-			"color": "Phantom Black",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "3",
-		"name": "iPhone 14 Pro",
-		"category": "Смартфоны",
-		"price": 3500,
-		"image": "/images/iphone-14-pro.jpeg",
-		"images": [
-			"/images/iphone-14-pro1.jpeg",
-			"/images/iphone-14-pro2.jpeg",
-			"/images/iphone-14-pro3.webp"
-		],
-		"description": "Смартфон Apple с Dynamic Island",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 14 Pro",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.1 OLED",
-			"processor": "A16 Bionic",
-			"camera": "48MP + 12MP + 12MP",
-			"battery": "3200mAh",
-			"os": "iOS 16",
-			"color": "Space Black",
-			"year": "2022",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "4",
-		"name": "Google Pixel 8 Pro",
-		"category": "Смартфоны",
-		"price": 2598,
-		"image": "/images/Google_Pixel_8_Pro1.jpeg",
-		"images": [
-			"/images/Google_Pixel_8_Pro1.jpeg",
-			"/images/Google_Pixel_8_Pro2.jpg",
-			"/images/Google_Pixel_8_Pro3.jpg"
-		],
-		"description": "Флагман Google с передовыми AI-функциями",
-		"specifications": {
-			"brand": "Google",
-			"model": "Pixel 8 Pro",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.7 LTPO OLED",
-			"processor": "Google Tensor G3",
-			"camera": "50MP + 48MP + 48MP",
-			"battery": "5050mAh",
-			"os": "Android 14",
-			"color": "Obsidian",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "5",
-		"name": "OnePlus 11",
-		"category": "Смартфоны",
-		"price": 2300,
-		"image": "/images/OnePlus_11.jpeg",
-		"images": [
-			"/images/OnePlus_11_1.jpeg",
-			"/images/OnePlus_11_2.jpeg",
-			"/images/OnePlus_11.jpeg"
-		],
-		"description": "Мощный флагман с быстрой зарядкой",
-		"specifications": {
-			"brand": "OnePlus",
-			"model": "11",
-			"memory": "256GB",
-			"ram": "16GB",
-			"display": "6.7 AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 48MP + 32MP",
-			"battery": "5000mAh",
-			"os": "Android 13",
-			"color": "Eternal Green",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "6",
-		"name": "iPhone 13",
-		"category": "Смартфоны",
-		"price": 2599,
-		"image": "/images/iphone-13.jpeg",
-		"images": [
-			"/images/iphone-13.jpeg",
-			"/images/iphone-13-2.webp",
-			"/images/iphone-13-3.jpg"
-		],
-		"description": "Надежный смартфон Apple",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 13",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "6.1 OLED",
-			"processor": "A15 Bionic",
-			"camera": "12MP + 12MP",
-			"battery": "3240mAh",
-			"os": "iOS 15",
-			"color": "Midnight",
-			"year": "2021",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "7",
-		"name": "Samsung Galaxy A54",
-		"category": "Смартфоны",
-		"price": 1260,
-		"image": "/images/samsung-galaxy-a54.jpeg",
-		"images": [
-			"/images/samsung-galaxy-a54-1.jpeg",
-			"/images/samsung-galaxy-a54-2.jpg",
-			"/images/samsung-galaxy-a54-2.jpeg"
-		],
-		"description": "Популярный смартфон среднего класса",
-		"specifications": {
-			"brand": "Samsung",
-			"model": "Galaxy A54",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.4 AMOLED",
-			"processor": "Exynos 1380",
-			"camera": "50MP + 12MP + 5MP",
-			"battery": "5000mAh",
-			"os": "Android 13",
-			"color": "Awesome Graphite",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "8",
-		"name": "Xiaomi 13T Pro",
-		"category": "Смартфоны",
-		"price": 1990,
-		"image": "/images/Xiaomi-13T.jpg",
-		"images": [
-			"/images/Xiaomi-13T.jpg",
-			"/images/Xiaomi-13T-1.jpg",
-			"/images/Xiaomi-13T-2.jpeg"
-		],
-		"description": "Мощный смартфон с отличной камерой",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "13T Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED",
-			"processor": "Dimensity 9200+",
-			"camera": "50MP + 50MP + 12MP",
-			"battery": "5000mAh",
-			"os": "Android 13",
-			"color": "Alpine Blue",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "9",
-		"name": "iPhone 12",
-		"category": "Смартфоны",
-		"price": 1990,
-		"image": "/images/iphone-12-3.jpg",
-		"images": [
-			"/images/iphone-12-3.jpg",
-			"/images/iphone-12.webp",
-			"/images/iphone-12-2.jpeg"
-		],
-		"description": "Классический дизайн Apple",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 12",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "6.1 OLED",
-			"processor": "A14 Bionic",
-			"camera": "12MP + 12MP",
-			"battery": "2815mAh",
-			"os": "iOS 14",
-			"color": "Purple",
-			"year": "2020",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "10",
-		"name": "Nothing Phone 2",
-		"category": "Смартфоны",
-		"price": 2699,
-		"image": "/images/Nothing Phone 2-1.jpg",
-		"images": [
-			"/images/Nothing Phone 2-1.jpg",
-			"/images/Nothing Phone 2-2.jpg",
-			"/images/Nothing Phone 2.jpg"
-		],
-		"description": "Инновационный дизайн с Glyph интерфейсом",
-		"specifications": {
-			"brand": "Nothing",
-			"model": "Phone 2",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.7 OLED",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "50MP + 50MP",
-			"battery": "4700mAh",
-			"os": "Android 13",
-			"color": "White",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "11",
-		"name": "iPhone 15",
-		"category": "Смартфоны",
-		"price": 4150,
-		"image": "/images/iPhone_15 Pro_Max.jpg",
-		"images": [
-			"/images/iPhone_15 Pro_Max.jpg",
-			"/images/iPhone_15 Pro_Max2.png",
-			"/images/iPhone_15 Pro_Max3.jpg"
-		],
-		"description": "Новый iPhone с Dynamic Island",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 15",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.1 OLED",
-			"processor": "A16 Bionic",
-			"camera": "48MP + 12MP",
-			"battery": "3349mAh",
-			"os": "iOS 17",
-			"color": "Pink",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "12",
-		"name": "Samsung Galaxy Z Fold 5",
-		"category": "Смартфоны",
-		"price": 4390,
-		"image": "/images/Samsung Galaxy Z Fold 5.webp",
-		"images": [
-			"/images/Samsung Galaxy Z Fold 5.webp",
-			"/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.webp",
-			"/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.png"
-		],
-		"description": "Складной смартфон нового поколения",
-		"specifications": {
-			"brand": "Samsung",
-			"model": "Galaxy Z Fold 5",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "7.6 Dynamic AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 12MP + 10MP",
-			"battery": "4400mAh",
-			"os": "Android 13",
-			"color": "Cream",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "13",
-		"name": "Google Pixel 7a",
-		"category": "Смартфоны",
-		"price": 1420,
-		"image": "/images/pixel_7a_04.jpg",
-		"images": [
-			"/images/pixel_7a_1.jpg",
-			"/images/pixel_7a_04.jpg",
-			"/images/pixel_7a_044.jpg"
-		],
-		"description": "Доступный Google с отличной камерой",
-		"specifications": {
-			"brand": "Google",
-			"model": "Pixel 7a",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.1 OLED",
-			"processor": "Google Tensor G2",
-			"camera": "64MP + 13MP",
-			"battery": "4385mAh",
-			"os": "Android 13",
-			"color": "Sea",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "14",
-		"name": "iPhone 14",
-		"category": "Смартфоны",
-		"price": 3200,
-		"image": "/images/iphone-14-pro.jpeg",
-		"images": [
-			"/images/iphone-14-pro.jpeg",
-			"/images/iphone-14-pro1.jpeg",
-			"/images/iphone-14-pro2.jpeg",
-			"/images/iphone-14-pro3.webp"
-		],
-		"description": "Надежный флагман Apple",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 14",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.1 OLED",
-			"processor": "A15 Bionic",
-			"camera": "12MP + 12MP",
-			"battery": "3279mAh",
-			"os": "iOS 16",
-			"color": "Blue",
-			"year": "2022",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "15",
-		"name": "Samsung Galaxy Z Flip 5",
-		"category": "Смартфоны",
-		"price": 2490,
-		"image": "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
-		"images": [
-			"/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
-			"/images/Galaxy-Z-Flip5-2.webp",
-			"/images/Galaxy-Z-Flip5-2.webp"
-		],
-		"description": "Компактный складной смартфон",
-		"specifications": {
-			"brand": "Samsung",
-			"model": "Galaxy Z Flip 5",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.7 Dynamic AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "12MP + 12MP",
-			"battery": "3700mAh",
-			"os": "Android 13",
-			"color": "Mint",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "16",
-		"name": "OnePlus Nord 3",
-		"category": "Смартфоны",
-		"price": 1399,
-		"image": "/images/OnePlus Nord 3.webp",
-		"images": [
-			"/images/OnePlus Nord 3.webp",
-			"/images/OnePlus Nord-1.png",
-			"/images/OnePlus Nord 3.webp"
-		],
-		"description": "Мощный среднебюджетный смартфон",
-		"specifications": {
-			"brand": "OnePlus",
-			"model": "Nord 3",
-			"memory": "256GB",
-			"ram": "16GB",
-			"display": "6.74 AMOLED",
-			"processor": "Dimensity 9000",
-			"camera": "50MP + 8MP + 2MP",
-			"battery": "5000mAh",
-			"os": "Android 13",
-			"color": "Tempest Gray",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "17",
-		"name": "iPhone 13 mini",
-		"category": "Смартфоны",
-		"price": 2825,
-		"image": "/images/iphone-13.jpeg",
-		"images": [
-			"/images/iphone-13-2.webp",
-			"/images/iphone-13-3.jpg",
-			"/images/iphone-13.jpeg"
-		],
-		"description": "Компактный премиальный смартфон",
-		"specifications": {
-			"brand": "Apple",
-			"model": "iPhone 13 mini",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "5.4 OLED",
-			"processor": "A15 Bionic",
-			"camera": "12MP + 12MP",
-			"battery": "2438mAh",
-			"os": "iOS 15",
-			"color": "Starlight",
-			"year": "2021",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "18",
-		"name": "Xiaomi 13 Pro",
-		"category": "Смартфоны",
-		"price": 1034,
-		"image": "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
-		"images": [
-			"/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
-			"/images/smartfon-xiaomi-13-pro-2.jpeg",
-			"/images/smartfon-xiaomi-13-pro-3.webp"
-		],
-		"description": "Флагман с камерой Leica",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "13 Pro",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.73 AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 50MP + 50MP",
-			"battery": "4820mAh",
-			"os": "Android 13",
-			"color": "Ceramic White",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "19",
-		"name": "Samsung Galaxy S23",
-		"category": "Смартфоны",
-		"price": 2885,
-		"image": "/images/S23-Colors.jpg",
-		"images": [
-			"/images/S23-Colors.jpg",
-			"/images/product_color_cream.avif",
-			"/images/sm-s911_galaxys23_1-3.jpg"
-		],
-		"description": "Компактный флагман Samsung",
-		"specifications": {
-			"brand": "Samsung",
-			"model": "Galaxy S23",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.1 Dynamic AMOLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 12MP + 10MP",
-			"battery": "3900mAh",
-			"os": "Android 13",
-			"color": "Lavender",
-			"year": "2023",
-			"condition": "new"
-		}
-	},
-	{
-		"id": "honor1",
-		"name": "Honor Magic6 Pro",
-		"category": "Смартфоны",
-		"price": 2899,
-		"image": "/images/honor/Honor Magic6 Pro-3.jpg",
-		"images": [
-			"/images/honor/Honor Magic6 Pro-1.jpg",
-			"/images/honor/Honor Magic6 Pro-3.jpg",
-			"/images/honor/Honor Magic6 Pro.webp"
-		],
-		"description": "Флагманский смартфон Honor с передовыми технологиями и мощной камерой",
-		"specifications": {
-			"brand": "Honor",
-			"model": "Magic6 Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.8 OLED LTPO",
-			"processor": "Snapdragon 8 Gen 3",
-			"camera": "50MP + 50MP + 180MP",
-			"battery": "5600 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor2",
-		"name": "Honor 90",
-		"category": "Смартфоны",
-		"price": 1099,
-		"image": "/images/honor/Honor 90-1.jpg",
-		"images": [
-			"/images/honor/Honor 90-3.png",
-			"/images/honor/Honor 90.png",
-			"/images/honor/Honor 90-1.jpg"
-		],
-		"description": "Стильный смартфон с отличной камерой и ярким экраном",
-		"specifications": {
-			"brand": "Honor",
-			"model": "90",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.7 AMOLED",
-			"processor": "Snapdragon 7 Gen 1",
-			"camera": "200MP + 12MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor3",
-		"name": "Honor Magic V2",
-		"category": "Смартфоны",
-		"price": 3499,
-		"image": "/images/honor/Honor Magic V2-2.webp",
-		"images": [
-			"/images/honor/Honor Magic V2-2.webp",
-			"/images/honor/Honor Magic V2-3.jpg",
-			"/images/honor/Honor Magic V2.png"
-		],
-		"description": "Инновационный складной смартфон с передовыми технологиями",
-		"specifications": {
-			"brand": "Honor",
-			"model": "Magic V2",
-			"memory": "512GB",
-			"ram": "16GB",
-			"display": "7.92 Складной OLED",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 50MP + 20MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor4",
-		"name": "Honor X9a",
-		"category": "Смартфоны",
-		"price": 799,
-		"image": "/images/honor/Honor X9a-2.jpeg",
-		"images": [
-			"/images/honor/Honor X9a-2.jpeg",
-			"/images/honor/Honor X9a-3.webp",
-			"/images/honor/Honor X9a.jpeg"
-		],
-		"description": "Надежный смартфон среднего класса с отличной автономностью",
-		"specifications": {
-			"brand": "Honor",
-			"model": "X9a",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.67 OLED",
-			"processor": "Snapdragon 695",
-			"camera": "64MP + 5MP + 2MP",
-			"battery": "5100 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor5",
-		"name": "Honor 70",
-		"category": "Смартфоны",
-		"price": 899,
-		"image": "/images/honor/Honor 70.jpg",
-		"images": [
-			"/images/honor/Honor 70.jpg",
-			"/images/honor/Honor 70-3.jpg",
-			"/images/honor/Honor 70-2.jpeg"
-		],
-		"description": "Элегантный смартфон с продвинутой камерой и быстрой зарядкой",
-		"specifications": {
-			"brand": "Honor",
-			"model": "70",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 OLED",
-			"processor": "Snapdragon 778G+",
-			"camera": "54MP + 50MP + 2MP",
-			"battery": "4800 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor6",
-		"name": "Honor X8",
-		"category": "Смартфоны",
-		"price": 599,
-		"image": "/images/honor/Honor X8-2.jpg",
-		"images": [
-			"/images/honor/Honor X8-3.jpg",
-			"/images/honor/Honor X8-2.jpg",
-			"/images/honor/Honor X8.png"
-		],
-		"description": "Доступный смартфон с хорошим соотношением цена-качество",
-		"specifications": {
-			"brand": "Honor",
-			"model": "X8",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.7 IPS",
-			"processor": "Snapdragon 680",
-			"camera": "64MP + 5MP + 2MP + 2MP",
-			"battery": "4000 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor7",
-		"name": "Honor Magic5 Pro",
-		"category": "Смартфоны",
-		"price": 2499,
-		"image": "/images/honor/Honor Magic6 Pro.webp",
-		"images": [
-			"/images/honor/Honor Magic6 Pro.webp",
-			"/images/honor/Honor Magic6 Pro-3.jpg",
-			"/images/honor/Honor Magic6 Pro-1.jpg"
-		],
-		"description": "Флагманский смартфон с продвинутой системой камер",
-		"specifications": {
-			"brand": "Honor",
-			"model": "Magic5 Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.81 OLED LTPO",
-			"processor": "Snapdragon 8 Gen 2",
-			"camera": "50MP + 50MP + 50MP",
-			"battery": "5100 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor8",
-		"name": "Honor 90 Lite",
-		"category": "Смартфоны",
-		"price": 699,
-		"image": "/images/honor/Honor 90 Lite-2.webp",
-		"images": [
-			"/images/honor/Honor 90 Lite-3.png",
-			"/images/honor/Honor 90 Lite-2.webp",
-			"/images/honor/Honor 90 Lite.png"
-		],
-		"description": "Облегченная версия популярного Honor 90 с отличными характеристиками",
-		"specifications": {
-			"brand": "Honor",
-			"model": "90 Lite",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.7 IPS",
-			"processor": "Dimensity 6020",
-			"camera": "100MP + 5MP + 2MP",
-			"battery": "4500 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor9",
-		"name": "Honor X7a",
-		"category": "Смартфоны",
-		"price": 499,
-		"image": "/images/honor/Honor X7a-3.jpg",
-		"images": [
-			"/images/honor/Honor X7a-21.jpeg",
-			"/images/honor/Honor X7a-3.jpg",
-			"/images/honor/Honor X7a.jpg"
-		],
-		"description": "Бюджетный смартфон с большим аккумулятором",
-		"specifications": {
-			"brand": "Honor",
-			"model": "X7a",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "6.74 IPS",
-			"processor": "MediaTek Helio G37",
-			"camera": "50MP + 5MP + 2MP + 2MP",
-			"battery": "6000 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "honor10",
-		"name": "Honor X6",
-		"category": "Смартфоны",
-		"price": 449,
-		"image": "/images/honor/Honor X6.avif",
-		"images": [
-			"/images/honor/Honor X6-3.webp",
-			"/images/honor/Honor X6-2.jpg",
-			"/images/honor/Honor X6.avif"
-		],
-		"description": "Доступный смартфон с тройной камерой и большим экраном",
-		"specifications": {
-			"brand": "Honor",
-			"model": "X6",
-			"memory": "64GB",
-			"ram": "4GB",
-			"display": "6.5 IPS",
-			"processor": "MediaTek Helio G25",
-			"camera": "50MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "honor"
-	},
-	{
-		"id": "huawei1",
-		"name": "Huawei P60 Pro",
-		"category": "Смартфоны",
-		"price": 2390,
-		"image": "/images/huawei/Huawei P60 Pro-1.webp",
-		"images": [
-			"/images/huawei/Huawei P60 Pro-2.avif",
-			"/images/huawei/Huawei P60 Pro-3.png",
-			"/images/huawei/Huawei P60 Pro.jpg"
-		],
-		"description": "Флагманский смартфон с революционной камерой XMAGE",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "P60 Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.67 OLED LTPO",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "48MP + 48MP + 48MP",
-			"battery": "4815 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei2",
-		"name": "Huawei Mate 60 Pro",
-		"category": "Смартфоны",
-		"price": 3699,
-		"image": "/images/huawei/mate_60_pro_all_1.webp",
-		"images": [
-			"/images/huawei/mate_60_pro_all_2.jpg",
-			"/images/huawei/mate_60_pro_all_1.webp",
-			"/images/huawei/mate_60_pro_all_3.jpeg"
-		],
-		"description": "Инновационный флагман с поддержкой спутниковой связи",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "Mate 60 Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.82 OLED LTPO",
-			"processor": "Kirin 9000s",
-			"camera": "50MP + 48MP + 12MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei3",
-		"name": "Huawei Mate X3",
-		"category": "Смартфоны",
-		"price": 3299,
-		"image": "/images/huawei/Huawei Mate X3.png",
-		"images": [
-			"/images/huawei/Huawei Mate X3.png",
-			"/images/huawei/Huawei Mate X3-2.jpg",
-			"/images/huawei/Huawei Mate X3.webp"
-		],
-		"description": "Премиальный складной смартфон с защитой от воды",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "Mate X3",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "7.85 Складной OLED",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "50MP + 13MP + 12MP",
-			"battery": "4800 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei4",
-		"name": "Huawei nova 11 Pro",
-		"category": "Смартфоны",
-		"price": 1599,
-		"image": "/images/huawei/Huawei nova 11 Pro.jpg",
-		"images": [
-			"/images/huawei/Huawei nova 11 Pro-1.jpg",
-			"/images/huawei/Huawei nova 11 Pro.jpg",
-			"/images/huawei/Huawei nova 11 Pro-2.jpg"
-		],
-		"description": "Стильный смартфон с акцентом на селфи-камеру",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "nova 11 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.78 OLED",
-			"processor": "Snapdragon 778G",
-			"camera": "50MP + 8MP, 60MP селфи",
-			"battery": "4500 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei5",
-		"name": "Huawei nova Y90",
-		"category": "Смартфоны",
-		"price": 799,
-		"image": "/images/huawei/Huawei nova Y90-1.jpg",
-		"images": [
-			"/images/huawei/Huawei nova Y90-2.avif",
-			"/images/huawei/Huawei nova Y90-1.jpg",
-			"/images/huawei/Huawei nova Y90-3.webp"
-		],
-		"description": "Доступный смартфон с большим экраном и батареей",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "nova Y90",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.7 LCD",
-			"processor": "Snapdragon 680",
-			"camera": "50MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei6",
-		"name": "Huawei P50 Pro",
-		"category": "Смартфоны",
-		"price": 2499,
-		"image": "/images/huawei/Huawei P50 Pro.webp",
-		"images": [
-			"/images/huawei/Huawei P50 Pro-1.webp",
-			"/images/huawei/Huawei P50 Pro.webp",
-			"/images/huawei/Huawei P50 Pro-3.jpg"
-		],
-		"description": "Флагманский смартфон с камерой Leica",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "P50 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.6 OLED",
-			"processor": "Snapdragon 888",
-			"camera": "50MP + 40MP + 13MP + 64MP",
-			"battery": "4360 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei7",
-		"name": "Huawei nova 10 Pro",
-		"category": "Смартфоны",
-		"price": 1299,
-		"image": "/images/huawei/Huawei nova 10 Pro-1.jpg",
-		"images": [
-			"/images/huawei/Huawei nova 10 Pro-2.jpg",
-			"/images/huawei/Huawei nova 10 Pro-1.jpg",
-			"/images/huawei/Huawei nova 10 Pro.avif"
-		],
-		"description": "Стильный смартфон среднего класса с отличными камерами",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "nova 10 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.78 OLED",
-			"processor": "Snapdragon 778G",
-			"camera": "50MP + 8MP + 2MP",
-			"battery": "4500 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei8",
-		"name": "Huawei Mate 50 Pro",
-		"category": "Смартфоны",
-		"price": 2899,
-		"image": "/images/huawei/Huawei Mate 50 Pro-1.jpeg",
-		"images": [
-			"/images/huawei/Huawei Mate 50 Pro-2.jpg",
-			"/images/huawei/Huawei Mate 50 Pro-3.jpg",
-			"/images/huawei/Huawei Mate 50 Pro.png"
-		],
-		"description": "Флагман с продвинутой системой камер",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "Mate 50 Pro",
-			"memory": "512GB",
-			"ram": "8GB",
-			"display": "6.74 OLED",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "50MP + 13MP + 64MP",
-			"battery": "4700 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei9",
-		"name": "Huawei nova Y70",
-		"category": "Смартфоны",
-		"price": 599,
-		"image": "/images/huawei/Huawei nova Y70-1.webp",
-		"images": [
-			"/images/huawei/Huawei nova Y70-2.webp",
-			"/images/huawei/Huawei nova Y70.jpeg",
-			"/images/huawei/Huawei nova Y70-1.webp"
-		],
-		"description": "Бюджетный смартфон с большой батареей",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "nova Y70",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "6.75 LCD",
-			"processor": "Mediatek MT8766",
-			"camera": "48MP + 5MP + 2MP",
-			"battery": "6000 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "huawei10",
-		"name": "Huawei nova 9",
-		"category": "Смартфоны",
-		"price": 999,
-		"image": "/images/huawei/Huawei nova 9.jpg",
-		"images": [
-			"/images/huawei/Huawei nova 9-1.jpeg",
-			"/images/huawei/Huawei nova 9.jpg",
-			"/images/huawei/Huawei nova 9-2.webp"
-		],
-		"description": "Стильный смартфон с качественным дисплеем",
-		"specifications": {
-			"brand": "Huawei",
-			"model": "nova 9",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.57 OLED",
-			"processor": "Snapdragon 778G",
-			"camera": "50MP + 8MP + 2MP + 2MP",
-			"battery": "4300 mAh"
-		},
-		"categoryId": "huawei"
-	},
-	{
-		"id": "infinix1",
-		"name": "Infinix Zero 30",
-		"category": "Смартфоны",
-		"price": 999,
-		"image": "/images/infinix/Infinix Zero 30-1.jpg",
-		"images": [
-			"/images/infinix/Infinix Zero 30-1.jpg",
-			"/images/infinix/Infinix Zero 30-2.jpg",
-			"/images/infinix/Infinix Zero 30.avif"
-		],
-		"description": "Флагманский смартфон с 108MP камерой и AMOLED экраном",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Zero 30",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.78 AMOLED 120Hz",
-			"processor": "Dimensity 8020",
-			"camera": "108MP + 13MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix2",
-		"name": "Infinix Note 30 Pro",
-		"category": "Смартфоны",
-		"price": 799,
-		"image": "/images/infinix/Infinix Note 30 Pro-1.jpg",
-		"images": [
-			"/images/infinix/Infinix Note 30 Pro-1.jpg",
-			"/images/infinix/Infinix Note 30 Pro-2.webp",
-			"/images/infinix/Infinix Note 30 Pro-3.jpg"
-		],
-		"description": "Мощный смартфон с быстрой зарядкой 68W",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Note 30 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Helio G99",
-			"camera": "108MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix3",
-		"name": "Infinix GT 10 Pro",
-		"category": "Смартфоны",
-		"price": 899,
-		"image": "/images/infinix/Infinix GT 10 Pro-1.jpg",
-		"images": [
-			"/images/infinix/Infinix GT 10 Pro-2.webp",
-			"/images/infinix/Infinix GT 10 Pro-1.jpg",
-			"/images/infinix/Infinix GT 10 Pro-1.jpg"
-		],
-		"description": "Игровой смартфон с RGB подсветкой и мощным процессором",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "GT 10 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Dimensity 8050",
-			"camera": "108MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix4",
-		"name": "Infinix Hot 30",
-		"category": "Смартфоны",
-		"price": 449,
-		"image": "/images/infinix/Infinix Hot 30-2.jpg",
-		"images": [
-			"/images/infinix/Infinix Hot 30-3.webp",
-			"/images/infinix/Infinix Hot 30-2.jpg",
-			"/images/infinix/Infinix Hot 30.png"
-		],
-		"description": "Доступный смартфон с хорошей производительностью",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Hot 30",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.78 IPS 90Hz",
-			"processor": "Helio G88",
-			"camera": "50MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix5",
-		"name": "Infinix Note 30",
-		"category": "Смартфоны",
-		"price": 599,
-		"image": "/images/infinix/Infinix Note 30-1.jpg",
-		"images": [
-			"/images/infinix/Infinix Note 30-2.jpg",
-			"/images/infinix/Infinix Note 30-1.jpg",
-			"/images/infinix/Infinix Note 30-3.webp"
-		],
-		"description": "Смартфон с большим экраном и стереодинамиками",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Note 30",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.78 IPS 120Hz",
-			"processor": "Helio G99",
-			"camera": "64MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix6",
-		"name": "Infinix Zero Ultra",
-		"category": "Смартфоны",
-		"price": 1099,
-		"image": "/images/infinix/Infinix Zero Ultra-1.png",
-		"images": [
-			"/images/infinix/Infinix Zero Ultra-2.jpeg",
-			"/images/infinix/Infinix Zero Ultra-2.jpg",
-			"/images/infinix/Infinix Zero Ultra-1.png"
-		],
-		"description": "Флагман с супербыстрой зарядкой 180W",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Zero Ultra",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.8 AMOLED 120Hz",
-			"processor": "Dimensity 920",
-			"camera": "200MP + 13MP + 2MP",
-			"battery": "4500 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix7",
-		"name": "Infinix Smart 7",
-		"category": "Смартфоны",
-		"price": 299,
-		"image": "/images/infinix/Infinix Smart 7-1.jpg",
-		"images": [
-			"/images/infinix/Infinix Smart 7-2.webp",
-			"/images/infinix/Infinix Smart 7.jpg",
-			"/images/infinix/Infinix Smart 7-1.jpg"
-		],
-		"description": "Бюджетный смартфон с большой батареей",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Smart 7",
-			"memory": "64GB",
-			"ram": "4GB",
-			"display": "6.6 IPS",
-			"processor": "Helio A22",
-			"camera": "13MP + 2MP",
-			"battery": "6000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix8",
-		"name": "Infinix Hot 30i",
-		"category": "Смартфоны",
-		"price": 349,
-		"image": "/images/infinix/Infinix Hot 30i-1.jpg",
-		"images": [
-			"/images/infinix/hInfinix Hot 30i-3.jpeg",
-			"/images/infinix/Infinix Hot 30i.jpeg",
-			"/images/infinix/Infinix Hot 30i-1.jpg"
-		],
-		"description": "Доступный смартфон с NFC и большим экраном",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Hot 30i",
-			"memory": "128GB",
-			"ram": "4GB",
-			"display": "6.6 IPS 90Hz",
-			"processor": "Helio G37",
-			"camera": "50MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix9",
-		"name": "Infinix Note 30 VIP",
-		"category": "Смартфоны",
-		"price": 899,
-		"image": "/images/infinix/Infinix Note 30 VIP-3.jpg",
-		"images": [
-			"/images/infinix/Infinix Note 30 VIP-1.png",
-			"/images/infinix/Infinix Note 30 VIP-1.webp",
-			"/images/infinix/Infinix Note 30 VIP-3.jpg"
-		],
-		"description": "Премиальная версия Note 30 с улучшенн§ыми характеристиками",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Note 30 VIP",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Dimensity 8050",
-			"camera": "108MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "infinix10",
-		"name": "Infinix Zero 20",
-		"category": "Смартфоны",
-		"price": 699,
-		"image": "/images/infinix/Infinix Zero 20-1.jpg",
-		"images": [
-			"/images/infinix/Infinix Zero 20-3.jpg",
-			"/images/infinix/Infinix Zero 20-1.jpg",
-			"/images/infinix/Infinix Zero 20-3.webp"
-		],
-		"description": "Смартфон с упором на селфи-камеру",
-		"specifications": {
-			"brand": "Infinix",
-			"model": "Zero 20",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.7 AMOLED 90Hz",
-			"processor": "Helio G99",
-			"camera": "108MP + 13MP + 2MP, 60MP селфи",
-			"battery": "4500 mAh"
-		},
-		"categoryId": "infinix"
-	},
-	{
-		"id": "xiaomi1",
-		"name": "Xiaomi 14 Pro",
-		"category": "Смартфоны",
-		"price": 2999,
-		"image": "/images/xiaomi/Xiaomi 14 Pro.jpg",
-		"images": [
-			"/images/xiaomi/Xiaomi 14 Pro-2.jpg",
-			"/images/xiaomi/Xiaomi 14 Pro.jpg",
-			"/images/xiaomi/Xiaomi 14 Pro-3.webp"
-		],
-		"description": "Флагманский смартфон с камерой Leica и чипом Snapdragon 8 Gen 3",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "14 Pro",
-			"memory": "512GB",
-			"ram": "16GB",
-			"display": "6.73 LTPO AMOLED 120Hz",
-			"processor": "Snapdragon 8 Gen 3",
-			"camera": "50MP + 50MP + 50MP Leica",
-			"battery": "4880 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi2",
-		"name": "Redmi Note 13 Pro+",
-		"category": "Смартфоны",
-		"price": 1199,
-		"image": "/images/xiaomi/Redmi Note 13 Pro2.jpg",
-		"images": [
-			"/images/xiaomi/Redmi Note 13 Pro2.jpg",
-			"/images/xiaomi/Redmi Note 13 Pro3.jpeg",
-			"/images/xiaomi/Redmi Note13Pro1.avif"
-		],
-		"description": "Мощный смартфон среднего класса с 200MP камерой",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "Redmi Note 13 Pro+",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Dimensity 7200 Ultra",
-			"camera": "200MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi4",
-		"name": "Xiaomi 13T Pro",
-		"category": "Смартфоны",
-		"price": 1899,
-		"image": "/images/xiaomi/Xiaomi 13T Pro.jpg",
-		"images": [
-			"/images/xiaomi/Xiaomi 13T Pro-2.webp",
-			"/images/xiaomi/Xiaomi 13T Pro.jpg",
-			"/images/xiaomi/Xiaomi 13T Pro-1.jpg"
-		],
-		"description": "Производительный смартфон с камерой Leica",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "13T Pro",
-			"memory": "512GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 144Hz",
-			"processor": "Dimensity 9200+",
-			"camera": "50MP + 50MP + 12MP Leica",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi5",
-		"name": "Redmi Note 12 Pro",
-		"category": "Смартфоны",
-		"price": 899,
-		"image": "/images/xiaomi/Redmi Note 12 Pro-3.webp",
-		"images": [
-			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
-			"/images/xiaomi/Redmi Note 12 Pro-3.webp",
-			"/images/xiaomi/Redmi Note 12 Pro.webp"
-		],
-		"description": "Популярный смартфон среднего класса",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "Redmi Note 12 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Dimensity 1080",
-			"camera": "50MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi7",
-		"name": "Redmi 12",
-		"category": "Смартфоны",
-		"price": 599,
-		"image": "/images/xiaomi/Redmi 12-1.jpg",
-		"images": [
-			"/images/xiaomi/Redmi 12-3.png",
-			"/images/xiaomi/Redmi 12.png",
-			"/images/xiaomi/Redmi 12-1.jpg"
-		],
-		"description": "Доступный смартфон с хорошими характеристиками",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "Redmi 12",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.79 IPS 90Hz",
-			"processor": "Helio G88",
-			"camera": "50MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi9",
-		"name": "Redmi Note 12",
-		"category": "Смартфоны",
-		"price": 699,
-		"image": "/images/xiaomi/Redmi Note 12-1.jpg",
-		"images": [
-			"/images/xiaomi/Redmi Note 12-3.jpg",
-			"/images/xiaomi/Redmi Note 12.png",
-			"/images/xiaomi/Redmi Note 12-1.jpg"
-		],
-		"description": "Сбалансированный смартфон с AMOLED экраном",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "Redmi Note 12",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 4 Gen 1",
-			"camera": "48MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "xiaomi10",
-		"name": "Redmi A2+",
-		"category": "Смартфоны",
-		"price": 299,
-		"image": "/images/xiaomi/RedmiA2_1.jpeg",
-		"images": [
-			"/images/xiaomi/RedmiA2_1.jpeg",
-			"/images/xiaomi/RedmiA2_2.jpg",
-			"/images/xiaomi/RedmiA2-3.jpg"
-		],
-		"description": "Ультрабюджетный смартфон с большим экраном",
-		"specifications": {
-			"brand": "Xiaomi",
-			"model": "Redmi A2+",
-			"memory": "64GB",
-			"ram": "3GB",
-			"display": "6.52 IPS",
-			"processor": "Helio G36",
-			"camera": "8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "xiaomi"
-	},
-	{
-		"id": "poco1",
-		"name": "POCO F5 Pro",
-		"category": "Смартфоны",
-		"price": 1499,
-		"image": "/images/POCO/POCO F5 Pro-2.webp",
-		"images": [
-			"/images/POCO/POCO F5 Pro.jpg",
-			"/images/POCO/POCO F5 Pro.webp",
-			"/images/POCO/POCO F5 Pro-2.webp"
-		],
-		"description": "Флагманский смартфон с топовым процессором Snapdragon 8+ Gen 1",
-		"specifications": {
-			"brand": "POCO",
-			"model": "F5 Pro",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 8+ Gen 1",
-			"camera": "64MP + 8MP + 2MP",
-			"battery": "5160 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco2",
-		"name": "POCO F5",
-		"category": "Смартфоны",
-		"price": 1199,
-		"image": "/images/POCO/POCO F5-1.jpg",
-		"images": [
-			"/images/POCO/POCO F5.avif",
-			"/images/POCO/POCO F5-1.jpg",
-			"/images/POCO/POCO F5-3.webp"
-		],
-		"description": "Мощный смартфон с процессором Snapdragon 7+ Gen 2",
-		"specifications": {
-			"brand": "POCO",
-			"model": "F5",
-			"memory": "256GB",
-			"ram": "12GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 7+ Gen 2",
-			"camera": "64MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco3",
-		"name": "POCO X6 Pro",
-		"category": "Смартфоны",
-		"price": 999,
-		"image": "/images/POCO/POCO X6 Pro-1.jpg",
-		"images": [
-			"/images/POCO/POCO X6 Pro-2.jpeg",
-			"/images/POCO/POCO X6 Pro-1.jpg",
-			"/images/POCO/POCO X6 Pro.jpg"
-		],
-		"description": "Производительный смартфон среднего класса",
-		"specifications": {
-			"brand": "POCO",
-			"model": "X6 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Dimensity 8100",
-			"camera": "64MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco4",
-		"name": "POCO X5 Pro",
-		"category": "Смартфоны",
-		"price": 899,
-		"image": "/images/POCO/POCO X5 Pro.jpg",
-		"images": [
-			"/images/POCO/POCO X5 Pro-3.png",
-			"/images/POCO/POCO X5 Pro-2.webp",
-			"/images/POCO/POCO X5 Pro.jpg"
-		],
-		"description": "Смартфон с отличным экраном и камерой 108MP",
-		"specifications": {
-			"brand": "POCO",
-			"model": "X5 Pro",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 778G",
-			"camera": "108MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco5",
-		"name": "POCO X5",
-		"category": "Смартфоны",
-		"price": 799,
-		"image": "/images/POCO/POCO X5-2.jpg",
-		"images": [
-			"/images/POCO/POCO X5-2.jpg",
-			"/images/POCO/POCO X5-3.png",
-			"/images/POCO/POCO X5-2.jpg"
-		],
-		"description": "Доступный смартфон с 5G и AMOLED экраном",
-		"specifications": {
-			"brand": "POCO",
-			"model": "X5",
-			"memory": "256GB",
-			"ram": "8GB",
-			"display": "6.67 AMOLED 120Hz",
-			"processor": "Snapdragon 695",
-			"camera": "48MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco6",
-		"name": "POCO M6 Pro",
-		"category": "Смартфоны",
-		"price": 699,
-		"image": "/images/POCO/POCO M6 Pro.png",
-		"images": [
-			"/images/POCO/POCO M6 Pro-2.jpg",
-			"/images/POCO/POCO M6 Pro.png",
-			"/images/POCO/POCO M6 Pro-2.jpg"
-		],
-		"description": "Бюджетный смартфон с хорошей производительностью",
-		"specifications": {
-			"brand": "POCO",
-			"model": "M6 Pro",
-			"memory": "128GB",
-			"ram": "8GB",
-			"display": "6.79 IPS 90Hz",
-			"processor": "Helio G99",
-			"camera": "64MP + 8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco7",
-		"name": "POCO M5s",
-		"category": "Смартфоны",
-		"price": 599,
-		"image": "/images/POCO/POCO M5s.jpg",
-		"images": [
-			"/images/POCO/POCO M5s-3.jpg",
-			"/images/POCO/POCO M5s.jpg",
-			"/images/POCO/POCO M5s-2.webp"
-		],
-		"description": "Доступный смартфон с AMOLED экраном",
-		"specifications": {
-			"brand": "POCO",
-			"model": "M5s",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.43 AMOLED",
-			"processor": "Helio G95",
-			"camera": "64MP + 8MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco8",
-		"name": "POCO M5",
-		"category": "Смартфоны",
-		"price": 499,
-		"image": "/images/POCO/POCO M5-1.jpg",
-		"images": [
-			"/images/POCO/POCO M5-1.jpg",
-			"/images/POCO/POCO M5.jpg",
-			"/images/POCO/POCO M5-1.jpg"
-		],
-		"description": "Бюджетный игровой смартфон",
-		"specifications": {
-			"brand": "POCO",
-			"model": "M5",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.58 IPS 90Hz",
-			"processor": "Helio G99",
-			"camera": "50MP + 2MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco9",
-		"name": "POCO C55",
-		"category": "Смартфоны",
-		"price": 399,
-		"image": "/images/POCO/POCO C55-2.jpg",
-		"images": [
-			"/images/POCO/POCO C55-3.jpg",
-			"/images/POCO/POCO C55.jpg",
-			"/images/POCO/POCO C55-2.jpg"
-		],
-		"description": "Ультрабюджетный смартфон с большим экраном",
-		"specifications": {
-			"brand": "POCO",
-			"model": "C55",
-			"memory": "128GB",
-			"ram": "6GB",
-			"display": "6.71 IPS",
-			"processor": "Helio G85",
-			"camera": "50MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	},
-	{
-		"id": "poco10",
-		"name": "POCO C51",
-		"category": "Смартфоны",
-		"price": 299,
-		"image": "/images/POCO/POCO C51-2.jpg",
-		"images": [
-			"/images/POCO/POCO C51-3.jpeg",
-			"/images/POCO/POCO C51.jpg",
-			"/images/POCO/POCO C51-2.jpg"
-		],
-		"description": "Самый доступный смартфон POCO",
-		"specifications": {
-			"brand": "POCO",
-			"model": "C51",
-			"memory": "64GB",
-			"ram": "4GB",
-			"display": "6.52 IPS",
-			"processor": "Helio G36",
-			"camera": "8MP + 2MP",
-			"battery": "5000 mAh"
-		},
-		"categoryId": "poco"
-	}
+  {
+    "id": "1",
+    "name": "iPhone 15 Pro Max",
+    "category": "Смартфоны",
+    "price": 7848,
+    "image": "/images/iPhone_15 Pro_Max.jpg",
+    "images": [
+      "/images/iPhone_15 Pro_Max1.jpg",
+      "/images/iPhone_15 Pro_Max2.png",
+      "/images/iPhone_15 Pro_Max3.jpg"
+    ],
+    "description": "Флагманский смартфон Apple с процессором A17 Pro",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 15 Pro Max",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.7 OLED",
+      "processor": "A17 Pro",
+      "camera": "48MP + 12MP + 12MP",
+      "battery": "4422mAh",
+      "os": "iOS 17",
+      "color": "Natural Titanium",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "2",
+    "name": "Samsung Galaxy S23 Ultra",
+    "category": "Смартфоны",
+    "price": 7848,
+    "image": "/images/Samsung_Galaxy_S23_Ultra.jpeg",
+    "images": [
+      "/images/Samsung_Galaxy_S23_Ultra1.jpeg",
+      "/images/Samsung_Galaxy_S23_Ultra2.jpeg",
+      "/images/Samsung_Galaxy_S23_Ultra3.jpeg"
+    ],
+    "description": "Флагманский смартфон Samsung с S Pen",
+    "specifications": {
+      "brand": "Samsung",
+      "model": "Galaxy S23 Ultra",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.8 AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "200MP + 12MP + 10MP + 10MP",
+      "battery": "5000mAh",
+      "os": "Android 13",
+      "color": "Phantom Black",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "3",
+    "name": "iPhone 14 Pro",
+    "category": "Смартфоны",
+    "price": 4100,
+    "image": "/images/iphone-14-pro.jpeg",
+    "images": [
+      "/images/iphone-14-pro1.jpeg",
+      "/images/iphone-14-pro2.jpeg",
+      "/images/iphone-14-pro3.webp"
+    ],
+    "description": "Смартфон Apple с Dynamic Island",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 14 Pro",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.1 OLED",
+      "processor": "A16 Bionic",
+      "camera": "48MP + 12MP + 12MP",
+      "battery": "3200mAh",
+      "os": "iOS 16",
+      "color": "Space Black",
+      "year": "2022",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "4",
+    "name": "Google Pixel 8 Pro",
+    "category": "Смартфоны",
+    "price": 2898,
+    "image": "/images/Google_Pixel_8_Pro1.jpeg",
+    "images": [
+      "/images/Google_Pixel_8_Pro1.jpeg",
+      "/images/Google_Pixel_8_Pro2.jpg",
+      "/images/Google_Pixel_8_Pro3.jpg"
+    ],
+    "description": "Флагман Google с передовыми AI-функциями",
+    "specifications": {
+      "brand": "Google",
+      "model": "Pixel 8 Pro",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.7 LTPO OLED",
+      "processor": "Google Tensor G3",
+      "camera": "50MP + 48MP + 48MP",
+      "battery": "5050mAh",
+      "os": "Android 14",
+      "color": "Obsidian",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "5",
+    "name": "OnePlus 11",
+    "category": "Смартфоны",
+    "price": 2600,
+    "image": "/images/OnePlus_11.jpeg",
+    "images": [
+      "/images/OnePlus_11_1.jpeg",
+      "/images/OnePlus_11_2.jpeg",
+      "/images/OnePlus_11.jpeg"
+    ],
+    "description": "Мощный флагман с быстрой зарядкой",
+    "specifications": {
+      "brand": "OnePlus",
+      "model": "11",
+      "memory": "256GB",
+      "ram": "16GB",
+      "display": "6.7 AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 48MP + 32MP",
+      "battery": "5000mAh",
+      "os": "Android 13",
+      "color": "Eternal Green",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "6",
+    "name": "iPhone 13",
+    "category": "Смартфоны",
+    "price": 2899,
+    "image": "/images/iphone-13.jpeg",
+    "images": [
+      "/images/iphone-13.jpeg",
+      "/images/iphone-13-2.webp",
+      "/images/iphone-13-3.jpg"
+    ],
+    "description": "Надежный смартфон Apple",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 13",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "6.1 OLED",
+      "processor": "A15 Bionic",
+      "camera": "12MP + 12MP",
+      "battery": "3240mAh",
+      "os": "iOS 15",
+      "color": "Midnight",
+      "year": "2021",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "7",
+    "name": "Samsung Galaxy A54",
+    "category": "Смартфоны",
+    "price": 1560,
+    "image": "/images/samsung-galaxy-a54.jpeg",
+    "images": [
+      "/images/samsung-galaxy-a54-1.jpeg",
+      "/images/samsung-galaxy-a54-2.jpg",
+      "/images/samsung-galaxy-a54-2.jpeg"
+    ],
+    "description": "Популярный смартфон среднего класса",
+    "specifications": {
+      "brand": "Samsung",
+      "model": "Galaxy A54",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.4 AMOLED",
+      "processor": "Exynos 1380",
+      "camera": "50MP + 12MP + 5MP",
+      "battery": "5000mAh",
+      "os": "Android 13",
+      "color": "Awesome Graphite",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "8",
+    "name": "Xiaomi 13T Pro",
+    "category": "Смартфоны",
+    "price": 2290,
+    "image": "/images/Xiaomi-13T.jpg",
+    "images": [
+      "/images/Xiaomi-13T.jpg",
+      "/images/Xiaomi-13T-1.jpg",
+      "/images/Xiaomi-13T-2.jpeg"
+    ],
+    "description": "Мощный смартфон с отличной камерой",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "13T Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED",
+      "processor": "Dimensity 9200+",
+      "camera": "50MP + 50MP + 12MP",
+      "battery": "5000mAh",
+      "os": "Android 13",
+      "color": "Alpine Blue",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "9",
+    "name": "iPhone 12",
+    "category": "Смартфоны",
+    "price": 2290,
+    "image": "/images/iphone-12-3.jpg",
+    "images": [
+      "/images/iphone-12-3.jpg",
+      "/images/iphone-12.webp",
+      "/images/iphone-12-2.jpeg"
+    ],
+    "description": "Классический дизайн Apple",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 12",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "6.1 OLED",
+      "processor": "A14 Bionic",
+      "camera": "12MP + 12MP",
+      "battery": "2815mAh",
+      "os": "iOS 14",
+      "color": "Purple",
+      "year": "2020",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "10",
+    "name": "Nothing Phone 2",
+    "category": "Смартфоны",
+    "price": 2999,
+    "image": "/images/Nothing Phone 2-1.jpg",
+    "images": [
+      "/images/Nothing Phone 2-1.jpg",
+      "/images/Nothing Phone 2-2.jpg",
+      "/images/Nothing Phone 2.jpg"
+    ],
+    "description": "Инновационный дизайн с Glyph интерфейсом",
+    "specifications": {
+      "brand": "Nothing",
+      "model": "Phone 2",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.7 OLED",
+      "processor": "Snapdragon 8+ Gen 1",
+      "camera": "50MP + 50MP",
+      "battery": "4700mAh",
+      "os": "Android 13",
+      "color": "White",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "11",
+    "name": "iPhone 15",
+    "category": "Смартфоны",
+    "price": 4450,
+    "image": "/images/iPhone_15 Pro_Max.jpg",
+    "images": [
+      "/images/iPhone_15 Pro_Max.jpg",
+      "/images/iPhone_15 Pro_Max2.png",
+      "/images/iPhone_15 Pro_Max3.jpg"
+    ],
+    "description": "Новый iPhone с Dynamic Island",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 15",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.1 OLED",
+      "processor": "A16 Bionic",
+      "camera": "48MP + 12MP",
+      "battery": "3349mAh",
+      "os": "iOS 17",
+      "color": "Pink",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "12",
+    "name": "Samsung Galaxy Z Fold 5",
+    "category": "Смартфоны",
+    "price": 4690,
+    "image": "/images/Samsung Galaxy Z Fold 5.webp",
+    "images": [
+      "/images/Samsung Galaxy Z Fold 5.webp",
+      "/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.webp",
+      "/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.png"
+    ],
+    "description": "Складной смартфон нового поколения",
+    "specifications": {
+      "brand": "Samsung",
+      "model": "Galaxy Z Fold 5",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "7.6 Dynamic AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 12MP + 10MP",
+      "battery": "4400mAh",
+      "os": "Android 13",
+      "color": "Cream",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "13",
+    "name": "Google Pixel 7a",
+    "category": "Смартфоны",
+    "price": 1720,
+    "image": "/images/pixel_7a_04.jpg",
+    "images": [
+      "/images/pixel_7a_1.jpg",
+      "/images/pixel_7a_04.jpg",
+      "/images/pixel_7a_044.jpg"
+    ],
+    "description": "Доступный Google с отличной камерой",
+    "specifications": {
+      "brand": "Google",
+      "model": "Pixel 7a",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.1 OLED",
+      "processor": "Google Tensor G2",
+      "camera": "64MP + 13MP",
+      "battery": "4385mAh",
+      "os": "Android 13",
+      "color": "Sea",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "14",
+    "name": "iPhone 14",
+    "category": "Смартфоны",
+    "price": 3500,
+    "image": "/images/iphone-14-pro.jpeg",
+    "images": [
+      "/images/iphone-14-pro.jpeg",
+      "/images/iphone-14-pro1.jpeg",
+      "/images/iphone-14-pro2.jpeg",
+      "/images/iphone-14-pro3.webp"
+    ],
+    "description": "Надежный флагман Apple",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 14",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.1 OLED",
+      "processor": "A15 Bionic",
+      "camera": "12MP + 12MP",
+      "battery": "3279mAh",
+      "os": "iOS 16",
+      "color": "Blue",
+      "year": "2022",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "15",
+    "name": "Samsung Galaxy Z Flip 5",
+    "category": "Смартфоны",
+    "price": 2790,
+    "image": "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
+    "images": [
+      "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
+      "/images/Galaxy-Z-Flip5-2.webp",
+      "/images/Galaxy-Z-Flip5-2.webp"
+    ],
+    "description": "Компактный складной смартфон",
+    "specifications": {
+      "brand": "Samsung",
+      "model": "Galaxy Z Flip 5",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.7 Dynamic AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "12MP + 12MP",
+      "battery": "3700mAh",
+      "os": "Android 13",
+      "color": "Mint",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "16",
+    "name": "OnePlus Nord 3",
+    "category": "Смартфоны",
+    "price": 1699,
+    "image": "/images/OnePlus Nord 3.webp",
+    "images": [
+      "/images/OnePlus Nord 3.webp",
+      "/images/OnePlus Nord-1.png",
+      "/images/OnePlus Nord 3.webp"
+    ],
+    "description": "Мощный среднебюджетный смартфон",
+    "specifications": {
+      "brand": "OnePlus",
+      "model": "Nord 3",
+      "memory": "256GB",
+      "ram": "16GB",
+      "display": "6.74 AMOLED",
+      "processor": "Dimensity 9000",
+      "camera": "50MP + 8MP + 2MP",
+      "battery": "5000mAh",
+      "os": "Android 13",
+      "color": "Tempest Gray",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "17",
+    "name": "iPhone 13 mini",
+    "category": "Смартфоны",
+    "price": 3125,
+    "image": "/images/iphone-13.jpeg",
+    "images": [
+      "/images/iphone-13-2.webp",
+      "/images/iphone-13-3.jpg",
+      "/images/iphone-13.jpeg"
+    ],
+    "description": "Компактный премиальный смартфон",
+    "specifications": {
+      "brand": "Apple",
+      "model": "iPhone 13 mini",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "5.4 OLED",
+      "processor": "A15 Bionic",
+      "camera": "12MP + 12MP",
+      "battery": "2438mAh",
+      "os": "iOS 15",
+      "color": "Starlight",
+      "year": "2021",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "18",
+    "name": "Xiaomi 13 Pro",
+    "category": "Смартфоны",
+    "price": 1334,
+    "image": "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
+    "images": [
+      "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
+      "/images/smartfon-xiaomi-13-pro-2.jpeg",
+      "/images/smartfon-xiaomi-13-pro-3.webp"
+    ],
+    "description": "Флагман с камерой Leica",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "13 Pro",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.73 AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 50MP + 50MP",
+      "battery": "4820mAh",
+      "os": "Android 13",
+      "color": "Ceramic White",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "19",
+    "name": "Samsung Galaxy S23",
+    "category": "Смартфоны",
+    "price": 3185,
+    "image": "/images/S23-Colors.jpg",
+    "images": [
+      "/images/S23-Colors.jpg",
+      "/images/product_color_cream.avif",
+      "/images/sm-s911_galaxys23_1-3.jpg"
+    ],
+    "description": "Компактный флагман Samsung",
+    "specifications": {
+      "brand": "Samsung",
+      "model": "Galaxy S23",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.1 Dynamic AMOLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 12MP + 10MP",
+      "battery": "3900mAh",
+      "os": "Android 13",
+      "color": "Lavender",
+      "year": "2023",
+      "condition": "new"
+    }
+  },
+  {
+    "id": "honor1",
+    "name": "Honor Magic6 Pro",
+    "category": "Смартфоны",
+    "price": 3199,
+    "image": "/images/honor/Honor Magic6 Pro-3.jpg",
+    "images": [
+      "/images/honor/Honor Magic6 Pro-1.jpg",
+      "/images/honor/Honor Magic6 Pro-3.jpg",
+      "/images/honor/Honor Magic6 Pro.webp"
+    ],
+    "description": "Флагманский смартфон Honor с передовыми технологиями и мощной камерой",
+    "specifications": {
+      "brand": "Honor",
+      "model": "Magic6 Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.8 OLED LTPO",
+      "processor": "Snapdragon 8 Gen 3",
+      "camera": "50MP + 50MP + 180MP",
+      "battery": "5600 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor2",
+    "name": "Honor 90",
+    "category": "Смартфоны",
+    "price": 1399,
+    "image": "/images/honor/Honor 90-1.jpg",
+    "images": [
+      "/images/honor/Honor 90-3.png",
+      "/images/honor/Honor 90.png",
+      "/images/honor/Honor 90-1.jpg"
+    ],
+    "description": "Стильный смартфон с отличной камерой и ярким экраном",
+    "specifications": {
+      "brand": "Honor",
+      "model": "90",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.7 AMOLED",
+      "processor": "Snapdragon 7 Gen 1",
+      "camera": "200MP + 12MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor3",
+    "name": "Honor Magic V2",
+    "category": "Смартфоны",
+    "price": 3799,
+    "image": "/images/honor/Honor Magic V2-2.webp",
+    "images": [
+      "/images/honor/Honor Magic V2-2.webp",
+      "/images/honor/Honor Magic V2-3.jpg",
+      "/images/honor/Honor Magic V2.png"
+    ],
+    "description": "Инновационный складной смартфон с передовыми технологиями",
+    "specifications": {
+      "brand": "Honor",
+      "model": "Magic V2",
+      "memory": "512GB",
+      "ram": "16GB",
+      "display": "7.92 Складной OLED",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 50MP + 20MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor4",
+    "name": "Honor X9a",
+    "category": "Смартфоны",
+    "price": 1099,
+    "image": "/images/honor/Honor X9a-2.jpeg",
+    "images": [
+      "/images/honor/Honor X9a-2.jpeg",
+      "/images/honor/Honor X9a-3.webp",
+      "/images/honor/Honor X9a.jpeg"
+    ],
+    "description": "Надежный смартфон среднего класса с отличной автономностью",
+    "specifications": {
+      "brand": "Honor",
+      "model": "X9a",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.67 OLED",
+      "processor": "Snapdragon 695",
+      "camera": "64MP + 5MP + 2MP",
+      "battery": "5100 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor5",
+    "name": "Honor 70",
+    "category": "Смартфоны",
+    "price": 1199,
+    "image": "/images/honor/Honor 70.jpg",
+    "images": [
+      "/images/honor/Honor 70.jpg",
+      "/images/honor/Honor 70-3.jpg",
+      "/images/honor/Honor 70-2.jpeg"
+    ],
+    "description": "Элегантный смартфон с продвинутой камерой и быстрой зарядкой",
+    "specifications": {
+      "brand": "Honor",
+      "model": "70",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 OLED",
+      "processor": "Snapdragon 778G+",
+      "camera": "54MP + 50MP + 2MP",
+      "battery": "4800 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor6",
+    "name": "Honor X8",
+    "category": "Смартфоны",
+    "price": 899,
+    "image": "/images/honor/Honor X8-2.jpg",
+    "images": [
+      "/images/honor/Honor X8-3.jpg",
+      "/images/honor/Honor X8-2.jpg",
+      "/images/honor/Honor X8.png"
+    ],
+    "description": "Доступный смартфон с хорошим соотношением цена-качество",
+    "specifications": {
+      "brand": "Honor",
+      "model": "X8",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.7 IPS",
+      "processor": "Snapdragon 680",
+      "camera": "64MP + 5MP + 2MP + 2MP",
+      "battery": "4000 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor7",
+    "name": "Honor Magic5 Pro",
+    "category": "Смартфоны",
+    "price": 2799,
+    "image": "/images/honor/Honor Magic6 Pro.webp",
+    "images": [
+      "/images/honor/Honor Magic6 Pro.webp",
+      "/images/honor/Honor Magic6 Pro-3.jpg",
+      "/images/honor/Honor Magic6 Pro-1.jpg"
+    ],
+    "description": "Флагманский смартфон с продвинутой системой камер",
+    "specifications": {
+      "brand": "Honor",
+      "model": "Magic5 Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.81 OLED LTPO",
+      "processor": "Snapdragon 8 Gen 2",
+      "camera": "50MP + 50MP + 50MP",
+      "battery": "5100 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor8",
+    "name": "Honor 90 Lite",
+    "category": "Смартфоны",
+    "price": 999,
+    "image": "/images/honor/Honor 90 Lite-2.webp",
+    "images": [
+      "/images/honor/Honor 90 Lite-3.png",
+      "/images/honor/Honor 90 Lite-2.webp",
+      "/images/honor/Honor 90 Lite.png"
+    ],
+    "description": "Облегченная версия популярного Honor 90 с отличными характеристиками",
+    "specifications": {
+      "brand": "Honor",
+      "model": "90 Lite",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.7 IPS",
+      "processor": "Dimensity 6020",
+      "camera": "100MP + 5MP + 2MP",
+      "battery": "4500 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor9",
+    "name": "Honor X7a",
+    "category": "Смартфоны",
+    "price": 799,
+    "image": "/images/honor/Honor X7a-3.jpg",
+    "images": [
+      "/images/honor/Honor X7a-21.jpeg",
+      "/images/honor/Honor X7a-3.jpg",
+      "/images/honor/Honor X7a.jpg"
+    ],
+    "description": "Бюджетный смартфон с большим аккумулятором",
+    "specifications": {
+      "brand": "Honor",
+      "model": "X7a",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "6.74 IPS",
+      "processor": "MediaTek Helio G37",
+      "camera": "50MP + 5MP + 2MP + 2MP",
+      "battery": "6000 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "honor10",
+    "name": "Honor X6",
+    "category": "Смартфоны",
+    "price": 749,
+    "image": "/images/honor/Honor X6.avif",
+    "images": [
+      "/images/honor/Honor X6-3.webp",
+      "/images/honor/Honor X6-2.jpg",
+      "/images/honor/Honor X6.avif"
+    ],
+    "description": "Доступный смартфон с тройной камерой и большим экраном",
+    "specifications": {
+      "brand": "Honor",
+      "model": "X6",
+      "memory": "64GB",
+      "ram": "4GB",
+      "display": "6.5 IPS",
+      "processor": "MediaTek Helio G25",
+      "camera": "50MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "honor"
+  },
+  {
+    "id": "huawei1",
+    "name": "Huawei P60 Pro",
+    "category": "Смартфоны",
+    "price": 2690,
+    "image": "/images/huawei/Huawei P60 Pro-1.webp",
+    "images": [
+      "/images/huawei/Huawei P60 Pro-2.avif",
+      "/images/huawei/Huawei P60 Pro-3.png",
+      "/images/huawei/Huawei P60 Pro.jpg"
+    ],
+    "description": "Флагманский смартфон с революционной камерой XMAGE",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "P60 Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.67 OLED LTPO",
+      "processor": "Snapdragon 8+ Gen 1",
+      "camera": "48MP + 48MP + 48MP",
+      "battery": "4815 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei2",
+    "name": "Huawei Mate 60 Pro",
+    "category": "Смартфоны",
+    "price": 3999,
+    "image": "/images/huawei/mate_60_pro_all_1.webp",
+    "images": [
+      "/images/huawei/mate_60_pro_all_2.jpg",
+      "/images/huawei/mate_60_pro_all_1.webp",
+      "/images/huawei/mate_60_pro_all_3.jpeg"
+    ],
+    "description": "Инновационный флагман с поддержкой спутниковой связи",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "Mate 60 Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.82 OLED LTPO",
+      "processor": "Kirin 9000s",
+      "camera": "50MP + 48MP + 12MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei3",
+    "name": "Huawei Mate X3",
+    "category": "Смартфоны",
+    "price": 3599,
+    "image": "/images/huawei/Huawei Mate X3.png",
+    "images": [
+      "/images/huawei/Huawei Mate X3.png",
+      "/images/huawei/Huawei Mate X3-2.jpg",
+      "/images/huawei/Huawei Mate X3.webp"
+    ],
+    "description": "Премиальный складной смартфон с защитой от воды",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "Mate X3",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "7.85 Складной OLED",
+      "processor": "Snapdragon 8+ Gen 1",
+      "camera": "50MP + 13MP + 12MP",
+      "battery": "4800 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei4",
+    "name": "Huawei nova 11 Pro",
+    "category": "Смартфоны",
+    "price": 1899,
+    "image": "/images/huawei/Huawei nova 11 Pro.jpg",
+    "images": [
+      "/images/huawei/Huawei nova 11 Pro-1.jpg",
+      "/images/huawei/Huawei nova 11 Pro.jpg",
+      "/images/huawei/Huawei nova 11 Pro-2.jpg"
+    ],
+    "description": "Стильный смартфон с акцентом на селфи-камеру",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "nova 11 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.78 OLED",
+      "processor": "Snapdragon 778G",
+      "camera": "50MP + 8MP, 60MP селфи",
+      "battery": "4500 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei5",
+    "name": "Huawei nova Y90",
+    "category": "Смартфоны",
+    "price": 1099,
+    "image": "/images/huawei/Huawei nova Y90-1.jpg",
+    "images": [
+      "/images/huawei/Huawei nova Y90-2.avif",
+      "/images/huawei/Huawei nova Y90-1.jpg",
+      "/images/huawei/Huawei nova Y90-3.webp"
+    ],
+    "description": "Доступный смартфон с большим экраном и батареей",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "nova Y90",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.7 LCD",
+      "processor": "Snapdragon 680",
+      "camera": "50MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei6",
+    "name": "Huawei P50 Pro",
+    "category": "Смартфоны",
+    "price": 2799,
+    "image": "/images/huawei/Huawei P50 Pro.webp",
+    "images": [
+      "/images/huawei/Huawei P50 Pro-1.webp",
+      "/images/huawei/Huawei P50 Pro.webp",
+      "/images/huawei/Huawei P50 Pro-3.jpg"
+    ],
+    "description": "Флагманский смартфон с камерой Leica",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "P50 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.6 OLED",
+      "processor": "Snapdragon 888",
+      "camera": "50MP + 40MP + 13MP + 64MP",
+      "battery": "4360 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei7",
+    "name": "Huawei nova 10 Pro",
+    "category": "Смартфоны",
+    "price": 1599,
+    "image": "/images/huawei/Huawei nova 10 Pro-1.jpg",
+    "images": [
+      "/images/huawei/Huawei nova 10 Pro-2.jpg",
+      "/images/huawei/Huawei nova 10 Pro-1.jpg",
+      "/images/huawei/Huawei nova 10 Pro.avif"
+    ],
+    "description": "Стильный смартфон среднего класса с отличными камерами",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "nova 10 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.78 OLED",
+      "processor": "Snapdragon 778G",
+      "camera": "50MP + 8MP + 2MP",
+      "battery": "4500 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei8",
+    "name": "Huawei Mate 50 Pro",
+    "category": "Смартфоны",
+    "price": 3199,
+    "image": "/images/huawei/Huawei Mate 50 Pro-1.jpeg",
+    "images": [
+      "/images/huawei/Huawei Mate 50 Pro-2.jpg",
+      "/images/huawei/Huawei Mate 50 Pro-3.jpg",
+      "/images/huawei/Huawei Mate 50 Pro.png"
+    ],
+    "description": "Флагман с продвинутой системой камер",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "Mate 50 Pro",
+      "memory": "512GB",
+      "ram": "8GB",
+      "display": "6.74 OLED",
+      "processor": "Snapdragon 8+ Gen 1",
+      "camera": "50MP + 13MP + 64MP",
+      "battery": "4700 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei9",
+    "name": "Huawei nova Y70",
+    "category": "Смартфоны",
+    "price": 899,
+    "image": "/images/huawei/Huawei nova Y70-1.webp",
+    "images": [
+      "/images/huawei/Huawei nova Y70-2.webp",
+      "/images/huawei/Huawei nova Y70.jpeg",
+      "/images/huawei/Huawei nova Y70-1.webp"
+    ],
+    "description": "Бюджетный смартфон с большой батареей",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "nova Y70",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "6.75 LCD",
+      "processor": "Mediatek MT8766",
+      "camera": "48MP + 5MP + 2MP",
+      "battery": "6000 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "huawei10",
+    "name": "Huawei nova 9",
+    "category": "Смартфоны",
+    "price": 1099,
+    "image": "/images/huawei/Huawei nova 9.jpg",
+    "images": [
+      "/images/huawei/Huawei nova 9-1.jpeg",
+      "/images/huawei/Huawei nova 9.jpg",
+      "/images/huawei/Huawei nova 9-2.webp"
+    ],
+    "description": "Стильный смартфон с качественным дисплеем",
+    "specifications": {
+      "brand": "Huawei",
+      "model": "nova 9",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.57 OLED",
+      "processor": "Snapdragon 778G",
+      "camera": "50MP + 8MP + 2MP + 2MP",
+      "battery": "4300 mAh"
+    },
+    "categoryId": "huawei"
+  },
+  {
+    "id": "infinix1",
+    "name": "Infinix Zero 30",
+    "category": "Смартфоны",
+    "price": 1299,
+    "image": "/images/infinix/Infinix Zero 30-1.jpg",
+    "images": [
+      "/images/infinix/Infinix Zero 30-1.jpg",
+      "/images/infinix/Infinix Zero 30-2.jpg",
+      "/images/infinix/Infinix Zero 30.avif"
+    ],
+    "description": "Флагманский смартфон с 108MP камерой и AMOLED экраном",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Zero 30",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.78 AMOLED 120Hz",
+      "processor": "Dimensity 8020",
+      "camera": "108MP + 13MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix2",
+    "name": "Infinix Note 30 Pro",
+    "category": "Смартфоны",
+    "price": 1099,
+    "image": "/images/infinix/Infinix Note 30 Pro-1.jpg",
+    "images": [
+      "/images/infinix/Infinix Note 30 Pro-1.jpg",
+      "/images/infinix/Infinix Note 30 Pro-2.webp",
+      "/images/infinix/Infinix Note 30 Pro-3.jpg"
+    ],
+    "description": "Мощный смартфон с быстрой зарядкой 68W",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Note 30 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Helio G99",
+      "camera": "108MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix3",
+    "name": "Infinix GT 10 Pro",
+    "category": "Смартфоны",
+    "price": 1199,
+    "image": "/images/infinix/Infinix GT 10 Pro-1.jpg",
+    "images": [
+      "/images/infinix/Infinix GT 10 Pro-2.webp",
+      "/images/infinix/Infinix GT 10 Pro-1.jpg",
+      "/images/infinix/Infinix GT 10 Pro-1.jpg"
+    ],
+    "description": "Игровой смартфон с RGB подсветкой и мощным процессором",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "GT 10 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Dimensity 8050",
+      "camera": "108MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix4",
+    "name": "Infinix Hot 30",
+    "category": "Смартфоны",
+    "price": 749,
+    "image": "/images/infinix/Infinix Hot 30-2.jpg",
+    "images": [
+      "/images/infinix/Infinix Hot 30-3.webp",
+      "/images/infinix/Infinix Hot 30-2.jpg",
+      "/images/infinix/Infinix Hot 30.png"
+    ],
+    "description": "Доступный смартфон с хорошей производительностью",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Hot 30",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.78 IPS 90Hz",
+      "processor": "Helio G88",
+      "camera": "50MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix5",
+    "name": "Infinix Note 30",
+    "category": "Смартфоны",
+    "price": 899,
+    "image": "/images/infinix/Infinix Note 30-1.jpg",
+    "images": [
+      "/images/infinix/Infinix Note 30-2.jpg",
+      "/images/infinix/Infinix Note 30-1.jpg",
+      "/images/infinix/Infinix Note 30-3.webp"
+    ],
+    "description": "Смартфон с большим экраном и стереодинамиками",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Note 30",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.78 IPS 120Hz",
+      "processor": "Helio G99",
+      "camera": "64MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix6",
+    "name": "Infinix Zero Ultra",
+    "category": "Смартфоны",
+    "price": 1399,
+    "image": "/images/infinix/Infinix Zero Ultra-1.png",
+    "images": [
+      "/images/infinix/Infinix Zero Ultra-2.jpeg",
+      "/images/infinix/Infinix Zero Ultra-2.jpg",
+      "/images/infinix/Infinix Zero Ultra-1.png"
+    ],
+    "description": "Флагман с супербыстрой зарядкой 180W",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Zero Ultra",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.8 AMOLED 120Hz",
+      "processor": "Dimensity 920",
+      "camera": "200MP + 13MP + 2MP",
+      "battery": "4500 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix7",
+    "name": "Infinix Smart 7",
+    "category": "Смартфоны",
+    "price": 599,
+    "image": "/images/infinix/Infinix Smart 7-1.jpg",
+    "images": [
+      "/images/infinix/Infinix Smart 7-2.webp",
+      "/images/infinix/Infinix Smart 7.jpg",
+      "/images/infinix/Infinix Smart 7-1.jpg"
+    ],
+    "description": "Бюджетный смартфон с большой батареей",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Smart 7",
+      "memory": "64GB",
+      "ram": "4GB",
+      "display": "6.6 IPS",
+      "processor": "Helio A22",
+      "camera": "13MP + 2MP",
+      "battery": "6000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix8",
+    "name": "Infinix Hot 30i",
+    "category": "Смартфоны",
+    "price": 649,
+    "image": "/images/infinix/Infinix Hot 30i-1.jpg",
+    "images": [
+      "/images/infinix/hInfinix Hot 30i-3.jpeg",
+      "/images/infinix/Infinix Hot 30i.jpeg",
+      "/images/infinix/Infinix Hot 30i-1.jpg"
+    ],
+    "description": "Доступный смартфон с NFC и большим экраном",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Hot 30i",
+      "memory": "128GB",
+      "ram": "4GB",
+      "display": "6.6 IPS 90Hz",
+      "processor": "Helio G37",
+      "camera": "50MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix9",
+    "name": "Infinix Note 30 VIP",
+    "category": "Смартфоны",
+    "price": 1199,
+    "image": "/images/infinix/Infinix Note 30 VIP-3.jpg",
+    "images": [
+      "/images/infinix/Infinix Note 30 VIP-1.png",
+      "/images/infinix/Infinix Note 30 VIP-1.webp",
+      "/images/infinix/Infinix Note 30 VIP-3.jpg"
+    ],
+    "description": "Премиальная версия Note 30 с улучшенн§ыми характеристиками",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Note 30 VIP",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Dimensity 8050",
+      "camera": "108MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "infinix10",
+    "name": "Infinix Zero 20",
+    "category": "Смартфоны",
+    "price": 999,
+    "image": "/images/infinix/Infinix Zero 20-1.jpg",
+    "images": [
+      "/images/infinix/Infinix Zero 20-3.jpg",
+      "/images/infinix/Infinix Zero 20-1.jpg",
+      "/images/infinix/Infinix Zero 20-3.webp"
+    ],
+    "description": "Смартфон с упором на селфи-камеру",
+    "specifications": {
+      "brand": "Infinix",
+      "model": "Zero 20",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.7 AMOLED 90Hz",
+      "processor": "Helio G99",
+      "camera": "108MP + 13MP + 2MP, 60MP селфи",
+      "battery": "4500 mAh"
+    },
+    "categoryId": "infinix"
+  },
+  {
+    "id": "xiaomi1",
+    "name": "Xiaomi 14 Pro",
+    "category": "Смартфоны",
+    "price": 1299,
+    "image": "/images/xiaomi/Xiaomi 14 Pro.jpg",
+    "images": [
+      "/images/xiaomi/Xiaomi 14 Pro-2.jpg",
+      "/images/xiaomi/Xiaomi 14 Pro.jpg",
+      "/images/xiaomi/Xiaomi 14 Pro-3.webp"
+    ],
+    "description": "Флагманский смартфон с камерой Leica и чипом Snapdragon 8 Gen 3",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "14 Pro",
+      "memory": "512GB",
+      "ram": "16GB",
+      "display": "6.73 LTPO AMOLED 120Hz",
+      "processor": "Snapdragon 8 Gen 3",
+      "camera": "50MP + 50MP + 50MP Leica",
+      "battery": "4880 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi2",
+    "name": "Redmi Note 13 Pro+",
+    "category": "Смартфоны",
+    "price": 1499,
+    "image": "/images/xiaomi/Redmi Note 13 Pro2.jpg",
+    "images": [
+      "/images/xiaomi/Redmi Note 13 Pro2.jpg",
+      "/images/xiaomi/Redmi Note 13 Pro3.jpeg",
+      "/images/xiaomi/Redmi Note13Pro1.avif"
+    ],
+    "description": "Мощный смартфон среднего класса с 200MP камерой",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "Redmi Note 13 Pro+",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Dimensity 7200 Ultra",
+      "camera": "200MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi4",
+    "name": "Xiaomi 13T Pro",
+    "category": "Смартфоны",
+    "price": 2199,
+    "image": "/images/xiaomi/Xiaomi 13T Pro.jpg",
+    "images": [
+      "/images/xiaomi/Xiaomi 13T Pro-2.webp",
+      "/images/xiaomi/Xiaomi 13T Pro.jpg",
+      "/images/xiaomi/Xiaomi 13T Pro-1.jpg"
+    ],
+    "description": "Производительный смартфон с камерой Leica",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "13T Pro",
+      "memory": "512GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED 144Hz",
+      "processor": "Dimensity 9200+",
+      "camera": "50MP + 50MP + 12MP Leica",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi5",
+    "name": "Redmi Note 12 Pro",
+    "category": "Смартфоны",
+    "price": 1199,
+    "image": "/images/xiaomi/Redmi Note 12 Pro-3.webp",
+    "images": [
+      "/images/xiaomi/Redmi Note 12 Pro-3.webp",
+      "/images/xiaomi/Redmi Note 12 Pro-3.webp",
+      "/images/xiaomi/Redmi Note 12 Pro.webp"
+    ],
+    "description": "Популярный смартфон среднего класса",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "Redmi Note 12 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Dimensity 1080",
+      "camera": "50MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi7",
+    "name": "Redmi 12",
+    "category": "Смартфоны",
+    "price": 899,
+    "image": "/images/xiaomi/Redmi 12-1.jpg",
+    "images": [
+      "/images/xiaomi/Redmi 12-3.png",
+      "/images/xiaomi/Redmi 12.png",
+      "/images/xiaomi/Redmi 12-1.jpg"
+    ],
+    "description": "Доступный смартфон с хорошими характеристиками",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "Redmi 12",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.79 IPS 90Hz",
+      "processor": "Helio G88",
+      "camera": "50MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi9",
+    "name": "Redmi Note 12",
+    "category": "Смартфоны",
+    "price": 999,
+    "image": "/images/xiaomi/Redmi Note 12-1.jpg",
+    "images": [
+      "/images/xiaomi/Redmi Note 12-3.jpg",
+      "/images/xiaomi/Redmi Note 12.png",
+      "/images/xiaomi/Redmi Note 12-1.jpg"
+    ],
+    "description": "Сбалансированный смартфон с AMOLED экраном",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "Redmi Note 12",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Snapdragon 4 Gen 1",
+      "camera": "48MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "xiaomi10",
+    "name": "Redmi A2+",
+    "category": "Смартфоны",
+    "price": 499,
+    "image": "/images/xiaomi/RedmiA2_1.jpeg",
+    "images": [
+      "/images/xiaomi/RedmiA2_1.jpeg",
+      "/images/xiaomi/RedmiA2_2.jpg",
+      "/images/xiaomi/RedmiA2-3.jpg"
+    ],
+    "description": "Ультрабюджетный смартфон с большим экраном",
+    "specifications": {
+      "brand": "Xiaomi",
+      "model": "Redmi A2+",
+      "memory": "64GB",
+      "ram": "3GB",
+      "display": "6.52 IPS",
+      "processor": "Helio G36",
+      "camera": "8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "xiaomi"
+  },
+  {
+    "id": "poco1",
+    "name": "POCO F5 Pro",
+    "category": "Смартфоны",
+    "price": 1799,
+    "image": "/images/POCO/POCO F5 Pro-2.webp",
+    "images": [
+      "/images/POCO/POCO F5 Pro.jpg",
+      "/images/POCO/POCO F5 Pro.webp",
+      "/images/POCO/POCO F5 Pro-2.webp"
+    ],
+    "description": "Флагманский смартфон с топовым процессором Snapdragon 8+ Gen 1",
+    "specifications": {
+      "brand": "POCO",
+      "model": "F5 Pro",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Snapdragon 8+ Gen 1",
+      "camera": "64MP + 8MP + 2MP",
+      "battery": "5160 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco2",
+    "name": "POCO F5",
+    "category": "Смартфоны",
+    "price": 1499,
+    "image": "/images/POCO/POCO F5-1.jpg",
+    "images": [
+      "/images/POCO/POCO F5.avif",
+      "/images/POCO/POCO F5-1.jpg",
+      "/images/POCO/POCO F5-3.webp"
+    ],
+    "description": "Мощный смартфон с процессором Snapdragon 7+ Gen 2",
+    "specifications": {
+      "brand": "POCO",
+      "model": "F5",
+      "memory": "256GB",
+      "ram": "12GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Snapdragon 7+ Gen 2",
+      "camera": "64MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco3",
+    "name": "POCO X6 Pro",
+    "category": "Смартфоны",
+    "price": 1299,
+    "image": "/images/POCO/POCO X6 Pro-1.jpg",
+    "images": [
+      "/images/POCO/POCO X6 Pro-2.jpeg",
+      "/images/POCO/POCO X6 Pro-1.jpg",
+      "/images/POCO/POCO X6 Pro.jpg"
+    ],
+    "description": "Производительный смартфон среднего класса",
+    "specifications": {
+      "brand": "POCO",
+      "model": "X6 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Dimensity 8100",
+      "camera": "64MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco4",
+    "name": "POCO X5 Pro",
+    "category": "Смартфоны",
+    "price": 1199,
+    "image": "/images/POCO/POCO X5 Pro.jpg",
+    "images": [
+      "/images/POCO/POCO X5 Pro-3.png",
+      "/images/POCO/POCO X5 Pro-2.webp",
+      "/images/POCO/POCO X5 Pro.jpg"
+    ],
+    "description": "Смартфон с отличным экраном и камерой 108MP",
+    "specifications": {
+      "brand": "POCO",
+      "model": "X5 Pro",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Snapdragon 778G",
+      "camera": "108MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco5",
+    "name": "POCO X5",
+    "category": "Смартфоны",
+    "price": 1099,
+    "image": "/images/POCO/POCO X5-2.jpg",
+    "images": [
+      "/images/POCO/POCO X5-2.jpg",
+      "/images/POCO/POCO X5-3.png",
+      "/images/POCO/POCO X5-2.jpg"
+    ],
+    "description": "Доступный смартфон с 5G и AMOLED экраном",
+    "specifications": {
+      "brand": "POCO",
+      "model": "X5",
+      "memory": "256GB",
+      "ram": "8GB",
+      "display": "6.67 AMOLED 120Hz",
+      "processor": "Snapdragon 695",
+      "camera": "48MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco6",
+    "name": "POCO M6 Pro",
+    "category": "Смартфоны",
+    "price": 999,
+    "image": "/images/POCO/POCO M6 Pro.png",
+    "images": [
+      "/images/POCO/POCO M6 Pro-2.jpg",
+      "/images/POCO/POCO M6 Pro.png",
+      "/images/POCO/POCO M6 Pro-2.jpg"
+    ],
+    "description": "Бюджетный смартфон с хорошей производительностью",
+    "specifications": {
+      "brand": "POCO",
+      "model": "M6 Pro",
+      "memory": "128GB",
+      "ram": "8GB",
+      "display": "6.79 IPS 90Hz",
+      "processor": "Helio G99",
+      "camera": "64MP + 8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco7",
+    "name": "POCO M5s",
+    "category": "Смартфоны",
+    "price": 899,
+    "image": "/images/POCO/POCO M5s.jpg",
+    "images": [
+      "/images/POCO/POCO M5s-3.jpg",
+      "/images/POCO/POCO M5s.jpg",
+      "/images/POCO/POCO M5s-2.webp"
+    ],
+    "description": "Доступный смартфон с AMOLED экраном",
+    "specifications": {
+      "brand": "POCO",
+      "model": "M5s",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.43 AMOLED",
+      "processor": "Helio G95",
+      "camera": "64MP + 8MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco8",
+    "name": "POCO M5",
+    "category": "Смартфоны",
+    "price": 799,
+    "image": "/images/POCO/POCO M5-1.jpg",
+    "images": [
+      "/images/POCO/POCO M5-1.jpg",
+      "/images/POCO/POCO M5.jpg",
+      "/images/POCO/POCO M5-1.jpg"
+    ],
+    "description": "Бюджетный игровой смартфон",
+    "specifications": {
+      "brand": "POCO",
+      "model": "M5",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.58 IPS 90Hz",
+      "processor": "Helio G99",
+      "camera": "50MP + 2MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco9",
+    "name": "POCO C55",
+    "category": "Смартфоны",
+    "price": 999,
+    "image": "/images/POCO/POCO C55-2.jpg",
+    "images": [
+      "/images/POCO/POCO C55-3.jpg",
+      "/images/POCO/POCO C55.jpg",
+      "/images/POCO/POCO C55-2.jpg"
+    ],
+    "description": "Ультрабюджетный смартфон с большим экраном",
+    "specifications": {
+      "brand": "POCO",
+      "model": "C55",
+      "memory": "128GB",
+      "ram": "6GB",
+      "display": "6.71 IPS",
+      "processor": "Helio G85",
+      "camera": "50MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  },
+  {
+    "id": "poco10",
+    "name": "POCO C51",
+    "category": "Смартфоны",
+    "price": 499,
+    "image": "/images/POCO/POCO C51-2.jpg",
+    "images": [
+      "/images/POCO/POCO C51-3.jpeg",
+      "/images/POCO/POCO C51.jpg",
+      "/images/POCO/POCO C51-2.jpg"
+    ],
+    "description": "Самый доступный смартфон POCO",
+    "specifications": {
+      "brand": "POCO",
+      "model": "C51",
+      "memory": "64GB",
+      "ram": "4GB",
+      "display": "6.52 IPS",
+      "processor": "Helio G36",
+      "camera": "8MP + 2MP",
+      "battery": "5000 mAh"
+    },
+    "categoryId": "poco"
+  }
 ]
