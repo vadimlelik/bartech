@@ -68,7 +68,7 @@ export default function Footer() {
               color="text.secondary"
               sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
             >
-              <MuiLink href="tel:+375257766462" color="inherit">
+              <MuiLink href="tel:+375 44 741-84-23" color="inherit">
                 +375 44 741-84-23
               </MuiLink>
             </Typography>

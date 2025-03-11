@@ -140,7 +140,7 @@ export default function Header() {
                 <Typography
                   variant="body2"
                   component="a"
-                  href="tel:+375257766462"
+                  href="tel:+375 44 741-84-23"
                   sx={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   +375 44 741-84-23
@@ -223,7 +223,7 @@ export default function Header() {
                 primary={
                   <Typography
                     component="a"
-                    href="tel:+375257766462"
+                    href="tel:+375 44 741-84-23"
                     sx={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     +375 44 741-84-23

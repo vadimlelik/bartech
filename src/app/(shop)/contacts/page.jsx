@@ -72,7 +72,7 @@ export default function Contacts() {
                   <Typography variant="h6">Телефон</Typography>
                 </Box>
                 <Link
-                  href="tel:+375257766462"
+                  href="tel:+375 44 741-84-23"
                   sx={{
                     textDecoration: 'none',
                     color: 'text.primary',

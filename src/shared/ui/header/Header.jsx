@@ -78,8 +78,8 @@ const Header = () => {
           <a href="#" className={styles.navLink}>
             пн.- пт.: 9:30 - 21:30
           </a>
-          <a href="tel:+375257766462" className={styles.navLink}>
-            +375257766462
+          <a href="tel:+375 44 741-84-23" className={styles.navLink}>
+            +375 44 741-84-23
           </a>
         </nav>
       )}
@@ -98,8 +98,8 @@ const Header = () => {
           <a href="#" className={styles.navLink}>
             пн.- пт.: 9:30 - 21:30
           </a>
-          <a href="tel:+375257766462" className={styles.navLink}>
-            +375257766462
+          <a href="tel:+375 44 741-84-23" className={styles.navLink}>
+            +375 44 741-84-23
           </a>
         </nav>
       )}
