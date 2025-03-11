@@ -69,7 +69,7 @@ export default function Footer() {
               sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
             >
               <MuiLink href="tel:+375257766462" color="inherit">
-                +375 25 776-64-62
+                +375 44 741-84-23
               </MuiLink>
             </Typography>
           </Grid>
