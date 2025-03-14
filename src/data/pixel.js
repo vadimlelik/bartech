@@ -42,3 +42,6 @@ export const PIXEL_3 = {
   shockproof: 'CV11U7JC77U5LNUGO2UG',
   bicycles: 'CV1297JC77UD29549UN0',
 };
+export const PIXEL_4 = {
+  bicycles: 'CV9EG9BC77UCFC44B5Q0',
+};
