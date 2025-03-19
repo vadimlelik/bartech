@@ -10,6 +10,14 @@ services:
       - ./data:/app/data:ro
     restart: always
 
+  certbot-renew:
+    image: certbot/certbot:latest
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - ./www:/var/www/certbot
+    entrypoint: >
+      sh -c "while :; do certbot renew --webroot -w /var/www/certbot --post-hook 'nginx -s reload'; sleep 12h; done"
+    restart: always
   certbot:
     image: certbot/certbot:latest
     volumes:
