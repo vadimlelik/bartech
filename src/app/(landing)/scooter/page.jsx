@@ -34,20 +34,20 @@ const reviews = [
   {
     id: 1,
     author: 'Игорь, Брест ',
-    text: 'Справляется с тяжелой землей. У нас земля глинистая, обычные мотоблоки не тянут.Взял Штенли 1900, потому что у него мощный мотор. Тянет отлично, фрезы крутит, землю ворочает как надо. Пока доволен.',
-    image: '/images/moto/reviews_moto_1.png',
+    text: 'На днях приобрел скутер YamaScoot X100 и не могу нарадоваться! Отличная скорость, экономичный расход топлива и шикарная маневренность в городских условиях. Прекрасно подходит для ежедневных поездок на работу. Очень доволен!',
+    image: '/images/scooter/reviews_scooter_2.png',
   },
   {
     id: 2,
     author: 'Иван, Витебск',
-    text: 'Работает как надо! Купил Shtenli 1900, потому что участок большой. Сразу взял к нему плуг. Машина мощная, легко идет по земле. Бензина ест немного, на весь день хватает. Хорошая штука для работы',
-    image: '/images/moto/reviews_moto_2.jpeg',
+    text: 'Этот скутер просто превосходен! Vespa Primavera — это сочетание стиля и производительности. Он быстрый, комфортный и очень удобен для городской езды. Я в восторге от его дизайна и качества сборки. Определенно рекомендую!',
+    image: '/images/scooter/reviews_scooter_1.png',
   },
   {
     id: 3,
     author: 'Максим, Мозырь',
-    text: 'Shtenli 1030 приобрел для обработки своего огорода.Двигатель немного слабее, чем у старших моделей, но для небольших площадей его хватает с головой. Прост в управлении и обслуживании. Понравилось, что легко заводится даже в холодную погоду. Отличный вариант!',
-    image: '/images/moto/reviews_moto_3.png',
+    text: 'Купил Honda Dio для поездок по городу — это просто идеальный выбор! Легкий, маневренный и экономичный. Прекрасно справляется с городскими пробками, а запуск всегда надежный. Очень рад своим приобретением!',
+    image: '/images/scooter/reviews_scooter_3.png',
   },
 ];
 
@@ -97,7 +97,7 @@ export default function MotoBlok() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=motoblok');
+        router.push('/thank-you?source=scooter');
       });
   };
   const questions = [
@@ -115,16 +115,6 @@ export default function MotoBlok() {
           value: 'Нужна консультация',
           label: 'Нужна консультация',
         },
-      ],
-    },
-    {
-      id: 5,
-      question: 'Выберите Подарок',
-      type: 'radio',
-      options: [
-        { value: 'Окучник', label: 'Окучник' },
-        { value: 'Плуг', label: 'Плуг' },
-        { value: 'Фреза', label: 'Фреза' },
       ],
     },
     {
@@ -164,14 +154,14 @@ export default function MotoBlok() {
     <div className={styles.container}>
       <div className={styles.text}>
         <h1 className={styles.title}>
-          МОТОБЛОКИ В РАССРОЧКУ БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ
+          СКУТЕР В РАССРОЧКУ БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ
         </h1>
-        <h3>Фрезы или сцепка в ПОДАРОК!</h3>
+        <h3>Шлем в подарок!</h3>
       </div>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/moto/moto1.webp"
+            src="/images/scooter/scooter_2.jpg"
             alt="Телефоны"
             width={500}
             height={400}
@@ -213,7 +203,7 @@ export default function MotoBlok() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/images/moto/moto2.webp"
+            src="/images/scooter/scooter_1.jpg"
             alt="Телефоны"
             width={600}
             height={600}
