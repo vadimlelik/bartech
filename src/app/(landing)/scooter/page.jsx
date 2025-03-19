@@ -71,10 +71,10 @@ export default function MotoBlok() {
 
   useEffect(() => {
     if (window.ttq) {
-      // window.ttq.load(PIXEL.bicycles);
-      // window.ttq.load(PIXEL_2.bicycles);
-      // window.ttq.load(PIXEL_3.bicycles);
-      // window.ttq.load(PIXEL_4.bicycles);
+      window.ttq.load(PIXEL.scooter);
+      window.ttq.load(PIXEL_2.scooter);
+      window.ttq.load(PIXEL_3.scooter);
+      window.ttq.load(PIXEL_4.scooter);
       // window.ttq.page();
     }
   }, []);

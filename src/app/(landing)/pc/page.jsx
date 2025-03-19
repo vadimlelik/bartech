@@ -92,9 +92,9 @@ export default function PC() {
 
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.shockproof);
-      window.ttq.load(PIXEL_2.shockproof);
-      window.ttq.load(PIXEL_3.shockproof);
+      window.ttq.load(PIXEL.pc);
+      window.ttq.load(PIXEL_2.pc);
+      window.ttq.load(PIXEL_3.pc);
       window.ttq.page();
     }
   }, []);
