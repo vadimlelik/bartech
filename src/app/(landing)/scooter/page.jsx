@@ -156,7 +156,7 @@ export default function MotoBlok() {
         <h1 className={styles.title}>
           Электроскутеры в рассрочку cо скидкой до 50%
         </h1>
-        <h3 className={styles.description}>Шлем в подарок!</h3>
+        {/* <h3 className={styles.description}>Шлем в подарок!</h3> */}
       </div>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
@@ -271,7 +271,7 @@ export default function MotoBlok() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="bicycles"
+        title="scooter"
       />
     </div>
   );

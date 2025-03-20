@@ -12,7 +12,7 @@ import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
 const advantages = [
   {
     id: 1,
-    title: 'Своя рассрочка от магазина',
+    title: 'Выгодная рассрочка',
     description:
       'Срок рассрочки до 5 лет без переплат. Не нужны справки о доходах. Без аванса и поручителей. С возможностью досрочного погашения.',
   },
@@ -311,7 +311,7 @@ export default function PC() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="Броне Телефон"
+        title="PC"
       />
     </div>
   );

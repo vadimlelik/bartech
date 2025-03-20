@@ -34,13 +34,13 @@ const reviews = [
   {
     id: 1,
     author: 'Игорь, Брест ',
-    text: 'Справляется с тяжелой землей. У нас тяжелая земля, обычные мотоблоки не тянут.Взял MTZ, потому что у него мощный мотор. Тянет отлично, фрезы крутит, землю ворочает как надо. Пока доволен.',
+    text: 'Справляется с тяжелой землей. У нас тяжелая земля, обычные мотоблоки не тянут.Взял МТЗ, потому что у него мощный мотор. Тянет отлично, фрезы крутит, землю ворочает как надо. Пока доволен.',
     image: '/images/moto/moto_reviews_1.jpg',
   },
   {
     id: 2,
     author: 'Иван, Витебск',
-    text: 'Работает как надо! Купил MTZ потому что участок большой. Сразу взял к нему плуг. Машина мощная, легко идет по земле. Бензина ест немного, на весь день хватает. Хорошая штука для работы',
+    text: 'Работает как надо! Купил МТЗ потому что участок большой. Сразу взял к нему плуг. Машина мощная, легко идет по земле. Бензина ест немного, на весь день хватает. Хорошая штука для работы',
     image: '/images/moto/reviews_moto_2.jpg',
   },
   {
@@ -76,7 +76,7 @@ export default function MotoBlok() {
       window.ttq.load(PIXEL_3.motoblock);
       window.ttq.load(PIXEL_4.motoblock);
       window.ttq.load(PIXEL_5.motoblock);
-      // window.ttq.page();
+      window.ttq.page();
     }
   }, []);
 
@@ -98,7 +98,7 @@ export default function MotoBlok() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=motoblock');
+        router.push('/thank-you?source=motoblok');
       });
   };
   const questions = [
@@ -119,7 +119,7 @@ export default function MotoBlok() {
       ],
     },
     {
-      id: 5,
+      id: 2,
       question: 'Выберите Подарок',
       type: 'radio',
       options: [
@@ -129,7 +129,7 @@ export default function MotoBlok() {
       ],
     },
     {
-      id: 2,
+      id: 3,
       question: 'Рассчитать платежи с первым взносом или без?',
       type: 'radio',
       options: [
@@ -214,7 +214,7 @@ export default function MotoBlok() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/images/moto/moto2.webp"
+            src="/images/moto/motoblok_mtz_2.jpg"
             alt="Телефоны"
             width={600}
             height={600}
@@ -282,7 +282,7 @@ export default function MotoBlok() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="bicycles"
+        title="motoblok"
       />
     </div>
   );
