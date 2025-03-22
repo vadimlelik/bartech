@@ -167,7 +167,7 @@ export default function MotoBlok() {
         <h1 className={styles.title}>
           МОТОБЛОКИ В РАССРОЧКУ БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ
         </h1>
-        <h3 className={styles.description}>Фрезы или сцепка в ПОДАРОК!</h3>
+        <h3 className={styles.description}>Плуг или Окучник в ПОДАРОК!</h3>
       </div>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
