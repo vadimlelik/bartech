@@ -35,19 +35,19 @@ const reviews = [
     id: 1,
     author: 'Игорь, Минск 30 лет',
     text: 'Купил электровелосипед, и теперь не устаю от поездок на работу! Включаю мотор, и он помогает мне легко подниматься в гору и ехать быстрее. Теперь добираюсь до работы за половину времени!',
-    image: '/bicycles_img_1.webp',
+    image: '/images/bicycles/review_bicycles1.jpg',
   },
   {
     id: 2,
     author: 'Ольга, Минск',
     text: 'Очень довольна своим электровелосипедом! Езжу на нем в парк, в магазин, просто катаюсь по городу. Очень комфортно и весело! Батарея долго держит заряд, так что можно проехать далеко! Пользуюсь уже год, никаких проблем не возникло. Спасибо за оперативность и низкие цены!',
-    image: '/bicycles_img_2.webp',
+    image: '/images/bicycles/review_bicycles2.jpg',
   },
   {
     id: 3,
     author: 'Максим, Мозырь',
     text: 'Раньше ездил на машине, но решил пересесть на электровелосипед, чтобы помочь окружающей среде. Это отличный выбор для экологичного транспорта! К тому же, ездить на велосипеде очень приятно! Спасибо за качество и доступные цены!',
-    image: '/bicycles_img_5.webp',
+    image: '/images/bicycles/review_bicycles3.jpeg',
   },
 ];
 
@@ -166,7 +166,7 @@ export default function Phone6() {
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <Image
-            src="/bicycles_img_7.webp"
+            src="/images/bicycles/bicycles_img1.jpg"
             alt="Телефоны"
             width={500}
             height={400}
@@ -208,7 +208,7 @@ export default function Phone6() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/bicycles_img_8.webp"
+            src="/images/bicycles/bicycles_img2.jpeg"
             alt="Телефоны"
             width={600}
             height={600}
