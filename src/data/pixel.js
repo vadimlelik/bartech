@@ -11,7 +11,7 @@ export const PIXEL = {
   laptop: 'CU29BTJC77U1O46890KG',
   shockproof: 'CU29CCJC77U5K61FE54G',
   bicycles: 'CUHHSNRC77U2U27B15QG',
-  motoblock: 'CVD8V5RC77UCFC44DR3G',
+  motoblok: 'CVD8V5RC77UCFC44DR3G',
   scooter: 'CVD98CBC77UCFC44DREG',
   pc: 'CVD9ANBC77UBK44211A0',
 };
@@ -29,7 +29,7 @@ export const PIXEL_2 = {
   laptop: 'CU2H7KRC77U1O4689E2G',
   shockproof: 'CU2H7UJC77U745U5TOVG',
   bicycles: 'CUHHS7BC77UA8JMINIR0',
-  motoblock: 'CVD92DRC77UBK44210SG',
+  motoblok: 'CVD92DRC77UBK44210SG',
   scooter: 'CVD99C3C77UCFC44DRHG',
   pc: 'CVD9BG3C77U13TBVSSRG',
 };
@@ -47,13 +47,13 @@ export const PIXEL_3 = {
   laptop: 'CV11QIBC77U2LFP4LLOG',
   shockproof: 'CV11U7JC77U5LNUGO2UG',
   bicycles: 'CV1297JC77UD29549UN0',
-  motoblock: 'CVD93HBC77U13TBVSSG0',
+  motoblok: 'CVD93HBC77U13TBVSSG0',
   scooter: 'CVD9A73C77U2KF3E56PG',
   pc: 'CVD9CEBC77U2KF3E56RG',
 };
 export const PIXEL_4 = {
   bicycles: 'CV9EG9BC77UCFC44B5Q0',
-  motoblock: 'CVD94ERC77U8JA3ILR7G',
+  motoblok: 'CVD94ERC77U8JA3ILR7G',
   scooter: 'CVD9D1JC77UC3LGT8E7G',
 };
 export const PIXEL_5 = {
@@ -62,4 +62,5 @@ export const PIXEL_5 = {
 };
 export const PIXEL_6 = {
   bicycles: 'D0M4USJC77U0HTKUB760',
+  motoblok: 'CVD971RC77U73VR73V1G',
 };

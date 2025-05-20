@@ -34,14 +34,14 @@ const reviews = [
   {
     id: 1,
     author: 'Игорь, Брест ',
-    text: 'Справляется с тяжелой землей. У нас земля глинистая, обычные мотоблоки не тянут.Взял Штенли 1900, потому что у него мощный мотор. Тянет отлично, фрезы крутит, землю ворочает как надо. Пока доволен.',
-    image: '/images/moto/reviews_moto_1.png',
+    text: 'Справляется с тяжелой землей. У нас тяжелая земля, обычные мотоблоки не тянут.Взял МТЗ, потому что у него мощный мотор. Тянет отлично, фрезы крутит, землю ворочает как надо. Пока доволен.',
+    image: '/images/moto/moto_reviews_1.jpg',
   },
   {
     id: 2,
     author: 'Иван, Витебск',
-    text: 'Работает как надо! Купил Shtenli 1900, потому что участок большой. Сразу взял к нему плуг. Машина мощная, легко идет по земле. Бензина ест немного, на весь день хватает. Хорошая штука для работы',
-    image: '/images/moto/reviews_moto_2.jpeg',
+    text: 'Работает как надо! Купил МТЗ потому что участок большой. Сразу взял к нему плуг. Машина мощная, легко идет по земле. Бензина ест немного, на весь день хватает. Хорошая штука для работы',
+    image: '/images/moto/reviews_moto_2.jpg',
   },
   {
     id: 3,
@@ -76,7 +76,7 @@ export default function MotoBlok() {
       window.ttq.load(PIXEL_3.motoblock);
       window.ttq.load(PIXEL_4.motoblock);
       window.ttq.load(PIXEL_5.motoblock);
-      // window.ttq.page();
+      window.ttq.page();
     }
   }, []);
 
@@ -119,7 +119,7 @@ export default function MotoBlok() {
       ],
     },
     {
-      id: 5,
+      id: 2,
       question: 'Выберите Подарок',
       type: 'radio',
       options: [
@@ -129,7 +129,7 @@ export default function MotoBlok() {
       ],
     },
     {
-      id: 2,
+      id: 3,
       question: 'Рассчитать платежи с первым взносом или без?',
       type: 'radio',
       options: [
@@ -167,12 +167,12 @@ export default function MotoBlok() {
         <h1 className={styles.title}>
           МОТОБЛОКИ В РАССРОЧКУ БЕЗ ПЕРВОГО ВЗНОСА И ПЕРЕПЛАТ
         </h1>
-        <h3>Фрезы или сцепка в ПОДАРОК!</h3>
+        <h3 className={styles.description}>Плуг или Окучник в ПОДАРОК!</h3>
       </div>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/moto/moto1.webp"
+            src="/images/moto/motoblock_1.jpeg"
             alt="Телефоны"
             width={500}
             height={400}
@@ -214,7 +214,7 @@ export default function MotoBlok() {
       <div className={styles.advantagesSection}>
         <div className={styles.advantagesImage}>
           <Image
-            src="/images/moto/moto2.webp"
+            src="/images/moto/motoblok_mtz_2.jpg"
             alt="Телефоны"
             width={600}
             height={600}
@@ -282,7 +282,7 @@ export default function MotoBlok() {
         questions={questions}
         onSubmit={handleQuizSubmit}
         successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="bicycles"
+        title="motoblok"
       />
     </div>
   );

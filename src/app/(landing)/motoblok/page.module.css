@@ -13,12 +13,12 @@
 }
 .text {
   font-size: 25px;
-  color: #ffdd59;
+  color: #fff;
 }
 
 .subtitle {
   font-size: 18px;
-  color: #ffdd59;
+  color: #fff;
 }
 
 .header {
@@ -26,7 +26,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: #ffd700;
+  color: #fff;
   padding: 8px 0;
   white-space: nowrap;
   overflow: hidden;
@@ -37,7 +37,7 @@
   display: inline-block;
   animation: marquee 20s linear infinite;
   font-weight: bold;
-  color: #ffdd59;
+  color: #fff;
 }
 
 @keyframes marquee {
@@ -74,6 +74,10 @@
   overflow: hidden;
   flex: 1;
 }
+.description {
+  font-size: 14px;
+  color: #ffdd59;
+}
 .imageContainer img {
   width: 100%;
   height: auto;
@@ -83,7 +87,7 @@
   font-size: 28px;
   margin: 0;
   font-weight: bold;
-  color: #ffdd59;
+  color: #fff;
   line-height: 1.2;
 }
 
@@ -91,7 +95,7 @@
   list-style: none;
   padding: 0;
   margin: 20px 0;
-  color: #ffdd59;
+  color: #fff;
 }
 
 .benefits li {
@@ -106,7 +110,7 @@
 .surveyText {
   text-align: center;
   font-size: 16px;
-  color: #ffdd59;
+  color: #fff;
   line-height: 1.4;
 }
 
