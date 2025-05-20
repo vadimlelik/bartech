@@ -58,4 +58,8 @@ export const PIXEL_4 = {
 };
 export const PIXEL_5 = {
   motoblock: 'CVD971RC77U73VR73V1G',
+  bicycles: 'D0M4T7JC77UAQ078QQMG',
+};
+export const PIXEL_6 = {
+  bicycles: 'D0M4USJC77U0HTKUB760',
 };
