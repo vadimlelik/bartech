@@ -8,7 +8,7 @@ import Quiz from '@/components/quiz/Quiz';
 import LogoIcon from '@/app/(shop)/components/Logo/Logo';
 import Button from '@/app/(shop)/components/button/Button';
 
-import { PIXEL, PIXEL_2, PIXEL_3 } from '../../../data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_7, PIXEL_8 } from '../../../data/pixel';
 
 const questions = [
   {
@@ -59,6 +59,8 @@ const PhoneFree = () => {
       window.ttq.load(PIXEL.phoneFree);
       window.ttq.load(PIXEL_2.phoneFree);
       window.ttq.load(PIXEL_3.phoneFree);
+      window.ttq.load(PIXEL_7.phoneFree);
+      window.ttq.load(PIXEL_8.phoneFree);
       window.ttq.page();
     }
   }, []);

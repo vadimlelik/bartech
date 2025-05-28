@@ -62,5 +62,17 @@ export const PIXEL_5 = {
 };
 export const PIXEL_6 = {
   bicycles: 'D0M4USJC77U0HTKUB760',
-  motoblok: 'CVD971RC77U73VR73V1G',
+  motoblok: 'D0M53DJC77UF7A0LNEO0',
+};
+export const PIXEL_7 = {
+  motoblock: 'D0M546RC77UE9KRQETV0',
+  phoneFree: 'D0RE4IJC77U6QKGBNBPG',
+  phone3: 'D0REBHJC77UCOE1U8NM0',
+  laptop: 'D0RECBRC77U5DVKCASM0',
+  shockproof: 'D0REDIRC77UC6ES2JHH0',
+  pc: 'D0RG373C77U5DVKCAU60',
+};
+export const PIXEL_8 = {
+  motoblock: 'D0M58JJC77UB5BNBACDG',
+  phoneFree: 'D0RE7DRC77U8DLIL1FIG',
 };

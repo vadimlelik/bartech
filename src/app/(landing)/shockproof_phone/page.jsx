@@ -7,7 +7,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_7 } from '@/data/pixel';
 
 const advantages = [
   {
@@ -95,6 +95,7 @@ export default function ShockproofPhone() {
       window.ttq.load(PIXEL.shockproof);
       window.ttq.load(PIXEL_2.shockproof);
       window.ttq.load(PIXEL_3.shockproof);
+      window.ttq.load(PIXEL_7.shockproof);
       window.ttq.page();
     }
   }, []);

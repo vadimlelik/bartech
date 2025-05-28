@@ -7,7 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_7 } from '@/data/pixel';
 
 const reviews = [
   {
@@ -156,6 +156,7 @@ export default function Phone4() {
       window.ttq.load(PIXEL.phone3);
       window.ttq.load(PIXEL_2.phone3);
       window.ttq.load(PIXEL_3.phone3);
+      window.ttq.load(PIXEL_7.phone3);
       window.ttq.page();
     }
   }, []);

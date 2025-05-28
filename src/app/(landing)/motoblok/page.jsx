@@ -1,7 +1,16 @@
 'use client';
 
 import Loading from '@/app/loading';
-import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4, PIXEL_5 } from '@/data/pixel';
+import {
+  PIXEL,
+  PIXEL_2,
+  PIXEL_3,
+  PIXEL_4,
+  PIXEL_5,
+  PIXEL_6,
+  PIXEL_7,
+  PIXEL_8,
+} from '@/data/pixel';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -76,6 +85,9 @@ export default function MotoBlok() {
       window.ttq.load(PIXEL_3.motoblock);
       window.ttq.load(PIXEL_4.motoblock);
       window.ttq.load(PIXEL_5.motoblock);
+      window.ttq.load(PIXEL_6.motoblock);
+      window.ttq.load(PIXEL_7.motoblock);
+      window.ttq.load(PIXEL_8.motoblock);
       window.ttq.page();
     }
   }, []);
