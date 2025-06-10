@@ -59,10 +59,15 @@ export const PIXEL_4 = {
 export const PIXEL_5 = {
   motoblock: 'CVD971RC77U73VR73V1G',
   bicycles: 'D0M4T7JC77UAQ078QQMG',
+  phoneFree: 'D13EB0BC77UC7904GUJ0',
+  shockproof: 'D13E9EBC77UFSDE2ADKG',
 };
 export const PIXEL_6 = {
   bicycles: 'D0M4USJC77U0HTKUB760',
+  shockproof: 'D13EBD3C77U3RR3TOVPG',
   motoblok: 'D0M53DJC77UF7A0LNEO0',
+  phone3: 'D13EAIJC77UFDTD9PD80',
+  phoneFree: 'D13E813C77UA06S82AR0',
 };
 export const PIXEL_7 = {
   motoblock: 'D0M546RC77UE9KRQETV0',
@@ -75,4 +80,5 @@ export const PIXEL_7 = {
 export const PIXEL_8 = {
   motoblock: 'D0M58JJC77UB5BNBACDG',
   phoneFree: 'D0RE7DRC77U8DLIL1FIG',
+  phone3: 'D13E67BC77UA06S82AQ0',
 };
