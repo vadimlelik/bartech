@@ -12,3 +12,11 @@ sudo certbot --nginx
 sudo certbot certonly --webroot -w /bartech -d technobar.by -d laptop1.technobar.by -d tv1.technobar.by -d phone2.technobar.by -d laptop2.technobar.by -d tv2.technobar.by -d phone.technobar.by
 
 docker-compose run --rm certbot certonly --webroot -w /var/www/certbot -d technobar.by -d laptop1.technobar.by -d tv1.technobar.by -d phone2.technobar.by -d laptop2.technobar.by -d tv2.technobar.by -d phone.technobar.by
+
+docker-compose run --rm certbot certonly \
+ --manual \
+ --preferred-challenges dns \
+ -d '\*.cvirko-vadim.ru' -d cvirko-vadim.ru \
+ --email test@mail.ru \
+ --agree-tos \
+ --no-eff-email
