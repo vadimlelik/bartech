@@ -20,3 +20,6 @@ sudo certbot certonly --manual --preferred-challenges dns -d technobar.by -d "\*
 Имя (Host): \_acme-challenge.technobar.by
 Тип записи: TXT
 Значение (Text): E2P3yPzEkt9kqT3hxWBrFzOR273STJk4LeXOOxvvoSs
+
+\_acme-challenge.\*
+WyrxlW7K4hAHvQK9-1Qcu_qmyuPuMuMC61axj4XEstU

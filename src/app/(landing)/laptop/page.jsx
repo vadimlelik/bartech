@@ -7,7 +7,17 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_7 } from '@/data/pixel';
+import {
+  PIXEL,
+  PIXEL_2,
+  PIXEL_3,
+  PIXEL_4,
+  PIXEL_5,
+  PIXEL_6,
+  PIXEL_7,
+  PIXEL_8,
+  PIXEL_9,
+} from '@/data/pixel';
 
 const advantages = [
   {
@@ -96,8 +106,12 @@ export default function Laptop() {
       window.ttq.load(PIXEL.laptop);
       window.ttq.load(PIXEL_2.laptop);
       window.ttq.load(PIXEL_3.laptop);
+      window.ttq.load(PIXEL_4.laptop);
+      window.ttq.load(PIXEL_5.laptop);
+      window.ttq.load(PIXEL_6.laptop);
       window.ttq.load(PIXEL_7.laptop);
-
+      window.ttq.load(PIXEL_8.laptop);
+      window.ttq.load(PIXEL_9.laptop);
       window.ttq.page();
     }
   }, []);

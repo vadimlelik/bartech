@@ -55,12 +55,18 @@ export const PIXEL_4 = {
   bicycles: 'CV9EG9BC77UCFC44B5Q0',
   motoblok: 'CVD94ERC77U8JA3ILR7G',
   scooter: 'CVD9D1JC77UC3LGT8E7G',
+  shockproof: 'D1V3VLJC77U9ORS1S8HG',
+  phone3: 'D1V3KMJC77U1VILI7OK0',
+  laptop: 'D1V41KJC77UE01TJL3GG',
 };
+
 export const PIXEL_5 = {
   motoblock: 'CVD971RC77U73VR73V1G',
   bicycles: 'D0M4T7JC77UAQ078QQMG',
   phoneFree: 'D13EB0BC77UC7904GUJ0',
   shockproof: 'D13E9EBC77UFSDE2ADKG',
+  phone3: 'D1V45MBC77U2G6DRTP5G',
+  laptop: 'D1V47AJC77U9ORS1S8U0',
 };
 export const PIXEL_6 = {
   bicycles: 'D0M4USJC77U0HTKUB760',
@@ -68,6 +74,7 @@ export const PIXEL_6 = {
   motoblok: 'D0M53DJC77UF7A0LNEO0',
   phone3: 'D13EAIJC77UFDTD9PD80',
   phoneFree: 'D13E813C77UA06S82AR0',
+  laptop: 'D1V4B13C77UBOJ7PL5FG',
 };
 export const PIXEL_7 = {
   motoblock: 'D0M546RC77UE9KRQETV0',
@@ -76,9 +83,31 @@ export const PIXEL_7 = {
   laptop: 'D0RECBRC77U5DVKCASM0',
   shockproof: 'D0REDIRC77UC6ES2JHH0',
   pc: 'D0RG373C77U5DVKCAU60',
+  bicycles: 'D1V47OBC77U1VHRJK7OG',
 };
 export const PIXEL_8 = {
   motoblock: 'D0M58JJC77UB5BNBACDG',
+  laptop: 'D1V4DP3C77UCQ41MKFAG',
   phoneFree: 'D0RE7DRC77U8DLIL1FIG',
   phone3: 'D13E67BC77UA06S82AQ0',
+  shockproof: 'D1V464RC77U1VHRJK7K0',
+  bicycles: 'D1V48PRC77UE01TJL40G',
+};
+
+export const PIXEL_9 = {
+  shockproof: 'D1V4A0JC77UCQ41MKF0G',
+  phone3: 'D1V4AN3C77U6O99O7HQ0',
+  bicycles: 'D1V4BD3C77UCQ41MKF4G',
+  laptop: 'D1V4H53C77U1VHRJK890',
+};
+
+export const PIXEL_10 = {
+  shockproof: 'D1V4D8RC77U1VILI7PQ0',
+  phone3: 'D1V4DGJC77U1VILI7PR0',
+  bicycles: 'D1V4E3JC77UCQ41MKFD0',
+};
+export const PIXEL_11 = {
+  shockproof: 'D1V4GJBC77U6O99O7I5G',
+  phone3: 'D1V4GSRC77U6OAPOQJMG',
+  bicycles: 'D1V4HFJC77U6O99O7I8G',
 };
