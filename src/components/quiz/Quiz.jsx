@@ -27,29 +27,25 @@ const Quiz = ({
   title = '',
   isLoading,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    trigger,
-  } = useForm();
+  const { control, handleSubmit, trigger, getValues, clearErrors } = useForm({
+    shouldUnregister: false,
+    mode: 'onTouched',
+  });
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [validationError, setValidationError] = useState('');
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
 
-  const handleFieldInteraction = () => {
+  const goToQuestion = (index) => {
     setValidationError('');
+    clearErrors();
+    setCurrentQuestion(index);
   };
 
   const nextQuestion = async () => {
@@ -63,7 +59,13 @@ const Quiz = ({
 
     setValidationError('');
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      goToQuestion(currentQuestion + 1);
+    }
+  };
+
+  const prevQuestion = () => {
+    if (currentQuestion > 0) {
+      goToQuestion(currentQuestion - 1);
     }
   };
 
@@ -71,7 +73,6 @@ const Quiz = ({
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     const allValid = await trigger();
     if (!allValid) {
       setValidationError('Пожалуйста, ответьте на все вопросы.');
@@ -79,8 +80,6 @@ const Quiz = ({
     }
 
     handleSubmit(async (data) => {
-      setValidationError('');
-
       try {
         const formattedComments = questions
           .map((question) => {
@@ -120,7 +119,7 @@ const Quiz = ({
         };
 
         await onSubmit(formData);
-      } catch (error) {
+      } catch {
         setValidationError(
           'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
         );
@@ -129,6 +128,9 @@ const Quiz = ({
   };
 
   if (!isOpen) return null;
+
+  const q = questions[currentQuestion];
+  const fieldName = `question${q.id}`;
 
   return (
     <QuizOverlay>
@@ -141,67 +143,88 @@ const Quiz = ({
 
         <form onSubmit={handleFormSubmit}>
           <QuestionContainer>
-            <h3>{questions[currentQuestion].question}</h3>
+            <h3>{q.question}</h3>
+
             <InputContainer>
-              {questions[currentQuestion].type === 'radio' ? (
-                questions[currentQuestion].options.map((option) => (
-                  <RadioContainer key={option.value}>
-                    <Controller
-                      name={`question${questions[currentQuestion].id}`}
-                      control={control}
-                      defaultValue=""
-                      rules={{ required: 'Это поле обязательно' }}
-                      render={({ field }) => (
-                        <RadioLabel
-                          $isChecked={field.value === option.value}
-                          onClick={() => {
-                            handleFieldInteraction();
-                            field.onChange(option.value);
-                          }}
-                        >
-                          {option.label}
-                        </RadioLabel>
-                      )}
-                    />
-                  </RadioContainer>
-                ))
-              ) : questions[currentQuestion].type === 'checkbox' ? (
-                questions[currentQuestion].options.map((option) => (
-                  <CheckboxContainer key={option.value}>
-                    <Controller
-                      name={`question${questions[currentQuestion].id}`}
-                      control={control}
-                      defaultValue={[]}
-                      rules={{ required: 'Это поле обязательно' }}
-                      render={({ field }) => {
-                        const isChecked = field.value.includes(option.value);
-                        return (
-                          <CheckboxLabel
-                            $isChecked={isChecked}
+              {/* ------ RADIO ------ */}
+              {q.type === 'radio' && (
+                <Controller
+                  name={fieldName}
+                  control={control}
+                  defaultValue={getValues(fieldName) ?? ''}
+                  rules={{ required: 'Это поле обязательно' }}
+                  render={({ field }) => (
+                    <>
+                      {q.options.map((option) => (
+                        <RadioContainer key={option.value}>
+                          <RadioLabel
+                            $isChecked={field.value === option.value}
                             onClick={() => {
-                              handleFieldInteraction();
-                              const newValue = isChecked
-                                ? field.value.filter((v) => v !== option.value)
-                                : [...field.value, option.value];
-                              field.onChange(newValue);
+                              field.onChange(option.value);
+                              clearErrors(fieldName);
+                              setValidationError('');
+                              if (currentQuestion < questions.length - 1) {
+                                goToQuestion(currentQuestion + 1);
+                              }
                             }}
                           >
                             {option.label}
-                          </CheckboxLabel>
-                        );
-                      }}
-                    />
-                  </CheckboxContainer>
-                ))
-              ) : (
+                          </RadioLabel>
+                        </RadioContainer>
+                      ))}
+                    </>
+                  )}
+                />
+              )}
+
+              {/* ------ CHECKBOX ------ */}
+              {q.type === 'checkbox' && (
                 <Controller
-                  name={`question${questions[currentQuestion].id}`}
+                  name={fieldName}
                   control={control}
-                  defaultValue=""
+                  defaultValue={getValues(fieldName) ?? []}
+                  rules={{ required: 'Это поле обязательно' }}
+                  render={({ field }) => (
+                    <>
+                      {q.options.map((option) => {
+                        const valueArray = Array.isArray(field.value)
+                          ? field.value
+                          : [];
+                        const isChecked = valueArray.includes(option.value);
+
+                        return (
+                          <CheckboxContainer key={option.value}>
+                            <CheckboxLabel
+                              $isChecked={isChecked}
+                              onClick={() => {
+                                const newValue = isChecked
+                                  ? valueArray.filter((v) => v !== option.value)
+                                  : [...valueArray, option.value];
+                                field.onChange(newValue);
+                                clearErrors(fieldName);
+                                setValidationError('');
+                              }}
+                            >
+                              {option.label}
+                            </CheckboxLabel>
+                          </CheckboxContainer>
+                        );
+                      })}
+                    </>
+                  )}
+                />
+              )}
+
+              {/* ------ PHONE ------ */}
+              {q.type === 'text' && (
+                <Controller
+                  name={fieldName}
+                  control={control}
+                  defaultValue={getValues(fieldName) ?? ''}
                   rules={{
                     validate: (value) => {
                       if (!value || value === '+375')
-                        return 'Пожалуйста, ответьте на все вопрос.';
+                        return 'Пожалуйста, ответьте на вопрос.';
                       if (
                         !/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(value)
                       ) {
@@ -216,25 +239,9 @@ const Quiz = ({
                       placeholder="+375 (__) ___-__-__"
                       value={field.value || '+375'}
                       onChange={(e) => {
-                        handleFieldInteraction();
                         field.onChange(e);
-                        if (/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(e)) {
-                          setValidationError('');
-                        }
-                      }}
-                      onBlur={(e) => {
-                        field.onBlur();
-                        if (!e.target.value || e.target.value === '+375') {
-                          setValidationError(
-                            'Пожалуйста, ответьте на все вопрос.'
-                          );
-                        } else if (
-                          /^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(
-                            e.target.value
-                          )
-                        ) {
-                          setValidationError('');
-                        }
+                        clearErrors(fieldName);
+                        setValidationError('');
                       }}
                       error={
                         validationError ||
@@ -249,9 +256,11 @@ const Quiz = ({
                 />
               )}
             </InputContainer>
+
             {validationError && currentQuestion < questions.length - 1 && (
               <ErrorText>{validationError}</ErrorText>
             )}
+
             {currentQuestion === questions.length - 1 && (
               <div
                 style={{
@@ -265,16 +274,13 @@ const Quiz = ({
                   name="consent"
                   control={control}
                   defaultValue={true}
-                  render={({ field: { value } }) => (
+                  render={() => (
                     <>
                       <input
                         type="checkbox"
                         checked={true}
                         readOnly
-                        style={{
-                          marginTop: '4px',
-                          cursor: 'default',
-                        }}
+                        style={{ marginTop: '4px', cursor: 'default' }}
                       />
                       <span
                         style={{
@@ -291,10 +297,29 @@ const Quiz = ({
               </div>
             )}
           </QuestionContainer>
-          <Navigation>
+
+          <Navigation
+            style={{
+              display: 'flex',
+              gap: '12px',
+            }}
+          >
+            {currentQuestion > 0 && (
+              <NavButton
+                type="button"
+                onClick={prevQuestion}
+                disabled={isLoading}
+              >
+                Назад
+              </NavButton>
+            )}
             {currentQuestion < questions.length - 1 ? (
-              <NavButton type="button" onClick={nextQuestion}>
-                {'Далее'}
+              <NavButton
+                type="button"
+                onClick={nextQuestion}
+                disabled={isLoading}
+              >
+                Далее
               </NavButton>
             ) : (
               <NavButton type="submit" disabled={isLoading}>
