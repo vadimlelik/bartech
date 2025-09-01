@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
@@ -70,28 +70,27 @@ export default function Phone4() {
   }, []);
 
   const handleQuizSubmit = async (data) => {
-    console.log(data);
-    // setIsLoading(true);
-    // axios
-    //   .post(
-    //     'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+    setIsLoading(true);
+    axios
+      .post(
+        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
 
-    //     {
-    //       FIELDS: {
-    //         ...data.FIELDS,
-    //         UTM_SOURCE: utm_source || '',
-    //         UTM_MEDIUM: utm_medium || '',
-    //         UTM_CAMPAIGN: utm_campaign || '',
-    //         UTM_CONTENT: utm_content || '',
-    //         UTM_TERM: ad + ttclid || '',
-    //       },
-    //     }
-    //   )
-    //   .then(() => {
-    //     setIsQuizOpen(false);
-    //     setIsLoading(false);
-    //     router.push('/thank-you?source=motoblok_1');
-    //   });
+        {
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: ad + ttclid || '',
+          },
+        }
+      )
+      .then(() => {
+        setIsQuizOpen(false);
+        setIsLoading(false);
+        router.push('/thank-you?source=motoblok_1');
+      });
   };
 
   const closeQuiz = () => {

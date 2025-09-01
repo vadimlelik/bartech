@@ -4,7 +4,14 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from './ThankYou.module.css';
 import { useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import {
+  PIXEL,
+  PIXEL_2,
+  PIXEL_3,
+  PIXEL_4,
+  PIXEL_5,
+  PIXEL_6,
+} from '@/data/pixel';
 
 const ThankYouPage = () => {
   const searchParams = useSearchParams();
@@ -15,11 +22,18 @@ const ThankYouPage = () => {
       const pixelId = PIXEL[source];
       const pixelId_2 = PIXEL_2[source];
       const pixelId_3 = PIXEL_3[source];
+      const pixelId_4 = PIXEL_4[source];
+      const pixelId_5 = PIXEL_5[source];
+      const pixelId_6 = PIXEL_6[source];
 
       if (window.ttq) {
         window.ttq.load(pixelId);
         window.ttq.load(pixelId_2);
         window.ttq.load(pixelId_3);
+        window.ttq.load(pixelId_4);
+        window.ttq.load(pixelId_5);
+        window.ttq.load(pixelId_6);
+
         window.ttq.page();
       }
     }

@@ -72,6 +72,11 @@ export default function Footer() {
                 +375 44 741-84-23
               </MuiLink>
             </Typography>
+            <Typography variant="body2" color="text.info">
+              Технобар Свидетельство о гос. регистрации: выдано 07 октября 2024
+              г. Минским горисполкомом Регистрация в Торговом реестре: 743083 от
+              26.02.2025
+            </Typography>
           </Grid>
 
           {/* Ссылки */}
@@ -117,6 +122,14 @@ export default function Footer() {
                   Условия рассрочки и сертификация
                 </Typography>
               </Link>
+              <Typography variant="body2" color="text.secondary">
+                +375 17 318-13-33; +375 17 360-82-11 – администрация Советского
+                района г. Минска;
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                +37517-218-00-82 – главное управление торговли и услуг
+                Мингорисполкома.
+              </Typography>
             </Box>
           </Grid>
 
@@ -161,8 +174,8 @@ export default function Footer() {
                       position: 'relative',
                     },
                     '& img': {
-                      width: '100% !important',
-                      height: '100% !important',
+                      // width: '100% !important',
+                      // height: '100% !important',
                       objectFit: 'contain',
                       imageRendering: '-webkit-optimize-contrast',
                     },
@@ -171,40 +184,28 @@ export default function Footer() {
                   <Image
                     src="/images/payment-visa.png"
                     alt="Visa"
-                    width={16}
-                    height={10}
+                    width={50}
+                    height={100}
                     priority
                     quality={100}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                    }}
                     unoptimized
                   />
                   <Image
                     src="/images/payment-mastercard.png"
                     alt="Mastercard"
-                    width={16}
-                    height={10}
+                    width={50}
+                    height={100}
                     priority
                     quality={100}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                    }}
                     unoptimized
                   />
                   <Image
                     src="/images/payment-belcard.png"
                     alt="BelCard"
-                    width={16}
-                    height={10}
+                    width={50}
+                    height={100}
                     priority
                     quality={100}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                    }}
                     unoptimized
                   />
                 </Box>

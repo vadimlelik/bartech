@@ -6,11 +6,13 @@
 
 .card {
   display: flex;
-  gap: 20px;
+  gap: 200px;
   background: #2f3fa9;
+  justify-content: space-between;
   color: #fff;
   border-radius: 16px;
   padding: 20px;
+
   margin-bottom: 25px;
   align-items: center;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
@@ -25,7 +27,7 @@
 }
 
 .card img {
-  max-width: 280px;
+  max-width: 300px;
   border-radius: 12px;
   flex-shrink: 0;
 }
@@ -35,8 +37,6 @@
 }
 
 .cardContent h2 {
-  margin-bottom: 12px;
-  color: #fff;
   font-size: 22px;
 }
 
@@ -46,7 +46,9 @@
 
 .cardContent ul,
 .cardContent ol {
-  margin: 10px 0 15px 20px;
+  padding-left: 20px;
+  line-height: 1.4;
+  font-size: 20px;
 }
 
 .cardContent ul li,
@@ -94,7 +96,25 @@
   text-align: center;
   margin: 40px 0;
 }
-
+.discount {
+  color: #fa0542;
+  font-weight: bold;
+  background-color: #fff;
+  font-size: 20px;
+  border: 1px solid #fa0542;
+  padding: 10px 20px;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  display: inline-block;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.discount:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
 .bottomBtn button {
   background: linear-gradient(135deg, #ff416c, #ff4b2b);
   border: none;
@@ -114,12 +134,20 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-
+.video {
+  max-width: 280px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
 /* адаптив */
 @media (max-width: 900px) {
+  .cardContent {
+    margin: 0px;
+  }
   .card {
     flex-direction: column;
     text-align: center;
+    gap: 20px;
   }
 
   .card img {
@@ -128,6 +156,16 @@
 }
 
 @media (max-width: 500px) {
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .cardContent ul,
+  .cardContent ol {
+    font-size: 16px;
+  }
   .cardContent h2 {
     font-size: 18px;
   }
