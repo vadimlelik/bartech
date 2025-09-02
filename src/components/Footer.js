@@ -146,12 +146,6 @@ export default function Footer() {
               }}
             >
               <Typography variant="body2" color="text.secondary">
-                2018-2024 ООО «В тренде»
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Продвижение сайта ZELKIRAL
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
                 Работает на MixCMS
               </Typography>
               <Box sx={{ mt: { xs: 1, md: 2 } }}>
