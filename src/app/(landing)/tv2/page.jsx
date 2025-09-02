@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import styles from './tvPage.module.css';
-import { Button } from '@mui/material';
-import { Quiz } from '@mui/icons-material';
+import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { PIXEL, PIXEL_3 } from '@/data/pixel';
+import Quiz from '@/components/quiz/Quiz';
 
 export default function CatalogPage() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function CatalogPage() {
     {
       id: 1,
       question: 'Выберите бренд телевизора!',
-      type: 'checkbox',
+      type: 'radio',
       options: [
         { label: 'Samsung', value: 'Samsung' },
         { label: 'TCL', value: 'TCL' },
