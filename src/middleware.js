@@ -23,7 +23,9 @@ export function middleware(request) {
     'scooter.technobar.by': '/scooter',
     'laptop_2.technobar.by': '/laptop_2',
     'tv2.technobar.by': '/tv2',
+    'tv3.technobar.by': '/tv3',
     'motoblok_1.technobar.by': '/motoblok_1',
+    'motoblok_2.technobar.by': '/motoblok_2',
   };
 
   // Проверяем, есть ли поддомен в нашей карте
