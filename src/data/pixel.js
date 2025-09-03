@@ -17,8 +17,6 @@ export const PIXEL = {
 };
 
 export const PIXEL_2 = {
-  // tv: '',
-  // discount50: '',
   phoneFree: 'CU2H9KJC77U745U5TP7G',
   phone: 'CU2H1QJC77U1O4689DFG',
   phone2: 'CU2H5CJC77U9QK0TT2O0',
@@ -55,12 +53,19 @@ export const PIXEL_4 = {
   bicycles: 'CV9EG9BC77UCFC44B5Q0',
   motoblok: 'CVD94ERC77U8JA3ILR7G',
   scooter: 'CVD9D1JC77UC3LGT8E7G',
+  phone3: 'D0REBHJC77UCOE1U8NM0',
 };
 export const PIXEL_5 = {
   motoblock: 'CVD971RC77U73VR73V1G',
   bicycles: 'D0M4T7JC77UAQ078QQMG',
+  phone3: 'D1V3KMJC77U1VILI7OK0',
 };
 export const PIXEL_6 = {
+  phone3: 'D1V45MBC77U2G6DRTP5G',
   bicycles: 'D0M4USJC77U0HTKUB760',
   motoblok: 'CVD971RC77U73VR73V1G',
+};
+
+export const PIXEL_7 = {
+  phone3: 'D1V4DGJC77U1VILI7PR0',
 };

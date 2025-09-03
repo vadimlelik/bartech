@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
@@ -7,7 +7,15 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import {
+  PIXEL,
+  PIXEL_2,
+  PIXEL_3,
+  PIXEL_4,
+  PIXEL_5,
+  PIXEL_6,
+  PIXEL_7,
+} from '@/data/pixel';
 
 const reviews = [
   {
@@ -156,6 +164,10 @@ export default function Phone4() {
       window.ttq.load(PIXEL.phone3);
       window.ttq.load(PIXEL_2.phone3);
       window.ttq.load(PIXEL_3.phone3);
+      window.ttq.load(PIXEL_4.phone3);
+      window.ttq.load(PIXEL_5.phone3);
+      window.ttq.load(PIXEL_6.phone3);
+      window.ttq.load(PIXEL_7.phone3);
       window.ttq.page();
     }
   }, []);
