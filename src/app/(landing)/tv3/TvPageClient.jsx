@@ -169,7 +169,7 @@ export default function TvLandingPage() {
           </p>
           <div className={styles.headerCta}>
             <Button
-              label="Подобрать телевизор"
+              label="Кнопка «узнать цену и подобрать платеж»"
               color="orange"
               size="small"
               onClick={() => setIsQuizOpen(true)}
@@ -185,7 +185,7 @@ export default function TvLandingPage() {
         >
           <div className={styles.mediaWrap}>
             <Image
-              src="/images/tv/tv2.webp"
+              src="images/tv/tv3.png"
               alt="Современные телевизоры в рассрочку"
               width={1200}
               height={800}

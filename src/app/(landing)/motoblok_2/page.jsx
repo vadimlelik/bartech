@@ -35,7 +35,7 @@ const advantages = [
     id: 1,
     title: 'Своя рассрочка от магазина',
     description:
-      'Срок до 5 лет без переплат. Без банков, справок и поручителей. Оформим за 10 минут.',
+      'Оформим рассрочку без переплат и доставим быстрее конкурентов. Сервис и гарантия — у нас',
   },
   {
     id: 2,
@@ -51,8 +51,9 @@ const advantages = [
   },
   {
     id: 4,
-    title: 'Доставка за 24 часа',
-    description: 'Бесплатно по РБ до двери. Оплата после осмотра и проверки.',
+    title: 'Бесплатная доставка до 7 дней ',
+    description:
+      'Все документы подписываете после осмотра и проверки на месте получения',
   },
 ];
 
@@ -113,7 +114,7 @@ export default function MotoblocksLandingPage() {
         }
       );
       setIsQuizOpen(false);
-      router.push('/thank-you?source=motoblok_landing');
+      router.push('/thank-you?source=motoblok_2');
     } catch (e) {
       console.error('Lead submit error', e);
       alert(
@@ -189,7 +190,7 @@ export default function MotoblocksLandingPage() {
           className={styles.stickyBtn}
           onClick={() => setIsQuizOpen(true)}
         >
-          Узнать цену и подарок
+          Узнать цену и забрать подарок
         </button>
       </div>
 
@@ -204,8 +205,8 @@ export default function MotoblocksLandingPage() {
             <span className={styles.titleAccent}> с 4 подарками</span>
           </h1>
           <p className={styles.subtitle}>
-            <b>ПЛУГ, ОКУЧНИК, ФРЕЗА, СЦЕПКА</b> — дарим до конца месяца.
-            Оформление за 10 минут. Доставка по РБ за 24 часа.
+            <b>Плуг, окучник, борона и сцепка</b> — дарим до конца месяца.
+            Оформление за 10 минут. Доставка по РБ до 7 дней.
           </p>
 
           <ul className={styles.kpis}>

@@ -8,6 +8,8 @@ import {
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
+  PIXEL_7,
+  PIXEL_8,
 } from '@/data/pixel';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -84,6 +86,8 @@ export default function Phone6() {
       window.ttq.load(PIXEL_4.bicycles);
       window.ttq.load(PIXEL_5.bicycles);
       window.ttq.load(PIXEL_6.bicycles);
+      window.ttq.load(PIXEL_7.bicycles);
+      window.ttq.load(PIXEL_8.bicycles);
       window.ttq.page();
     }
   }, []);

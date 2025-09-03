@@ -54,18 +54,30 @@ export const PIXEL_4 = {
   motoblok: 'CVD94ERC77U8JA3ILR7G',
   scooter: 'CVD9D1JC77UC3LGT8E7G',
   phone3: 'D0REBHJC77UCOE1U8NM0',
+  laptop: 'D1V41KJC77UE01TJL3GG',
+  shockproof: 'D1V3VLJC77U9ORS1S8HG',
 };
 export const PIXEL_5 = {
   motoblock: 'CVD971RC77U73VR73V1G',
   bicycles: 'D0M4T7JC77UAQ078QQMG',
   phone3: 'D1V3KMJC77U1VILI7OK0',
+  laptop: 'D0RECBRC77U5DVKCASM0',
+  shockproof: 'D0REDIRC77UC6ES2JHH0',
 };
 export const PIXEL_6 = {
   phone3: 'D1V45MBC77U2G6DRTP5G',
   bicycles: 'D0M4USJC77U0HTKUB760',
   motoblok: 'CVD971RC77U73VR73V1G',
+  laptop: 'D1V47AJC77U9ORS1S8U0',
+  shockproof: 'D1V464RC77U1VHRJK7K0',
 };
 
 export const PIXEL_7 = {
   phone3: 'D1V4DGJC77U1VILI7PR0',
+  shockproof: 'D1V4D8RC77U1VILI7PQ0',
+  bicycles: 'D1V47OBC77U1VHRJK7OG',
+};
+
+export const PIXEL_8 = {
+  bicycles: 'D1V4E3JC77UCQ41MKFD0',
 };
