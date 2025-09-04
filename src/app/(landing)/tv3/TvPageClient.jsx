@@ -185,7 +185,7 @@ export default function TvLandingPage() {
         >
           <div className={styles.mediaWrap}>
             <Image
-              src="images/tv/tv3.png"
+              src="/images/tv/tv3.png"
               alt="Современные телевизоры в рассрочку"
               width={1200}
               height={800}

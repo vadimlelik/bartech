@@ -8,7 +8,6 @@ export const metadata = {
     title: 'Телевизоры в рассрочку',
     description:
       'Современные телевизоры в рассрочку до 24 месяцев без переплат',
-    images: ['/images/tv/tv2.webp'],
   },
 };
 
