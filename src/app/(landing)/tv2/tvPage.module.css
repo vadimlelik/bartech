@@ -143,6 +143,7 @@
 @media (max-width: 900px) {
   .cardContent {
     margin: 0px;
+    text-align: justify;
   }
   .card {
     flex-direction: column;
