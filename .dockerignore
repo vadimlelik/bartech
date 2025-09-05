@@ -1,4 +1,18 @@
+# Игнорируем папку с локальными зависимостями
 node_modules
+
+# Логи и временные файлы
 npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# IDE и редакторы
+.vscode
+.idea
+
+# Docker файлы
 Dockerfile
 docker-compose.yml
+
+# Системные файлы
+.DS_Store
