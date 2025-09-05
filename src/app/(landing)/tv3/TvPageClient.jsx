@@ -6,7 +6,7 @@ import styles from './tvPage.module.css';
 import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 import Quiz from '@/components/quiz/Quiz';
 
 export default function TvLandingPage() {
@@ -169,7 +169,7 @@ export default function TvLandingPage() {
           </p>
           <div className={styles.headerCta}>
             <Button
-              label="Кнопка «узнать цену и подобрать платеж»"
+              label="Узнать цену и подобрать платеж"
               color="orange"
               size="small"
               onClick={() => setIsQuizOpen(true)}

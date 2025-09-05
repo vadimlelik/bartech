@@ -110,7 +110,7 @@ export default function CatalogPage() {
       <main className={styles.main}>
         {/* Первая карточка */}
         <div className={`${styles.card} ${styles.hidden}`}>
-          <img src="images/tv/tv2.webp" alt="Техника" />
+          <img src="images/tv/tv3_2.png" alt="Техника" />
           <div className={styles.cardContent}>
             <span className={styles.discount}>
               <h2>
@@ -139,6 +139,13 @@ export default function CatalogPage() {
             src="images/tv/video.MOV"
             type="video/mp4"
             className={styles.video}
+            playsInline
+            preload="auto"
+            controls
+            controlsList="nodownload"
+            disablePictureInPicture
+            disableRemotePlayback
+            onContextMenu={(e) => e.preventDefault()}
           />
           <div className={styles.cardContent}>
             <h2>Рассчитайте ежемесячный платеж прямо на сайте</h2>
@@ -155,7 +162,7 @@ export default function CatalogPage() {
 
         {/* Третья карточка */}
         <div className={`${styles.card} ${styles.hidden}`}>
-          <img src="images/tv/tv2_1.webp" alt="Техника" />
+          <img src="images/tv/tv3.png" alt="Техника" />
           <div className={styles.cardContent}>
             <h2>Характеристики</h2>
             <ul>
