@@ -90,9 +90,9 @@ export default function MotoblocksLandingPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.ttq) {
-      window.ttq.load(PIXEL.phone3);
-      window.ttq.load(PIXEL_2.phone3);
-      window.ttq.load(PIXEL_3.phone3);
+      window.ttq.load(PIXEL.motoblok2);
+      window.ttq.load(PIXEL_2.motoblok2);
+      window.ttq.load(PIXEL_3.motoblock2);
       window.ttq.page();
     }
   }, []);
@@ -114,7 +114,7 @@ export default function MotoblocksLandingPage() {
         }
       );
       setIsQuizOpen(false);
-      router.push('/thank-you?source=motoblok_2');
+      router.push('/thank-you?source=motoblok2');
     } catch (e) {
       console.error('Lead submit error', e);
       alert(

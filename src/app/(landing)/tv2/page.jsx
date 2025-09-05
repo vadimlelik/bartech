@@ -5,7 +5,7 @@ import styles from './tvPage.module.css';
 import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { PIXEL, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 import Quiz from '@/components/quiz/Quiz';
 
 export default function CatalogPage() {
@@ -78,8 +78,8 @@ export default function CatalogPage() {
 
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.tv);
-      window.ttq.load(PIXEL_3.tv);
+      window.ttq.load(PIXEL.tv2);
+      window.ttq.load(PIXEL_2.tv2);
       window.ttq.page();
     }
   }, []);
@@ -102,7 +102,7 @@ export default function CatalogPage() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=tv_1');
+        router.push('/thank-you?source=tv2');
       });
   };
   return (

@@ -5,7 +5,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4 } from '@/data/pixel';
 
 export default function Laptop() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -44,14 +44,15 @@ export default function Laptop() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=laptop');
+        router.push('/thank-you?source=laptop2');
       });
   };
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.laptop);
-      window.ttq.load(PIXEL_2.laptop);
-      window.ttq.load(PIXEL_3.laptop);
+      window.ttq.load(PIXEL.laptop2);
+      window.ttq.load(PIXEL_2.laptop2);
+      window.ttq.load(PIXEL_3.laptop2);
+      window.ttq.load(PIXEL_4.laptop2);
 
       window.ttq.page();
     }

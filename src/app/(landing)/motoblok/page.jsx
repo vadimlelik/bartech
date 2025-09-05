@@ -98,7 +98,7 @@ export default function MotoBlok() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=motoblok');
+        router.push('/thank-you?source=motoblock');
       });
   };
   const questions = [

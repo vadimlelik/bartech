@@ -106,7 +106,7 @@ const Quiz = ({
 
         const formData = {
           FIELDS: {
-            TITLE: `Заявка на консультацию ${title}`,
+            TITLE: `Заявка на ПРОДАЖУ $$$ ${title}`,
             COMMENTS: formattedComments,
             PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
             SOURCE_ID: 'WEB',

@@ -89,7 +89,7 @@ export default function Phone4() {
       .then(() => {
         setIsQuizOpen(false);
         setIsLoading(false);
-        router.push('/thank-you?source=motoblok_1');
+        router.push('/thank-you?source=motoblock1');
       });
   };
 
@@ -157,9 +157,9 @@ export default function Phone4() {
   ];
   useEffect(() => {
     if (window.ttq) {
-      window.ttq.load(PIXEL.phone3);
-      window.ttq.load(PIXEL_2.phone3);
-      window.ttq.load(PIXEL_3.phone3);
+      window.ttq.load(PIXEL.motoblok1);
+      window.ttq.load(PIXEL_2.motoblok1);
+      window.ttq.load(PIXEL_3.motoblock1);
       window.ttq.page();
     }
   }, []);

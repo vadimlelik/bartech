@@ -6,7 +6,7 @@ import styles from './tvPage.module.css';
 import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { PIXEL, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
 import Quiz from '@/components/quiz/Quiz';
 
 export default function TvLandingPage() {
@@ -65,8 +65,8 @@ export default function TvLandingPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.ttq) {
-      window.ttq.load(PIXEL.tv);
-      window.ttq.load(PIXEL_3.tv);
+      window.ttq.load(PIXEL.tv3);
+      window.ttq.load(PIXEL_2.tv3);
       window.ttq.page();
     }
   }, []);
@@ -137,7 +137,7 @@ export default function TvLandingPage() {
         }
       );
       setIsQuizOpen(false);
-      router.push('/thank-you?source=tv_3');
+      router.push('/thank-you?source=tv3');
     } catch (err) {
       console.error(err);
       alert(
