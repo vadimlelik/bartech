@@ -89,11 +89,19 @@ const nextConfig = {
         destination: '/:path*',
       },
       {
+        source: '/motoblok_2/:path*',
+        destination: '/:path*',
+      },
+      {
         source: '/laptop_2/:path*',
         destination: '/:path*',
       },
       {
         source: '/tv2/:path*',
+        destination: '/:path*',
+      },
+      {
+        source: '/tv3/:path*',
         destination: '/:path*',
       },
     ];
