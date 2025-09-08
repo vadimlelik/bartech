@@ -170,7 +170,8 @@ export default function Phone4() {
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h2 className={styles.heroTitle}>
-            РАСПРОДАЖА МОТОБЛОКОВ В РАССРОЧКУ БЕЗ 1-ГО ПЛАТЕЖА И ПОД 0%
+            РАСПРОДАЖА МОТОБЛОКОВ В РАССРОЧКУ С ПЕРВЫМ ПЛАТЕЖОМ ТОЛЬКО ЧЕРЕЗ 31
+            ДЕНЬ
           </h2>
           <p className={styles.heroDescription}>
             <span className={styles.bold}>ПЛУГ, ОКУЧНИК, БОРОНА, СЦЕПКА</span>

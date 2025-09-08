@@ -15,6 +15,7 @@ import {
   PIXEL_5,
   PIXEL_6,
 } from '@/data/pixel';
+import Script from 'next/script';
 
 const advantages = [
   {
@@ -171,99 +172,150 @@ export default function Laptop() {
   if (!now) return <Loading />;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.discountBanner}>
-          СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% •
+    <>
+      <Script id="facebook-pixel" strategy="afterInteractive">
+        {`
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '748574324825711');
+          fbq('track', 'PageView');
+        `}
+      </Script>
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: 'none' }}
+          src="https://www.facebook.com/tr?id=748574324825711'&ev=PageView&noscript=1"
+          alt=""
+        />
+      </noscript>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.discountBanner}>
+            СКИДКА -50% • СКИДКА -50% • СКИДКА -50% • СКИДКА -50% •
+          </div>
         </div>
-      </div>
 
-      <div className={styles.mainSection}>
-        <div className={styles.textContent}>
-          <h1 className={styles.title}>
-            Ноутбуки в рассрочку
-            <br />
-            со скидкой -50%
-          </h1>
-        </div>
-
-        <div className={styles.imageContainer}>
-          <Image
-            src="/laptop_img-1.jpg"
-            alt="Ноутбуки"
-            width={500}
-            height={400}
-            priority
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '20px',
-            }}
-          />
-        </div>
-
-        <div className={styles.textContent}>
-          <p className={styles.surveyText}>
-            Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
-            скидки -50%
-          </p>
-
-          <button
-            className={styles.priceButton}
-            onClick={() => setIsQuizOpen(true)}
-          >
-            Узнать цену
-          </button>
-
-          <div className={styles.timer}>
-            <CountdownTimer />
+        <div className={styles.mainSection}>
+          <div className={styles.textContent}>
+            <h1 className={styles.title}>
+              Ноутбуки в рассрочку
+              <br />
+              со скидкой -50%
+            </h1>
           </div>
 
-          <ul className={styles.benefits}>
-            <li>✅ Рассрочку от 6 месяцев</li>
-            <li>✅ Без справок о доходах</li>
-            <li>✅ Без первого взноса и переплат</li>
-            <li>
-              🎁 В подарок к каждому заказу: Новый телефон или мышка с сумкой !
-            </li>
-          </ul>
-        </div>
-      </div>
+          <div className={styles.imageContainer}>
+            <Image
+              src="/laptop_img-1.jpg"
+              alt="Ноутбуки"
+              width={500}
+              height={400}
+              priority
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '20px',
+              }}
+            />
+          </div>
 
-      <div className={styles.advantagesSection}>
-        <div className={styles.advantagesImage}>
-          <Image
-            src="/laptop_img-2.webp"
-            alt="Ноутбуки"
-            width={500}
-            height={1000}
-            priority
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-            }}
-          />
-        </div>
+          <div className={styles.textContent}>
+            <p className={styles.surveyText}>
+              Ответьте всего на 4 вопроса и мы вышлем график платежей с учетом
+              скидки -50%
+            </p>
 
-        <div className={styles.advantagesList}>
-          <h2 className={styles.sectionTitle}>
-            Преимущества
-            <br />
-            нашего магазина
-          </h2>
+            <button
+              className={styles.priceButton}
+              onClick={() => setIsQuizOpen(true)}
+            >
+              Узнать цену
+            </button>
 
-          {advantages.map((advantage, index) => (
-            <div key={advantage.id} className={styles.advantageItem}>
-              <span className={styles.advantageNumber}>{index + 1}</span>
-              <div>
-                <h3>{advantage.title}</h3>
-                <p>{advantage.description}</p>
-              </div>
+            <div className={styles.timer}>
+              <CountdownTimer />
             </div>
-          ))}
 
+            <ul className={styles.benefits}>
+              <li>✅ Рассрочку от 6 месяцев</li>
+              <li>✅ Без справок о доходах</li>
+              <li>✅ Без первого взноса и переплат</li>
+              <li>
+                🎁 В подарок к каждому заказу: Новый телефон или мышка с сумкой
+                !
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className={styles.advantagesSection}>
+          <div className={styles.advantagesImage}>
+            <Image
+              src="/laptop_img-2.webp"
+              alt="Ноутбуки"
+              width={500}
+              height={1000}
+              priority
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
+            />
+          </div>
+
+          <div className={styles.advantagesList}>
+            <h2 className={styles.sectionTitle}>
+              Преимущества
+              <br />
+              нашего магазина
+            </h2>
+
+            {advantages.map((advantage, index) => (
+              <div key={advantage.id} className={styles.advantageItem}>
+                <span className={styles.advantageNumber}>{index + 1}</span>
+                <div>
+                  <h3>{advantage.title}</h3>
+                  <p>{advantage.description}</p>
+                </div>
+              </div>
+            ))}
+
+            <button
+              className={styles.priceButton}
+              onClick={() => setIsQuizOpen(true)}
+            >
+              Узнать цену
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.reviewsSection}>
+          <h2 className={styles.reviewsTitle}>ОТЗЫВЫ НАШИХ ПОКУПАТЕЛЕЙ</h2>
+          <div className={styles.reviewsGrid}>
+            {reviews.map((review) => (
+              <div key={review.id} className={styles.reviewCard}>
+                <Image
+                  src={review.image}
+                  alt={`Отзыв ${review.author}`}
+                  width={300}
+                  height={200}
+                  className={styles.reviewImage}
+                />
+                <p className={styles.reviewText}>{review.text}</p>
+                <p className={styles.reviewAuthor}>{review.author}</p>
+              </div>
+            ))}
+          </div>
           <button
             className={styles.priceButton}
             onClick={() => setIsQuizOpen(true)}
@@ -271,41 +323,16 @@ export default function Laptop() {
             Узнать цену
           </button>
         </div>
+        <Quiz
+          isOpen={isQuizOpen}
+          onClose={() => setIsQuizOpen(false)}
+          isLoading={isLoading}
+          questions={questions}
+          onSubmit={handleQuizSubmit}
+          successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
+          title="laptop"
+        />
       </div>
-
-      <div className={styles.reviewsSection}>
-        <h2 className={styles.reviewsTitle}>ОТЗЫВЫ НАШИХ ПОКУПАТЕЛЕЙ</h2>
-        <div className={styles.reviewsGrid}>
-          {reviews.map((review) => (
-            <div key={review.id} className={styles.reviewCard}>
-              <Image
-                src={review.image}
-                alt={`Отзыв ${review.author}`}
-                width={300}
-                height={200}
-                className={styles.reviewImage}
-              />
-              <p className={styles.reviewText}>{review.text}</p>
-              <p className={styles.reviewAuthor}>{review.author}</p>
-            </div>
-          ))}
-        </div>
-        <button
-          className={styles.priceButton}
-          onClick={() => setIsQuizOpen(true)}
-        >
-          Узнать цену
-        </button>
-      </div>
-      <Quiz
-        isOpen={isQuizOpen}
-        onClose={() => setIsQuizOpen(false)}
-        isLoading={isLoading}
-        questions={questions}
-        onSubmit={handleQuizSubmit}
-        successMessage="Ваши данные успешно отправлены! Мы скоро свяжемся с вами"
-        title="laptop"
-      />
-    </div>
+    </>
   );
 }
