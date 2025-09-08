@@ -1,4 +1,7 @@
+'use client';
+import { useCartStore } from '@/store/cart';
 import styles from './page.module.css';
+import { useParams } from 'next/navigation';
 
 const products = [
   {
@@ -72,9 +75,11 @@ const products = [
     image: '/images/mt/img_13_1.jpg',
   },
 ];
-export default function ProductPage({ params }) {
+export default function ProductPage() {
+  const params = useParams();
   const product = products.find((p) => p.id === Number(params.id));
 
+  const { addToCart } = useCartStore();
   if (!product) {
     return <div className={styles.container}>Товар не найден</div>;
   }
@@ -87,7 +92,10 @@ export default function ProductPage({ params }) {
           <h1 className={styles.title}>{product.title}</h1>
           <span className={styles.price}>{product.price} руб.</span>
           <pre className={styles.description}>{product.description}</pre>
-          <button className={styles.button} disabled>
+          <button
+            className={styles.button}
+            onClick={() => addToCart({ ...product, name: product.title })}
+          >
             Временно нет в наличии
           </button>
         </div>

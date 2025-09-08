@@ -39,6 +39,7 @@ export default function CartPage() {
       updateQuantity(productId, newQuantity);
     }
   };
+  console.log(cartItems, 'cartItems');
 
   const cartTotal = getCartTotal();
 
@@ -128,8 +129,8 @@ export default function CartPage() {
                                   unoptimized
                                 />
                               </Box>
-                              <Link
-                                href={`/products/${item.id}`}
+                              <div
+                                // href={`/products/${item.id}`}
                                 style={{
                                   textDecoration: 'none',
                                   color: 'inherit',
@@ -138,7 +139,7 @@ export default function CartPage() {
                                 <Typography variant="subtitle1">
                                   {item.name}
                                 </Typography>
-                              </Link>
+                              </div>
                             </Box>
                           </TableCell>
                           <TableCell align="right">
