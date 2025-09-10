@@ -70,7 +70,7 @@ const products = [
 
 Двигатель: RATO R420 (15 л.с.), воздушное охлаждение, датчик уровня масла`,
     details: '',
-    image: '/images/mt/img_13_1.jpg',
+    image: '/images/mt/img_13_3.png',
   },
 ];
 

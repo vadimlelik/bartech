@@ -96,7 +96,7 @@ export default function ProductPage() {
             className={styles.button}
             onClick={() => addToCart({ ...product, name: product.title })}
           >
-            Временно нет в наличии
+            Добавить в корзину
           </button>
         </div>
       </div>
