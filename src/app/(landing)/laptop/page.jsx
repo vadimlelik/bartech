@@ -14,6 +14,7 @@ import {
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
+  PIXEL_7,
 } from '@/data/pixel';
 import Script from 'next/script';
 
@@ -107,6 +108,7 @@ export default function Laptop() {
       window.ttq.load(PIXEL_4.laptop);
       window.ttq.load(PIXEL_5.laptop);
       window.ttq.load(PIXEL_6.laptop);
+      window.ttq.load(PIXEL_7.laptop);
 
       window.ttq.page();
     }

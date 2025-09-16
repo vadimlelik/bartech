@@ -137,8 +137,8 @@ export default function CatalogPage() {
           <div className={styles.cardContent}>
             <span className={styles.discount}>
               <h2>
-                РАСПРОДАЖА МОТОБЛОКОВ В РАССРОЧКУ С ПЕРВЫМ ПЛАТЕЖОМ ТОЛЬКО ЧЕРЕЗ
-                31 ДЕНЬ
+                РАСПРОДАЖА ТЕЛЕВИЗОРОВ В РАССРОЧКУ С ПЕРВЫМ ПЛАТЕЖОМ ТОЛЬКО
+                ЧЕРЕЗ 31 ДЕНЬ
               </h2>
             </span>
             <p>ЛЮБАЯ ТЕХНИКА В РАССРОЧКУ БЕЗ ПЕРЕПЛАТ</p>

@@ -90,6 +90,7 @@ export const PIXEL_7 = {
   phone3: 'D1V4DGJC77U1VILI7PR0',
   shockproof: 'D1V4D8RC77U1VILI7PQ0',
   bicycles: 'D1V47OBC77U1VHRJK7OG',
+  laptop: 'D33ST9BC77U1PDQ722G0',
 };
 
 export const PIXEL_8 = {
