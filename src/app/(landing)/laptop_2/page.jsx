@@ -5,7 +5,7 @@ import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4, PIXEL_5 } from '@/data/pixel';
 import Script from 'next/script';
 
 export default function Laptop() {
@@ -54,6 +54,7 @@ export default function Laptop() {
       window.ttq.load(PIXEL_2.laptop2);
       window.ttq.load(PIXEL_3.laptop2);
       window.ttq.load(PIXEL_4.laptop2);
+      window.ttq.load(PIXEL_5.laptop2);
 
       window.ttq.page();
     }
