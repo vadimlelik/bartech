@@ -104,6 +104,8 @@ export default function Laptop() {
     if (window.ttq) {
       window.ttq.load(PIXEL.laptop);
       window.ttq.load(PIXEL_2.laptop);
+      window.ttq.load(PIXEL_3.laptop);
+      window.ttq.load(PIXEL_4.laptop);
       window.ttq.page();
     }
   }, []);

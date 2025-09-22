@@ -45,6 +45,7 @@ export const PIXEL_2 = {
 
 export const PIXEL_3 = {
   laptop2: 'D35AFSBC77U361QHR5EG',
+  laptop: 'D38CPSBC77UEJ8GPVAD0',
   motoblock2: 'D2SJL93C77U1L7NBAP2G',
   motoblock1: 'D2SJKS3C77U6OF3MOMAG',
   discount50: 'CV1245JC77U0G6IA64C0',
@@ -62,6 +63,7 @@ export const PIXEL_3 = {
   pc: 'CVD9CEBC77U2KF3E56RG',
 };
 export const PIXEL_4 = {
+  laptop: 'CV11QIBC77U2LFP4LLOG',
   bicycles: 'CV9EG9BC77UCFC44B5Q0',
   motoblok: 'CVD94ERC77U8JA3ILR7G',
   laptop2: 'D35AGVBC77UA632JQ7R0',

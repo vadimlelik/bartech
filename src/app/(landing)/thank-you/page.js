@@ -11,6 +11,8 @@ import {
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
+  PIXEL_7,
+  PIXEL_8,
 } from '@/data/pixel';
 
 const ThankYouPage = () => {
@@ -25,6 +27,8 @@ const ThankYouPage = () => {
       const pixelId_4 = PIXEL_4[source];
       const pixelId_5 = PIXEL_5[source];
       const pixelId_6 = PIXEL_6[source];
+      const pixelId_7 = PIXEL_7[source];
+      const pixelId_8 = PIXEL_8[source];
 
       if (window.ttq) {
         window.ttq.load(pixelId);
@@ -33,6 +37,8 @@ const ThankYouPage = () => {
         window.ttq.load(pixelId_4);
         window.ttq.load(pixelId_5);
         window.ttq.load(pixelId_6);
+        window.ttq.load(pixelId_7);
+        window.ttq.load(pixelId_8);
 
         window.ttq.page();
       }
