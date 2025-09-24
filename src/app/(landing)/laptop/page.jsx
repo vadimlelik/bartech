@@ -9,12 +9,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
 import {
   PIXEL,
+  PIXEL_10,
+  PIXEL_11,
+  PIXEL_12,
+  PIXEL_13,
+  PIXEL_14,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
   PIXEL_7,
+  PIXEL_8,
+  PIXEL_9,
 } from '@/data/pixel';
 import Script from 'next/script';
 
@@ -106,6 +113,16 @@ export default function Laptop() {
       window.ttq.load(PIXEL_2.laptop);
       window.ttq.load(PIXEL_3.laptop);
       window.ttq.load(PIXEL_4.laptop);
+      window.ttq.load(PIXEL_5.laptop);
+      window.ttq.load(PIXEL_6.laptop);
+      window.ttq.load(PIXEL_7.laptop);
+      window.ttq.load(PIXEL_8.laptop);
+      window.ttq.load(PIXEL_9.laptop);
+      window.ttq.load(PIXEL_10.laptop);
+      window.ttq.load(PIXEL_11.laptop);
+      window.ttq.load(PIXEL_12.laptop);
+      window.ttq.load(PIXEL_13.laptop);
+      window.ttq.load(PIXEL_14.laptop);
       window.ttq.page();
     }
   }, []);

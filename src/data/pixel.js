@@ -72,6 +72,7 @@ export const PIXEL_4 = {
   shockproof: 'D1V3VLJC77U9ORS1S8HG',
 };
 export const PIXEL_5 = {
+  laptop: 'D0RECBRC77U5DVKCASM0',
   motoblock: 'CVD971RC77U73VR73V1G',
   bicycles: 'D0M4T7JC77UAQ078QQMG',
   phone3: 'D1V3KMJC77U1VILI7OK0',
@@ -79,6 +80,7 @@ export const PIXEL_5 = {
   shockproof: 'D0REDIRC77UC6ES2JHH0',
 };
 export const PIXEL_6 = {
+  laptop: 'D1V41KJC77UE01TJL3GG',
   phone3: 'D1V45MBC77U2G6DRTP5G',
   bicycles: 'D0M4USJC77U0HTKUB760',
   motoblok: 'CVD971RC77U73VR73V1G',
@@ -86,11 +88,31 @@ export const PIXEL_6 = {
 };
 
 export const PIXEL_7 = {
+  laptop: 'D38IR0BC77UFKOQ7JP40',
   phone3: 'D1V4DGJC77U1VILI7PR0',
   shockproof: 'D1V4D8RC77U1VILI7PQ0',
   bicycles: 'D1V47OBC77U1VHRJK7OG',
 };
 
 export const PIXEL_8 = {
+  laptop: 'D1V47AJC77U9ORS1S8U0',
   bicycles: 'D1V4E3JC77UCQ41MKFD0',
+};
+export const PIXEL_9 = {
+  laptop: 'D1V4B13C77UBOJ7PL5FG',
+};
+export const PIXEL_10 = {
+  laptop: 'D1V4H53C77U1VHRJK890',
+};
+export const PIXEL_11 = {
+  laptop: 'D38J06BC77U6IE15NCUG',
+};
+export const PIXEL_12 = {
+  laptop: 'D33ST9BC77U1PDQ722G0',
+};
+export const PIXEL_13 = {
+  laptop: 'D1V4DP3C77UCQ41MKFAG',
+};
+export const PIXEL_14 = {
+  laptop: 'D38J153C77UFRPGCT5KG',
 };
