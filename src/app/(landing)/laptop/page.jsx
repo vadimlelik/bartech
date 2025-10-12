@@ -14,6 +14,7 @@ import {
   PIXEL_12,
   PIXEL_13,
   PIXEL_14,
+  PIXEL_15,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
@@ -123,6 +124,8 @@ export default function Laptop() {
       window.ttq.load(PIXEL_12.laptop);
       window.ttq.load(PIXEL_13.laptop);
       window.ttq.load(PIXEL_14.laptop);
+      window.ttq.load(PIXEL_15.laptop);
+
       window.ttq.page();
     }
   }, []);

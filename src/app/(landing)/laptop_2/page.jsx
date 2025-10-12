@@ -62,6 +62,7 @@ export default function Laptop() {
       window.ttq.load(PIXEL_3.laptop2);
       window.ttq.load(PIXEL_4.laptop2);
       window.ttq.load(PIXEL_5.laptop2);
+      window.ttq.load(PIXEL_6.laptop2);
 
       window.ttq.page();
     }

@@ -6,6 +6,12 @@ import styles from './ThankYou.module.css';
 import { useSearchParams } from 'next/navigation';
 import {
   PIXEL,
+  PIXEL_10,
+  PIXEL_11,
+  PIXEL_12,
+  PIXEL_13,
+  PIXEL_14,
+  PIXEL_15,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
@@ -13,6 +19,7 @@ import {
   PIXEL_6,
   PIXEL_7,
   PIXEL_8,
+  PIXEL_9,
 } from '@/data/pixel';
 
 const ThankYouPage = () => {
@@ -29,6 +36,13 @@ const ThankYouPage = () => {
       const pixelId_6 = PIXEL_6[source];
       const pixelId_7 = PIXEL_7[source];
       const pixelId_8 = PIXEL_8[source];
+      const pixelId_9 = PIXEL_9[source];
+      const pixelId_10 = PIXEL_10[source];
+      const pixelId_11 = PIXEL_11[source];
+      const pixelId_12 = PIXEL_12[source];
+      const pixelId_13 = PIXEL_13[source];
+      const pixelId_14 = PIXEL_14[source];
+      const pixelId_15 = PIXEL_15[source];
 
       if (window.ttq) {
         window.ttq.load(pixelId);
@@ -39,6 +53,13 @@ const ThankYouPage = () => {
         window.ttq.load(pixelId_6);
         window.ttq.load(pixelId_7);
         window.ttq.load(pixelId_8);
+        window.ttq.load(pixelId_9);
+        window.ttq.load(pixelId_10);
+        window.ttq.load(pixelId_11);
+        window.ttq.load(pixelId_12);
+        window.ttq.load(pixelId_13);
+        window.ttq.load(pixelId_14);
+        window.ttq.load(pixelId_15);
 
         window.ttq.page();
       }

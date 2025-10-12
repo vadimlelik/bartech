@@ -44,6 +44,9 @@ export const PIXEL_2 = {
 };
 
 export const PIXEL_3 = {
+  tv: 'D3JTEMRC77U8DNMA5LVG',
+  tv2: 'D3JTEUJC77UEJB9HDLDG',
+  tv3: 'D3JTF43C77U8DNMA5M30',
   laptop2: 'D35AFSBC77U361QHR5EG',
   laptop: 'D38CPSBC77UEJ8GPVAD0',
   motoblock2: 'D2SJL93C77U1L7NBAP2G',
@@ -81,6 +84,7 @@ export const PIXEL_5 = {
 };
 export const PIXEL_6 = {
   laptop: 'D1V41KJC77UE01TJL3GG',
+  laptop2: 'D3JTDNBC77UAH4NBC6B0',
   phone3: 'D1V45MBC77U2G6DRTP5G',
   bicycles: 'D0M4USJC77U0HTKUB760',
   motoblok: 'CVD971RC77U73VR73V1G',
@@ -115,4 +119,8 @@ export const PIXEL_13 = {
 };
 export const PIXEL_14 = {
   laptop: 'D38J153C77UFRPGCT5KG',
+};
+
+export const PIXEL_15 = {
+  laptop: 'D3JTCBRC77U8DNMA5LR0',
 };
