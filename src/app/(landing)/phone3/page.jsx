@@ -9,12 +9,15 @@ import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   PIXEL,
+  PIXEL_10,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
   PIXEL_7,
+  PIXEL_8,
+  PIXEL_9,
 } from '@/data/pixel';
 
 const reviews = [
@@ -168,6 +171,9 @@ export default function Phone4() {
       window.ttq.load(PIXEL_5.phone3);
       window.ttq.load(PIXEL_6.phone3);
       window.ttq.load(PIXEL_7.phone3);
+      window.ttq.load(PIXEL_8.phone3);
+      window.ttq.load(PIXEL_9.phone3);
+      window.ttq.load(PIXEL_10.phone3);
       window.ttq.page();
     }
   }, []);

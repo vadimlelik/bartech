@@ -9,12 +9,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
 import {
   PIXEL,
+  PIXEL_10,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
   PIXEL_7,
+  PIXEL_8,
+  PIXEL_9,
 } from '@/data/pixel';
 
 const advantages = [
@@ -107,6 +110,9 @@ export default function ShockproofPhone() {
       window.ttq.load(PIXEL_5.shockproof);
       window.ttq.load(PIXEL_6.shockproof);
       window.ttq.load(PIXEL_7.shockproof);
+      window.ttq.load(PIXEL_8.shockproof);
+      window.ttq.load(PIXEL_9.shockproof);
+      window.ttq.load(PIXEL_10.shockproof);
       window.ttq.page();
     }
   }, []);

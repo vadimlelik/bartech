@@ -101,12 +101,18 @@ export const PIXEL_7 = {
 export const PIXEL_8 = {
   laptop: 'D1V47AJC77U9ORS1S8U0',
   bicycles: 'D1V4E3JC77UCQ41MKFD0',
+  shockproof: 'D3RPIA3C77U53GBVSUMG',
+  phone3: 'D3RPKIJC77U93U3T6DK0',
 };
 export const PIXEL_9 = {
   laptop: 'D1V4B13C77UBOJ7PL5FG',
+  phone3: 'D3RPKIJC77U93U3T6DK0',
+  shockproof: 'D3RPLVRC77U1N95E6I10',
 };
 export const PIXEL_10 = {
   laptop: 'D1V4H53C77U1VHRJK890',
+  phone3: 'D3RPPMBC77U8AFCA1FV0',
+  shockproof: 'D3RPQORC77UELR3N7000',
 };
 export const PIXEL_11 = {
   laptop: 'D38J06BC77U6IE15NCUG',
