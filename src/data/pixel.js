@@ -102,7 +102,7 @@ export const PIXEL_8 = {
   laptop: 'D1V47AJC77U9ORS1S8U0',
   bicycles: 'D1V4E3JC77UCQ41MKFD0',
   shockproof: 'D3RPIA3C77U53GBVSUMG',
-  phone3: 'D3RPKIJC77U93U3T6DK0',
+  phone3: 'D3RPLIJC77UACP402I20',
 };
 export const PIXEL_9 = {
   laptop: 'D1V4B13C77UBOJ7PL5FG',
