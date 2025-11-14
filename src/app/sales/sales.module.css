@@ -1,0 +1,47 @@
+.promo {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+}
+
+.block {
+  margin-bottom: 30px;
+  padding: 20px 24px;
+  background: #f7f8fa;
+  border-left: 4px solid #4b7bec;
+  border-radius: 12px;
+}
+
+.block h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #1f1f1f;
+}
+
+.block p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Заменили глобальный селектор ul на локально-скопированный */
+.block ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.block li {
+  margin: 6px 0;
+}

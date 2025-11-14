@@ -72,16 +72,15 @@ const Footer = () => {
                   Возврат товара
                 </Link>
               </li>
-              {/*
               <li>
                 <Link
                   className={styles['footer__offer__link']}
-                  href={'/pass'}
+                  href={'sales'}
                   target="_blank"
                 >
-                  Сертификация и условия рассрочки
+                  Акции
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </div>
         </div>

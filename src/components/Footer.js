@@ -108,6 +108,11 @@ export default function Footer() {
                   Публичная оферта
                 </Typography>
               </Link>
+              <Link href="/sales" passHref style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Акции
+                </Typography>
+              </Link>
               <Link
                 href="/guarantee"
                 passHref
