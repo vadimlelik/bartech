@@ -39,7 +39,6 @@ export default function CartPage() {
       updateQuantity(productId, newQuantity);
     }
   };
-  console.log(cartItems, 'cartItems');
 
   const cartTotal = getCartTotal();
 

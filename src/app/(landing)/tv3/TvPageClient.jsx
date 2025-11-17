@@ -140,7 +140,9 @@ export default function TvLandingPage() {
       setIsQuizOpen(false);
       router.push('/thank-you?source=tv3');
     } catch (err) {
-      console.error(err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(err);
+      }
       alert(
         'Не удалось отправить заявку — проверьте интернет и попробуйте снова.'
       );

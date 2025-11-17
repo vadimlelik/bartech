@@ -116,7 +116,9 @@ export default function MotoblocksLandingPage() {
       setIsQuizOpen(false);
       router.push('/thank-you?source=motoblok2');
     } catch (e) {
-      console.error('Lead submit error', e);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Lead submit error', e);
+      }
       alert(
         'Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз, пожалуйста.'
       );
