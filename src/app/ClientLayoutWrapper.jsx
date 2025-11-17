@@ -69,7 +69,18 @@ export default function ClientLayoutWrapper({ children }) {
   }, []);
 
   useEffect(() => {
-    gtag.pageview(pathname);
+    // Проверяем, что gtag загружен перед использованием
+    let attempts = 0;
+    const maxAttempts = 50; // Максимум 5 секунд (50 * 100ms)
+    const checkAndTrack = () => {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        gtag.pageview(pathname);
+      } else if (attempts < maxAttempts) {
+        attempts++;
+        setTimeout(checkAndTrack, 100);
+      }
+    };
+    checkAndTrack();
   }, [pathname]);
 
   return (

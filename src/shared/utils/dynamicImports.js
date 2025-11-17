@@ -4,12 +4,14 @@ import dynamic from 'next/dynamic';
 export const DynamicQuiz = dynamic(() => import('@/components/quiz/Quiz'), {
   ssr: false,
   loading: () => (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center',
-      minHeight: '200px'
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '200px',
+      }}
+    >
       Загрузка...
     </div>
   ),

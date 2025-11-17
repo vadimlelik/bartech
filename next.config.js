@@ -23,13 +23,15 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
-    optimizePackageImports: ['@mui/material', '@mui/icons-material'],
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
+  // compiler: {
+  //   removeConsole:
+  //     process.env.NODE_ENV === 'production'
+  //       ? {
+  //           exclude: ['error', 'warn'],
+  //         }
+  //       : false,
+  // },
   async rewrites() {
     return [
       {

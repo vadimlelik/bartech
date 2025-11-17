@@ -1,14 +1,13 @@
 'use client';
 
 import { Suspense } from 'react';
-import { Box } from '@mui/material';
 
 export default function Template({ children }) {
   return (
     <Suspense
       fallback={
-        <Box
-          sx={{
+        <div
+          style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -16,7 +15,7 @@ export default function Template({ children }) {
           }}
         >
           <div>Загрузка...</div>
-        </Box>
+        </div>
       }
     >
       {children}
