@@ -106,7 +106,12 @@ export default function FavoritesPage() {
         Избранное ({products.length})
       </Typography>
       <Grid container spacing={3}>
-        {products.map((product) => (
+        {products.map((product) => {
+          // Пропускаем товары без id
+          if (!product.id) {
+            return null;
+          }
+          return (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card
               sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -155,7 +160,8 @@ export default function FavoritesPage() {
               </CardContent>
             </Card>
           </Grid>
-        ))}
+          );
+        })}
       </Grid>
       <Snackbar
         open={snackbarOpen}

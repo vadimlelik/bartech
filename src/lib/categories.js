@@ -1,14 +1,17 @@
-import fs from 'fs';
-import path from 'path';
+import { 
+  getAllCategories as getAllCategoriesSupabase,
+  getCategoryById as getCategoryByIdSupabase,
+  addCategory as addCategorySupabase,
+  updateCategory as updateCategorySupabase,
+  deleteCategory as deleteCategorySupabase
+} from './categories-supabase';
 
-const categoriesPath = path.join(process.cwd(), 'data', 'categories.json');
-
-export function getCategories() {
+// Экспортируем функции для работы с категориями из Supabase
+export async function getCategories() {
   try {
-    const data = JSON.parse(fs.readFileSync(categoriesPath, 'utf8'));
-    return data;
+    return await getAllCategoriesSupabase();
   } catch (error) {
-    'Error reading categories:', error;
+    console.error('Error reading categories:', error);
     return [];
   }
 }
@@ -17,26 +20,49 @@ export async function getCategoryById(id) {
   if (!id) return null;
 
   try {
-    const categories = getCategories();
-    if (!Array.isArray(categories)) {
-      return null;
+    // Сначала пытаемся найти по ID
+    let category = await getCategoryByIdSupabase(id);
+    
+    if (category) {
+      return category;
     }
 
-    // Если передано название категории, пытаемся найти по имени
+    // Если по ID не нашли, пытаемся найти по имени
+    const categories = await getAllCategoriesSupabase();
     const categoryByName = categories.find(
-      (category) => category.name.toLowerCase() === id.toString().toLowerCase()
+      (cat) => cat.name.toLowerCase() === id.toString().toLowerCase()
     );
-    if (categoryByName) {
-      return categoryByName;
-    }
-
-    // Если по имени не нашли, ищем по ID
-    const categoryById = categories.find(
-      (category) => category.id.toLowerCase() === id.toString().toLowerCase()
-    );
-    return categoryById || null;
+    
+    return categoryByName || null;
   } catch (error) {
-    'Error in getCategoryById:', error;
+    console.error('Error in getCategoryById:', error);
     return null;
+  }
+}
+
+export async function addCategory(categoryData) {
+  try {
+    return await addCategorySupabase(categoryData);
+  } catch (error) {
+    console.error('Error adding category:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateCategory(id, categoryData) {
+  try {
+    return await updateCategorySupabase(id, categoryData);
+  } catch (error) {
+    console.error('Error updating category:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteCategory(id) {
+  try {
+    return await deleteCategorySupabase(id);
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    return { success: false, error: error.message };
   }
 }

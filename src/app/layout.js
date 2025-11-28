@@ -12,6 +12,7 @@ import StyledComponentsRegistry from './registry';
 import { loadTikTokPixel } from '@/shared/utils';
 import { usePathname } from 'next/navigation';
 import * as gtag from '@/lib/gtag';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -128,15 +129,17 @@ export default function RootLayout({ children }) {
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Box
-              sx={{
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              {children}
-            </Box>
+            <AuthProvider>
+              <Box
+                sx={{
+                  minHeight: '100vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {children}
+              </Box>
+            </AuthProvider>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>

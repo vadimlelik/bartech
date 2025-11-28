@@ -33,5 +33,10 @@
 		"id": "poco",
 		"name": "POCO",
 		"image": "/images/POCO/POCO C55.jpg"
+	},
+	{
+		"id": "",
+		"name": "мотоблоки",
+		"image": "https://beagudoboagjuwltklis.supabase.co/storage/v1/object/public/images/categories/afbfb449-0190-46fd-8b83-a220329cd3a8.jpg"
 	}
 ]

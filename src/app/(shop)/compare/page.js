@@ -34,13 +34,19 @@ export default function ComparePage() {
     );
   }
 
-  // Получаем все уникальные характеристики
+  // Получаем все уникальные характеристики (только непустые)
   const allSpecs = compareItems.reduce((specs, item) => {
-    Object.keys(item.specifications).forEach((spec) => {
-      if (!specs.includes(spec)) {
-        specs.push(spec);
-      }
-    });
+    if (item.specifications && 
+        typeof item.specifications === 'object' && 
+        !Array.isArray(item.specifications)) {
+      Object.keys(item.specifications).forEach((spec) => {
+        const value = item.specifications[spec];
+        // Добавляем только если значение не пустое и еще не добавлено
+        if (value && value !== '' && value !== null && value !== undefined && String(value).trim() !== '' && !specs.includes(spec)) {
+          specs.push(spec);
+        }
+      });
+    }
     return specs;
   }, []);
 
@@ -100,18 +106,35 @@ export default function ComparePage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {allSpecs.map((spec) => (
-                <TableRow key={spec}>
-                  <TableCell component="th" scope="row">
-                    {spec}
-                  </TableCell>
-                  {compareItems.map((item) => (
-                    <TableCell key={item.id} align="center">
-                      {item.specifications[spec]}
+              {allSpecs.map((spec) => {
+                // Проверяем, есть ли хотя бы одно непустое значение в строке
+                const hasAnyValue = compareItems.some((item) => {
+                  const value = item.specifications?.[spec];
+                  return value && value !== '' && value !== null && value !== undefined;
+                });
+                
+                // Показываем строку только если есть хотя бы одно значение
+                if (!hasAnyValue) return null;
+                
+                return (
+                  <TableRow key={spec}>
+                    <TableCell component="th" scope="row">
+                      {spec}
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+                    {compareItems.map((item) => {
+                      const value = item.specifications?.[spec];
+                      const displayValue = (value && value !== '' && value !== null && value !== undefined) 
+                        ? value 
+                        : '-';
+                      return (
+                        <TableCell key={item.id} align="center">
+                          {displayValue}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

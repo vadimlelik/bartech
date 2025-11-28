@@ -277,14 +277,18 @@ export default function ProductDetails({ product }) {
             }}
             onClick={handleImageClick}
           >
-            <Image
-              src={product.images[currentImageIndex]}
-              alt={`${product.name} - изображение ${currentImageIndex + 1}`}
-              fill
-              style={{ objectFit: 'contain' }}
-              unoptimized
-              priority
-            />
+            {product.images && 
+             product.images.length > 0 && 
+             product.images[currentImageIndex] && (
+              <Image
+                src={product.images[currentImageIndex]}
+                alt={`${product.name} - изображение ${currentImageIndex + 1}`}
+                fill
+                style={{ objectFit: 'contain' }}
+                unoptimized
+                priority
+              />
+            )}
             <Box
               sx={{
                 position: 'absolute',
@@ -385,15 +389,25 @@ export default function ProductDetails({ product }) {
             )}
           </Box>
 
-          <Box
-            sx={{ mb: 3, backgroundColor: 'grey.50', p: 2, borderRadius: 1 }}
-          >
-            <Typography variant="subtitle1" gutterBottom>
-              Основные характеристики:
-            </Typography>
-            <Grid container spacing={2}>
-              {product.specifications &&
-                Object.entries(product.specifications)
+          {product.specifications &&
+           typeof product.specifications === 'object' &&
+           !Array.isArray(product.specifications) &&
+           Object.entries(product.specifications).filter(([key, value]) => {
+             const strValue = String(value || '').trim();
+             return strValue !== '' && value !== null && value !== undefined;
+           }).length > 0 && (
+            <Box
+              sx={{ mb: 3, backgroundColor: 'grey.50', p: 2, borderRadius: 1 }}
+            >
+              <Typography variant="subtitle1" gutterBottom>
+                Основные характеристики:
+              </Typography>
+              <Grid container spacing={2}>
+                {Object.entries(product.specifications)
+                  .filter(([key, value]) => {
+                    const strValue = String(value || '').trim();
+                    return strValue !== '' && value !== null && value !== undefined;
+                  })
                   .slice(0, 6)
                   .map(([key, value]) => (
                     <Grid item xs={12} sm={6} key={key}>
@@ -405,8 +419,9 @@ export default function ProductDetails({ product }) {
                       </Box>
                     </Grid>
                   ))}
-            </Grid>
-          </Box>
+              </Grid>
+            </Box>
+          )}
 
           <Typography variant="body1" color="text.secondary" paragraph>
             {product.description}
@@ -510,26 +525,41 @@ export default function ProductDetails({ product }) {
           </Tabs>
 
           <TabPanel value={tabValue} index={0}>
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  {Object.entries(product.specifications).map(
-                    ([key, value]) => (
-                      <TableRow key={key}>
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          sx={{ width: '30%' }}
-                        >
-                          {translateSpecification(key)}
-                        </TableCell>
-                        <TableCell>{value}</TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            {product.specifications &&
+             typeof product.specifications === 'object' &&
+             !Array.isArray(product.specifications) &&
+             Object.entries(product.specifications).filter(([key, value]) => 
+               value && value !== '' && value !== null && value !== undefined && String(value).trim() !== ''
+             ).length > 0 ? (
+              <TableContainer>
+                <Table>
+                  <TableBody>
+                    {Object.entries(product.specifications)
+                      .filter(([key, value]) => 
+                        value && value !== '' && value !== null && value !== undefined && String(value).trim() !== ''
+                      )
+                      .map(([key, value]) => (
+                        <TableRow key={key}>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            sx={{ width: '30%' }}
+                          >
+                            {translateSpecification(key)}
+                          </TableCell>
+                          <TableCell>{value}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Box sx={{ p: 3, textAlign: 'center' }}>
+                <Typography variant="body1" color="text.secondary">
+                  Характеристики не указаны
+                </Typography>
+              </Box>
+            )}
           </TabPanel>
 
           <TabPanel value={tabValue} index={1}>
@@ -582,12 +612,16 @@ export default function ProductDetails({ product }) {
             <ArrowForwardIcon />
           </IconButton>
           <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-            <Image
-              src={product.images[currentImageIndex]}
-              alt={`${product.name} - изображение ${currentImageIndex + 1}`}
-              fill
-              style={{ objectFit: 'contain' }}
-            />
+            {product.images && 
+             product.images.length > 0 && 
+             product.images[currentImageIndex] && (
+              <Image
+                src={product.images[currentImageIndex]}
+                alt={`${product.name} - изображение ${currentImageIndex + 1}`}
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            )}
           </Box>
         </DialogContent>
       </Dialog>

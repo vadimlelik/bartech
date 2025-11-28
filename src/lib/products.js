@@ -1,22 +1,47 @@
+// Используем Supabase для получения товаров
+// Если нужно вернуться к JSON файлам, раскомментируйте код ниже и закомментируйте импорт
+import {
+  getAllProducts as getAllProductsFromSupabase,
+  getProducts as getProductsFromSupabase,
+  getProductById as getProductByIdFromSupabase,
+  getProductsByCategory as getProductsByCategoryFromSupabase,
+} from './products-supabase-read';
+
+// Fallback на JSON файлы если Supabase не настроен
 import fs from 'fs';
 import path from 'path';
 
 const productsPath = path.join(process.cwd(), 'data', 'products_new.json');
 
-function getAllProducts() {
+function getAllProductsFromJSON() {
   try {
     if (!fs.existsSync(productsPath)) {
       return [];
     }
     const rawData = fs.readFileSync(productsPath, 'utf8');
-
     const data = JSON.parse(rawData);
-    'Parsed products count:', data.length;
     return data;
   } catch (error) {
-    'Error reading products:', error;
+    console.error('Error reading products:', error);
     return [];
   }
+}
+
+// Проверяем наличие переменных Supabase
+const useSupabase =
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+async function getAllProducts() {
+  if (useSupabase) {
+    try {
+      return await getAllProductsFromSupabase();
+    } catch (error) {
+      console.error('Error fetching from Supabase, falling back to JSON:', error);
+      return getAllProductsFromJSON();
+    }
+  }
+  return getAllProductsFromJSON();
 }
 
 export async function getProducts({
@@ -30,18 +55,26 @@ export async function getProducts({
   filters = {},
 } = {}) {
   try {
-    'getProducts called with:',
-      {
-        categoryId,
-        search,
-        sort,
-        sortBy,
-        page,
-        limit,
-        ids,
-        filters,
-      };
-    let filteredProducts = getAllProducts() || [];
+    // Используем Supabase если настроен
+    if (useSupabase) {
+      try {
+        return await getProductsFromSupabase({
+          categoryId,
+          search,
+          sort,
+          sortBy,
+          page,
+          limit,
+          ids,
+          filters,
+        });
+      } catch (error) {
+        console.error('Error fetching from Supabase, falling back to JSON:', error);
+      }
+    }
+
+    // Fallback на JSON файлы
+    let filteredProducts = getAllProductsFromJSON() || [];
     'Total products:', filteredProducts.length;
 
     // Если переданы ID, ищем только по ним
@@ -207,51 +240,57 @@ export async function getProducts({
   }
 }
 
-export function getProductById(id) {
-  ('=== getProductById Debug ===');
-  '1. Input ID:', id, typeof id;
-
+export async function getProductById(id) {
   if (!id) {
-    ('2. No ID provided');
     return null;
   }
 
   try {
-    const products = getAllProducts();
-    '3. All products loaded:', products ? products.length : 'no products';
+    // Используем Supabase если настроен
+    if (useSupabase) {
+      try {
+        return await getProductByIdFromSupabase(id);
+      } catch (error) {
+        console.error('Error fetching from Supabase, falling back to JSON:', error);
+      }
+    }
 
+    // Fallback на JSON файлы
+    const products = getAllProductsFromJSON();
     if (!Array.isArray(products)) {
-      ('4. Products is not an array');
       return null;
     }
 
     const stringId = String(id);
-    '5. Looking for product with string ID:', stringId;
-
-    const product = products.find((product) => {
-      'Comparing:', String(product.id), '===', stringId;
-      return String(product.id) === stringId;
-    });
-
-    '6. Found product:', product;
+    const product = products.find((product) => String(product.id) === stringId);
 
     return product || null;
   } catch (error) {
-    '7. Error in getProductById:', error;
+    console.error('Error in getProductById:', error);
     return null;
   }
 }
 
-export function getProductsByCategory(categoryId) {
+export async function getProductsByCategory(categoryId) {
   if (!categoryId) return [];
   try {
-    const products = getAllProducts();
+    // Используем Supabase если настроен
+    if (useSupabase) {
+      try {
+        return await getProductsByCategoryFromSupabase(categoryId);
+      } catch (error) {
+        console.error('Error fetching from Supabase, falling back to JSON:', error);
+      }
+    }
+
+    // Fallback на JSON файлы
+    const products = getAllProductsFromJSON();
     if (!Array.isArray(products)) return [];
     return (
-      products.filter((product) => product.categoryId === categoryId) || []
+      products.filter((product) => product.categoryId === categoryId || product.category_id === categoryId) || []
     );
   } catch (error) {
-    'Error in getProductsByCategory:', error;
+    console.error('Error in getProductsByCategory:', error);
     return [];
   }
 }

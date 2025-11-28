@@ -29,14 +29,19 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useCartStore } from '../store/cart';
 import { useFavoritesStore } from '../store/favorites';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { cartItems } = useCartStore();
   const { favorites } = useFavoritesStore();
+  const { user, profile, signOut, isAdmin, loading: authLoading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -152,7 +157,7 @@ export default function Header() {
               </Box>
             </Box>
 
-            {/* Иконки корзины и закладок */}
+            {/* Иконки корзины, закладок и авторизации */}
             <Box sx={{ display: 'flex', gap: 1 }}>
               <Link
                 href="/favorites"
@@ -187,6 +192,38 @@ export default function Header() {
                   </IconButton>
                 </Tooltip>
               </Link>
+
+              {/* Кнопка админ-панели для админов */}
+              {mounted && !authLoading && isAdmin() && (
+                <Link
+                  href="/admin"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <Tooltip title="Админ-панель">
+                    <IconButton color="inherit">
+                      <AdminPanelSettingsIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Link>
+              )}
+
+              {/* Кнопка входа/выхода */}
+              {mounted && !authLoading && (
+                <Tooltip title={user ? 'Выйти' : 'Войти'}>
+                  <IconButton
+                    color="inherit"
+                    onClick={async () => {
+                      if (user) {
+                        await signOut();
+                      } else {
+                        window.location.href = '/auth/login';
+                      }
+                    }}
+                  >
+                    {user ? <LogoutIcon /> : <LoginIcon />}
+                  </IconButton>
+                </Tooltip>
+              )}
             </Box>
           </Box>
         </Toolbar>
@@ -215,6 +252,58 @@ export default function Header() {
               </Link>
             ))}
             <Divider />
+            {mounted && !authLoading && user && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary={profile?.full_name || user.email}
+                    secondary={isAdmin() ? 'Администратор' : 'Пользователь'}
+                  />
+                </ListItem>
+                {isAdmin() && (
+                  <Link
+                    href="/admin"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ListItem button>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Админ-панель" />
+                    </ListItem>
+                  </Link>
+                )}
+                <ListItem
+                  button
+                  onClick={async () => {
+                    await signOut();
+                    toggleMobileMenu();
+                  }}
+                >
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Выйти" />
+                </ListItem>
+                <Divider />
+              </>
+            )}
+            {mounted && !authLoading && !user && (
+              <>
+                <Link
+                  href="/auth/login"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <ListItem button>
+                    <ListItemIcon>
+                      <LoginIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Войти" />
+                  </ListItem>
+                </Link>
+                <Divider />
+              </>
+            )}
             <ListItem>
               <ListItemIcon>
                 <PhoneIcon />

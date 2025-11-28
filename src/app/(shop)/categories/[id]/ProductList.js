@@ -398,7 +398,12 @@ export default function ProductList({ categoryId }) {
         </Grid>
       ) : (
         <Grid container spacing={3}>
-          {products.map((product) => (
+          {products.map((product) => {
+            // Пропускаем товары без id или изображения
+            if (!product.id || !product.image) {
+              return null;
+            }
+            return (
             <Grid item xs={12} sm={6} md={4} key={product.id}>
               <Card
                 sx={{
@@ -482,16 +487,18 @@ export default function ProductList({ categoryId }) {
                       bgcolor: 'background.paper',
                     }}
                   >
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      style={{
-                        objectFit: 'contain',
-                        padding: '20px',
-                      }}
-                      priority={true}
-                    />
+                    {product.image && (
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        style={{
+                          objectFit: 'contain',
+                          padding: '20px',
+                        }}
+                        priority={true}
+                      />
+                    )}
                   </Box>
 
                   <CardContent sx={{ flexGrow: 1, pt: 2 }}>
@@ -547,12 +554,26 @@ export default function ProductList({ categoryId }) {
                       </Typography>
 
                       {/* Основные характеристики */}
-                      {product.specifications && (
+                      {(() => {
+                        if (!product.specifications || 
+                            typeof product.specifications !== 'object' || 
+                            Array.isArray(product.specifications)) {
+                          return false;
+                        }
+                        const specs = product.specifications;
+                        const hasDisplay = specs.display && String(specs.display).trim() !== '';
+                        const hasProcessor = specs.processor && String(specs.processor).trim() !== '';
+                        const hasRam = specs.ram && String(specs.ram).trim() !== '';
+                        const hasMemory = specs.memory && String(specs.memory).trim() !== '';
+                        const hasCamera = specs.camera && String(specs.camera).trim() !== '';
+                        const hasBattery = specs.battery && String(specs.battery).trim() !== '';
+                        return hasDisplay || hasProcessor || hasRam || hasMemory || hasCamera || hasBattery;
+                      })() && (
                         <List
                           dense
                           sx={{ mt: 1, '& .MuiListItem-root': { px: 0 } }}
                         >
-                          {product.specifications.display && (
+                          {product.specifications.display && String(product.specifications.display).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -564,7 +585,7 @@ export default function ProductList({ categoryId }) {
                               />
                             </ListItem>
                           )}
-                          {product.specifications.processor && (
+                          {product.specifications.processor && String(product.specifications.processor).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -576,7 +597,7 @@ export default function ProductList({ categoryId }) {
                               />
                             </ListItem>
                           )}
-                          {product.specifications.ram && (
+                          {product.specifications.ram && String(product.specifications.ram).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -588,7 +609,7 @@ export default function ProductList({ categoryId }) {
                               />
                             </ListItem>
                           )}
-                          {product.specifications.memory && (
+                          {product.specifications.memory && String(product.specifications.memory).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -600,7 +621,7 @@ export default function ProductList({ categoryId }) {
                               />
                             </ListItem>
                           )}
-                          {product.specifications.camera && (
+                          {product.specifications.camera && String(product.specifications.camera).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -612,7 +633,7 @@ export default function ProductList({ categoryId }) {
                               />
                             </ListItem>
                           )}
-                          {product.specifications.battery && (
+                          {product.specifications.battery && String(product.specifications.battery).trim() !== '' && (
                             <ListItem>
                               <ListItemText
                                 primary={
@@ -664,7 +685,8 @@ export default function ProductList({ categoryId }) {
                 </Link>
               </Card>
             </Grid>
-          ))}
+            );
+          })}
         </Grid>
       )}
 

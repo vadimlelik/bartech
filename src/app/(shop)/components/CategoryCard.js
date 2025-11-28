@@ -14,6 +14,11 @@ export default function CategoryCard({ category }) {
     const router = useRouter();
     const { id, name, image, description } = category;
 
+    // Проверяем, что id не пустой
+    if (!id || id === '') {
+        return null;
+    }
+
     return (
         <Card
             elevation={3}
@@ -32,20 +37,22 @@ export default function CategoryCard({ category }) {
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
             >
                 <Box sx={{ position: 'relative', paddingTop: '60%' }}>
-                    <CardMedia
-                        component="img"
-                        image={image}
-                        alt={name}
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                            p: 2,
-                        }}
-                    />
+                    {image && (
+                        <CardMedia
+                            component="img"
+                            image={image}
+                            alt={name}
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain',
+                                p: 2,
+                            }}
+                        />
+                    )}
                 </Box>
                 <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                     <Typography

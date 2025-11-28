@@ -1,8 +1,72 @@
 import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
-export function middleware(request) {
+export async function middleware(request) {
   const url = request.nextUrl;
   const hostname = request.headers.get('host');
+  const response = NextResponse.next();
+
+  // Защита админ-роутов
+  if (url.pathname.startsWith('/admin')) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      // Если Supabase не настроен, разрешаем доступ (для разработки)
+      return response;
+    }
+
+    try {
+      // Создаем Supabase клиент для middleware с поддержкой cookies
+      const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+        cookies: {
+          get(name) {
+            return request.cookies.get(name)?.value;
+          },
+          set(name, value, options) {
+            request.cookies.set({ name, value, ...options });
+            response.cookies.set({ name, value, ...options });
+          },
+          remove(name, options) {
+            request.cookies.set({ name, value: '', ...options });
+            response.cookies.set({ name, value: '', ...options });
+          },
+        },
+      });
+
+      // Получаем текущего пользователя
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      // Если пользователь не авторизован, перенаправляем на страницу входа
+      if (!user || userError) {
+        const redirectUrl = new URL('/auth/login', request.url);
+        redirectUrl.searchParams.set('redirect', url.pathname);
+        return NextResponse.redirect(redirectUrl);
+      }
+
+      // Получаем профиль пользователя
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      // Если профиль не найден или роль не admin, перенаправляем на главную
+      if (!profile || profileError || profile.role !== 'admin') {
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+
+      // Если все проверки пройдены, разрешаем доступ
+      return response;
+    } catch (error) {
+      console.error('Error in admin middleware:', error);
+      // В случае ошибки перенаправляем на главную
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
 
   // Карта соответствия поддоменов и путей
   const subdomainMap = {
