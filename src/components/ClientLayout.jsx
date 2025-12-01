@@ -1,17 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import { loadTikTokPixel } from '@/shared/utils';
 import * as gtag from '@/lib/gtag';
+import CookieConsent from './CookieConsent';
+
+const COOKIE_CONSENT_KEY = 'cookie-consent';
+
+const hasCookieConsent = () => {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted';
+};
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
+  const [analyticsLoaded, setAnalyticsLoaded] = useState(false);
 
-  useEffect(() => {
-    loadTikTokPixel('YOUR_PIXEL_ID_HERE');
+  // Загружаем аналитику только если есть согласие
+  const loadAnalytics = () => {
+    if (analyticsLoaded || typeof window === 'undefined') return;
 
+    // Загружаем Yandex Metrica
     const script = document.createElement('script');
     script.text = `
       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -39,40 +50,87 @@ export default function ClientLayout({ children }) {
     noscript.appendChild(div);
     document.body.appendChild(noscript);
 
-    return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-      if (document.body.contains(noscript)) {
-        document.body.removeChild(noscript);
-      }
-    };
+    // Загружаем TikTok Pixel только если есть ID
+    const tiktokPixelId = 'YOUR_PIXEL_ID_HERE';
+    if (tiktokPixelId && tiktokPixelId !== 'YOUR_PIXEL_ID_HERE') {
+      loadTikTokPixel(tiktokPixelId);
+    }
+
+    setAnalyticsLoaded(true);
+  };
+
+  // Проверяем согласие при монтировании
+  useEffect(() => {
+    if (hasCookieConsent()) {
+      loadAnalytics();
+    }
   }, []);
 
+  // Обработчик принятия согласия
+  const handleCookieAccept = () => {
+    loadAnalytics();
+    // Динамически загружаем Google Analytics после согласия
+    if (typeof window !== 'undefined') {
+      // Проверяем, не загружен ли уже gtag
+      const existingScript = document.querySelector(`script[src*="googletagmanager.com/gtag/js"]`);
+      if (!existingScript && !window.dataLayer) {
+        // Загружаем gtag.js
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`;
+        script.onload = () => {
+          // Инициализируем gtag после загрузки скрипта
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function() {
+            window.dataLayer.push(arguments);
+          };
+          window.gtag('js', new Date());
+          window.gtag('config', gtag.GA_TRACKING_ID, {
+            page_path: window.location.pathname,
+          });
+          // Отслеживаем текущую страницу
+          gtag.pageview(pathname);
+        };
+        document.head.appendChild(script);
+      } else if (window.gtag) {
+        // Если gtag уже загружен, просто отслеживаем страницу
+        gtag.pageview(pathname);
+      }
+    }
+  };
+
+  // Отслеживание изменений пути только если аналитика загружена
   useEffect(() => {
-    gtag.pageview(pathname);
-  }, [pathname]);
+    if (analyticsLoaded && typeof window !== 'undefined' && window.gtag) {
+      gtag.pageview(pathname);
+    }
+  }, [pathname, analyticsLoaded]);
 
   return (
     <>
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      />
-      <Script
-        id="gtag-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${gtag.GA_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
-          `,
-        }}
-      />
+      {hasCookieConsent() && (
+        <>
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+          />
+          <Script
+            id="gtag-init"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gtag.GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+        </>
+      )}
+      <CookieConsent onAccept={handleCookieAccept} />
       {children}
     </>
   );
