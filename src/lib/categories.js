@@ -6,7 +6,6 @@ import {
   deleteCategory as deleteCategorySupabase
 } from './categories-supabase';
 
-// Экспортируем функции для работы с категориями из Supabase
 export async function getCategories() {
   try {
     return await getAllCategoriesSupabase();
@@ -20,14 +19,12 @@ export async function getCategoryById(id) {
   if (!id) return null;
 
   try {
-    // Сначала пытаемся найти по ID
     let category = await getCategoryByIdSupabase(id);
     
     if (category) {
       return category;
     }
 
-    // Если по ID не нашли, пытаемся найти по имени
     const categories = await getAllCategoriesSupabase();
     const categoryByName = categories.find(
       (cat) => cat.name.toLowerCase() === id.toString().toLowerCase()

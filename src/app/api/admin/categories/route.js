@@ -2,10 +2,8 @@ import { NextResponse } from 'next/server';
 import { getCategories, addCategory } from '@/lib/categories';
 import { requireAdmin } from '@/lib/auth-helpers';
 
-// GET - получить все категории (для админки)
 export async function GET() {
   try {
-    // Проверяем, что пользователь является администратором
     await requireAdmin();
     
     const categories = await getCategories();
@@ -27,15 +25,12 @@ export async function GET() {
   }
 }
 
-// POST - создать новую категорию
 export async function POST(request) {
   try {
-    // Проверяем, что пользователь является администратором
     await requireAdmin();
     
     const body = await request.json();
     
-    // Валидация обязательных полей
     if (!body.name) {
       return NextResponse.json(
         { error: 'Name is required' },

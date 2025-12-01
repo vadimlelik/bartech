@@ -72,7 +72,6 @@ export default function Header() {
             py: { xs: 1, md: 2 },
           }}
         >
-          {/* Бургер меню для мобильных */}
           <IconButton
             color="inherit"
             edge="start"
@@ -82,7 +81,6 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
 
-          {/* Логотип */}
           <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Image
@@ -100,7 +98,6 @@ export default function Header() {
             </Box>
           </Link>
 
-          {/* Навигация для десктопа */}
           <Box
             sx={{
               display: { xs: 'none', md: 'flex' },
@@ -124,7 +121,6 @@ export default function Header() {
             ))}
           </Box>
 
-          {/* Контактная информация и иконки */}
           <Box
             sx={{
               display: 'flex',
@@ -132,7 +128,6 @@ export default function Header() {
               gap: { xs: 1, md: 3 },
             }}
           >
-            {/* Контакты */}
             <Box
               sx={{
                 display: { xs: 'none', md: 'flex' },
@@ -157,7 +152,6 @@ export default function Header() {
               </Box>
             </Box>
 
-            {/* Иконки корзины, закладок и авторизации */}
             <Box sx={{ display: 'flex', gap: 1 }}>
               <Link
                 href="/favorites"
@@ -193,7 +187,6 @@ export default function Header() {
                 </Tooltip>
               </Link>
 
-              {/* Кнопка админ-панели для админов */}
               {mounted && !authLoading && isAdmin() && (
                 <Link
                   href="/admin"
@@ -207,7 +200,6 @@ export default function Header() {
                 </Link>
               )}
 
-              {/* Кнопка входа/выхода */}
               {mounted && !authLoading && (
                 <Tooltip title={user ? 'Выйти' : 'Войти'}>
                   <IconButton
@@ -229,7 +221,6 @@ export default function Header() {
         </Toolbar>
       </Container>
 
-      {/* Мобильное меню */}
       <Drawer anchor="left" open={mobileMenuOpen} onClose={toggleMobileMenu}>
         <Box
           sx={{ width: 250 }}

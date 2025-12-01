@@ -28,7 +28,6 @@ export default function Footer() {
     >
       <Container maxWidth="lg">
         <Grid container spacing={{ xs: 2, md: 4 }}>
-          {/* Юридическая информация */}
           <Grid item xs={12} md={4}>
             <Typography
               variant="h6"
@@ -79,7 +78,6 @@ export default function Footer() {
             </Typography>
           </Grid>
 
-          {/* Ссылки */}
           <Grid item xs={12} md={4}>
             <Typography
               variant="h6"
@@ -138,7 +136,6 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          {/* Дополнительная информация */}
           <Grid item xs={12} md={4}>
             <Box
               sx={{
@@ -173,8 +170,6 @@ export default function Footer() {
                       position: 'relative',
                     },
                     '& img': {
-                      // width: '100% !important',
-                      // height: '100% !important',
                       objectFit: 'contain',
                       imageRendering: '-webkit-optimize-contrast',
                     },
@@ -212,7 +207,6 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          {/* Правовая информация */}
           <Grid item xs={12}>
             <Typography
               variant="body2"

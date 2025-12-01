@@ -32,21 +32,17 @@ export async function getProducts({
   try {
     let query = supabaseAdmin.from('products').select('*', { count: 'exact' });
 
-    // Если переданы ID, ищем только по ним
     if (ids && ids.length > 0) {
       query = query.in('id', ids.map((id) => parseInt(id)).filter(Boolean));
     } else {
-      // Фильтр по категории или бренду
       if (categoryId) {
         query = query.or(`category_id.eq.${categoryId},specifications->>brand.ilike.%${categoryId}%`);
       }
 
-      // Поиск по названию
       if (search && search.trim()) {
         query = query.ilike('name', `%${search.trim()}%`);
       }
 
-      // Применяем фильтры по характеристикам
       Object.entries(filters).forEach(([field, value]) => {
         if (value) {
           query = query.eq(`specifications->>${field}`, value);
@@ -54,13 +50,11 @@ export async function getProducts({
       });
     }
 
-    // Сортировка
     const ascending = sort === 'asc';
     query = query.order(sortBy === 'price' ? 'price' : 'name', {
       ascending,
     });
 
-    // Пагинация
     const from = (page - 1) * limit;
     const to = from + limit - 1;
     query = query.range(from, to);
@@ -81,7 +75,6 @@ export async function getProducts({
       };
     }
 
-    // Получаем доступные фильтры (нужно загрузить все товары для фильтров)
     const allProducts = await getAllProducts();
     const availableFilters = {
       memory: [
@@ -134,11 +127,9 @@ export async function getProducts({
       ].sort(),
     };
 
-    // Преобразуем данные для совместимости с фронтендом
     const formattedProducts = (data || []).map((product) => ({
       ...product,
       categoryId: product.category_id,
-      // Обеспечиваем обратную совместимость
     }));
 
     return {
@@ -179,7 +170,6 @@ export async function getProductById(id) {
       return null;
     }
 
-    // Преобразуем для обратной совместимости
     return data
       ? {
           ...data,

@@ -107,7 +107,6 @@ export default function FavoritesPage() {
       </Typography>
       <Grid container spacing={3}>
         {products.map((product) => {
-          // Пропускаем товары без id
           if (!product.id) {
             return null;
           }

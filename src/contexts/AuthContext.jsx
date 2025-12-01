@@ -21,17 +21,14 @@ export const AuthProvider = ({ children }) => {
   const [supabase, setSupabase] = useState(null);
   const router = useRouter();
 
-  // Инициализируем Supabase клиент только на клиенте
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const client = createClientSupabase();
       setSupabase(client);
-      // Если клиент не создан (на сервере), устанавливаем loading в false
       if (!client) {
         setLoading(false);
       }
     } else {
-      // На сервере всегда loading = false
       setLoading(false);
     }
   }, []);
@@ -41,10 +38,8 @@ export const AuthProvider = ({ children }) => {
 
     let mounted = true;
 
-    // Проверяем текущую сессию при загрузке
     const initializeAuth = async () => {
       try {
-        // Сначала проверяем сессию
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
@@ -60,7 +55,6 @@ export const AuthProvider = ({ children }) => {
           startTransition(() => {
             setUser(session.user);
           });
-          // Ждем немного, чтобы сессия полностью восстановилась из cookies
           await new Promise(resolve => setTimeout(resolve, 100));
           if (mounted) {
             await fetchProfile(session.user.id);
@@ -88,14 +82,12 @@ export const AuthProvider = ({ children }) => {
 
     initializeAuth();
 
-    // Слушаем изменения в авторизации
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
         
         console.log('Auth state changed:', event, session?.user?.id);
         
-        // Обрабатываем разные события
         if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           if (session?.user && mounted) {
             startTransition(() => {
@@ -125,11 +117,9 @@ export const AuthProvider = ({ children }) => {
             });
           }
         } else if (session?.user && mounted) {
-          // Для других событий, если есть сессия
           startTransition(() => {
             setUser(session.user);
           });
-          // Ждем немного, чтобы сессия полностью восстановилась из cookies
           await new Promise(resolve => setTimeout(resolve, 100));
           if (mounted) {
             await fetchProfile(session.user.id);
@@ -164,8 +154,6 @@ export const AuthProvider = ({ children }) => {
     console.log('fetchProfile: Fetching profile for user:', userId, 'retries left:', retries);
     
     try {
-      // Используем API route вместо прямого запроса к Supabase
-      // Это помогает избежать проблем с зависанием запросов
       console.log('fetchProfile: Fetching profile via API...');
       const startTime = Date.now();
       
@@ -195,15 +183,12 @@ export const AuthProvider = ({ children }) => {
         role: data?.role
       });
       
-      // Если профиль не найден, пытаемся создать его
       if (!data) {
         if (retries > 0) {
-          // Ждем немного и повторяем (триггер мог еще не сработать)
           console.log(`fetchProfile: Profile not found, retrying... (${retries} retries left)`);
           await new Promise(resolve => setTimeout(resolve, 1000));
           return fetchProfile(userId, retries - 1);
         } else {
-          // Если после всех попыток профиль не найден, создаем его вручную
           console.log('Profile not found, creating manually...');
           if (!supabase) {
             startTransition(() => {
@@ -287,8 +272,6 @@ export const AuthProvider = ({ children }) => {
         startTransition(() => {
           setUser(data.user);
         });
-        // Профиль будет создан автоматически через триггер
-        // Ждем немного, чтобы триггер успел создать профиль
         await new Promise(resolve => setTimeout(resolve, 500));
         await fetchProfile(data.user.id);
       }
@@ -318,7 +301,6 @@ export const AuthProvider = ({ children }) => {
         startTransition(() => {
           setUser(data.user);
         });
-        // Ждем немного, чтобы сессия сохранилась в cookies
         await new Promise(resolve => setTimeout(resolve, 100));
         await fetchProfile(data.user.id);
       }
@@ -351,10 +333,6 @@ export const AuthProvider = ({ children }) => {
     return profile?.role === 'admin';
   };
 
-  // loading должен быть true, если:
-  // 1. supabase не инициализирован
-  // 2. идет загрузка (loading === true)
-  // 3. есть user, но profile еще не загружен
   const isLoading = loading || !supabase || (user && !profile);
 
   const value = {

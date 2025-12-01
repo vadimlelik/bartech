@@ -14,7 +14,6 @@ export default function CategoryCard({ category }) {
     const router = useRouter();
     const { id, name, image, description } = category;
 
-    // Проверяем, что id не пустой
     if (!id || id === '') {
         return null;
     }

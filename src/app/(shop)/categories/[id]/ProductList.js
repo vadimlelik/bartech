@@ -140,7 +140,6 @@ export default function ProductList({ categoryId }) {
     }
     setPreviewFilters(newFilters);
 
-    // Получаем предварительный подсчет
     setIsPreviewLoading(true);
     try {
       const params = new URLSearchParams({
@@ -399,7 +398,6 @@ export default function ProductList({ categoryId }) {
       ) : (
         <Grid container spacing={3}>
           {products.map((product) => {
-            // Пропускаем товары без id или изображения
             if (!product.id || !product.image) {
               return null;
             }
@@ -553,7 +551,6 @@ export default function ProductList({ categoryId }) {
                         {product.description}
                       </Typography>
 
-                      {/* Основные характеристики */}
                       {(() => {
                         if (!product.specifications || 
                             typeof product.specifications !== 'object' || 

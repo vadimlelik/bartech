@@ -24,10 +24,8 @@ export default function RootLayout({ children }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Initialize TikTok Pixel
     loadTikTokPixel('YOUR_PIXEL_ID_HERE');
 
-    // Yandex.Metrika counter
     const script = document.createElement('script');
     script.text = `
       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -44,7 +42,6 @@ export default function RootLayout({ children }) {
     `;
     document.head.appendChild(script);
 
-    // Add noscript element for Yandex Metrika
     const noscript = document.createElement('noscript');
     const div = document.createElement('div');
     const img = document.createElement('img');

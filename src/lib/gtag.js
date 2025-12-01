@@ -1,13 +1,11 @@
 export const GA_TRACKING_ID = 'G-Z9FPYDW23Z';
 
-// Отправка события просмотра страницы
 export const pageview = (url) => {
   window.gtag('config', GA_TRACKING_ID, {
     page_path: url,
   });
 };
 
-// Отправка кастомного события
 export const event = ({ action, category, label, value }) => {
   window.gtag('event', action, {
     event_category: category,

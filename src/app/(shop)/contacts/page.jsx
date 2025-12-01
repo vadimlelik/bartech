@@ -22,7 +22,6 @@ export default function Contacts() {
           </Typography>
 
           <Grid container spacing={4}>
-            {/* Основная информация */}
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -64,7 +63,6 @@ export default function Contacts() {
               </Box>
             </Grid>
 
-            {/* Контактная информация */}
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

@@ -20,7 +20,6 @@ export default function ComparePanel() {
   const { compareItems, removeFromCompare } = useCompareStore();
   const [show, setShow] = useState(false);
 
-  // Показываем панель только когда есть товары для сравнения
   useEffect(() => {
     setShow(compareItems.length > 0);
   }, [compareItems]);

@@ -6,10 +6,6 @@ import { Box, CircularProgress, Typography, Container } from '@mui/material';
 export default function AdminGuard({ children }) {
   const { user, profile, loading } = useAuth();
 
-  // Основная защита выполняется в middleware
-  // Этот компонент только показывает состояние загрузки
-
-  // Показываем загрузку пока проверяется авторизация
   if (loading || !user || !profile) {
     console.log('AdminGuard: Waiting for auth...', { loading, hasUser: !!user, hasProfile: !!profile, profileRole: profile?.role });
     return (
@@ -32,7 +28,6 @@ export default function AdminGuard({ children }) {
     );
   }
 
-  // Если роль не admin (middleware должен был перенаправить, но на всякий случай)
   if (profile.role !== 'admin') {
     console.log('AdminGuard: User is not admin', { role: profile.role });
     return (
@@ -57,7 +52,6 @@ export default function AdminGuard({ children }) {
     );
   }
 
-  // Если все проверки пройдены, показываем контент
   console.log('AdminGuard: Access granted', { userId: user?.id, role: profile.role });
   return <>{children}</>;
 }

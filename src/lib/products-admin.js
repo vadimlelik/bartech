@@ -31,7 +31,6 @@ export function addProduct(productData) {
   try {
     const products = getAllProducts();
     
-    // Генерируем новый ID
     const maxId = products.reduce((max, p) => {
       const id = parseInt(p.id) || 0;
       return id > max ? id : max;

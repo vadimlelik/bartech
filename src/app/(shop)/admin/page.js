@@ -79,15 +79,13 @@ function AdminPageContent() {
   }));
 
   useEffect(() => {
-    // Загружаем данные только после завершения авторизации
     if (authLoading || !profile) {
       console.log('AdminPage: Waiting for auth...', { authLoading, profile: !!profile });
       return;
     }
 
-    console.log('AdminPage: Loading data...', { profileRole: profile?.role });
+      console.log('AdminPage: Loading data...', { profileRole: profile?.role });
     
-    // Загружаем данные при монтировании компонента
     const loadData = async () => {
       try {
         await Promise.all([
@@ -253,7 +251,6 @@ function AdminPageContent() {
       const data = await response.json();
       
       if (!response.ok) {
-        // Ошибка от сервера
         const errorMessage = data.error || 'Ошибка загрузки изображения';
         console.error('Upload error:', errorMessage);
         showSnackbar(errorMessage, 'error');
@@ -352,7 +349,6 @@ function AdminPageContent() {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  // Функции для работы с категориями
   const handleOpenCategoryDialog = (category = null) => {
     if (category) {
       setEditingCategory(category);
@@ -402,7 +398,6 @@ function AdminPageContent() {
       const data = await response.json();
       
       if (!response.ok) {
-        // Ошибка от сервера
         const errorMessage = data.error || 'Ошибка загрузки изображения';
         console.error('Upload error:', errorMessage);
         showSnackbar(errorMessage, 'error');

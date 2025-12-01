@@ -6,7 +6,6 @@ import {
 } from '@/lib/categories';
 import { requireAdmin } from '@/lib/auth-helpers';
 
-// GET - получить категорию по ID
 export async function GET(request, { params }) {
   try {
     await requireAdmin();
@@ -44,7 +43,6 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT - обновить категорию
 export async function PUT(request, { params }) {
   try {
     await requireAdmin();
@@ -82,7 +80,6 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - удалить категорию
 export async function DELETE(request, { params }) {
   try {
     await requireAdmin();

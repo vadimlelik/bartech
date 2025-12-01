@@ -1,6 +1,5 @@
 import { supabaseAdmin } from './supabase';
 
-// Проверка доступности Supabase
 function checkSupabase() {
   if (!supabaseAdmin) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
@@ -66,7 +65,6 @@ export async function addProduct(productData) {
       specifications: productData.specifications || {},
     };
 
-    // Удаляем пустые строки и преобразуем в null
     Object.keys(processedData).forEach(key => {
       if (processedData[key] === '') {
         processedData[key] = null;
@@ -93,7 +91,6 @@ export async function addProduct(productData) {
         code: error.code,
       });
       
-      // Более понятное сообщение для DNS ошибок
       let userFriendlyError = error.message || 'Failed to create product';
       if (error.message && error.message.includes('ENOTFOUND')) {
         userFriendlyError = 'Не удалось подключиться к Supabase. Проверьте правильность URL в файле .env.local. URL должен быть в формате: https://xxxxx.supabase.co';
@@ -122,7 +119,6 @@ export async function updateProduct(id, productData) {
   try {
     checkSupabase();
     
-    // Обработка данных перед отправкой в Supabase
     const processedData = {
       name: productData.name || null,
       category: productData.category || null,
@@ -134,7 +130,6 @@ export async function updateProduct(id, productData) {
       specifications: productData.specifications || {},
     };
 
-    // Удаляем пустые строки и преобразуем в null
     Object.keys(processedData).forEach(key => {
       if (processedData[key] === '') {
         processedData[key] = null;

@@ -24,12 +24,10 @@ export async function GET() {
       },
     });
 
-    // Пытаемся получить сессию из cookies
     if (accessToken) {
       const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
       
       if (user && !userError) {
-        // Получаем профиль пользователя
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('*')

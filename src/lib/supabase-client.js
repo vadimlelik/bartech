@@ -9,12 +9,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-// Клиент для использования на клиенте с поддержкой сессий и cookies
-// createBrowserClient автоматически использует cookies для хранения сессии
 let supabaseClient = null;
 
 export const createClientSupabase = () => {
-  // Создаем клиент только один раз и только на клиенте
   if (typeof window === 'undefined') {
     return null;
   }

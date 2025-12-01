@@ -13,7 +13,6 @@ export async function GET(request) {
       );
     }
     
-    // Получаем текущего пользователя
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     
     if (userError || !user) {
@@ -23,7 +22,6 @@ export async function GET(request) {
       );
     }
     
-    // Получаем профиль пользователя
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
@@ -32,7 +30,6 @@ export async function GET(request) {
     
     if (profileError) {
       if (profileError.code === 'PGRST116') {
-        // Профиль не найден
         return NextResponse.json(
           { profile: null },
           { status: 200 }

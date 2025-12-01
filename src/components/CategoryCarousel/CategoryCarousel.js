@@ -57,16 +57,6 @@ export default function CategoryCarousel() {
   const maxSteps = slides.length;
   const [autoPlay, setAutoPlay] = useState(true);
 
-  // useEffect(() => {
-  //   let timer;
-  //   if (autoPlay) {
-  //     timer = setInterval(() => {
-  //       setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
-  //     }, 6000); // Увеличил время показа до 6 секунд, чтобы люди успевали прочитать текст
-  //   }
-  //   return () => clearInterval(timer);
-  // }, [autoPlay, maxSteps]);
-
   const handleNext = () => {
     setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
   };

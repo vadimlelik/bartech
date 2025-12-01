@@ -12,7 +12,6 @@ export default function PaymentDelivery() {
 					Оплата и доставка
 				</Typography>
 
-				{/* Секция доставки */}
 				<Box component='section' sx={{ mb: 6 }}>
 					<Grid container spacing={4}>
 						<Grid item xs={12} md={6}>
@@ -72,7 +71,6 @@ export default function PaymentDelivery() {
 
 				<Divider sx={{ my: 4 }} />
 
-				{/* Секция оплаты */}
 				<Box component='section' sx={{ mb: 6 }}>
 					<Grid container spacing={4}>
 						<Grid item xs={12} md={6}>
@@ -120,7 +118,6 @@ export default function PaymentDelivery() {
 					</Grid>
 				</Box>
 
-				{/* Дополнительная информация */}
 				<Box component='section'>
 					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main', mb: 2 }}>
 						Важная информация

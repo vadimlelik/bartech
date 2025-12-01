@@ -5,10 +5,8 @@ import { IoIosArrowForward } from 'react-icons/io';
 import styles from './categoriesItem.module.css';
 
 const CategoriesItem = ({ id, name, image, imageUrl }) => {
-  // Поддержка как image (из базы), так и imageUrl (для обратной совместимости)
   const imageSrc = image || imageUrl;
   
-  // Проверяем, что id не пустой
   if (!id || id === '') {
     return null;
   }

@@ -6,18 +6,15 @@ export async function middleware(request) {
   const hostname = request.headers.get('host');
   const response = NextResponse.next();
 
-  // Защита админ-роутов
   if (url.pathname.startsWith('/admin')) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
-      // Если Supabase не настроен, разрешаем доступ (для разработки)
       return response;
     }
 
     try {
-      // Создаем Supabase клиент для middleware с поддержкой cookies
       const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
         cookies: {
           get(name) {
@@ -34,41 +31,34 @@ export async function middleware(request) {
         },
       });
 
-      // Получаем текущего пользователя
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
 
-      // Если пользователь не авторизован, перенаправляем на страницу входа
       if (!user || userError) {
         const redirectUrl = new URL('/auth/login', request.url);
         redirectUrl.searchParams.set('redirect', url.pathname);
         return NextResponse.redirect(redirectUrl);
       }
 
-      // Получаем профиль пользователя
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .single();
 
-      // Если профиль не найден или роль не admin, перенаправляем на главную
       if (!profile || profileError || profile.role !== 'admin') {
         return NextResponse.redirect(new URL('/', request.url));
       }
 
-      // Если все проверки пройдены, разрешаем доступ
       return response;
     } catch (error) {
       console.error('Error in admin middleware:', error);
-      // В случае ошибки перенаправляем на главную
       return NextResponse.redirect(new URL('/', request.url));
     }
   }
 
-  // Карта соответствия поддоменов и путей
   const subdomainMap = {
     'phone2.technobar.by': '/phone2',
     'tv1.technobar.by': '/tv1',
@@ -92,18 +82,13 @@ export async function middleware(request) {
     'motoblok_2.technobar.by': '/motoblok_2',
   };
 
-  // Проверяем, есть ли поддомен в нашей карте
   if (subdomainMap[hostname]) {
-    // Создаем новый URL с правильным путем
     const newUrl = new URL(request.url);
     newUrl.pathname = `${subdomainMap[hostname]}${url.pathname}`;
-
-    // Логируем для отладки
 
     return NextResponse.rewrite(newUrl);
   }
 
-  // Проверяем, если запрос идет на статические файлы или системные пути Next.js
   const staticPaths = ['/static', '/_next', '/favicon.ico'];
   if (staticPaths.some((path) => url.pathname.startsWith(path))) {
     return NextResponse.next();
@@ -114,7 +99,6 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    // Исключаем системные пути
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

@@ -34,14 +34,12 @@ export default function ComparePage() {
     );
   }
 
-  // Получаем все уникальные характеристики (только непустые)
   const allSpecs = compareItems.reduce((specs, item) => {
     if (item.specifications && 
         typeof item.specifications === 'object' && 
         !Array.isArray(item.specifications)) {
       Object.keys(item.specifications).forEach((spec) => {
         const value = item.specifications[spec];
-        // Добавляем только если значение не пустое и еще не добавлено
         if (value && value !== '' && value !== null && value !== undefined && String(value).trim() !== '' && !specs.includes(spec)) {
           specs.push(spec);
         }
@@ -107,13 +105,11 @@ export default function ComparePage() {
             </TableHead>
             <TableBody>
               {allSpecs.map((spec) => {
-                // Проверяем, есть ли хотя бы одно непустое значение в строке
                 const hasAnyValue = compareItems.some((item) => {
                   const value = item.specifications?.[spec];
                   return value && value !== '' && value !== null && value !== undefined;
                 });
                 
-                // Показываем строку только если есть хотя бы одно значение
                 if (!hasAnyValue) return null;
                 
                 return (

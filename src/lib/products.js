@@ -1,5 +1,3 @@
-// Используем Supabase для получения товаров
-// Если нужно вернуться к JSON файлам, раскомментируйте код ниже и закомментируйте импорт
 import {
   getAllProducts as getAllProductsFromSupabase,
   getProducts as getProductsFromSupabase,
@@ -7,7 +5,6 @@ import {
   getProductsByCategory as getProductsByCategoryFromSupabase,
 } from './products-supabase-read';
 
-// Fallback на JSON файлы если Supabase не настроен
 import fs from 'fs';
 import path from 'path';
 
@@ -27,7 +24,6 @@ function getAllProductsFromJSON() {
   }
 }
 
-// Проверяем наличие переменных Supabase
 const useSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -55,7 +51,6 @@ export async function getProducts({
   filters = {},
 } = {}) {
   try {
-    // Используем Supabase если настроен
     if (useSupabase) {
       try {
         return await getProductsFromSupabase({
@@ -73,11 +68,9 @@ export async function getProducts({
       }
     }
 
-    // Fallback на JSON файлы
     let filteredProducts = getAllProductsFromJSON() || [];
     'Total products:', filteredProducts.length;
 
-    // Если переданы ID, ищем только по ним
     if (ids && ids.length > 0) {
       'Filtering by IDs:', ids;
       filteredProducts = (filteredProducts || []).filter((product) => {
@@ -88,7 +81,6 @@ export async function getProducts({
       });
       'Found products:', filteredProducts;
     } else {
-      // Фильтр по категории или бренду
       if (categoryId) {
         'Filtering by categoryId:', categoryId;
         filteredProducts = (filteredProducts || []).filter((product) => {
@@ -109,7 +101,6 @@ export async function getProducts({
         'Filtered products:', filteredProducts.length;
       }
 
-      // Поиск по названию
       if (search && search.trim()) {
         const searchLower = search.trim().toLowerCase();
         filteredProducts = (filteredProducts || []).filter((product) =>
@@ -117,7 +108,6 @@ export async function getProducts({
         );
       }
 
-      // Применяем все активные фильтры
       Object.entries(filters).forEach(([field, value]) => {
         if (value) {
           filteredProducts = (filteredProducts || []).filter(
@@ -129,7 +119,6 @@ export async function getProducts({
       });
     }
 
-    // Сортировка
     filteredProducts.sort((a, b) => {
       const aValue = a?.[sortBy] || 0;
       const bValue = b?.[sortBy] || 0;
@@ -139,7 +128,6 @@ export async function getProducts({
       return aValue < bValue ? 1 : -1;
     });
 
-    // Получаем доступные фильтры
     const availableFilters = {
       memory: [
         ...new Set(
@@ -209,7 +197,6 @@ export async function getProducts({
         .sort(),
     };
 
-    // Пагинация
     const total = filteredProducts.length;
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
@@ -246,7 +233,6 @@ export async function getProductById(id) {
   }
 
   try {
-    // Используем Supabase если настроен
     if (useSupabase) {
       try {
         return await getProductByIdFromSupabase(id);
@@ -255,7 +241,6 @@ export async function getProductById(id) {
       }
     }
 
-    // Fallback на JSON файлы
     const products = getAllProductsFromJSON();
     if (!Array.isArray(products)) {
       return null;
@@ -274,7 +259,6 @@ export async function getProductById(id) {
 export async function getProductsByCategory(categoryId) {
   if (!categoryId) return [];
   try {
-    // Используем Supabase если настроен
     if (useSupabase) {
       try {
         return await getProductsByCategoryFromSupabase(categoryId);
@@ -283,7 +267,6 @@ export async function getProductsByCategory(categoryId) {
       }
     }
 
-    // Fallback на JSON файлы
     const products = getAllProductsFromJSON();
     if (!Array.isArray(products)) return [];
     return (

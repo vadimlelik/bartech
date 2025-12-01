@@ -1,6 +1,5 @@
 import { supabaseAdmin } from './supabase';
 
-// Проверка доступности Supabase
 function checkSupabase() {
   if (!supabaseAdmin) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
@@ -56,13 +55,11 @@ export async function addCategory(categoryData) {
   try {
     checkSupabase();
     
-    // Проверяем наличие названия
     const categoryName = categoryData.name?.trim();
     if (!categoryName || categoryName === '') {
       return { success: false, error: 'Category name is required' };
     }
     
-    // Генерируем ID из названия, если не указан или пустой
     let categoryId = categoryData.id?.trim();
     if (!categoryId || categoryId === '') {
       categoryId = categoryName
@@ -70,15 +67,13 @@ export async function addCategory(categoryData) {
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '')
         .replace(/-+/g, '-') // Убираем множественные дефисы
-        .replace(/^-|-$/g, ''); // Убираем дефисы в начале и конце
+        .replace(/^-|-$/g, '');
     }
     
-    // Проверяем, что ID не пустой после генерации
     if (!categoryId || categoryId === '') {
       return { success: false, error: 'Failed to generate category ID from name. Please provide an ID manually.' };
     }
     
-    // Обработка данных перед отправкой в Supabase
     const processedData = {
       id: categoryId,
       name: categoryName,
@@ -113,7 +108,6 @@ export async function addCategory(categoryData) {
         code: error.code,
       });
       
-      // Более понятное сообщение для ошибок
       let userFriendlyError = error.message || 'Failed to create category';
       if (error.code === '23505') { // Unique violation
         userFriendlyError = `Категория с ID "${categoryId}" уже существует`;
@@ -143,14 +137,12 @@ export async function updateCategory(id, categoryData) {
       return { success: false, error: 'Category ID is required' };
     }
     
-    // Обработка данных перед отправкой в Supabase
     const processedData = {
       name: categoryData.name || null,
       image: categoryData.image || null,
       description: categoryData.description || null,
     };
 
-    // Удаляем пустые строки и преобразуем в null
     Object.keys(processedData).forEach(key => {
       if (processedData[key] === '') {
         processedData[key] = null;

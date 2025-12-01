@@ -13,7 +13,6 @@ export async function POST(request) {
       );
     }
 
-    // Проверяем тип файла
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
@@ -22,8 +21,7 @@ export async function POST(request) {
       );
     }
 
-    // Проверяем размер файла (максимум 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: 'File size exceeds 10MB limit' },
@@ -31,10 +29,8 @@ export async function POST(request) {
       );
     }
 
-    // Получаем папку из запроса (по умолчанию 'products')
     const folder = formData.get('folder') || 'products';
     
-    // Загружаем изображение (Supabase Storage или локальное хранилище)
     const uploadResult = await uploadImage(file, folder);
 
     return NextResponse.json({
@@ -49,7 +45,6 @@ export async function POST(request) {
       name: error.name,
     });
     
-    // Более понятные сообщения об ошибках
     let errorMessage = 'Failed to upload file';
     if (error.message) {
       errorMessage = error.message;

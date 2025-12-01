@@ -2,10 +2,8 @@ import { NextResponse } from 'next/server';
 import { addProduct, getAllProducts } from '@/lib/products-supabase';
 import { requireAdmin } from '@/lib/auth-helpers';
 
-// GET - получить все товары (для админки)
 export async function GET() {
   try {
-    // Проверяем, что пользователь является администратором
     await requireAdmin();
     
     const products = await getAllProducts();
@@ -27,15 +25,12 @@ export async function GET() {
   }
 }
 
-// POST - создать новый товар
 export async function POST(request) {
   try {
-    // Проверяем, что пользователь является администратором
     await requireAdmin();
     
     const body = await request.json();
     
-    // Валидация обязательных полей
     if (!body.name || !body.price) {
       return NextResponse.json(
         { error: 'Name and price are required' },
