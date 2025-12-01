@@ -71,11 +71,12 @@ chmod +x scripts/init-certbot.sh
 Или вручную:
 
 ```bash
-docker run --rm \
+docker run --rm -it \
   -v certbot-etc:/etc/letsencrypt \
   -v certbot-var:/var/lib/letsencrypt \
   -v $(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
   certbot/dns-cloudflare certonly \
+  --non-interactive \
   --dns-cloudflare \
   --dns-cloudflare-credentials /cloudflare.ini \
   --dns-cloudflare-propagation-seconds 60 \

@@ -35,11 +35,12 @@ clean: ## Очистить неиспользуемые Docker ресурсы
 init-certs: ## Инициализировать SSL сертификаты
 	@echo "Инициализация SSL сертификатов..."
 	@read -p "Введите ваш email: " email; \
-	docker run --rm \
+	docker run --rm -it \
 		-v certbot-etc:/etc/letsencrypt \
 		-v certbot-var:/var/lib/letsencrypt \
 		-v $$(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
 		certbot/dns-cloudflare certonly \
+		--non-interactive \
 		--dns-cloudflare \
 		--dns-cloudflare-credentials /cloudflare.ini \
 		--dns-cloudflare-propagation-seconds 60 \
