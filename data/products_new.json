@@ -4,11 +4,11 @@
     "name": "iPhone 15 Pro Max",
     "category": "Смартфоны",
     "price": 7848,
-    "image": "/images/iPhone_15 Pro_Max.jpg",
+    "image": "/images/products/apple/iphone_15-pro_max.jpg",
     "images": [
-      "/images/iPhone_15 Pro_Max1.jpg",
-      "/images/iPhone_15 Pro_Max2.png",
-      "/images/iPhone_15 Pro_Max3.jpg"
+      "/images/products/apple/iphone_15-pro_max1.jpg",
+      "/images/products/apple/iphone_15-pro_max2.png",
+      "/images/products/apple/iphone_15-pro_max3.jpg"
     ],
     "description": "Флагманский смартфон Apple с процессором A17 Pro",
     "specifications": {
@@ -31,11 +31,11 @@
     "name": "Samsung Galaxy S23 Ultra",
     "category": "Смартфоны",
     "price": 7848,
-    "image": "/images/Samsung_Galaxy_S23_Ultra.jpeg",
+    "image": "/images/products/samsung/samsung_galaxy_s23_ultra.jpeg",
     "images": [
-      "/images/Samsung_Galaxy_S23_Ultra1.jpeg",
-      "/images/Samsung_Galaxy_S23_Ultra2.jpeg",
-      "/images/Samsung_Galaxy_S23_Ultra3.jpeg"
+      "/images/products/samsung/samsung_galaxy_s23_ultra1.jpeg",
+      "/images/products/samsung/samsung_galaxy_s23_ultra2.jpeg",
+      "/images/products/samsung/samsung_galaxy_s23_ultra3.jpeg"
     ],
     "description": "Флагманский смартфон Samsung с S Pen",
     "specifications": {
@@ -58,11 +58,11 @@
     "name": "iPhone 14 Pro",
     "category": "Смартфоны",
     "price": 4100,
-    "image": "/images/iphone-14-pro.jpeg",
+    "image": "/images/products/apple/iphone-14-pro.jpeg",
     "images": [
-      "/images/iphone-14-pro1.jpeg",
-      "/images/iphone-14-pro2.jpeg",
-      "/images/iphone-14-pro3.webp"
+      "/images/products/apple/iphone-14-pro1.jpeg",
+      "/images/products/apple/iphone-14-pro2.jpeg",
+      "/images/products/apple/iphone-14-pro3.webp"
     ],
     "description": "Смартфон Apple с Dynamic Island",
     "specifications": {
@@ -85,11 +85,11 @@
     "name": "Google Pixel 8 Pro",
     "category": "Смартфоны",
     "price": 2898,
-    "image": "/images/Google_Pixel_8_Pro1.jpeg",
+    "image": "/images/products/google/google_pixel_8_pro1.jpeg",
     "images": [
-      "/images/Google_Pixel_8_Pro1.jpeg",
-      "/images/Google_Pixel_8_Pro2.jpg",
-      "/images/Google_Pixel_8_Pro3.jpg"
+      "/images/products/google/google_pixel_8_pro1.jpeg",
+      "/images/products/google/google_pixel_8_pro2.jpg",
+      "/images/products/google/google_pixel_8_pro3.jpg"
     ],
     "description": "Флагман Google с передовыми AI-функциями",
     "specifications": {
@@ -112,11 +112,11 @@
     "name": "OnePlus 11",
     "category": "Смартфоны",
     "price": 2600,
-    "image": "/images/OnePlus_11.jpeg",
+    "image": "/images/products/oneplus/oneplus_11.jpeg",
     "images": [
-      "/images/OnePlus_11_1.jpeg",
-      "/images/OnePlus_11_2.jpeg",
-      "/images/OnePlus_11.jpeg"
+      "/images/products/oneplus/oneplus_11_1.jpeg",
+      "/images/products/oneplus/oneplus_11_2.jpeg",
+      "/images/products/oneplus/oneplus_11.jpeg"
     ],
     "description": "Мощный флагман с быстрой зарядкой",
     "specifications": {
@@ -139,11 +139,11 @@
     "name": "iPhone 13",
     "category": "Смартфоны",
     "price": 2899,
-    "image": "/images/iphone-13.jpeg",
+    "image": "/images/products/apple/iphone-13.jpeg",
     "images": [
-      "/images/iphone-13.jpeg",
-      "/images/iphone-13-2.webp",
-      "/images/iphone-13-3.jpg"
+      "/images/products/apple/iphone-13.jpeg",
+      "/images/products/apple/iphone-13-2.webp",
+      "/images/products/apple/iphone-13-3.jpg"
     ],
     "description": "Надежный смартфон Apple",
     "specifications": {
@@ -166,11 +166,11 @@
     "name": "Samsung Galaxy A54",
     "category": "Смартфоны",
     "price": 1560,
-    "image": "/images/samsung-galaxy-a54.jpeg",
+    "image": "/images/products/samsung/samsung-galaxy-a54.jpeg",
     "images": [
-      "/images/samsung-galaxy-a54-1.jpeg",
-      "/images/samsung-galaxy-a54-2.jpg",
-      "/images/samsung-galaxy-a54-2.jpeg"
+      "/images/products/samsung/samsung-galaxy-a54-1.jpeg",
+      "/images/products/samsung/samsung-galaxy-a54-2.jpg",
+      "/images/products/samsung/samsung-galaxy-a54-2.jpeg"
     ],
     "description": "Популярный смартфон среднего класса",
     "specifications": {
@@ -193,11 +193,11 @@
     "name": "Xiaomi 13T Pro",
     "category": "Смартфоны",
     "price": 2290,
-    "image": "/images/Xiaomi-13T.jpg",
+    "image": "/images/products/xiaomi/xiaomi-13t.jpg",
     "images": [
-      "/images/Xiaomi-13T.jpg",
-      "/images/Xiaomi-13T-1.jpg",
-      "/images/Xiaomi-13T-2.jpeg"
+      "/images/products/xiaomi/xiaomi-13t.jpg",
+      "/images/products/xiaomi/xiaomi-13t-1.jpg",
+      "/images/products/xiaomi/xiaomi-13t-2.jpeg"
     ],
     "description": "Мощный смартфон с отличной камерой",
     "specifications": {
@@ -220,11 +220,11 @@
     "name": "iPhone 12",
     "category": "Смартфоны",
     "price": 2290,
-    "image": "/images/iphone-12-3.jpg",
+    "image": "/images/products/apple/iphone-12-3.jpg",
     "images": [
-      "/images/iphone-12-3.jpg",
-      "/images/iphone-12.webp",
-      "/images/iphone-12-2.jpeg"
+      "/images/products/apple/iphone-12-3.jpg",
+      "/images/products/apple/iphone-12.webp",
+      "/images/products/apple/iphone-12-2.jpeg"
     ],
     "description": "Классический дизайн Apple",
     "specifications": {
@@ -247,11 +247,11 @@
     "name": "Nothing Phone 2",
     "category": "Смартфоны",
     "price": 2999,
-    "image": "/images/Nothing Phone 2-1.jpg",
+    "image": "/images/products/nothing/nothing-phone-2-1.jpg",
     "images": [
-      "/images/Nothing Phone 2-1.jpg",
-      "/images/Nothing Phone 2-2.jpg",
-      "/images/Nothing Phone 2.jpg"
+      "/images/products/nothing/nothing-phone-2-1.jpg",
+      "/images/products/nothing/nothing-phone-2-2.jpg",
+      "/images/products/nothing/nothing-phone-2.jpg"
     ],
     "description": "Инновационный дизайн с Glyph интерфейсом",
     "specifications": {
@@ -274,11 +274,11 @@
     "name": "iPhone 15",
     "category": "Смартфоны",
     "price": 4450,
-    "image": "/images/iPhone_15 Pro_Max.jpg",
+    "image": "/images/products/apple/iphone_15-pro_max.jpg",
     "images": [
-      "/images/iPhone_15 Pro_Max.jpg",
-      "/images/iPhone_15 Pro_Max2.png",
-      "/images/iPhone_15 Pro_Max3.jpg"
+      "/images/products/apple/iphone_15-pro_max.jpg",
+      "/images/products/apple/iphone_15-pro_max2.png",
+      "/images/products/apple/iphone_15-pro_max3.jpg"
     ],
     "description": "Новый iPhone с Dynamic Island",
     "specifications": {
@@ -301,11 +301,11 @@
     "name": "Samsung Galaxy Z Fold 5",
     "category": "Смартфоны",
     "price": 4690,
-    "image": "/images/Samsung Galaxy Z Fold 5.webp",
+    "image": "/images/products/samsung/samsung-galaxy-z-fold-5.webp",
     "images": [
-      "/images/Samsung Galaxy Z Fold 5.webp",
-      "/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.webp",
-      "/images/Samsung-Galaxy-Z-Fold-4-Beige-Mobile-Store-Ecuador.png"
+      "/images/products/samsung/samsung-galaxy-z-fold-5.webp",
+      "/images/products/samsung/samsung-galaxy-z-fold-4-beige-mobile-store-ecuador.webp",
+      "/images/products/samsung/samsung-galaxy-z-fold-4-beige-mobile-store-ecuador.png"
     ],
     "description": "Складной смартфон нового поколения",
     "specifications": {
@@ -328,11 +328,11 @@
     "name": "Google Pixel 7a",
     "category": "Смартфоны",
     "price": 1720,
-    "image": "/images/pixel_7a_04.jpg",
+    "image": "/images/products/google/pixel_7a_04.jpg",
     "images": [
-      "/images/pixel_7a_1.jpg",
-      "/images/pixel_7a_04.jpg",
-      "/images/pixel_7a_044.jpg"
+      "/images/products/google/pixel_7a_1.jpg",
+      "/images/products/google/pixel_7a_04.jpg",
+      "/images/products/google/pixel_7a_044.jpg"
     ],
     "description": "Доступный Google с отличной камерой",
     "specifications": {
@@ -355,12 +355,12 @@
     "name": "iPhone 14",
     "category": "Смартфоны",
     "price": 3500,
-    "image": "/images/iphone-14-pro.jpeg",
+    "image": "/images/products/apple/iphone-14-pro.jpeg",
     "images": [
-      "/images/iphone-14-pro.jpeg",
-      "/images/iphone-14-pro1.jpeg",
-      "/images/iphone-14-pro2.jpeg",
-      "/images/iphone-14-pro3.webp"
+      "/images/products/apple/iphone-14-pro.jpeg",
+      "/images/products/apple/iphone-14-pro1.jpeg",
+      "/images/products/apple/iphone-14-pro2.jpeg",
+      "/images/products/apple/iphone-14-pro3.webp"
     ],
     "description": "Надежный флагман Apple",
     "specifications": {
@@ -383,11 +383,11 @@
     "name": "Samsung Galaxy Z Flip 5",
     "category": "Смартфоны",
     "price": 2790,
-    "image": "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
+    "image": "/images/products/galaxy-z-flip5-highlights-design-end-mo.jpg",
     "images": [
-      "/images/galaxy-z-flip5-highlights-design-end-mo.jpg",
-      "/images/Galaxy-Z-Flip5-2.webp",
-      "/images/Galaxy-Z-Flip5-2.webp"
+      "/images/products/galaxy-z-flip5-highlights-design-end-mo.jpg",
+      "/images/products/galaxy-z-flip5-2.webp",
+      "/images/products/galaxy-z-flip5-2.webp"
     ],
     "description": "Компактный складной смартфон",
     "specifications": {
@@ -410,11 +410,11 @@
     "name": "OnePlus Nord 3",
     "category": "Смартфоны",
     "price": 1699,
-    "image": "/images/OnePlus Nord 3.webp",
+    "image": "/images/products/oneplus/oneplus-nord-3.webp",
     "images": [
-      "/images/OnePlus Nord 3.webp",
-      "/images/OnePlus Nord-1.png",
-      "/images/OnePlus Nord 3.webp"
+      "/images/products/oneplus/oneplus-nord-3.webp",
+      "/images/products/oneplus/oneplus-nord-1.png",
+      "/images/products/oneplus/oneplus-nord-3.webp"
     ],
     "description": "Мощный среднебюджетный смартфон",
     "specifications": {
@@ -437,11 +437,11 @@
     "name": "iPhone 13 mini",
     "category": "Смартфоны",
     "price": 3125,
-    "image": "/images/iphone-13.jpeg",
+    "image": "/images/products/apple/iphone-13.jpeg",
     "images": [
-      "/images/iphone-13-2.webp",
-      "/images/iphone-13-3.jpg",
-      "/images/iphone-13.jpeg"
+      "/images/products/apple/iphone-13-2.webp",
+      "/images/products/apple/iphone-13-3.jpg",
+      "/images/products/apple/iphone-13.jpeg"
     ],
     "description": "Компактный премиальный смартфон",
     "specifications": {
@@ -464,11 +464,11 @@
     "name": "Xiaomi 13 Pro",
     "category": "Смартфоны",
     "price": 1334,
-    "image": "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
+    "image": "/images/products/xiaomi/smartfon-xiaomi-13-pro-blue-0-1.webp",
     "images": [
-      "/images/smartfon-xiaomi-13-pro-blue-0-1.webp",
-      "/images/smartfon-xiaomi-13-pro-2.jpeg",
-      "/images/smartfon-xiaomi-13-pro-3.webp"
+      "/images/products/xiaomi/smartfon-xiaomi-13-pro-blue-0-1.webp",
+      "/images/products/xiaomi/smartfon-xiaomi-13-pro-2.jpeg",
+      "/images/products/xiaomi/smartfon-xiaomi-13-pro-3.webp"
     ],
     "description": "Флагман с камерой Leica",
     "specifications": {
@@ -491,11 +491,11 @@
     "name": "Samsung Galaxy S23",
     "category": "Смартфоны",
     "price": 3185,
-    "image": "/images/S23-Colors.jpg",
+    "image": "/images/products/s23-colors.jpg",
     "images": [
-      "/images/S23-Colors.jpg",
-      "/images/product_color_cream.avif",
-      "/images/sm-s911_galaxys23_1-3.jpg"
+      "/images/products/s23-colors.jpg",
+      "/images/products/product_color_cream.avif",
+      "/images/products/sm-s911_galaxys23_1-3.jpg"
     ],
     "description": "Компактный флагман Samsung",
     "specifications": {
@@ -518,11 +518,11 @@
     "name": "Honor Magic6 Pro",
     "category": "Смартфоны",
     "price": 3199,
-    "image": "/images/honor/Honor Magic6 Pro-3.jpg",
+    "image": "/images/products/honor/honor-magic6-pro-3.jpg",
     "images": [
-      "/images/honor/Honor Magic6 Pro-1.jpg",
-      "/images/honor/Honor Magic6 Pro-3.jpg",
-      "/images/honor/Honor Magic6 Pro.webp"
+      "/images/products/honor/honor-magic6-pro-1.jpg",
+      "/images/products/honor/honor-magic6-pro-3.jpg",
+      "/images/products/honor/honor-magic6-pro.webp"
     ],
     "description": "Флагманский смартфон Honor с передовыми технологиями и мощной камерой",
     "specifications": {
@@ -542,11 +542,11 @@
     "name": "Honor 90",
     "category": "Смартфоны",
     "price": 1399,
-    "image": "/images/honor/Honor 90-1.jpg",
+    "image": "/images/products/honor/honor-90-1.jpg",
     "images": [
-      "/images/honor/Honor 90-3.png",
-      "/images/honor/Honor 90.png",
-      "/images/honor/Honor 90-1.jpg"
+      "/images/products/honor/honor-90-3.png",
+      "/images/products/honor/honor-90.png",
+      "/images/products/honor/honor-90-1.jpg"
     ],
     "description": "Стильный смартфон с отличной камерой и ярким экраном",
     "specifications": {
@@ -566,11 +566,11 @@
     "name": "Honor Magic V2",
     "category": "Смартфоны",
     "price": 3799,
-    "image": "/images/honor/Honor Magic V2-2.webp",
+    "image": "/images/products/honor/honor-magic-v2-2.webp",
     "images": [
-      "/images/honor/Honor Magic V2-2.webp",
-      "/images/honor/Honor Magic V2-3.jpg",
-      "/images/honor/Honor Magic V2.png"
+      "/images/products/honor/honor-magic-v2-2.webp",
+      "/images/products/honor/honor-magic-v2-3.jpg",
+      "/images/products/honor/honor-magic-v2.png"
     ],
     "description": "Инновационный складной смартфон с передовыми технологиями",
     "specifications": {
@@ -590,11 +590,11 @@
     "name": "Honor X9a",
     "category": "Смартфоны",
     "price": 1099,
-    "image": "/images/honor/Honor X9a-2.jpeg",
+    "image": "/images/products/honor/honor-x9a-2.jpeg",
     "images": [
-      "/images/honor/Honor X9a-2.jpeg",
-      "/images/honor/Honor X9a-3.webp",
-      "/images/honor/Honor X9a.jpeg"
+      "/images/products/honor/honor-x9a-2.jpeg",
+      "/images/products/honor/honor-x9a-3.webp",
+      "/images/products/honor/honor-x9a.jpeg"
     ],
     "description": "Надежный смартфон среднего класса с отличной автономностью",
     "specifications": {
@@ -614,11 +614,11 @@
     "name": "Honor 70",
     "category": "Смартфоны",
     "price": 1199,
-    "image": "/images/honor/Honor 70.jpg",
+    "image": "/images/products/honor/honor-70.jpg",
     "images": [
-      "/images/honor/Honor 70.jpg",
-      "/images/honor/Honor 70-3.jpg",
-      "/images/honor/Honor 70-2.jpeg"
+      "/images/products/honor/honor-70.jpg",
+      "/images/products/honor/honor-70-3.jpg",
+      "/images/products/honor/honor-70-2.jpeg"
     ],
     "description": "Элегантный смартфон с продвинутой камерой и быстрой зарядкой",
     "specifications": {
@@ -638,11 +638,11 @@
     "name": "Honor X8",
     "category": "Смартфоны",
     "price": 899,
-    "image": "/images/honor/Honor X8-2.jpg",
+    "image": "/images/products/honor/honor-x8-2.jpg",
     "images": [
-      "/images/honor/Honor X8-3.jpg",
-      "/images/honor/Honor X8-2.jpg",
-      "/images/honor/Honor X8.png"
+      "/images/products/honor/honor-x8-3.jpg",
+      "/images/products/honor/honor-x8-2.jpg",
+      "/images/products/honor/honor-x8.png"
     ],
     "description": "Доступный смартфон с хорошим соотношением цена-качество",
     "specifications": {
@@ -662,11 +662,11 @@
     "name": "Honor Magic5 Pro",
     "category": "Смартфоны",
     "price": 2799,
-    "image": "/images/honor/Honor Magic6 Pro.webp",
+    "image": "/images/products/honor/honor-magic6-pro.webp",
     "images": [
-      "/images/honor/Honor Magic6 Pro.webp",
-      "/images/honor/Honor Magic6 Pro-3.jpg",
-      "/images/honor/Honor Magic6 Pro-1.jpg"
+      "/images/products/honor/honor-magic6-pro.webp",
+      "/images/products/honor/honor-magic6-pro-3.jpg",
+      "/images/products/honor/honor-magic6-pro-1.jpg"
     ],
     "description": "Флагманский смартфон с продвинутой системой камер",
     "specifications": {
@@ -686,11 +686,11 @@
     "name": "Honor 90 Lite",
     "category": "Смартфоны",
     "price": 999,
-    "image": "/images/honor/Honor 90 Lite-2.webp",
+    "image": "/images/products/honor/honor-90-lite-2.webp",
     "images": [
-      "/images/honor/Honor 90 Lite-3.png",
-      "/images/honor/Honor 90 Lite-2.webp",
-      "/images/honor/Honor 90 Lite.png"
+      "/images/products/honor/honor-90-lite-3.png",
+      "/images/products/honor/honor-90-lite-2.webp",
+      "/images/products/honor/honor-90-lite.png"
     ],
     "description": "Облегченная версия популярного Honor 90 с отличными характеристиками",
     "specifications": {
@@ -710,11 +710,11 @@
     "name": "Honor X7a",
     "category": "Смартфоны",
     "price": 799,
-    "image": "/images/honor/Honor X7a-3.jpg",
+    "image": "/images/products/honor/honor-x7a-3.jpg",
     "images": [
-      "/images/honor/Honor X7a-21.jpeg",
-      "/images/honor/Honor X7a-3.jpg",
-      "/images/honor/Honor X7a.jpg"
+      "/images/products/honor/honor-x7a-21.jpeg",
+      "/images/products/honor/honor-x7a-3.jpg",
+      "/images/products/honor/honor-x7a.jpg"
     ],
     "description": "Бюджетный смартфон с большим аккумулятором",
     "specifications": {
@@ -734,11 +734,11 @@
     "name": "Honor X6",
     "category": "Смартфоны",
     "price": 749,
-    "image": "/images/honor/Honor X6.avif",
+    "image": "/images/products/honor/honor-x6.avif",
     "images": [
-      "/images/honor/Honor X6-3.webp",
-      "/images/honor/Honor X6-2.jpg",
-      "/images/honor/Honor X6.avif"
+      "/images/products/honor/honor-x6-3.webp",
+      "/images/products/honor/honor-x6-2.jpg",
+      "/images/products/honor/honor-x6.avif"
     ],
     "description": "Доступный смартфон с тройной камерой и большим экраном",
     "specifications": {
@@ -758,11 +758,11 @@
     "name": "Huawei P60 Pro",
     "category": "Смартфоны",
     "price": 2690,
-    "image": "/images/huawei/Huawei P60 Pro-1.webp",
+    "image": "/images/products/huawei/huawei-p60-pro-1.webp",
     "images": [
-      "/images/huawei/Huawei P60 Pro-2.avif",
-      "/images/huawei/Huawei P60 Pro-3.png",
-      "/images/huawei/Huawei P60 Pro.jpg"
+      "/images/products/huawei/huawei-p60-pro-2.avif",
+      "/images/products/huawei/huawei-p60-pro-3.png",
+      "/images/products/huawei/huawei-p60-pro.jpg"
     ],
     "description": "Флагманский смартфон с революционной камерой XMAGE",
     "specifications": {
@@ -782,11 +782,11 @@
     "name": "Huawei Mate 60 Pro",
     "category": "Смартфоны",
     "price": 3999,
-    "image": "/images/huawei/mate_60_pro_all_1.webp",
+    "image": "/images/products/huawei/mate_60_pro_all_1.webp",
     "images": [
-      "/images/huawei/mate_60_pro_all_2.jpg",
-      "/images/huawei/mate_60_pro_all_1.webp",
-      "/images/huawei/mate_60_pro_all_3.jpeg"
+      "/images/products/huawei/mate_60_pro_all_2.jpg",
+      "/images/products/huawei/mate_60_pro_all_1.webp",
+      "/images/products/huawei/mate_60_pro_all_3.jpeg"
     ],
     "description": "Инновационный флагман с поддержкой спутниковой связи",
     "specifications": {
@@ -806,11 +806,11 @@
     "name": "Huawei Mate X3",
     "category": "Смартфоны",
     "price": 3599,
-    "image": "/images/huawei/Huawei Mate X3.png",
+    "image": "/images/products/huawei/huawei-mate-x3.png",
     "images": [
-      "/images/huawei/Huawei Mate X3.png",
-      "/images/huawei/Huawei Mate X3-2.jpg",
-      "/images/huawei/Huawei Mate X3.webp"
+      "/images/products/huawei/huawei-mate-x3.png",
+      "/images/products/huawei/huawei-mate-x3-2.jpg",
+      "/images/products/huawei/huawei-mate-x3.webp"
     ],
     "description": "Премиальный складной смартфон с защитой от воды",
     "specifications": {
@@ -830,11 +830,11 @@
     "name": "Huawei nova 11 Pro",
     "category": "Смартфоны",
     "price": 1899,
-    "image": "/images/huawei/Huawei nova 11 Pro.jpg",
+    "image": "/images/products/huawei/huawei-nova-11-pro.jpg",
     "images": [
-      "/images/huawei/Huawei nova 11 Pro-1.jpg",
-      "/images/huawei/Huawei nova 11 Pro.jpg",
-      "/images/huawei/Huawei nova 11 Pro-2.jpg"
+      "/images/products/huawei/huawei-nova-11-pro-1.jpg",
+      "/images/products/huawei/huawei-nova-11-pro.jpg",
+      "/images/products/huawei/huawei-nova-11-pro-2.jpg"
     ],
     "description": "Стильный смартфон с акцентом на селфи-камеру",
     "specifications": {
@@ -854,11 +854,11 @@
     "name": "Huawei nova Y90",
     "category": "Смартфоны",
     "price": 1099,
-    "image": "/images/huawei/Huawei nova Y90-1.jpg",
+    "image": "/images/products/huawei/huawei-nova-y90-1.jpg",
     "images": [
-      "/images/huawei/Huawei nova Y90-2.avif",
-      "/images/huawei/Huawei nova Y90-1.jpg",
-      "/images/huawei/Huawei nova Y90-3.webp"
+      "/images/products/huawei/huawei-nova-y90-2.avif",
+      "/images/products/huawei/huawei-nova-y90-1.jpg",
+      "/images/products/huawei/huawei-nova-y90-3.webp"
     ],
     "description": "Доступный смартфон с большим экраном и батареей",
     "specifications": {
@@ -878,11 +878,11 @@
     "name": "Huawei P50 Pro",
     "category": "Смартфоны",
     "price": 2799,
-    "image": "/images/huawei/Huawei P50 Pro.webp",
+    "image": "/images/products/huawei/huawei-p50-pro.webp",
     "images": [
-      "/images/huawei/Huawei P50 Pro-1.webp",
-      "/images/huawei/Huawei P50 Pro.webp",
-      "/images/huawei/Huawei P50 Pro-3.jpg"
+      "/images/products/huawei/huawei-p50-pro-1.webp",
+      "/images/products/huawei/huawei-p50-pro.webp",
+      "/images/products/huawei/huawei-p50-pro-3.jpg"
     ],
     "description": "Флагманский смартфон с камерой Leica",
     "specifications": {
@@ -902,11 +902,11 @@
     "name": "Huawei nova 10 Pro",
     "category": "Смартфоны",
     "price": 1599,
-    "image": "/images/huawei/Huawei nova 10 Pro-1.jpg",
+    "image": "/images/products/huawei/huawei-nova-10-pro-1.jpg",
     "images": [
-      "/images/huawei/Huawei nova 10 Pro-2.jpg",
-      "/images/huawei/Huawei nova 10 Pro-1.jpg",
-      "/images/huawei/Huawei nova 10 Pro.avif"
+      "/images/products/huawei/huawei-nova-10-pro-2.jpg",
+      "/images/products/huawei/huawei-nova-10-pro-1.jpg",
+      "/images/products/huawei/huawei-nova-10-pro.avif"
     ],
     "description": "Стильный смартфон среднего класса с отличными камерами",
     "specifications": {
@@ -926,11 +926,11 @@
     "name": "Huawei Mate 50 Pro",
     "category": "Смартфоны",
     "price": 3199,
-    "image": "/images/huawei/Huawei Mate 50 Pro-1.jpeg",
+    "image": "/images/products/huawei/huawei-mate-50-pro-1.jpeg",
     "images": [
-      "/images/huawei/Huawei Mate 50 Pro-2.jpg",
-      "/images/huawei/Huawei Mate 50 Pro-3.jpg",
-      "/images/huawei/Huawei Mate 50 Pro.png"
+      "/images/products/huawei/huawei-mate-50-pro-2.jpg",
+      "/images/products/huawei/huawei-mate-50-pro-3.jpg",
+      "/images/products/huawei/huawei-mate-50-pro.png"
     ],
     "description": "Флагман с продвинутой системой камер",
     "specifications": {
@@ -950,11 +950,11 @@
     "name": "Huawei nova Y70",
     "category": "Смартфоны",
     "price": 899,
-    "image": "/images/huawei/Huawei nova Y70-1.webp",
+    "image": "/images/products/huawei/huawei-nova-y70-1.webp",
     "images": [
-      "/images/huawei/Huawei nova Y70-2.webp",
-      "/images/huawei/Huawei nova Y70.jpeg",
-      "/images/huawei/Huawei nova Y70-1.webp"
+      "/images/products/huawei/huawei-nova-y70-2.webp",
+      "/images/products/huawei/huawei-nova-y70.jpeg",
+      "/images/products/huawei/huawei-nova-y70-1.webp"
     ],
     "description": "Бюджетный смартфон с большой батареей",
     "specifications": {
@@ -974,11 +974,11 @@
     "name": "Huawei nova 9",
     "category": "Смартфоны",
     "price": 1099,
-    "image": "/images/huawei/Huawei nova 9.jpg",
+    "image": "/images/products/huawei/huawei-nova-9.jpg",
     "images": [
-      "/images/huawei/Huawei nova 9-1.jpeg",
-      "/images/huawei/Huawei nova 9.jpg",
-      "/images/huawei/Huawei nova 9-2.webp"
+      "/images/products/huawei/huawei-nova-9-1.jpeg",
+      "/images/products/huawei/huawei-nova-9.jpg",
+      "/images/products/huawei/huawei-nova-9-2.webp"
     ],
     "description": "Стильный смартфон с качественным дисплеем",
     "specifications": {
@@ -998,11 +998,11 @@
     "name": "Infinix Zero 30",
     "category": "Смартфоны",
     "price": 1299,
-    "image": "/images/infinix/Infinix Zero 30-1.jpg",
+    "image": "/images/products/infinix/infinix-zero-30-1.jpg",
     "images": [
-      "/images/infinix/Infinix Zero 30-1.jpg",
-      "/images/infinix/Infinix Zero 30-2.jpg",
-      "/images/infinix/Infinix Zero 30.avif"
+      "/images/products/infinix/infinix-zero-30-1.jpg",
+      "/images/products/infinix/infinix-zero-30-2.jpg",
+      "/images/products/infinix/infinix-zero-30.avif"
     ],
     "description": "Флагманский смартфон с 108MP камерой и AMOLED экраном",
     "specifications": {
@@ -1022,11 +1022,11 @@
     "name": "Infinix Note 30 Pro",
     "category": "Смартфоны",
     "price": 1099,
-    "image": "/images/infinix/Infinix Note 30 Pro-1.jpg",
+    "image": "/images/products/infinix/infinix-note-30-pro-1.jpg",
     "images": [
-      "/images/infinix/Infinix Note 30 Pro-1.jpg",
-      "/images/infinix/Infinix Note 30 Pro-2.webp",
-      "/images/infinix/Infinix Note 30 Pro-3.jpg"
+      "/images/products/infinix/infinix-note-30-pro-1.jpg",
+      "/images/products/infinix/infinix-note-30-pro-2.webp",
+      "/images/products/infinix/infinix-note-30-pro-3.jpg"
     ],
     "description": "Мощный смартфон с быстрой зарядкой 68W",
     "specifications": {
@@ -1046,11 +1046,11 @@
     "name": "Infinix GT 10 Pro",
     "category": "Смартфоны",
     "price": 1199,
-    "image": "/images/infinix/Infinix GT 10 Pro-1.jpg",
+    "image": "/images/products/infinix/infinix-gt-10-pro-1.jpg",
     "images": [
-      "/images/infinix/Infinix GT 10 Pro-2.webp",
-      "/images/infinix/Infinix GT 10 Pro-1.jpg",
-      "/images/infinix/Infinix GT 10 Pro-1.jpg"
+      "/images/products/infinix/infinix-gt-10-pro-2.webp",
+      "/images/products/infinix/infinix-gt-10-pro-1.jpg",
+      "/images/products/infinix/infinix-gt-10-pro-1.jpg"
     ],
     "description": "Игровой смартфон с RGB подсветкой и мощным процессором",
     "specifications": {
@@ -1070,11 +1070,11 @@
     "name": "Infinix Hot 30",
     "category": "Смартфоны",
     "price": 749,
-    "image": "/images/infinix/Infinix Hot 30-2.jpg",
+    "image": "/images/products/infinix/infinix-hot-30-2.jpg",
     "images": [
-      "/images/infinix/Infinix Hot 30-3.webp",
-      "/images/infinix/Infinix Hot 30-2.jpg",
-      "/images/infinix/Infinix Hot 30.png"
+      "/images/products/infinix/infinix-hot-30-3.webp",
+      "/images/products/infinix/infinix-hot-30-2.jpg",
+      "/images/products/infinix/infinix-hot-30.png"
     ],
     "description": "Доступный смартфон с хорошей производительностью",
     "specifications": {
@@ -1094,11 +1094,11 @@
     "name": "Infinix Note 30",
     "category": "Смартфоны",
     "price": 899,
-    "image": "/images/infinix/Infinix Note 30-1.jpg",
+    "image": "/images/products/infinix/infinix-note-30-1.jpg",
     "images": [
-      "/images/infinix/Infinix Note 30-2.jpg",
-      "/images/infinix/Infinix Note 30-1.jpg",
-      "/images/infinix/Infinix Note 30-3.webp"
+      "/images/products/infinix/infinix-note-30-2.jpg",
+      "/images/products/infinix/infinix-note-30-1.jpg",
+      "/images/products/infinix/infinix-note-30-3.webp"
     ],
     "description": "Смартфон с большим экраном и стереодинамиками",
     "specifications": {
@@ -1118,11 +1118,11 @@
     "name": "Infinix Zero Ultra",
     "category": "Смартфоны",
     "price": 1399,
-    "image": "/images/infinix/Infinix Zero Ultra-1.png",
+    "image": "/images/products/infinix/infinix-zero-ultra-1.png",
     "images": [
-      "/images/infinix/Infinix Zero Ultra-2.jpeg",
-      "/images/infinix/Infinix Zero Ultra-2.jpg",
-      "/images/infinix/Infinix Zero Ultra-1.png"
+      "/images/products/infinix/infinix-zero-ultra-2.jpeg",
+      "/images/products/infinix/infinix-zero-ultra-2.jpg",
+      "/images/products/infinix/infinix-zero-ultra-1.png"
     ],
     "description": "Флагман с супербыстрой зарядкой 180W",
     "specifications": {
@@ -1142,11 +1142,11 @@
     "name": "Infinix Smart 7",
     "category": "Смартфоны",
     "price": 599,
-    "image": "/images/infinix/Infinix Smart 7-1.jpg",
+    "image": "/images/products/infinix/infinix-smart-7-1.jpg",
     "images": [
-      "/images/infinix/Infinix Smart 7-2.webp",
-      "/images/infinix/Infinix Smart 7.jpg",
-      "/images/infinix/Infinix Smart 7-1.jpg"
+      "/images/products/infinix/infinix-smart-7-2.webp",
+      "/images/products/infinix/infinix-smart-7.jpg",
+      "/images/products/infinix/infinix-smart-7-1.jpg"
     ],
     "description": "Бюджетный смартфон с большой батареей",
     "specifications": {
@@ -1166,11 +1166,11 @@
     "name": "Infinix Hot 30i",
     "category": "Смартфоны",
     "price": 649,
-    "image": "/images/infinix/Infinix Hot 30i-1.jpg",
+    "image": "/images/products/infinix/infinix-hot-30i-1.jpg",
     "images": [
-      "/images/infinix/hInfinix Hot 30i-3.jpeg",
-      "/images/infinix/Infinix Hot 30i.jpeg",
-      "/images/infinix/Infinix Hot 30i-1.jpg"
+      "/images/products/infinix/hinfinix-hot-30i-3.jpeg",
+      "/images/products/infinix/infinix-hot-30i.jpeg",
+      "/images/products/infinix/infinix-hot-30i-1.jpg"
     ],
     "description": "Доступный смартфон с NFC и большим экраном",
     "specifications": {
@@ -1190,11 +1190,11 @@
     "name": "Infinix Note 30 VIP",
     "category": "Смартфоны",
     "price": 1199,
-    "image": "/images/infinix/Infinix Note 30 VIP-3.jpg",
+    "image": "/images/products/infinix/infinix-note-30-vip-3.jpg",
     "images": [
-      "/images/infinix/Infinix Note 30 VIP-1.png",
-      "/images/infinix/Infinix Note 30 VIP-1.webp",
-      "/images/infinix/Infinix Note 30 VIP-3.jpg"
+      "/images/products/infinix/infinix-note-30-vip-1.png",
+      "/images/products/infinix/infinix-note-30-vip-1.webp",
+      "/images/products/infinix/infinix-note-30-vip-3.jpg"
     ],
     "description": "Премиальная версия Note 30 с улучшенн§ыми характеристиками",
     "specifications": {
@@ -1214,11 +1214,11 @@
     "name": "Infinix Zero 20",
     "category": "Смартфоны",
     "price": 999,
-    "image": "/images/infinix/Infinix Zero 20-1.jpg",
+    "image": "/images/products/infinix/infinix-zero-20-1.jpg",
     "images": [
-      "/images/infinix/Infinix Zero 20-3.jpg",
-      "/images/infinix/Infinix Zero 20-1.jpg",
-      "/images/infinix/Infinix Zero 20-3.webp"
+      "/images/products/infinix/infinix-zero-20-3.jpg",
+      "/images/products/infinix/infinix-zero-20-1.jpg",
+      "/images/products/infinix/infinix-zero-20-3.webp"
     ],
     "description": "Смартфон с упором на селфи-камеру",
     "specifications": {
@@ -1238,11 +1238,11 @@
     "name": "Xiaomi 14 Pro",
     "category": "Смартфоны",
     "price": 1299,
-    "image": "/images/xiaomi/Xiaomi 14 Pro.jpg",
+    "image": "/images/products/xiaomi/xiaomi-14-pro.jpg",
     "images": [
-      "/images/xiaomi/Xiaomi 14 Pro-2.jpg",
-      "/images/xiaomi/Xiaomi 14 Pro.jpg",
-      "/images/xiaomi/Xiaomi 14 Pro-3.webp"
+      "/images/products/xiaomi/xiaomi-14-pro-2.jpg",
+      "/images/products/xiaomi/xiaomi-14-pro.jpg",
+      "/images/products/xiaomi/xiaomi-14-pro-3.webp"
     ],
     "description": "Флагманский смартфон с камерой Leica и чипом Snapdragon 8 Gen 3",
     "specifications": {
@@ -1262,11 +1262,11 @@
     "name": "Redmi Note 13 Pro+",
     "category": "Смартфоны",
     "price": 1499,
-    "image": "/images/xiaomi/Redmi Note 13 Pro2.jpg",
+    "image": "/images/products/xiaomi/redmi-note-13-pro2.jpg",
     "images": [
-      "/images/xiaomi/Redmi Note 13 Pro2.jpg",
-      "/images/xiaomi/Redmi Note 13 Pro3.jpeg",
-      "/images/xiaomi/Redmi Note13Pro1.avif"
+      "/images/products/xiaomi/redmi-note-13-pro2.jpg",
+      "/images/products/xiaomi/redmi-note-13-pro3.jpeg",
+      "/images/products/xiaomi/redmi-note13pro1.avif"
     ],
     "description": "Мощный смартфон среднего класса с 200MP камерой",
     "specifications": {
@@ -1286,11 +1286,11 @@
     "name": "Xiaomi 13T Pro",
     "category": "Смартфоны",
     "price": 2199,
-    "image": "/images/xiaomi/Xiaomi 13T Pro.jpg",
+    "image": "/images/products/xiaomi/xiaomi-13t-pro.jpg",
     "images": [
-      "/images/xiaomi/Xiaomi 13T Pro-2.webp",
-      "/images/xiaomi/Xiaomi 13T Pro.jpg",
-      "/images/xiaomi/Xiaomi 13T Pro-1.jpg"
+      "/images/products/xiaomi/xiaomi-13t-pro-2.webp",
+      "/images/products/xiaomi/xiaomi-13t-pro.jpg",
+      "/images/products/xiaomi/xiaomi-13t-pro-1.jpg"
     ],
     "description": "Производительный смартфон с камерой Leica",
     "specifications": {
@@ -1310,11 +1310,11 @@
     "name": "Redmi Note 12 Pro",
     "category": "Смартфоны",
     "price": 1199,
-    "image": "/images/xiaomi/Redmi Note 12 Pro-3.webp",
+    "image": "/images/products/xiaomi/redmi-note-12-pro-3.webp",
     "images": [
-      "/images/xiaomi/Redmi Note 12 Pro-3.webp",
-      "/images/xiaomi/Redmi Note 12 Pro-3.webp",
-      "/images/xiaomi/Redmi Note 12 Pro.webp"
+      "/images/products/xiaomi/redmi-note-12-pro-3.webp",
+      "/images/products/xiaomi/redmi-note-12-pro-3.webp",
+      "/images/products/xiaomi/redmi-note-12-pro.webp"
     ],
     "description": "Популярный смартфон среднего класса",
     "specifications": {
@@ -1334,11 +1334,11 @@
     "name": "Redmi 12",
     "category": "Смартфоны",
     "price": 899,
-    "image": "/images/xiaomi/Redmi 12-1.jpg",
+    "image": "/images/products/xiaomi/redmi-12-1.jpg",
     "images": [
-      "/images/xiaomi/Redmi 12-3.png",
-      "/images/xiaomi/Redmi 12.png",
-      "/images/xiaomi/Redmi 12-1.jpg"
+      "/images/products/xiaomi/redmi-12-3.png",
+      "/images/products/xiaomi/redmi-12.png",
+      "/images/products/xiaomi/redmi-12-1.jpg"
     ],
     "description": "Доступный смартфон с хорошими характеристиками",
     "specifications": {
@@ -1358,11 +1358,11 @@
     "name": "Redmi Note 12",
     "category": "Смартфоны",
     "price": 999,
-    "image": "/images/xiaomi/Redmi Note 12-1.jpg",
+    "image": "/images/products/xiaomi/redmi-note-12-1.jpg",
     "images": [
-      "/images/xiaomi/Redmi Note 12-3.jpg",
-      "/images/xiaomi/Redmi Note 12.png",
-      "/images/xiaomi/Redmi Note 12-1.jpg"
+      "/images/products/xiaomi/redmi-note-12-3.jpg",
+      "/images/products/xiaomi/redmi-note-12.png",
+      "/images/products/xiaomi/redmi-note-12-1.jpg"
     ],
     "description": "Сбалансированный смартфон с AMOLED экраном",
     "specifications": {
@@ -1382,11 +1382,11 @@
     "name": "Redmi A2+",
     "category": "Смартфоны",
     "price": 499,
-    "image": "/images/xiaomi/RedmiA2_1.jpeg",
+    "image": "/images/products/xiaomi/redmia2_1.jpeg",
     "images": [
-      "/images/xiaomi/RedmiA2_1.jpeg",
-      "/images/xiaomi/RedmiA2_2.jpg",
-      "/images/xiaomi/RedmiA2-3.jpg"
+      "/images/products/xiaomi/redmia2_1.jpeg",
+      "/images/products/xiaomi/redmia2_2.jpg",
+      "/images/products/xiaomi/redmia2-3.jpg"
     ],
     "description": "Ультрабюджетный смартфон с большим экраном",
     "specifications": {
@@ -1406,11 +1406,11 @@
     "name": "POCO F5 Pro",
     "category": "Смартфоны",
     "price": 1799,
-    "image": "/images/POCO/POCO F5 Pro-2.webp",
+    "image": "/images/products/poco/poco-f5-pro-2.webp",
     "images": [
-      "/images/POCO/POCO F5 Pro.jpg",
-      "/images/POCO/POCO F5 Pro.webp",
-      "/images/POCO/POCO F5 Pro-2.webp"
+      "/images/products/poco/poco-f5-pro.jpg",
+      "/images/products/poco/poco-f5-pro.webp",
+      "/images/products/poco/poco-f5-pro-2.webp"
     ],
     "description": "Флагманский смартфон с топовым процессором Snapdragon 8+ Gen 1",
     "specifications": {
@@ -1430,11 +1430,11 @@
     "name": "POCO F5",
     "category": "Смартфоны",
     "price": 1499,
-    "image": "/images/POCO/POCO F5-1.jpg",
+    "image": "/images/products/poco/poco-f5-1.jpg",
     "images": [
-      "/images/POCO/POCO F5.avif",
-      "/images/POCO/POCO F5-1.jpg",
-      "/images/POCO/POCO F5-3.webp"
+      "/images/products/poco/poco-f5.avif",
+      "/images/products/poco/poco-f5-1.jpg",
+      "/images/products/poco/poco-f5-3.webp"
     ],
     "description": "Мощный смартфон с процессором Snapdragon 7+ Gen 2",
     "specifications": {
@@ -1454,11 +1454,11 @@
     "name": "POCO X6 Pro",
     "category": "Смартфоны",
     "price": 1299,
-    "image": "/images/POCO/POCO X6 Pro-1.jpg",
+    "image": "/images/products/poco/poco-x6-pro-1.jpg",
     "images": [
-      "/images/POCO/POCO X6 Pro-2.jpeg",
-      "/images/POCO/POCO X6 Pro-1.jpg",
-      "/images/POCO/POCO X6 Pro.jpg"
+      "/images/products/poco/poco-x6-pro-2.jpeg",
+      "/images/products/poco/poco-x6-pro-1.jpg",
+      "/images/products/poco/poco-x6-pro.jpg"
     ],
     "description": "Производительный смартфон среднего класса",
     "specifications": {
@@ -1478,11 +1478,11 @@
     "name": "POCO X5 Pro",
     "category": "Смартфоны",
     "price": 1199,
-    "image": "/images/POCO/POCO X5 Pro.jpg",
+    "image": "/images/products/poco/poco-x5-pro.jpg",
     "images": [
-      "/images/POCO/POCO X5 Pro-3.png",
-      "/images/POCO/POCO X5 Pro-2.webp",
-      "/images/POCO/POCO X5 Pro.jpg"
+      "/images/products/poco/poco-x5-pro-3.png",
+      "/images/products/poco/poco-x5-pro-2.webp",
+      "/images/products/poco/poco-x5-pro.jpg"
     ],
     "description": "Смартфон с отличным экраном и камерой 108MP",
     "specifications": {
@@ -1502,11 +1502,11 @@
     "name": "POCO X5",
     "category": "Смартфоны",
     "price": 1099,
-    "image": "/images/POCO/POCO X5-2.jpg",
+    "image": "/images/products/poco/poco-x5-2.jpg",
     "images": [
-      "/images/POCO/POCO X5-2.jpg",
-      "/images/POCO/POCO X5-3.png",
-      "/images/POCO/POCO X5-2.jpg"
+      "/images/products/poco/poco-x5-2.jpg",
+      "/images/products/poco/poco-x5-3.png",
+      "/images/products/poco/poco-x5-2.jpg"
     ],
     "description": "Доступный смартфон с 5G и AMOLED экраном",
     "specifications": {
@@ -1526,11 +1526,11 @@
     "name": "POCO M6 Pro",
     "category": "Смартфоны",
     "price": 999,
-    "image": "/images/POCO/POCO M6 Pro.png",
+    "image": "/images/products/poco/poco-m6-pro.png",
     "images": [
-      "/images/POCO/POCO M6 Pro-2.jpg",
-      "/images/POCO/POCO M6 Pro.png",
-      "/images/POCO/POCO M6 Pro-2.jpg"
+      "/images/products/poco/poco-m6-pro-2.jpg",
+      "/images/products/poco/poco-m6-pro.png",
+      "/images/products/poco/poco-m6-pro-2.jpg"
     ],
     "description": "Бюджетный смартфон с хорошей производительностью",
     "specifications": {
@@ -1550,11 +1550,11 @@
     "name": "POCO M5s",
     "category": "Смартфоны",
     "price": 899,
-    "image": "/images/POCO/POCO M5s.jpg",
+    "image": "/images/products/poco/poco-m5s.jpg",
     "images": [
-      "/images/POCO/POCO M5s-3.jpg",
-      "/images/POCO/POCO M5s.jpg",
-      "/images/POCO/POCO M5s-2.webp"
+      "/images/products/poco/poco-m5s-3.jpg",
+      "/images/products/poco/poco-m5s.jpg",
+      "/images/products/poco/poco-m5s-2.webp"
     ],
     "description": "Доступный смартфон с AMOLED экраном",
     "specifications": {
@@ -1574,11 +1574,11 @@
     "name": "POCO M5",
     "category": "Смартфоны",
     "price": 799,
-    "image": "/images/POCO/POCO M5-1.jpg",
+    "image": "/images/products/poco/poco-m5-1.jpg",
     "images": [
-      "/images/POCO/POCO M5-1.jpg",
-      "/images/POCO/POCO M5.jpg",
-      "/images/POCO/POCO M5-1.jpg"
+      "/images/products/poco/poco-m5-1.jpg",
+      "/images/products/poco/poco-m5.jpg",
+      "/images/products/poco/poco-m5-1.jpg"
     ],
     "description": "Бюджетный игровой смартфон",
     "specifications": {
@@ -1598,11 +1598,11 @@
     "name": "POCO C55",
     "category": "Смартфоны",
     "price": 999,
-    "image": "/images/POCO/POCO C55-2.jpg",
+    "image": "/images/products/poco/poco-c55-2.jpg",
     "images": [
-      "/images/POCO/POCO C55-3.jpg",
-      "/images/POCO/POCO C55.jpg",
-      "/images/POCO/POCO C55-2.jpg"
+      "/images/products/poco/poco-c55-3.jpg",
+      "/images/products/poco/poco-c55.jpg",
+      "/images/products/poco/poco-c55-2.jpg"
     ],
     "description": "Ультрабюджетный смартфон с большим экраном",
     "specifications": {
@@ -1622,11 +1622,11 @@
     "name": "POCO C51",
     "category": "Смартфоны",
     "price": 499,
-    "image": "/images/POCO/POCO C51-2.jpg",
+    "image": "/images/products/poco/poco-c51-2.jpg",
     "images": [
-      "/images/POCO/POCO C51-3.jpeg",
-      "/images/POCO/POCO C51.jpg",
-      "/images/POCO/POCO C51-2.jpg"
+      "/images/products/poco/poco-c51-3.jpeg",
+      "/images/products/poco/poco-c51.jpg",
+      "/images/products/poco/poco-c51-2.jpg"
     ],
     "description": "Самый доступный смартфон POCO",
     "specifications": {

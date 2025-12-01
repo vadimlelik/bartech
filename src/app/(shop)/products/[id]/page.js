@@ -2,6 +2,9 @@ import { Container, Box } from '@mui/material';
 import ProductDetails from './ProductDetails';
 import { getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
+import { getProductSchema, getBreadcrumbSchema } from '@/lib/seo';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
 
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
@@ -20,13 +23,61 @@ export async function generateMetadata({ params }) {
       };
     }
 
+    const productImage = product.images && product.images.length > 0
+      ? product.images[0]
+      : product.image || '/logo_techno_bar.svg';
+    
+    // Обработка URL изображения
+    let imageUrl;
+    if (!productImage) {
+      imageUrl = `${siteUrl}/logo_techno_bar.svg`;
+    } else if (productImage.startsWith('http://') || productImage.startsWith('https://')) {
+      imageUrl = productImage;
+    } else if (productImage.startsWith('/')) {
+      imageUrl = `${siteUrl}${productImage}`;
+    } else {
+      imageUrl = `${siteUrl}/${productImage}`;
+    }
+
+    const description = product.description || 
+      `Купить ${product.name} в Минске с доставкой. ${product.specifications?.brand ? `Бренд: ${product.specifications.brand}.` : ''} Цена: ${product.price} BYN. Рассрочка без переплат.`;
+
     return {
-      title: `${product.name} - Купить в магазине`,
-      description:
-        product.description || `Купить ${product.name} в Минске с доставкой`,
+      title: `${product.name} - Купить в Bartech`,
+      description,
+      keywords: [
+        product.name,
+        product.specifications?.brand,
+        'купить в минске',
+        'техника',
+        product.category || product.categoryId,
+      ].filter(Boolean),
+      openGraph: {
+        title: `${product.name} - Купить в Bartech`,
+        description,
+        type: 'website',
+        url: `${siteUrl}/products/${id}`,
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: product.name,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${product.name} - Купить в Bartech`,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `${siteUrl}/products/${id}`,
+      },
     };
   } catch (error) {
-    'Error generating product metadata:', error;
+    console.error('Error generating product metadata:', error);
     return {
       title: 'Ошибка',
       description: 'Произошла ошибка при загрузке продукта',
@@ -42,8 +93,30 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
+  const productSchema = getProductSchema(product);
+  
+  // Breadcrumbs для продукта
+  const breadcrumbs = [
+    { name: 'Главная', url: '/' },
+    ...(product.categoryId ? [{ name: product.categoryId, url: `/categories/${product.categoryId}` }] : []),
+    { name: product.name, url: `/products/${id}` },
+  ];
+  const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);
+
   return (
     <>
+      {productSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
       <Box component="main" sx={{ flex: 1 }}>
         <Container maxWidth="lg" sx={{ py: 4, minHeight: '100vh' }}>
           <ProductDetails product={product} />

@@ -2,7 +2,7 @@
 	{
 		"id": "apple",
 		"name": "Apple",
-		"image": "/images/iPhone_15 Pro_Max2.png"
+		"image": "/images/products/apple/iphone_15-pro_max2.png"
 	},
 	{
 		"id": "samsung",
@@ -22,17 +22,17 @@
 	{
 		"id": "honor",
 		"name": "Honor",
-		"image": "/images/honor/honor.png"
+		"image": "/images/products/honor/honor.png"
 	},
 	{
 		"id": "infinix",
 		"name": "Infinix",
-		"image": "/images/infinix/infinix.webp"
+		"image": "/images/products/infinix/infinix.webp"
 	},
 	{
 		"id": "poco",
 		"name": "POCO",
-		"image": "/images/POCO/POCO C55.jpg"
+		"image": "/images/products/poco/poco-c55.jpg"
 	},
 	{
 		"id": "",

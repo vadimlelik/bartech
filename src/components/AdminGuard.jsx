@@ -1,10 +1,16 @@
 'use client';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { useAuthStore } from '@/store/auth';
 import { Box, CircularProgress, Typography, Container } from '@mui/material';
 
 export default function AdminGuard({ children }) {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, init } = useAuthStore();
+
+  // Убеждаемся, что auth store инициализирован
+  useEffect(() => {
+    init();
+  }, [init]);
 
   if (loading || !user || !profile) {
     console.log('AdminGuard: Waiting for auth...', { loading, hasUser: !!user, hasProfile: !!profile, profileRole: profile?.role });

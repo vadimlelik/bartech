@@ -36,10 +36,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import Image from 'next/image';
 import AdminGuard from '@/components/AdminGuard';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/store/auth';
 
 function AdminPageContent() {
-  const { profile, loading: authLoading } = useAuth();
+  const { profile, loading: authLoading } = useAuthStore();
   const [activeTab, setActiveTab] = useState(0);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -49,6 +49,7 @@ function AdminPageContent() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [initializing, setInitializing] = useState(false);
   const [categoryFormData, setCategoryFormData] = useState({
     id: '',
     name: '',
@@ -214,6 +215,29 @@ function AdminPageContent() {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setEditingProduct(null);
+    setFormData({
+      name: '',
+      category: '',
+      categoryId: '',
+      price: '',
+      image: '',
+      images: '',
+      description: '',
+      specifications: {
+        brand: '',
+        model: '',
+        memory: '',
+        ram: '',
+        display: '',
+        processor: '',
+        camera: '',
+        battery: '',
+        os: '',
+        color: '',
+        year: '',
+        condition: 'new',
+      },
+    });
   };
 
   const handleInputChange = (e) => {
@@ -224,13 +248,13 @@ function AdminPageContent() {
         ...formData,
         specifications: {
           ...(formData.specifications || {}),
-          [specKey]: value,
+          [specKey]: value || '',
         },
       });
     } else {
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: value || '',
       });
     }
   };
@@ -258,10 +282,10 @@ function AdminPageContent() {
       }
 
       if (data.path) {
-        setFormData({
-          ...formData,
-          image: data.path,
-        });
+        setFormData((prev) => ({
+          ...prev,
+          image: data.path || '',
+        }));
         showSnackbar('Изображение загружено', 'success');
       } else {
         showSnackbar('Ошибка: путь к изображению не получен', 'error');
@@ -371,13 +395,18 @@ function AdminPageContent() {
   const handleCloseCategoryDialog = () => {
     setOpenCategoryDialog(false);
     setEditingCategory(null);
+    setCategoryFormData({
+      id: '',
+      name: '',
+      image: '',
+    });
   };
 
   const handleCategoryInputChange = (e) => {
     const { name, value } = e.target;
     setCategoryFormData({
       ...categoryFormData,
-      [name]: value,
+      [name]: value || '',
     });
   };
 
@@ -405,10 +434,10 @@ function AdminPageContent() {
       }
 
       if (data.path) {
-        setCategoryFormData({
-          ...categoryFormData,
-          image: data.path,
-        });
+        setCategoryFormData((prev) => ({
+          ...prev,
+          image: data.path || '',
+        }));
         showSnackbar('Изображение загружено', 'success');
       } else {
         showSnackbar('Ошибка: путь к изображению не получен', 'error');
@@ -475,11 +504,63 @@ function AdminPageContent() {
     }
   };
 
+  const handleInitializeDatabase = async () => {
+    if (!confirm('Вы уверены, что хотите инициализировать базу данных? Это добавит все категории и товары из файлов data/categories.json и data/products_new.json. Существующие записи могут быть продублированы.')) {
+      return;
+    }
+
+    setInitializing(true);
+    try {
+      const response = await fetch('/api/admin/init-db', {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const { results } = data;
+        const message = `Инициализация завершена! Категории: ${results.categories.success} успешно, ${results.categories.failed} ошибок. Товары: ${results.products.success} успешно, ${results.products.failed} ошибок.`;
+        showSnackbar(message, 'success');
+        
+        // Обновляем списки после инициализации
+        await Promise.all([
+          fetchProducts(),
+          fetchCategories(),
+        ]);
+      } else {
+        showSnackbar(data.error || 'Ошибка инициализации базы данных', 'error');
+      }
+    } catch (error) {
+      console.error('Error initializing database:', error);
+      showSnackbar('Ошибка инициализации базы данных', 'error');
+    } finally {
+      setInitializing(false);
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
-        Админ-панель
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1">
+          Админ-панель
+        </Typography>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleInitializeDatabase}
+          disabled={initializing}
+          sx={{ ml: 2 }}
+        >
+          {initializing ? (
+            <>
+              <CircularProgress size={20} sx={{ mr: 1 }} />
+              Инициализация...
+            </>
+          ) : (
+            'Инициализировать БД'
+          )}
+        </Button>
+      </Box>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
@@ -574,7 +655,7 @@ function AdminPageContent() {
                 fullWidth
                 label="Название"
                 name="name"
-                value={formData.name}
+                value={formData.name || ''}
                 onChange={handleInputChange}
                 required
               />
@@ -582,13 +663,13 @@ function AdminPageContent() {
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>Категория</InputLabel>
-                <Select
+                  <Select
                   value={formData.categoryId || ''}
                   label="Категория"
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      categoryId: e.target.value,
+                      categoryId: e.target.value || '',
                       category: categories.find((c) => c.id === e.target.value)?.name || '',
                     })
                   }
@@ -606,7 +687,7 @@ function AdminPageContent() {
                 fullWidth
                 label="Категория (текст)"
                 name="category"
-                value={formData.category}
+                value={formData.category || ''}
                 onChange={handleInputChange}
                 helperText="Или введите название категории вручную"
               />
@@ -617,7 +698,7 @@ function AdminPageContent() {
                 label="Цена"
                 name="price"
                 type="number"
-                value={formData.price}
+                value={formData.price || ''}
                 onChange={handleInputChange}
                 required
               />
@@ -627,7 +708,7 @@ function AdminPageContent() {
                 fullWidth
                 label="Описание"
                 name="description"
-                value={formData.description}
+                value={formData.description || ''}
                 onChange={handleInputChange}
                 multiline
                 rows={3}
@@ -638,7 +719,7 @@ function AdminPageContent() {
                 fullWidth
                 label="Основное изображение (путь)"
                 name="image"
-                value={formData.image}
+                value={formData.image || ''}
                 onChange={handleInputChange}
                 helperText="Или загрузите файл ниже"
               />
@@ -670,7 +751,7 @@ function AdminPageContent() {
                 fullWidth
                 label="Дополнительные изображения (через запятую)"
                 name="images"
-                value={formData.images}
+                value={formData.images || ''}
                 onChange={handleInputChange}
                 helperText="Разделяйте пути запятыми"
               />

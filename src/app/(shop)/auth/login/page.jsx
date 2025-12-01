@@ -12,14 +12,14 @@ import {
   Alert,
   Paper,
 } from '@mui/material';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/store/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const signIn = useAuthStore((state) => state.signIn);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get('redirect') || '/';

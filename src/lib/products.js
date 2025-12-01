@@ -28,7 +28,7 @@ const useSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-async function getAllProducts() {
+export async function getAllProducts() {
   if (useSupabase) {
     try {
       return await getAllProductsFromSupabase();

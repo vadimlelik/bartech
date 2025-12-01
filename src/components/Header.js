@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   AppBar,
   Toolbar,
@@ -34,14 +35,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useCartStore } from '../store/cart';
 import { useFavoritesStore } from '../store/favorites';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/store/auth';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
   const { cartItems } = useCartStore();
   const { favorites } = useFavoritesStore();
-  const { user, profile, signOut, isAdmin, loading: authLoading } = useAuth();
+  const { user, profile, signOut, isAdmin, loading: authLoading } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);
@@ -206,9 +208,9 @@ export default function Header() {
                     color="inherit"
                     onClick={async () => {
                       if (user) {
-                        await signOut();
+                        await signOut(router);
                       } else {
-                        window.location.href = '/auth/login';
+                        router.push('/auth/login');
                       }
                     }}
                   >
@@ -267,7 +269,7 @@ export default function Header() {
                 <ListItem
                   button
                   onClick={async () => {
-                    await signOut();
+                    await signOut(router);
                     toggleMobileMenu();
                   }}
                 >

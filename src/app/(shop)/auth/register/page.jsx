@@ -12,7 +12,7 @@ import {
   Alert,
   Paper,
 } from '@mui/material';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/store/auth';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const signUp = useAuthStore((state) => state.signUp);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
