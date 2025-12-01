@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cvirko-vadim.ru';
 
 export default function robots() {
   return {

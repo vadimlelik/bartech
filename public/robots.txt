@@ -1,0 +1,14 @@
+# robots.txt для cvirko-vadim.ru
+# Используются только стандартные директивы
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /checkout/
+Disallow: /cart
+Disallow: /favorites
+Disallow: /compare
+
+Sitemap: https://cvirko-vadim.ru/sitemap.xml
+
