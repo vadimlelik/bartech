@@ -9,11 +9,12 @@ SUBDOMAINS="phone2.cvirko-vadim.ru,tv1.cvirko-vadim.ru,1phonefree.cvirko-vadim.r
 echo "Инициализация CertBot для домена $DOMAIN и поддоменов..."
 
 docker run --rm -it \
-  -v certbot-etc:/etc/letsencrypt \
-  -v certbot-var:/var/lib/letsencrypt \
+  -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
+  -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
   -v $(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
   certbot/dns-cloudflare certonly \
   --non-interactive \
+  --force-renewal \
   --dns-cloudflare \
   --dns-cloudflare-credentials /cloudflare.ini \
   --dns-cloudflare-propagation-seconds 60 \
