@@ -6,6 +6,10 @@ const nextConfig = {
   output: 'standalone', // Для Docker оптимизации
   assetPrefix: isPhoneSubdomain ? 'https://cvirko-vadim.ru' : '',
   reactStrictMode: false,
+  eslint: {
+    // Игнорировать ESLint ошибки при сборке (только для production)
+    ignoreDuringBuilds: false, // Оставляем false, чтобы видеть реальные ошибки
+  },
   images: {
     remotePatterns: [
       {

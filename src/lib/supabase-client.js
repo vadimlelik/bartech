@@ -34,7 +34,7 @@ export const createClientSupabase = () => {
             if (options?.sameSite) {
               cookie += `; samesite=${options.sameSite}`;
             }
-            if (options?.secure) cookie += `; secure`;
+            if (options?.secure) cookie += '; secure';
             document.cookie = cookie;
           });
         },

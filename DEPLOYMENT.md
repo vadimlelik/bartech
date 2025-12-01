@@ -52,8 +52,14 @@ cp certbot/cloudflare.ini.example certbot/cloudflare.ini
 dns_cloudflare_api_token = your_cloudflare_api_token_here
 ```
 
-**Важно:** Получите API токен на https://dash.cloudflare.com/profile/api-tokens
-Токен должен иметь права: `Zone:Zone:Read` и `Zone:DNS:Edit`
+**Важно:** 
+- Получите API токен на https://dash.cloudflare.com/profile/api-tokens
+- Токен должен иметь права: `Zone:Zone:Read` и `Zone:DNS:Edit`
+- Установите правильные права доступа для файла (только владелец может читать):
+
+```bash
+chmod 600 certbot/cloudflare.ini
+```
 
 ### 5. Получение SSL сертификатов
 

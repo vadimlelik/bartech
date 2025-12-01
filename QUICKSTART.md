@@ -73,6 +73,11 @@ nano certbot/cloudflare.ini
 dns_cloudflare_api_token = your_token_here
 ```
 
+Установите правильные права доступа:
+```bash
+chmod 600 certbot/cloudflare.ini
+```
+
 ### 4.6 Получение SSL сертификатов
 
 ```bash
