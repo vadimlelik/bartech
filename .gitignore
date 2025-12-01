@@ -31,6 +31,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -38,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Certbot sensitive files
+certbot/cloudflare.ini
+certbot/etc/
+certbot/var/
+
+# Docker volumes
+certbot-etc/
+certbot-var/
+
+# SSL certificates
+*.pem
+*.key
+*.crt

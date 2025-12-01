@@ -1,0 +1,21 @@
+version: '3.8'
+
+# Production override для docker-compose
+# Использование: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  nextjs:
+    image: ${DOCKERHUB_USERNAME:-yourusername}/bartech:latest
+    pull_policy: always
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+
+  nginx:
+    restart: always
+
+  certbot:
+    restart: always
+

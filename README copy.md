@@ -9,9 +9,9 @@ sudo apt install certbot python3-certbot-nginx
 
 sudo certbot --nginx
 
-sudo certbot certonly --webroot -w /bartech -d technobar.by -d laptop1.technobar.by -d tv1.technobar.by -d phone2.technobar.by -d laptop2.technobar.by -d tv2.technobar.by -d phone.technobar.by
+sudo certbot certonly --webroot -w /bartech -d cvirko-vadim.ru -d laptop1.cvirko-vadim.ru -d tv1.cvirko-vadim.ru -d phone2.cvirko-vadim.ru -d laptop2.cvirko-vadim.ru -d tv2.cvirko-vadim.ru -d phone.cvirko-vadim.ru
 
-docker-compose run --rm certbot certonly --webroot -w /var/www/certbot -d technobar.by -d laptop1.technobar.by -d tv1.technobar.by -d phone2.technobar.by -d laptop2.technobar.by -d tv2.technobar.by -d phone.technobar.by
+docker-compose run --rm certbot certonly --webroot -w /var/www/certbot -d cvirko-vadim.ru -d laptop1.cvirko-vadim.ru -d tv1.cvirko-vadim.ru -d phone2.cvirko-vadim.ru -d laptop2.cvirko-vadim.ru -d tv2.cvirko-vadim.ru -d phone.cvirko-vadim.ru
 
 docker-compose run --rm certbot certonly \
  --manual \

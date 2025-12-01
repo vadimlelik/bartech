@@ -1,0 +1,15 @@
+# Ensure shell scripts have LF line endings
+*.sh text eol=lf
+
+# Ensure Windows scripts have CRLF line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Docker files
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+*.dockerfile text eol=lf
+
+# Makefile
+Makefile text eol=lf
+
