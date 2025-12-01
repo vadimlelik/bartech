@@ -57,17 +57,13 @@ init-certs: ## Инициализировать SSL сертификаты
 		-d phone4.cvirko-vadim.ru \
 		-d phone5.cvirko-vadim.ru \
 		-d phone6.cvirko-vadim.ru \
-		-d shockproof_phone.cvirko-vadim.ru \
 		-d laptop.cvirko-vadim.ru \
 		-d bicycles.cvirko-vadim.ru \
 		-d motoblok.cvirko-vadim.ru \
 		-d pc.cvirko-vadim.ru \
 		-d scooter.cvirko-vadim.ru \
-		-d laptop_2.cvirko-vadim.ru \
 		-d tv2.cvirko-vadim.ru \
-		-d tv3.cvirko-vadim.ru \
-		-d motoblok_1.cvirko-vadim.ru \
-		-d motoblok_2.cvirko-vadim.ru
+		-d tv3.cvirko-vadim.ru
 
 renew-certs: ## Обновить SSL сертификаты вручную
 	docker-compose exec certbot certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini

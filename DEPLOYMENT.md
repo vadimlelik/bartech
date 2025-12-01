@@ -93,17 +93,13 @@ docker run --rm -it \
   -d phone4.cvirko-vadim.ru \
   -d phone5.cvirko-vadim.ru \
   -d phone6.cvirko-vadim.ru \
-  -d shockproof_phone.cvirko-vadim.ru \
   -d laptop.cvirko-vadim.ru \
   -d bicycles.cvirko-vadim.ru \
   -d motoblok.cvirko-vadim.ru \
   -d pc.cvirko-vadim.ru \
   -d scooter.cvirko-vadim.ru \
-  -d laptop_2.cvirko-vadim.ru \
   -d tv2.cvirko-vadim.ru \
-  -d tv3.cvirko-vadim.ru \
-  -d motoblok_1.cvirko-vadim.ru \
-  -d motoblok_2.cvirko-vadim.ru
+  -d tv3.cvirko-vadim.ru
 ```
 
 ### 6. Запуск приложения
@@ -210,17 +206,15 @@ docker-compose restart nginx
 - phone4.cvirko-vadim.ru
 - phone5.cvirko-vadim.ru
 - phone6.cvirko-vadim.ru
-- shockproof_phone.cvirko-vadim.ru
 - laptop.cvirko-vadim.ru
 - bicycles.cvirko-vadim.ru
 - motoblok.cvirko-vadim.ru
 - pc.cvirko-vadim.ru
 - scooter.cvirko-vadim.ru
-- laptop_2.cvirko-vadim.ru
 - tv2.cvirko-vadim.ru
 - tv3.cvirko-vadim.ru
-- motoblok_1.cvirko-vadim.ru
-- motoblok_2.cvirko-vadim.ru
+
+**Примечание:** Домены с подчеркиваниями (`shockproof_phone`, `laptop_2`, `motoblok_1`, `motoblok_2`) не могут получить SSL сертификаты, так как подчеркивания недопустимы в DNS именах согласно RFC 1123. Эти домены используются только для внутренней маршрутизации через Next.js middleware.
 
 ## Troubleshooting
 
