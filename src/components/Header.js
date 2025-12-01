@@ -33,12 +33,15 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useCartStore } from '../store/cart';
 import { useFavoritesStore } from '../store/favorites';
 import { useAuthStore } from '@/store/auth';
+import CreditCardsModal from './CreditCards/CreditCardsModal';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [creditModalOpen, setCreditModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { cartItems } = useCartStore();
@@ -59,6 +62,12 @@ export default function Header() {
     { text: 'Отзывы', href: '/reviews', icon: <RateReviewIcon /> },
     { text: 'Контакты', href: '/contacts', icon: <ContactsIcon /> },
   ];
+
+  const handleCreditClick = (e) => {
+    e.preventDefault();
+    setCreditModalOpen(true);
+    setMobileMenuOpen(false);
+  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -121,6 +130,13 @@ export default function Header() {
                 </Button>
               </Link>
             ))}
+            <Button
+              color="inherit"
+              startIcon={<CreditCardIcon />}
+              onClick={handleCreditClick}
+            >
+              Рассрочка
+            </Button>
           </Box>
 
           <Box
@@ -244,6 +260,12 @@ export default function Header() {
                 </ListItem>
               </Link>
             ))}
+            <ListItem button onClick={handleCreditClick}>
+              <ListItemIcon>
+                <CreditCardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Рассрочка" />
+            </ListItem>
             <Divider />
             {mounted && !authLoading && user && (
               <>
@@ -317,6 +339,10 @@ export default function Header() {
           </List>
         </Box>
       </Drawer>
+      <CreditCardsModal
+        isOpen={creditModalOpen}
+        onClose={() => setCreditModalOpen(false)}
+      />
     </AppBar>
   );
 }

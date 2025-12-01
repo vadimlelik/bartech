@@ -1,10 +1,21 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import styles from './footer.module.css';
 import Link from 'next/link';
+import CreditCardsModal from '@/components/CreditCards/CreditCardsModal';
 
 const Footer = () => {
+  const [creditModalOpen, setCreditModalOpen] = useState(false);
+
+  const handleCreditClick = (e) => {
+    e.preventDefault();
+    setCreditModalOpen(true);
+  };
+
   return (
-    <footer className={styles.footer}>
+    <>
+      <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.text}>
           ООО «Баратех» УНП: 193796252 <br /> Юридический и почтовый адрес:
@@ -40,6 +51,16 @@ const Footer = () => {
               <li className={styles['footer__offer__item']}>
                 Рассрочка предоставляеться на сроки 3 месяца, 6 месяцев, 12
                 месяцев, 18 месяцев.{' '}
+              </li>
+              <li className={styles['footer__offer__item']}>
+                <a
+                  href="#"
+                  onClick={handleCreditClick}
+                  className={styles['footer__offer__link']}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Кредитные предложения
+                </a>
               </li>
             </ul>
           </div>
@@ -86,6 +107,11 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    <CreditCardsModal
+      isOpen={creditModalOpen}
+      onClose={() => setCreditModalOpen(false)}
+    />
+    </>
   );
 };
 
