@@ -64,7 +64,7 @@ DOCKERHUB_USERNAME=your_username
 ### 4.5 Настройка Cloudflare API
 
 ```bash
-cp certbot/certbot/cloudflare.ini
+cp certbot/cloudflare.ini.example certbot/cloudflare.ini
 nano certbot/cloudflare.ini
 ```
 

@@ -39,7 +39,7 @@ init-certs: ## Инициализировать SSL сертификаты
 		-v certbot-etc:/etc/letsencrypt \
 		-v certbot-var:/var/lib/letsencrypt \
 		-v $$(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
-		certbot/certbot certonly \
+		certbot/dns-cloudflare certonly \
 		--dns-cloudflare \
 		--dns-cloudflare-credentials /cloudflare.ini \
 		--dns-cloudflare-propagation-seconds 60 \
