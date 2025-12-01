@@ -7,6 +7,10 @@ help: ## Показать справку
 build: ## Собрать Docker образы
 	docker-compose build
 
+build-nextjs: ## Пересобрать только контейнер Next.js
+	docker-compose build nextjs
+	docker-compose up -d nextjs
+
 up: ## Запустить все сервисы
 	docker-compose up -d
 
