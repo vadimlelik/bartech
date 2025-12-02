@@ -17,7 +17,6 @@ import {
   Dialog,
   DialogContent,
   IconButton,
-  Slider,
   Stack,
   Chip,
   Rating,
@@ -53,38 +52,6 @@ function TabPanel({ children, value, index, ...other }) {
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
-  );
-}
-
-function InstallmentCalculator({ price }) {
-  const [months, setMonths] = useState(12);
-  const monthlyPayment = price / months;
-
-  return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Рассрочка на {months} месяцев
-      </Typography>
-      <Slider
-        value={months}
-        onChange={(_, value) => setMonths(value)}
-        step={6}
-        marks
-        min={6}
-        max={36}
-        valueLabelDisplay="auto"
-        sx={{ mt: 4, mb: 2 }}
-      />
-      <Typography variant="h5" color="primary" sx={{ mt: 3 }}>
-        Ежемесячный платеж: {monthlyPayment.toFixed(2)} BYN
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-        Общая сумма: {price.toFixed(2)} BYN
-      </Typography>
-      <Button variant="contained" fullWidth sx={{ mt: 3 }}>
-        Оформить рассрочку
-      </Button>
-    </Box>
   );
 }
 
@@ -220,6 +187,16 @@ export default function ProductDetails({ product }) {
   const { addToCompare, isInCompare } = useCompareStore();
   const isFavorite = favorites.includes(product.id);
 
+  const productImages = (() => {
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      return product.images.filter(img => img && img.trim() !== '');
+    }
+    if (product.image && product.image.trim() !== '') {
+      return [product.image];
+    }
+    return ['/logo_techno_bar.svg']; 
+  })();
+
   const specificationTranslations = {
     brand: 'Бренд',
     model: 'Модель',
@@ -239,7 +216,9 @@ export default function ProductDetails({ product }) {
   };
 
   const handleImageClick = () => {
-    setImageDialogOpen(true);
+    if (productImages.length > 0) {
+      setImageDialogOpen(true);
+    }
   };
 
   const handlePrevImage = (e) => {
@@ -247,7 +226,7 @@ export default function ProductDetails({ product }) {
       e.stopPropagation();
     }
     setCurrentImageIndex((prev) =>
-      prev > 0 ? prev - 1 : product.images.length - 1
+      prev > 0 ? prev - 1 : productImages.length - 1
     );
   };
 
@@ -256,7 +235,7 @@ export default function ProductDetails({ product }) {
       e.stopPropagation();
     }
     setCurrentImageIndex((prev) =>
-      prev < product.images.length - 1 ? prev + 1 : 0
+      prev < productImages.length - 1 ? prev + 1 : 0
     );
   };
 
@@ -277,11 +256,9 @@ export default function ProductDetails({ product }) {
             }}
             onClick={handleImageClick}
           >
-            {product.images && 
-             product.images.length > 0 && 
-             product.images[currentImageIndex] && (
+            {productImages.length > 0 && productImages[currentImageIndex] && (
               <Image
-                src={product.images[currentImageIndex]}
+                src={productImages[currentImageIndex]}
                 alt={`${product.name} - изображение ${currentImageIndex + 1}`}
                 fill
                 style={{ objectFit: 'contain' }}
@@ -289,72 +266,76 @@ export default function ProductDetails({ product }) {
                 priority
               />
             )}
+            {productImages.length > 1 && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  p: 2,
+                  zIndex: 1,
+                }}
+              >
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{
+                    bgcolor: 'background.paper',
+                    '&:hover': { bgcolor: 'background.paper' },
+                  }}
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{
+                    bgcolor: 'background.paper',
+                    '&:hover': { bgcolor: 'background.paper' },
+                  }}
+                >
+                  <ArrowForwardIcon />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
+          {productImages.length > 1 && (
             <Box
               sx={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
                 display: 'flex',
-                justifyContent: 'space-between',
-                p: 2,
-                zIndex: 1,
+                gap: 2,
+                mt: 2,
+                justifyContent: 'center',
               }}
             >
-              <IconButton
-                onClick={handlePrevImage}
-                sx={{
-                  bgcolor: 'background.paper',
-                  '&:hover': { bgcolor: 'background.paper' },
-                }}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-              <IconButton
-                onClick={handleNextImage}
-                sx={{
-                  bgcolor: 'background.paper',
-                  '&:hover': { bgcolor: 'background.paper' },
-                }}
-              >
-                <ArrowForwardIcon />
-              </IconButton>
+              {productImages.map((img, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    position: 'relative',
+                    cursor: 'pointer',
+                    border:
+                      index === currentImageIndex
+                        ? '2px solid primary.main'
+                        : 'none',
+                    opacity: index === currentImageIndex ? 1 : 0.7,
+                  }}
+                  onClick={() => setCurrentImageIndex(index)}
+                >
+                  <Image
+                    src={img}
+                    alt={`${product.name} - миниатюра ${index + 1}`}
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    unoptimized
+                  />
+                </Box>
+              ))}
             </Box>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 2,
-              mt: 2,
-              justifyContent: 'center',
-            }}
-          >
-            {product.images.map((img, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: 60,
-                  height: 60,
-                  position: 'relative',
-                  cursor: 'pointer',
-                  border:
-                    index === currentImageIndex
-                      ? '2px solid primary.main'
-                      : 'none',
-                  opacity: index === currentImageIndex ? 1 : 0.7,
-                }}
-                onClick={() => setCurrentImageIndex(index)}
-              >
-                <Image
-                  src={img}
-                  alt={`${product.name} - миниатюра ${index + 1}`}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                  unoptimized
-                />
-              </Box>
-            ))}
-          </Box>
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="h4" gutterBottom>
@@ -469,17 +450,6 @@ export default function ProductDetails({ product }) {
             >
               В корзину
             </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => setTabValue(2)} // Переход к вкладке рассрочки
-              sx={{
-                height: 48,
-                fontSize: '1.1rem',
-              }}
-            >
-              Купить в рассрочку
-            </Button>
             <IconButton
               onClick={() => {
                 'Product ID:', product.id, 'type:', typeof product.id;
@@ -520,7 +490,6 @@ export default function ProductDetails({ product }) {
           >
             <Tab label="Характеристики" />
             <Tab label="Доставка" />
-            <Tab label="Рассрочка" />
             <Tab label="Отзывы" />
           </Tabs>
 
@@ -567,10 +536,6 @@ export default function ProductDetails({ product }) {
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
-            <InstallmentCalculator price={product.price} />
-          </TabPanel>
-
-          <TabPanel value={tabValue} index={3}>
             <Reviews />
           </TabPanel>
         </Paper>
@@ -612,14 +577,13 @@ export default function ProductDetails({ product }) {
             <ArrowForwardIcon />
           </IconButton>
           <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-            {product.images && 
-             product.images.length > 0 && 
-             product.images[currentImageIndex] && (
+            {productImages.length > 0 && productImages[currentImageIndex] && (
               <Image
-                src={product.images[currentImageIndex]}
+                src={productImages[currentImageIndex]}
                 alt={`${product.name} - изображение ${currentImageIndex + 1}`}
                 fill
                 style={{ objectFit: 'contain' }}
+                unoptimized
               />
             )}
           </Box>

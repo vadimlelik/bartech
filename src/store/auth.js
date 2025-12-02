@@ -19,7 +19,7 @@ export const useAuthStore = create((set, get) => {
     return state._loading || !supabase || (state.user && !state.profile);
   };
 
-  // Инициализация происходит при первом использовании
+
   const initialize = async () => {
     const supabase = getSupabase();
     if (!supabase) {
@@ -37,7 +37,6 @@ export const useAuthStore = create((set, get) => {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
-          console.error('Error getting session:', sessionError);
           if (mounted) {
             set((state) => ({ 
               _loading: false, 
@@ -48,7 +47,6 @@ export const useAuthStore = create((set, get) => {
         }
 
         if (session?.user && mounted) {
-          console.log('Session found on mount:', session.user.id);
           set((state) => ({ 
             user: session.user, 
             _loading: true,
@@ -65,7 +63,7 @@ export const useAuthStore = create((set, get) => {
             }
           }
         } else if (mounted) {
-          console.log('No session found on mount');
+  
           set((state) => ({ 
             user: null, 
             profile: null, 
@@ -74,7 +72,7 @@ export const useAuthStore = create((set, get) => {
           }));
         }
       } catch (error) {
-        console.error('Error initializing auth:', error);
+  
         if (mounted) {
           set((state) => ({ 
             _loading: false,
@@ -91,7 +89,6 @@ export const useAuthStore = create((set, get) => {
       async (event, session) => {
         if (!mounted) return;
         
-        console.log('Auth state changed:', event, session?.user?.id);
         
         if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           if (session?.user && mounted) {
@@ -190,14 +187,11 @@ export const useAuthStore = create((set, get) => {
     fetchProfile: async (userId, retries = 3) => {
       const supabase = getSupabase();
       if (!supabase) {
-        console.log('fetchProfile: No supabase client');
         return;
       }
       
-      console.log('fetchProfile: Fetching profile for user:', userId, 'retries left:', retries);
       
       try {
-        console.log('fetchProfile: Fetching profile via API...');
         const startTime = Date.now();
         
         const response = await fetch('/api/auth/profile', {
@@ -209,7 +203,6 @@ export const useAuthStore = create((set, get) => {
         
         if (!response.ok) {
           if (response.status === 401) {
-            console.warn('fetchProfile: Unauthorized');
             set((state) => ({ 
               profile: null,
               loading: computeLoading({ ...state, profile: null })
@@ -222,18 +215,11 @@ export const useAuthStore = create((set, get) => {
         
         const { profile: data } = await response.json();
         
-        console.log(`fetchProfile: Query completed in ${duration}ms`, { 
-          hasData: !!data,
-          role: data?.role
-        });
-        
         if (!data) {
           if (retries > 0) {
-            console.log(`fetchProfile: Profile not found, retrying... (${retries} retries left)`);
             await new Promise(resolve => setTimeout(resolve, 1000));
             return get().fetchProfile(userId, retries - 1);
           } else {
-            console.log('Profile not found, creating manually...');
             const supabase = getSupabase();
             if (!supabase) {
               set((state) => ({ 
@@ -258,13 +244,11 @@ export const useAuthStore = create((set, get) => {
                   .single();
 
                 if (createError) {
-                  console.error('Error creating profile:', createError);
                   set((state) => ({ 
                     profile: null,
                     loading: computeLoading({ ...state, profile: null })
                   }));
                 } else {
-                  console.log('Profile created successfully');
                   set((state) => ({ 
                     profile: newProfile,
                     loading: computeLoading({ ...state, profile: newProfile })
@@ -277,7 +261,6 @@ export const useAuthStore = create((set, get) => {
                 }));
               }
             } catch (createError) {
-              console.error('Error creating profile:', createError);
               set((state) => ({ 
                 profile: null,
                 loading: computeLoading({ ...state, profile: null })
@@ -287,14 +270,11 @@ export const useAuthStore = create((set, get) => {
           }
         }
         
-        console.log('fetchProfile: Profile loaded successfully:', { role: data?.role, email: data?.email });
         set((state) => ({ 
           profile: data,
           loading: computeLoading({ ...state, profile: data })
         }));
-        console.log('fetchProfile: Profile state updated');
       } catch (error) {
-        console.error('Error fetching profile:', error);
         set((state) => ({ 
           profile: null,
           loading: computeLoading({ ...state, profile: null })
@@ -332,7 +312,6 @@ export const useAuthStore = create((set, get) => {
 
         return { data, error: null };
       } catch (error) {
-        console.error('Error signing up:', error);
         return { data: null, error };
       }
     },
@@ -352,7 +331,6 @@ export const useAuthStore = create((set, get) => {
         if (error) throw error;
 
         if (data.user) {
-          console.log('Sign in successful:', data.user.id);
           set((state) => ({ 
             user: data.user,
             loading: computeLoading({ ...state, user: data.user })
@@ -363,7 +341,6 @@ export const useAuthStore = create((set, get) => {
 
         return { data, error: null };
       } catch (error) {
-        console.error('Error signing in:', error);
         return { data: null, error };
       }
     },
@@ -388,7 +365,6 @@ export const useAuthStore = create((set, get) => {
           window.location.href = '/';
         }
       } catch (error) {
-        console.error('Error signing out:', error);
         throw error;
       }
     },
