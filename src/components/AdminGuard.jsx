@@ -1,18 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/store/auth';
 import { Box, CircularProgress, Typography, Container } from '@mui/material';
 
 export default function AdminGuard({ children }) {
   const { user, profile, loading, init } = useAuthStore();
+  const accessGrantedRef = useRef(false);
 
   // Убеждаемся, что auth store инициализирован
   useEffect(() => {
     init();
   }, [init]);
 
-  if (loading || !user || !profile) {
+  // Если доступ уже был предоставлен, сохраняем это состояние
+  useEffect(() => {
+    if (!loading && user && profile && profile.role === 'admin') {
+      accessGrantedRef.current = true;
+    }
+  }, [loading, user, profile]);
+
+  // Если доступ уже был предоставлен, не скрываем содержимое при временных изменениях loading
+  const shouldShowLoading = (!accessGrantedRef.current && (loading || !user || !profile));
+
+  if (shouldShowLoading) {
     console.log('AdminGuard: Waiting for auth...', { loading, hasUser: !!user, hasProfile: !!profile, profileRole: profile?.role });
     return (
       <Container maxWidth="xl" sx={{ py: 8 }}>

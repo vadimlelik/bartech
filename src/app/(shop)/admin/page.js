@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Container,
   Typography,
@@ -39,14 +40,13 @@ import AdminGuard from '@/components/AdminGuard';
 import { useAuthStore } from '@/store/auth';
 
 function AdminPageContent() {
+  const router = useRouter();
   const { profile, loading: authLoading } = useAuthStore();
   const [activeTab, setActiveTab] = useState(0);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openDialog, setOpenDialog] = useState(false);
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [initializing, setInitializing] = useState(false);
@@ -55,53 +55,72 @@ function AdminPageContent() {
     name: '',
     image: '',
   });
-  const [formData, setFormData] = useState(() => ({
-    name: '',
-    category: '',
-    categoryId: '',
-    price: '',
-    image: '',
-    images: '',
-    description: '',
-    specifications: {
-      brand: '',
-      model: '',
-      memory: '',
-      ram: '',
-      display: '',
-      processor: '',
-      camera: '',
-      battery: '',
-      os: '',
-      color: '',
-      year: '',
-      condition: 'new',
-    },
-  }));
+
+  // Используем ref для отслеживания первой загрузки, чтобы избежать повторных загрузок
+  const initialLoadDoneRef = useRef(false);
+  const prevAuthLoadingRef = useRef(authLoading);
 
   useEffect(() => {
+    // Если уже загружали данные, больше не загружаем - это ключевая проверка!
+    if (initialLoadDoneRef.current) {
+      return;
+    }
+
+    // Отслеживаем изменение authLoading
+    const prevAuthLoading = prevAuthLoadingRef.current;
+    prevAuthLoadingRef.current = authLoading;
+
+    // Загружаем данные только когда authLoading меняется с true на false (первая загрузка)
     if (authLoading || !profile) {
       console.log('AdminPage: Waiting for auth...', { authLoading, profile: !!profile });
       return;
     }
 
+    // Загружаем данные только если это переход с true на false ИЛИ если изначально было false
+    if (prevAuthLoading === true && authLoading === false && profile) {
+      // Помечаем, что начальная загрузка выполнена ДО загрузки данных
+      initialLoadDoneRef.current = true;
+
       console.log('AdminPage: Loading data...', { profileRole: profile?.role });
-    
-    const loadData = async () => {
-      try {
-        await Promise.all([
-          fetchProducts(),
-          fetchCategories(),
-        ]);
-        console.log('AdminPage: Data loaded successfully');
-      } catch (error) {
-        console.error('AdminPage: Error loading data:', error);
-      }
-    };
-    
-    loadData();
+      
+      const loadData = async () => {
+        try {
+          await Promise.all([
+            fetchProducts(),
+            fetchCategories(),
+          ]);
+          console.log('AdminPage: Data loaded successfully');
+        } catch (error) {
+          console.error('AdminPage: Error loading data:', error);
+          // Если произошла ошибка, сбрасываем флаг, чтобы можно было попробовать снова
+          initialLoadDoneRef.current = false;
+        }
+      };
+      
+      loadData();
+    } else if (prevAuthLoading === false && authLoading === false && profile && !initialLoadDoneRef.current) {
+      // Если изначально authLoading был false (уже загружен), загружаем данные один раз
+      initialLoadDoneRef.current = true;
+
+      console.log('AdminPage: Loading data (initial state)...', { profileRole: profile?.role });
+      
+      const loadData = async () => {
+        try {
+          await Promise.all([
+            fetchProducts(),
+            fetchCategories(),
+          ]);
+          console.log('AdminPage: Data loaded successfully');
+        } catch (error) {
+          console.error('AdminPage: Error loading data:', error);
+          initialLoadDoneRef.current = false;
+        }
+      };
+      
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading, profile]);
+  }, [authLoading]); // Зависим только от authLoading
 
   const fetchProducts = async () => {
     try {
@@ -157,190 +176,6 @@ function AdminPageContent() {
     }
   };
 
-  const handleOpenDialog = (product = null) => {
-    if (product) {
-      setEditingProduct(product);
-      setFormData({
-        name: product.name || '',
-        category: product.category || '',
-        categoryId: product.category_id || product.categoryId || '',
-        price: product.price || '',
-        image: product.image || '',
-        images: Array.isArray(product.images) ? product.images.join(', ') : '',
-        description: product.description || '',
-        specifications: {
-          brand: product.specifications?.brand || '',
-          model: product.specifications?.model || '',
-          memory: product.specifications?.memory || '',
-          ram: product.specifications?.ram || '',
-          display: product.specifications?.display || '',
-          processor: product.specifications?.processor || '',
-          camera: product.specifications?.camera || '',
-          battery: product.specifications?.battery || '',
-          os: product.specifications?.os || '',
-          color: product.specifications?.color || '',
-          year: product.specifications?.year || '',
-          condition: product.specifications?.condition || 'new',
-        },
-      });
-    } else {
-      setEditingProduct(null);
-      setFormData({
-        name: '',
-        category: '',
-        categoryId: '',
-        price: '',
-        image: '',
-        images: '',
-        description: '',
-        specifications: {
-          brand: '',
-          model: '',
-          memory: '',
-          ram: '',
-          display: '',
-          processor: '',
-          camera: '',
-          battery: '',
-          os: '',
-          color: '',
-          year: '',
-          condition: 'new',
-        },
-      });
-    }
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setEditingProduct(null);
-    setFormData({
-      name: '',
-      category: '',
-      categoryId: '',
-      price: '',
-      image: '',
-      images: '',
-      description: '',
-      specifications: {
-        brand: '',
-        model: '',
-        memory: '',
-        ram: '',
-        display: '',
-        processor: '',
-        camera: '',
-        battery: '',
-        os: '',
-        color: '',
-        year: '',
-        condition: 'new',
-      },
-    });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name.startsWith('specifications.')) {
-      const specKey = name.split('.')[1];
-      setFormData({
-        ...formData,
-        specifications: {
-          ...(formData.specifications || {}),
-          [specKey]: value || '',
-        },
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value || '',
-      });
-    }
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        const errorMessage = data.error || 'Ошибка загрузки изображения';
-        console.error('Upload error:', errorMessage);
-        showSnackbar(errorMessage, 'error');
-        return;
-      }
-
-      if (data.path) {
-        setFormData((prev) => ({
-          ...prev,
-          image: data.path || '',
-        }));
-        showSnackbar('Изображение загружено', 'success');
-      } else {
-        showSnackbar('Ошибка: путь к изображению не получен', 'error');
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      showSnackbar(`Ошибка загрузки: ${error.message || 'Неизвестная ошибка'}`, 'error');
-    }
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const submitData = {
-        name: formData.name,
-        category: formData.category,
-        category_id: formData.categoryId,
-        price: parseFloat(formData.price) || 0,
-        image: formData.image,
-        images: formData.images
-          ? formData.images.split(',').map((img) => img.trim()).filter(Boolean)
-          : [],
-        description: formData.description,
-        specifications: formData.specifications || {},
-      };
-
-      const url = editingProduct
-        ? `/api/admin/products/${editingProduct.id}`
-        : '/api/admin/products';
-      const method = editingProduct ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        showSnackbar(
-          editingProduct ? 'Товар обновлен' : 'Товар создан',
-          'success'
-        );
-        handleCloseDialog();
-        fetchProducts();
-      } else {
-        showSnackbar(data.error || 'Ошибка сохранения', 'error');
-      }
-    } catch (error) {
-      console.error('Error saving product:', error);
-      showSnackbar('Ошибка сохранения товара', 'error');
-    }
-  };
 
   const handleDelete = async (id) => {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) {
@@ -578,7 +413,7 @@ function AdminPageContent() {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={() => handleOpenDialog()}
+              onClick={() => router.push('/admin/products/new')}
             >
               Добавить товар
             </Button>
@@ -626,7 +461,7 @@ function AdminPageContent() {
                   <TableCell align="right">
                     <IconButton
                       color="primary"
-                      onClick={() => handleOpenDialog(product)}
+                      onClick={() => router.push(`/admin/products/${product.id}/edit`)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -643,246 +478,6 @@ function AdminPageContent() {
           </Table>
         </TableContainer>
       )}
-
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>
-          {editingProduct ? 'Редактировать товар' : 'Добавить товар'}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Название"
-                name="name"
-                value={formData.name || ''}
-                onChange={handleInputChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <FormControl fullWidth>
-                <InputLabel>Категория</InputLabel>
-                  <Select
-                  value={formData.categoryId || ''}
-                  label="Категория"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      categoryId: e.target.value || '',
-                      category: categories.find((c) => c.id === e.target.value)?.name || '',
-                    })
-                  }
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Категория (текст)"
-                name="category"
-                value={formData.category || ''}
-                onChange={handleInputChange}
-                helperText="Или введите название категории вручную"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Цена"
-                name="price"
-                type="number"
-                value={formData.price || ''}
-                onChange={handleInputChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Описание"
-                name="description"
-                value={formData.description || ''}
-                onChange={handleInputChange}
-                multiline
-                rows={3}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Основное изображение (путь)"
-                name="image"
-                value={formData.image || ''}
-                onChange={handleInputChange}
-                helperText="Или загрузите файл ниже"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="outlined" component="label">
-                Загрузить изображение
-                <input
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-              </Button>
-              {formData.image && (
-                <Box sx={{ mt: 2 }}>
-                  <Image
-                    src={formData.image}
-                    alt="Preview"
-                    width={200}
-                    height={200}
-                    style={{ objectFit: 'cover', borderRadius: 4 }}
-                  />
-                </Box>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Дополнительные изображения (через запятую)"
-                name="images"
-                value={formData.images || ''}
-                onChange={handleInputChange}
-                helperText="Разделяйте пути запятыми"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                Характеристики
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Бренд"
-                name="specifications.brand"
-                value={formData.specifications?.brand || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Модель"
-                name="specifications.model"
-                value={formData.specifications?.model || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Память"
-                name="specifications.memory"
-                value={formData.specifications?.memory || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="ОЗУ"
-                name="specifications.ram"
-                value={formData.specifications?.ram || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Дисплей"
-                name="specifications.display"
-                value={formData.specifications?.display || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Процессор"
-                name="specifications.processor"
-                value={formData.specifications?.processor || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Камера"
-                name="specifications.camera"
-                value={formData.specifications?.camera || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Батарея"
-                name="specifications.battery"
-                value={formData.specifications?.battery || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="ОС"
-                name="specifications.os"
-                value={formData.specifications?.os || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Цвет"
-                name="specifications.color"
-                value={formData.specifications?.color || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Год"
-                name="specifications.year"
-                value={formData.specifications?.year || ''}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Состояние"
-                name="specifications.condition"
-                value={formData.specifications?.condition || 'new'}
-                onChange={handleInputChange}
-                select
-                SelectProps={{ native: true }}
-              >
-                <option value="new">Новый</option>
-                <option value="used">Б/У</option>
-              </TextField>
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Отмена</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            {editingProduct ? 'Сохранить' : 'Создать'}
-          </Button>
-        </DialogActions>
-      </Dialog>
         </>
       )}
 
