@@ -353,7 +353,7 @@ export default function ProductDetails({ product }) {
 
           <Box sx={{ mb: 3 }}>
             <Typography variant="h5" color="primary" component="span">
-              {product.price.toFixed(2)} BYN
+              от {product.price.toFixed(2)} BYN/мес. <br />
             </Typography>
             {product.oldPrice && (
               <Typography

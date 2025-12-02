@@ -25,10 +25,7 @@ import {
   Snackbar,
   CircularProgress,
   Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+
   Tabs,
   Tab,
 } from '@mui/material';
@@ -72,7 +69,6 @@ function AdminPageContent() {
 
     // Загружаем данные только когда authLoading меняется с true на false (первая загрузка)
     if (authLoading || !profile) {
-      console.log('AdminPage: Waiting for auth...', { authLoading, profile: !!profile });
       return;
     }
 
@@ -81,7 +77,6 @@ function AdminPageContent() {
       // Помечаем, что начальная загрузка выполнена ДО загрузки данных
       initialLoadDoneRef.current = true;
 
-      console.log('AdminPage: Loading data...', { profileRole: profile?.role });
       
       const loadData = async () => {
         try {
@@ -89,9 +84,7 @@ function AdminPageContent() {
             fetchProducts(),
             fetchCategories(),
           ]);
-          console.log('AdminPage: Data loaded successfully');
         } catch (error) {
-          console.error('AdminPage: Error loading data:', error);
           // Если произошла ошибка, сбрасываем флаг, чтобы можно было попробовать снова
           initialLoadDoneRef.current = false;
         }
@@ -101,8 +94,7 @@ function AdminPageContent() {
     } else if (prevAuthLoading === false && authLoading === false && profile && !initialLoadDoneRef.current) {
       // Если изначально authLoading был false (уже загружен), загружаем данные один раз
       initialLoadDoneRef.current = true;
-
-      console.log('AdminPage: Loading data (initial state)...', { profileRole: profile?.role });
+  
       
       const loadData = async () => {
         try {
@@ -110,9 +102,7 @@ function AdminPageContent() {
             fetchProducts(),
             fetchCategories(),
           ]);
-          console.log('AdminPage: Data loaded successfully');
         } catch (error) {
-          console.error('AdminPage: Error loading data:', error);
           initialLoadDoneRef.current = false;
         }
       };
@@ -456,7 +446,7 @@ function AdminPageContent() {
                   <TableCell>
                     <Chip label={product.category || product.category_id || '-'} size="small" />
                   </TableCell>
-                  <TableCell>{product.price} руб.</TableCell>
+                  <TableCell> от {product.price} руб/мес.</TableCell>
                   <TableCell>{product.specifications?.brand || '-'}</TableCell>
                   <TableCell align="right">
                     <IconButton

@@ -667,7 +667,7 @@ export default function ProductList({ categoryId }) {
                             textDecoration: 'line-through',
                           }}
                         >
-                          {product.oldPrice.toLocaleString()} BYN
+                         от {product.oldPrice.toLocaleString()} BYN/мес. <br />
                         </Typography>
                       )}
                       <Typography
@@ -675,7 +675,7 @@ export default function ProductList({ categoryId }) {
                         color="primary"
                         sx={{ fontWeight: 'bold' }}
                       >
-                        {product.price.toLocaleString()} BYN
+                        от {product.price.toLocaleString()} BYN/мес. <br />
                       </Typography>
                     </Box>
                   </CardContent>

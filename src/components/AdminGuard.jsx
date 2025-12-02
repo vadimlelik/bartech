@@ -24,7 +24,6 @@ export default function AdminGuard({ children }) {
   const shouldShowLoading = (!accessGrantedRef.current && (loading || !user || !profile));
 
   if (shouldShowLoading) {
-    console.log('AdminGuard: Waiting for auth...', { loading, hasUser: !!user, hasProfile: !!profile, profileRole: profile?.role });
     return (
       <Container maxWidth="xl" sx={{ py: 8 }}>
         <Box
@@ -46,7 +45,6 @@ export default function AdminGuard({ children }) {
   }
 
   if (profile.role !== 'admin') {
-    console.log('AdminGuard: User is not admin', { role: profile.role });
     return (
       <Container maxWidth="xl" sx={{ py: 8 }}>
         <Box
@@ -68,8 +66,6 @@ export default function AdminGuard({ children }) {
       </Container>
     );
   }
-
-  console.log('AdminGuard: Access granted', { userId: user?.id, role: profile.role });
   return <>{children}</>;
 }
 
