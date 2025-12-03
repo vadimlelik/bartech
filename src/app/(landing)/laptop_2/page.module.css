@@ -1,0 +1,138 @@
+.hero {
+  background: url('/images/laptop/laptop_2.webp') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+.subtitle {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  opacity: 0.8;
+}
+.bottomBtn {
+  margin-top: 2rem;
+}
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.content {
+  position: relative;
+  max-width: 900px;
+  animation: fadeIn 1.5s ease;
+}
+
+.content h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.btn {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background: #ff00cc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  background: #ff00cc;
+  color: #fff;
+}
+.btn span {
+  font-size: 20px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+.btn:hover span {
+  color: #6b5e5e;
+}
+
+.content h1 span {
+  color: #ff00cc;
+}
+
+.content p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.list {
+  text-align: left;
+  margin-top: 25px;
+  font-size: 1rem;
+}
+
+.list li {
+  margin: 8px 0;
+}
+
+.list li span {
+  color: #ff00cc;
+  font-weight: bold;
+}
+
+.gift {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.gift i {
+  font-size: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .content h1 {
+    font-size: 1.6rem;
+  }
+
+  .list {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content h1 {
+    font-size: 1.3rem;
+  }
+  .list {
+    font-size: 0.85rem;
+  }
+}

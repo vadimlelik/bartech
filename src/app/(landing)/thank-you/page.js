@@ -1,0 +1,110 @@
+'use client';
+
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import styles from './ThankYou.module.css';
+import { useSearchParams } from 'next/navigation';
+import {
+  PIXEL,
+  PIXEL_10,
+  PIXEL_11,
+  PIXEL_12,
+  PIXEL_13,
+  PIXEL_14,
+  PIXEL_15,
+  PIXEL_2,
+  PIXEL_3,
+  PIXEL_4,
+  PIXEL_5,
+  PIXEL_6,
+  PIXEL_7,
+  PIXEL_8,
+  PIXEL_9,
+} from '@/data/pixel';
+
+const ThankYouPage = () => {
+  const searchParams = useSearchParams();
+  const source = searchParams.get('source');
+
+  useEffect(() => {
+    if (source) {
+      const pixelId = PIXEL[source];
+      const pixelId_2 = PIXEL_2[source];
+      const pixelId_3 = PIXEL_3[source];
+      const pixelId_4 = PIXEL_4[source];
+      const pixelId_5 = PIXEL_5[source];
+      const pixelId_6 = PIXEL_6[source];
+      const pixelId_7 = PIXEL_7[source];
+      const pixelId_8 = PIXEL_8[source];
+      const pixelId_9 = PIXEL_9[source];
+      const pixelId_10 = PIXEL_10[source];
+      const pixelId_11 = PIXEL_11[source];
+      const pixelId_12 = PIXEL_12[source];
+      const pixelId_13 = PIXEL_13[source];
+      const pixelId_14 = PIXEL_14[source];
+      const pixelId_15 = PIXEL_15[source];
+
+      if (window.ttq) {
+        window.ttq.load(pixelId);
+        window.ttq.load(pixelId_2);
+        window.ttq.load(pixelId_3);
+        window.ttq.load(pixelId_4);
+        window.ttq.load(pixelId_5);
+        window.ttq.load(pixelId_6);
+        window.ttq.load(pixelId_7);
+        window.ttq.load(pixelId_8);
+        window.ttq.load(pixelId_9);
+        window.ttq.load(pixelId_10);
+        window.ttq.load(pixelId_11);
+        window.ttq.load(pixelId_12);
+        window.ttq.load(pixelId_13);
+        window.ttq.load(pixelId_14);
+        window.ttq.load(pixelId_15);
+
+        window.ttq.page();
+      }
+    }
+  }, [source]);
+
+  return (
+    <div className={styles.container}>
+      <motion.h1
+        className={styles.title}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        Спасибо за отправку формы!
+      </motion.h1>
+
+      {/* Подзаголовок с анимацией */}
+      <motion.p
+        className={styles.subtitle}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+      >
+        Мы получили ваши данные и скоро свяжемся с вами.
+      </motion.p>
+
+      {/* Анимация благодарности */}
+      <motion.div
+        className={styles.animationContainer}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.8, delay: 1.5 }}
+      >
+        <motion.div
+          className={styles.heart}
+          initial={{ scale: 1 }}
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+        >
+          ❤️
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default ThankYouPage;

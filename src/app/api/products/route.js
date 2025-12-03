@@ -1,27 +1,62 @@
-import { products } from '@/data/products'
+import { getProducts } from '@/lib/products';
+import { NextResponse } from 'next/server';
 
 export async function GET(request) {
-	const { searchParams } = new URL(request.url)
-	const productId = searchParams.get('id')
-	const categoryId = searchParams.get('categoryId')
+  try {
+    const { searchParams } = new URL(request.url);
 
-	if (productId) {
-		const product = products.find((p) => p.id === productId)
-		if (!product) {
-			return new Response(JSON.stringify({ error: 'Product not found' }), {
-				status: 404,
-			})
-		}
-		return new Response(JSON.stringify(product), {
-			headers: { 'Content-Type': 'application/json' },
-		})
-	}
+    const params = {
+      categoryId: searchParams.get('categoryId'),
+      search: searchParams.get('search'),
+      sort: searchParams.get('sort') || 'asc',
+      sortBy: searchParams.get('sortBy') || 'name',
+      page: parseInt(searchParams.get('page') || '1'),
+      limit: parseInt(searchParams.get('limit') || '12'),
+      ids: searchParams.get('ids')?.split(',') || [],
+      filters: {},
+    };
 
-	const filteredProducts = categoryId
-		? products.filter((product) => product.category === categoryId)
-		: products
+    // Собираем все возможные фильтры
+    const filterFields = [
+      'memory',
+      'ram',
+      'processor',
+      'display',
+      'camera',
+      'battery',
+      'os',
+      'color',
+      'year',
+    ];
+    filterFields.forEach((field) => {
+      const value = searchParams.get(field);
+      if (value) params.filters[field] = value;
+    });
 
-	return new Response(JSON.stringify(filteredProducts), {
-		headers: { 'Content-Type': 'application/json' },
-	})
+    const result = await getProducts(params);
+
+    if (!result) {
+      return NextResponse.json(
+        { error: 'Products not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      products: result.products || [],
+      filters: result.filters || {},
+      pagination: {
+        total: result.pagination?.total || 0,
+        page: result.pagination?.page || 1,
+        limit: result.pagination?.limit || 12,
+        pages: result.pagination?.pages || 1,
+      },
+    });
+  } catch (error) {
+    'Error in products API:', error;
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }

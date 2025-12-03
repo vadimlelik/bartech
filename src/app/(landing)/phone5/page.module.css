@@ -1,0 +1,415 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #272626 0%, #454040 100%);
+  padding: 2rem 1rem;
+}
+
+.marquee {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ff4444;
+  color: white;
+  padding: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.marqueeContent {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.main {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: white;
+  line-height: 1.3;
+}
+
+.productCard {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.productInfo {
+  flex: 1;
+}
+
+.installmentLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.productTitle {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.priceBlock {
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.oldPrice {
+  display: block;
+  color: #999;
+  font-size: 0.9rem;
+  text-decoration: line-through;
+}
+
+.rating {
+  color: #ffd700;
+  margin-top: 0.5rem;
+}
+
+.inStock {
+  color: #4caf50;
+  margin-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.colorOption {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.productImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phoneImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.timerSection {
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 10px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.actionButton {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.actionButton:hover {
+  background: #ff6666;
+}
+
+.advantages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+
+.advantageItem {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.advantageContent h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.advantageContent p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.reviewsSection {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  margin-top: 3rem;
+}
+
+.reviewsSection h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.reviewStats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #c7aeae;
+  border-radius: 10px;
+}
+
+.rating {
+  text-align: center;
+}
+
+.ratingNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stars {
+  color: #ffd700;
+  margin: 0.5rem 0;
+}
+
+.ratingBars {
+  flex: 1;
+}
+
+.ratingBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.barFull,
+.barPartial,
+.barEmpty {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #eee;
+}
+
+.barFull {
+  background: #ffd700;
+}
+
+.barPartial {
+  background: linear-gradient(to right, #ffd700 50%, #eee 50%);
+}
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review {
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reviewerImage {
+  border-radius: 50%;
+}
+
+.reviewHeader h3 {
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.review p {
+  color: #666;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .productCard {
+    flex-direction: column;
+  }
+
+  .reviewStats {
+    flex-direction: column;
+  }
+
+  .advantages {
+    grid-template-columns: 1fr;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+  .timerSection {
+    padding: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .productImage {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 425px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .productCard {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .productTitle {
+    font-size: 1.6rem;
+  }
+
+  .price {
+    font-size: 1.3rem;
+  }
+
+  .actionButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .advantages {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .advantageItem {
+    padding: 1rem;
+  }
+
+  .advantageContent h3 {
+    font-size: 1rem;
+  }
+
+  .advantageContent p {
+    font-size: 0.8rem;
+  }
+
+  .reviewsSection {
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .reviewsSection h2 {
+    font-size: 1.4rem;
+  }
+
+  .reviewStats {
+    padding: 0.8rem;
+    gap: 1rem;
+  }
+
+  .ratingNumber {
+    font-size: 1.6rem;
+  }
+
+  .review {
+    padding: 1rem;
+  }
+
+  .reviewHeader {
+    gap: 0.8rem;
+  }
+
+  .reviewHeader h3 {
+    font-size: 0.9rem;
+  }
+
+  .review p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding: 1rem 0.3rem;
+  }
+
+  .header h1 {
+    font-size: 1.3rem;
+  }
+
+  .productTitle {
+    font-size: 1.4rem;
+  }
+
+  .price {
+    font-size: 1.2rem;
+  }
+
+  .actionButton {
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  .advantageContent h3 {
+    font-size: 0.9rem;
+  }
+
+  .advantageContent p {
+    font-size: 0.75rem;
+  }
+
+  .reviewsSection h2 {
+    font-size: 1.3rem;
+  }
+
+  .review p {
+    font-size: 0.8rem;
+  }
+}

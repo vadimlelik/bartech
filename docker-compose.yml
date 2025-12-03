@@ -1,32 +1,63 @@
 version: '3.8'
 
 services:
-  nextjs-app:
+  nextjs:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: 'http://localhost:3000'
+        - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    container_name: bartech-nextjs
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
-    restart: always
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   nginx:
-    image: nginx:latest
+    image: nginx:stable-alpine
+    container_name: bartech-nginx
+    restart: unless-stopped
+    depends_on:
+      - nextjs
     ports:
       - '80:80'
       - '443:443'
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    depends_on:
-      - nextjs-app
-    restart: always
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - cvirko-vadim_certbot-etc:/etc/letsencrypt:ro
+      - cvirko-vadim_certbot-var:/var/lib/letsencrypt:ro
+    networks:
+      - app-network
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   certbot:
-    image: certbot/certbot
+    image: certbot/dns-cloudflare:latest
+    container_name: bartech-certbot
+    restart: unless-stopped
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'certbot certonly --webroot --webroot-path=/var/www/certbot --agree-tos --email cvi-vadim@yandex.ru -d cvirko-vadim.ru -d phone.cvirko-vadim.ru && trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'"
+      - cvirko-vadim_certbot-etc:/etc/letsencrypt
+      - cvirko-vadim_certbot-var:/var/lib/letsencrypt
+      - ./certbot/cloudflare.ini:/cloudflare.ini:ro
+    networks:
+      - app-network
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --quiet; sleep 12h & wait $${!}; done'"
+
+volumes:
+  cvirko-vadim_certbot-etc:
+    external: true
+  cvirko-vadim_certbot-var:
+    external: true
+
+networks:
+  app-network:
+    driver: bridge

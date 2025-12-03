@@ -1,0 +1,53 @@
+/* Общие стили для контейнера */
+.masked-input-container {
+	position: relative;
+	width: 100%;
+	max-width: 400px; /* Максимальная ширина для удобства */
+	margin: 20px 0;
+}
+
+/* Стили для инпута */
+.masked-input {
+	width: 100%;
+	padding: 10px;
+	font-size: 16px;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	outline: none;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+/* Стили для отключенного состояния */
+.masked-input:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+	background-color: #f0f0f0;
+}
+
+/* Стили для инпута с ошибкой */
+.input-error {
+	border-color: #e74c3c;
+	background-color: #fbe5e5;
+}
+
+/* Стили для фокуса на инпуте */
+.masked-input:focus {
+	border-color: #3498db;
+	box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Стили для сообщения об ошибке */
+.error-message {
+	color: #e74c3c;
+	font-size: 12px;
+	position: absolute;
+	bottom: -18px;
+	left: 0;
+	padding-left: 10px;
+}
+
+/* Плейсхолдер */
+.masked-input::placeholder {
+	color: #aaa;
+}

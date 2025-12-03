@@ -1,0 +1,42 @@
+[
+	{
+		"id": "apple",
+		"name": "Apple",
+		"image": "/images/products/apple/iphone_15-pro_max2.png"
+	},
+	{
+		"id": "samsung",
+		"name": "Samsung",
+		"image": "/images/categories/samsung.webp"
+	},
+	{
+		"id": "huawei",
+		"name": "Huawei",
+		"image": "/images/categories/huawei.jpg"
+	},
+	{
+		"id": "xiaomi",
+		"name": "Xiaomi",
+		"image": "/images/categories/xiaomi.jpeg"
+	},
+	{
+		"id": "honor",
+		"name": "Honor",
+		"image": "/images/products/honor/honor.png"
+	},
+	{
+		"id": "infinix",
+		"name": "Infinix",
+		"image": "/images/products/infinix/infinix.webp"
+	},
+	{
+		"id": "poco",
+		"name": "POCO",
+		"image": "/images/products/poco/poco-c55.jpg"
+	},
+	{
+		"id": "",
+		"name": "мотоблоки",
+		"image": "https://beagudoboagjuwltklis.supabase.co/storage/v1/object/public/images/categories/afbfb449-0190-46fd-8b83-a220329cd3a8.jpg"
+	}
+]

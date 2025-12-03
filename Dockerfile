@@ -1,31 +1,53 @@
-FROM node:18-alpine
+# Multi-stage build для оптимизации размера образа
+FROM node:18-alpine AS base
 
-# Устанавливаем рабочую директорию
+# Установка зависимостей только если нужно
+FROM base AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Сборка приложения
+FROM base AS builder
 WORKDIR /app
 
-# Копируем package.json и устанавливаем зависимости
-COPY package*.json ./
-RUN npm install
+# Принимаем build arguments для NEXT_PUBLIC переменных
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-# Копируем исходный код приложения
+# Устанавливаем их как environment variables для сборки
+# Используем значения по умолчанию, если не переданы
+ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-
-# Передаём переменные окружения как аргументы
-ARG NEXT_PUBLIC_API_URL
-ARG NEXT_PUBLIC_PHONE
-
-# Устанавливаем переменные окружения
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_PHONE=$NEXT_PUBLIC_PHONE
-
-# Устанавливаем переменную для продакшн-режима
-ENV NODE_ENV=production
-
-# Собираем приложение
 RUN npm run build
 
-# Команда для запуска приложения
-CMD ["npm", "start"]
+# Production образ
+FROM base AS runner
+WORKDIR /app
 
-# Открываем порт 3000
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Копируем только необходимые файлы
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Устанавливаем права
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
 EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

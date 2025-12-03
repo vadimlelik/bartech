@@ -1,3 +1,54 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "import/order": "off",
+    "react/prop-types": "off",
+    "react/no-unknown-property": "off",
+    // Next.js рекомендует отключить эту проверку
+    "react/react-in-jsx-scope": "off",
+
+    // Консоли допускаются только как предупреждения
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+
+    // Удалите или исправьте неиспользуемые переменные
+    "no-unused-vars": [
+      "off",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "@next/next/no-img-element": "off",
+
+    // JSX должен быть в .jsx или .js файлах
+    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+
+    // Убедитесь, что есть ключи в списках
+    "react/jsx-key": "error",
+
+    // Дополнительные строгие правила (можно отключить по желанию)
+    "eqeqeq": "error",
+    "no-trailing-spaces": "warn",
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Автоматически определяет версию React
+    }
+  }
 }
