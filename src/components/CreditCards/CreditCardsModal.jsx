@@ -8,7 +8,7 @@ const creditOffers = [
   {
     id: 'sberbank',
     bank: 'Сбер Банк',
-    title: "Кредит 'Комбо'",
+    title: 'Кредит \'Комбо\'',
     terms: [13, 18, 24, 36, 48, 60],
     minAmount: 100,
     maxAmount: 20000,
@@ -21,7 +21,7 @@ const creditOffers = [
   {
     id: 'dabrabyt',
     bank: 'Банк Дабрабыт',
-    title: "Кредит 'Комбо товары РБ'",
+    title: 'Кредит \'Комбо товары РБ\'',
     terms: [13, 18, 24, 36],
     minAmount: 50,
     maxAmount: 15000,
@@ -34,7 +34,7 @@ const creditOffers = [
   {
     id: 'neobank',
     bank: 'Нео Банк Азия',
-    title: "Кредит 'Комбо'",
+    title: 'Кредит \'Комбо\'',
     terms: [12, 18, 24, 30, 36, 48, 60],
     minAmount: 100,
     maxAmount: 17000,
@@ -47,7 +47,7 @@ const creditOffers = [
   {
     id: 'belveb',
     bank: 'БелВэб',
-    title: "Кредит 'Комбо'",
+    title: 'Кредит \'Комбо\'',
     terms: [12, 18, 24],
     minAmount: 50,
     maxAmount: 7000,

@@ -349,23 +349,19 @@ export const useAuthStore = create((set, get) => {
       const supabase = getSupabase();
       if (!supabase) return;
       
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-        set((state) => ({ 
-          user: null, 
-          profile: null, 
-          _loading: false,
-          loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
-        }));
-        // Используем router если передан, иначе window.location
-        if (router) {
-          router.push('/');
-        } else if (typeof window !== 'undefined') {
-          window.location.href = '/';
-        }
-      } catch (error) {
-        throw error;
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      set((state) => ({ 
+        user: null, 
+        profile: null, 
+        _loading: false,
+        loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
+      }));
+      // Используем router если передан, иначе window.location
+      if (router) {
+        router.push('/');
+      } else if (typeof window !== 'undefined') {
+        window.location.href = '/';
       }
     },
 

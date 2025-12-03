@@ -72,7 +72,7 @@ export default function ClientLayout({ children }) {
     // Динамически загружаем Google Analytics после согласия
     if (typeof window !== 'undefined') {
       // Проверяем, не загружен ли уже gtag
-      const existingScript = document.querySelector(`script[src*='googletagmanager.com/gtag/js']`);
+      const existingScript = document.querySelector('script[src*=\'googletagmanager.com/gtag/js\']');
       if (!existingScript && !window.dataLayer) {
         // Загружаем gtag.js
         const script = document.createElement('script');
