@@ -15,11 +15,18 @@
 
 В настройках репозитория (Settings → Secrets and variables → Actions) добавьте:
 
+**Обязательные для сборки Docker образа:**
 - `DOCKERHUB_USERNAME` - ваш Docker Hub username
 - `DOCKERHUB_TOKEN` - ваш Docker Hub access token
-- `SSH_PRIVATE_KEY` - приватный SSH ключ для сервера (для автоматического деплоя)
+- `NEXT_PUBLIC_SUPABASE_URL` - URL вашего Supabase проекта (требуется на этапе сборки!)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - анонимный ключ Supabase (требуется на этапе сборки!)
+
+**Для автоматического деплоя (опционально):**
+- `SSH_PRIVATE_KEY` - приватный SSH ключ для сервера
 - `SSH_USER` - пользователь для SSH (обычно `root` или `ubuntu`)
 - `SERVER_HOST` - IP адрес или домен вашего сервера
+
+**Важно:** `NEXT_PUBLIC_*` переменные должны быть в GitHub Secrets, так как они встраиваются в клиентский JavaScript bundle во время сборки Docker образа.
 
 ### 3. Настройка сервера
 

@@ -10,6 +10,15 @@ RUN npm ci --only=production && npm cache clean --force
 # Сборка приложения
 FROM base AS builder
 WORKDIR /app
+
+# Принимаем build arguments для NEXT_PUBLIC переменных
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Устанавливаем их как environment variables для сборки
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .

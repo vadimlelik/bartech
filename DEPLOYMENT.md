@@ -38,6 +38,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 DOCKERHUB_USERNAME=your_dockerhub_username
 ```
 
+**Важно:** Переменные `NEXT_PUBLIC_*` должны быть доступны как на этапе сборки Docker образа (через build args), так и во время выполнения контейнера. Они встраиваются в клиентский JavaScript bundle во время `npm run build`.
+
 ### 4. Настройка CertBot
 
 Скопируйте пример конфигурации Cloudflare:
