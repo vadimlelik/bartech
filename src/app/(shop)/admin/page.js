@@ -30,7 +30,12 @@ import {
   MenuItem,
   Tabs,
   Tab,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -43,17 +48,43 @@ function AdminPageContent() {
   const [activeTab, setActiveTab] = useState(0);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [landingPages, setLandingPages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+  const [openLandingDialog, setOpenLandingDialog] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
+  const [editingLandingPage, setEditingLandingPage] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [initializing, setInitializing] = useState(false);
+  const [storageImages, setStorageImages] = useState([]);
+  const [loadingImages, setLoadingImages] = useState(false);
+  const [imageGalleryOpen, setImageGalleryOpen] = useState(false);
   const [categoryFormData, setCategoryFormData] = useState({
     id: '',
     name: '',
     image: '',
+  });
+  const [landingFormData, setLandingFormData] = useState({
+    slug: '',
+    title: '',
+    theme: 'phone2',
+    content: {
+      rating: '',
+      title: '',
+      infoItems: [],
+      heroTitle: '',
+      benefits: [],
+      advantages: [],
+      reviews: [],
+      quizPrompt: '',
+      buttonText: '',
+      questions: [],
+    },
+    images: [],
+    pixels: [],
+    is_active: true,
   });
   const [formData, setFormData] = useState(() => ({
     name: '',
@@ -92,6 +123,7 @@ function AdminPageContent() {
         await Promise.all([
           fetchProducts(),
           fetchCategories(),
+          fetchLandingPages(),
         ]);
         console.log('AdminPage: Data loaded successfully');
       } catch (error) {
@@ -154,6 +186,30 @@ function AdminPageContent() {
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchLandingPages = async () => {
+    try {
+      const response = await fetch('/api/admin/landing-pages');
+      
+      if (!response.ok) {
+        if (response.status === 403) {
+          console.error('Access forbidden for landing pages');
+          return;
+        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      if (data.landingPages && Array.isArray(data.landingPages)) {
+        setLandingPages(data.landingPages);
+      } else {
+        setLandingPages([]);
+      }
+    } catch (error) {
+      console.error('Error fetching landing pages:', error);
     }
   };
 
@@ -504,6 +560,384 @@ function AdminPageContent() {
     }
   };
 
+  const handleOpenLandingDialog = (landingPage = null) => {
+    if (landingPage) {
+      setEditingLandingPage(landingPage);
+      const content = landingPage.content || {};
+      setLandingFormData({
+        slug: landingPage.slug || '',
+        title: landingPage.title || '',
+        theme: landingPage.theme || 'phone2',
+        content: {
+          rating: content.rating || '',
+          title: content.title || '',
+          infoItems: content.infoItems || [],
+          heroTitle: content.heroTitle || '',
+          benefits: content.benefits || [],
+          advantages: content.advantages || [],
+          reviews: content.reviews || [],
+          quizPrompt: content.quizPrompt || '',
+          buttonText: content.buttonText || '',
+          questions: Array.isArray(content.questions) ? content.questions : [],
+        },
+        images: Array.isArray(landingPage.images) ? landingPage.images : [],
+        pixels: Array.isArray(landingPage.pixels) ? landingPage.pixels : [],
+        is_active: landingPage.is_active !== undefined ? landingPage.is_active : true,
+      });
+    } else {
+      setEditingLandingPage(null);
+      setLandingFormData({
+        slug: '',
+        title: '',
+        theme: 'phone2',
+        content: {
+          rating: '',
+          title: '',
+          infoItems: [],
+          heroTitle: '',
+          benefits: [],
+          advantages: [],
+          reviews: [],
+          quizPrompt: '',
+          buttonText: '',
+          questions: [],
+        },
+        images: [],
+        pixels: [],
+        is_active: true,
+      });
+    }
+    setOpenLandingDialog(true);
+  };
+
+  const handleCloseLandingDialog = () => {
+    setOpenLandingDialog(false);
+    setEditingLandingPage(null);
+    setLandingFormData({
+      slug: '',
+      title: '',
+      theme: 'phone2',
+      content: {
+        rating: '',
+        title: '',
+        infoItems: [],
+        heroTitle: '',
+        benefits: [],
+        advantages: [],
+        reviews: [],
+        quizPrompt: '',
+        buttonText: '',
+      },
+      images: [],
+      pixels: [],
+      is_active: true,
+    });
+  };
+
+  const handleLandingInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name.startsWith('content.')) {
+      const contentKey = name.split('.')[1];
+      setLandingFormData({
+        ...landingFormData,
+        content: {
+          ...landingFormData.content,
+          [contentKey]: value,
+        },
+      });
+    } else if (name === 'is_active') {
+      setLandingFormData({
+        ...landingFormData,
+        [name]: checked,
+      });
+    } else {
+      setLandingFormData({
+        ...landingFormData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      id: Date.now(),
+      question: '',
+      type: 'text',
+      options: [],
+    };
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: [...(landingFormData.content?.questions || []), newQuestion],
+      },
+    });
+  };
+
+  const handleRemoveQuestion = (questionId) => {
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: (landingFormData.content?.questions || []).filter(q => q.id !== questionId),
+      },
+    });
+  };
+
+  const handleUpdateQuestion = (questionId, field, value) => {
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: (landingFormData.content?.questions || []).map(q => 
+          q.id === questionId ? { ...q, [field]: value } : q
+        ),
+      },
+    });
+  };
+
+  const handleAddOption = (questionId) => {
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: (landingFormData.content?.questions || []).map(q => 
+          q.id === questionId 
+            ? { ...q, options: [...(q.options || []), { value: '', label: '' }] }
+            : q
+        ),
+      },
+    });
+  };
+
+  const handleRemoveOption = (questionId, optionIndex) => {
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: (landingFormData.content?.questions || []).map(q => 
+          q.id === questionId 
+            ? { ...q, options: q.options.filter((_, i) => i !== optionIndex) }
+            : q
+        ),
+      },
+    });
+  };
+
+  const handleUpdateOption = (questionId, optionIndex, field, value) => {
+    setLandingFormData({
+      ...landingFormData,
+      content: {
+        ...landingFormData.content,
+        questions: (landingFormData.content?.questions || []).map(q => 
+          q.id === questionId 
+            ? { 
+                ...q, 
+                options: q.options.map((opt, i) => 
+                  i === optionIndex ? { ...opt, [field]: value } : opt
+                )
+              }
+            : q
+        ),
+      },
+    });
+  };
+
+  const handleAddPixel = () => {
+    setLandingFormData({
+      ...landingFormData,
+      pixels: [...(landingFormData.pixels || []), ''],
+    });
+  };
+
+  const handleRemovePixel = (index) => {
+    setLandingFormData({
+      ...landingFormData,
+      pixels: landingFormData.pixels.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleUpdatePixel = (index, value) => {
+    const newPixels = [...(landingFormData.pixels || [])];
+    newPixels[index] = value.trim();
+    setLandingFormData({
+      ...landingFormData,
+      pixels: newPixels,
+    });
+  };
+
+  const handleLandingImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'landing');
+
+      const response = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        const errorMessage = data.error || 'Ошибка загрузки изображения';
+        console.error('Upload error:', errorMessage);
+        showSnackbar(errorMessage, 'error');
+        return;
+      }
+
+      if (data.path) {
+        setLandingFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, data.path],
+        }));
+        showSnackbar('Изображение загружено', 'success');
+        // Обновляем список изображений из Storage
+        fetchStorageImages();
+      } else {
+        showSnackbar('Ошибка: путь к изображению не получен', 'error');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      showSnackbar(`Ошибка загрузки: ${error.message || 'Неизвестная ошибка'}`, 'error');
+    }
+  };
+
+  const fetchStorageImages = async () => {
+    try {
+      setLoadingImages(true);
+      const response = await fetch('/api/admin/images');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch images');
+      }
+      
+      const data = await response.json();
+      setStorageImages(data.images || []);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+      showSnackbar('Ошибка загрузки изображений из Storage', 'error');
+    } finally {
+      setLoadingImages(false);
+    }
+  };
+
+  const handleOpenImageGallery = () => {
+    setImageGalleryOpen(true);
+    if (storageImages.length === 0) {
+      fetchStorageImages();
+    }
+  };
+
+  const handleSelectImageFromGallery = (imagePath) => {
+    if (!landingFormData.images.includes(imagePath)) {
+      setLandingFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, imagePath],
+      }));
+      showSnackbar('Изображение добавлено', 'success');
+    } else {
+      showSnackbar('Изображение уже добавлено', 'warning');
+    }
+    setImageGalleryOpen(false);
+  };
+
+  const handleLandingSubmit = async () => {
+    try {
+      // Валидация и очистка вопросов
+      const cleanedQuestions = (landingFormData.content?.questions || []).map((q, index) => {
+        const cleanedQ = {
+          id: q.id || index + 1,
+          question: q.question || '',
+          type: q.type || 'text',
+        };
+        
+        // Добавляем options только для radio и checkbox
+        if (cleanedQ.type === 'radio' || cleanedQ.type === 'checkbox') {
+          cleanedQ.options = (q.options || []).filter(opt => opt.value && opt.label).map(opt => ({
+            value: opt.value,
+            label: opt.label,
+          }));
+        }
+        
+        return cleanedQ;
+      }).filter(q => q.question.trim() !== ''); // Удаляем пустые вопросы
+
+      // Очистка пикселей - удаляем пустые значения
+      const cleanedPixels = (landingFormData.pixels || [])
+        .map(p => p.trim())
+        .filter(p => p !== '');
+
+      const submitData = {
+        slug: landingFormData.slug,
+        title: landingFormData.title,
+        theme: landingFormData.theme,
+        content: {
+          ...landingFormData.content,
+          questions: cleanedQuestions,
+        },
+        images: landingFormData.images,
+        pixels: cleanedPixels,
+        is_active: landingFormData.is_active,
+      };
+
+      const url = editingLandingPage
+        ? `/api/admin/landing-pages/${editingLandingPage.id}`
+        : '/api/admin/landing-pages';
+      const method = editingLandingPage ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showSnackbar(
+          editingLandingPage ? 'Landing страница обновлена' : 'Landing страница создана',
+          'success'
+        );
+        handleCloseLandingDialog();
+        fetchLandingPages();
+      } else {
+        showSnackbar(data.error || 'Ошибка сохранения', 'error');
+      }
+    } catch (error) {
+      console.error('Error saving landing page:', error);
+      showSnackbar('Ошибка сохранения landing страницы', 'error');
+    }
+  };
+
+  const handleDeleteLandingPage = async (id) => {
+    if (!confirm('Вы уверены, что хотите удалить эту landing страницу?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/landing-pages/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        showSnackbar('Landing страница удалена', 'success');
+        fetchLandingPages();
+      } else {
+        const data = await response.json();
+        showSnackbar(data.error || 'Ошибка удаления', 'error');
+      }
+    } catch (error) {
+      console.error('Error deleting landing page:', error);
+      showSnackbar('Ошибка удаления landing страницы', 'error');
+    }
+  };
+
   const handleInitializeDatabase = async () => {
     if (!confirm('Вы уверены, что хотите инициализировать базу данных? Это добавит все категории и товары из файлов data/categories.json и data/products_new.json. Существующие записи могут быть продублированы.')) {
       return;
@@ -566,6 +1000,7 @@ function AdminPageContent() {
         <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
           <Tab label="Товары" />
           <Tab label="Категории" />
+          <Tab label="Landing Pages" />
         </Tabs>
       </Box>
 
@@ -1026,6 +1461,524 @@ function AdminPageContent() {
               <Button onClick={handleCategorySubmit} variant="contained">
                 {editingCategory ? 'Сохранить' : 'Создать'}
               </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
+
+      {activeTab === 2 && (
+        <>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+            <Typography variant="h5" component="h2">
+              Управление Landing Pages
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenLandingDialog()}
+            >
+              Добавить Landing Page
+            </Button>
+          </Box>
+
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Slug</TableCell>
+                    <TableCell>Название</TableCell>
+                    <TableCell>Тема</TableCell>
+                    <TableCell>Активна</TableCell>
+                    <TableCell align="right">Действия</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {landingPages.map((landingPage) => (
+                    <TableRow key={landingPage.id}>
+                      <TableCell>{landingPage.id}</TableCell>
+                      <TableCell>{landingPage.slug}</TableCell>
+                      <TableCell>{landingPage.title}</TableCell>
+                      <TableCell>
+                        <Chip label={landingPage.theme} size="small" />
+                      </TableCell>
+                      <TableCell>
+                        <Chip 
+                          label={landingPage.is_active ? 'Да' : 'Нет'} 
+                          color={landingPage.is_active ? 'success' : 'default'}
+                          size="small" 
+                        />
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleOpenLandingDialog(landingPage)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteLandingPage(landingPage.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          <Dialog open={openLandingDialog} onClose={handleCloseLandingDialog} maxWidth="lg" fullWidth>
+            <DialogTitle>
+              {editingLandingPage ? 'Редактировать Landing Page' : 'Добавить Landing Page'}
+            </DialogTitle>
+            <DialogContent>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Slug (URL)"
+                    name="slug"
+                    value={landingFormData.slug}
+                    onChange={handleLandingInputChange}
+                    required
+                    helperText="Например: new-phone-offer"
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Название"
+                    name="title"
+                    value={landingFormData.title}
+                    onChange={handleLandingInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>Тема</InputLabel>
+                    <Select
+                      value={landingFormData.theme}
+                      label="Тема"
+                      name="theme"
+                      onChange={handleLandingInputChange}
+                    >
+                      <MenuItem value="phone2">Phone2</MenuItem>
+                      <MenuItem value="phone3">Phone3</MenuItem>
+                      <MenuItem value="phone4">Phone4</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                    <input
+                      type="checkbox"
+                      id="is_active"
+                      name="is_active"
+                      checked={landingFormData.is_active}
+                      onChange={handleLandingInputChange}
+                      style={{ marginRight: 8 }}
+                    />
+                    <label htmlFor="is_active">Активна</label>
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Контент
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Рейтинг"
+                    name="content.rating"
+                    value={landingFormData.content?.rating || ''}
+                    onChange={handleLandingInputChange}
+                    helperText="Например: (4,9) ⭐️⭐️⭐️⭐️⭐️ 1031 отзыв"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Заголовок"
+                    name="content.title"
+                    value={landingFormData.content?.title || ''}
+                    onChange={handleLandingInputChange}
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Hero заголовок"
+                    name="content.heroTitle"
+                    value={landingFormData.content?.heroTitle || ''}
+                    onChange={handleLandingInputChange}
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Текст кнопки"
+                    name="content.buttonText"
+                    value={landingFormData.content?.buttonText || ''}
+                    onChange={handleLandingInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Призыв к действию"
+                    name="content.quizPrompt"
+                    value={landingFormData.content?.quizPrompt || ''}
+                    onChange={handleLandingInputChange}
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Изображения
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                    <Button variant="outlined" component="label">
+                      Загрузить новое
+                      <input
+                        type="file"
+                        hidden
+                        accept="image/*"
+                        onChange={handleLandingImageUpload}
+                      />
+                    </Button>
+                    <Button variant="outlined" onClick={handleOpenImageGallery}>
+                      Выбрать из Storage
+                    </Button>
+                  </Box>
+                  {landingFormData.images && landingFormData.images.length > 0 && (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 2 }}>
+                      {landingFormData.images.map((img, index) => (
+                        <Box key={index} sx={{ position: 'relative' }}>
+                          <Image
+                            src={img}
+                            alt={`Image ${index + 1}`}
+                            width={100}
+                            height={100}
+                            style={{ objectFit: 'cover', borderRadius: 4 }}
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              setLandingFormData({
+                                ...landingFormData,
+                                images: landingFormData.images.filter((_, i) => i !== index),
+                              });
+                            }}
+                            sx={{ position: 'absolute', top: 0, right: 0, bgcolor: 'error.main', color: 'white' }}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Вопросы для формы
+                  </Typography>
+                  <Box sx={{ mb: 2 }}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                      onClick={handleAddQuestion}
+                      size="small"
+                    >
+                      Добавить вопрос
+                    </Button>
+                  </Box>
+                  {landingFormData.content?.questions && landingFormData.content.questions.length > 0 && (
+                    <Box sx={{ mb: 2 }}>
+                      {landingFormData.content.questions.map((question, qIndex) => (
+                        <Accordion key={question.id} sx={{ mb: 1 }}>
+                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="subtitle1">
+                              Вопрос {qIndex + 1}: {question.question || 'Новый вопрос'}
+                            </Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                <TextField
+                                  fullWidth
+                                  label="Текст вопроса"
+                                  value={question.question || ''}
+                                  onChange={(e) => handleUpdateQuestion(question.id, 'question', e.target.value)}
+                                  required
+                                />
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel>Тип вопроса</InputLabel>
+                                  <Select
+                                    value={question.type || 'text'}
+                                    label="Тип вопроса"
+                                    onChange={(e) => handleUpdateQuestion(question.id, 'type', e.target.value)}
+                                  >
+                                    <MenuItem value="text">Текст</MenuItem>
+                                    <MenuItem value="radio">Один вариант (radio)</MenuItem>
+                                    <MenuItem value="checkbox">Несколько вариантов (checkbox)</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Grid>
+                              {(question.type === 'radio' || question.type === 'checkbox') && (
+                                <>
+                                  <Grid item xs={12}>
+                                    <Divider sx={{ my: 1 }} />
+                                    <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                                      Варианты ответов
+                                    </Typography>
+                                    <Button
+                                      variant="outlined"
+                                      size="small"
+                                      startIcon={<AddIcon />}
+                                      onClick={() => handleAddOption(question.id)}
+                                      sx={{ mb: 2 }}
+                                    >
+                                      Добавить вариант
+                                    </Button>
+                                  </Grid>
+                                  {question.options && question.options.map((option, optIndex) => (
+                                    <Grid item xs={12} key={optIndex}>
+                                      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                        <TextField
+                                          fullWidth
+                                          label="Значение"
+                                          size="small"
+                                          value={option.value || ''}
+                                          onChange={(e) => handleUpdateOption(question.id, optIndex, 'value', e.target.value)}
+                                          placeholder="value"
+                                        />
+                                        <TextField
+                                          fullWidth
+                                          label="Текст"
+                                          size="small"
+                                          value={option.label || ''}
+                                          onChange={(e) => handleUpdateOption(question.id, optIndex, 'label', e.target.value)}
+                                          placeholder="label"
+                                        />
+                                        <IconButton
+                                          color="error"
+                                          onClick={() => handleRemoveOption(question.id, optIndex)}
+                                          size="small"
+                                        >
+                                          <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                      </Box>
+                                    </Grid>
+                                  ))}
+                                </>
+                              )}
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="outlined"
+                                  color="error"
+                                  startIcon={<DeleteIcon />}
+                                  onClick={() => handleRemoveQuestion(question.id)}
+                                  size="small"
+                                >
+                                  Удалить вопрос
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))}
+                    </Box>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Пиксели (TikTok)
+                  </Typography>
+                  <Box sx={{ mb: 2 }}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                      onClick={handleAddPixel}
+                      size="small"
+                    >
+                      Добавить пиксель
+                    </Button>
+                  </Box>
+                  {landingFormData.pixels && landingFormData.pixels.length > 0 && (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      {landingFormData.pixels.map((pixel, index) => (
+                        <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                          <TextField
+                            fullWidth
+                            label={`ID пикселя ${index + 1}`}
+                            value={pixel || ''}
+                            onChange={(e) => handleUpdatePixel(index, e.target.value)}
+                            placeholder="Введите ID пикселя"
+                            size="small"
+                          />
+                          <IconButton
+                            color="error"
+                            onClick={() => handleRemovePixel(index)}
+                            size="small"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                  {(!landingFormData.pixels || landingFormData.pixels.length === 0) && (
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                      Нет добавленных пикселей. Нажмите "Добавить пиксель" для добавления.
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseLandingDialog}>Отмена</Button>
+              <Button onClick={handleLandingSubmit} variant="contained">
+                {editingLandingPage ? 'Сохранить' : 'Создать'}
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Галерея изображений из Storage */}
+          <Dialog 
+            open={imageGalleryOpen} 
+            onClose={() => setImageGalleryOpen(false)} 
+            maxWidth="md" 
+            fullWidth
+          >
+            <DialogTitle>
+              Выбрать изображение из Storage
+            </DialogTitle>
+            <DialogContent>
+              {loadingImages ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Найдено изображений: {storageImages.length}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={fetchStorageImages}
+                    >
+                      Обновить
+                    </Button>
+                  </Box>
+                  {storageImages.length === 0 ? (
+                    <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                      Нет изображений в Storage
+                    </Typography>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                        gap: 2,
+                        maxHeight: '60vh',
+                        overflowY: 'auto',
+                        p: 1,
+                      }}
+                    >
+                      {storageImages.map((image, index) => (
+                        <Box
+                          key={index}
+                          sx={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            border: landingFormData.images.includes(image.path) 
+                              ? '2px solid #1976d2' 
+                              : '2px solid transparent',
+                            borderRadius: 1,
+                            overflow: 'hidden',
+                            '&:hover': {
+                              border: '2px solid #1976d2',
+                            },
+                          }}
+                          onClick={() => handleSelectImageFromGallery(image.path)}
+                        >
+                          <Image
+                            src={image.path}
+                            alt={image.name}
+                            width={120}
+                            height={120}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                          />
+                          {landingFormData.images.includes(image.path) && (
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: 4,
+                                right: 4,
+                                bgcolor: 'primary.main',
+                                color: 'white',
+                                borderRadius: '50%',
+                                width: 24,
+                                height: 24,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '12px',
+                              }}
+                            >
+                              ✓
+                            </Box>
+                          )}
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              bgcolor: 'rgba(0, 0, 0, 0.7)',
+                              color: 'white',
+                              p: 0.5,
+                              fontSize: '10px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                            title={image.name}
+                          >
+                            {image.name}
+                          </Box>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setImageGalleryOpen(false)}>Закрыть</Button>
             </DialogActions>
           </Dialog>
         </>

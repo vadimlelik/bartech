@@ -1,0 +1,343 @@
+/* Контейнер для слайдера */
+.page {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	min-height: 100vh;
+}
+
+.container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.wrapper {
+	width: 100%;
+}
+
+.title {
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: clamp(20px, 4vw, 32px);
+	line-height: 1.3;
+	padding: 0 10px;
+	word-wrap: break-word;
+}
+
+.rating {
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: clamp(14px, 2.5vw, 20px);
+	line-height: 1.4;
+	padding: 0 10px;
+	word-wrap: break-word;
+}
+
+.sliderContainer {
+	max-width: 1220px;
+	margin: 0 auto;
+	padding: 0 20px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Сам слайдер */
+.slider {
+	width: 100%;
+	height: auto;
+	position: relative;
+}
+
+.slideWrapper {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Стили изображения */
+.image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+}
+
+.bye {
+	margin-top: 20px;
+	text-align: center;
+	padding: 0 10px;
+}
+
+.button {
+	margin-top: 15px;
+	width: 100%;
+	max-width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.info {
+	list-style: none;
+	padding: 0;
+	margin: 20px 0;
+}
+
+.byeText {
+	font-size: clamp(12px, 2vw, 14px);
+	line-height: 1.5;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.infoItem {
+	font-size: clamp(16px, 3vw, 24px);
+	line-height: 1.5;
+	margin-bottom: 12px;
+	padding: 10px;
+	word-wrap: break-word;
+}
+
+/* Стили для адаптивности - Большие экраны */
+@media (min-width: 1920px) {
+	.container {
+		max-width: 1600px;
+		padding-left: 40px;
+		padding-right: 40px;
+	}
+	
+	.sliderContainer {
+		max-width: 1400px;
+		padding: 0 40px;
+	}
+	
+	.slideWrapper {
+		aspect-ratio: 16 / 9;
+		max-height: 600px;
+		min-height: 400px;
+	}
+}
+
+/* Планшеты в альбомной ориентации */
+@media (min-width: 1024px) and (max-width: 1919px) {
+	.container {
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+	
+	.sliderContainer {
+		padding: 0 30px;
+	}
+	
+	.slideWrapper {
+		aspect-ratio: 16 / 9;
+		max-height: 500px;
+		min-height: 350px;
+	}
+}
+
+/* Планшеты */
+@media (min-width: 768px) and (max-width: 1023px) {
+	.page {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+	
+	.container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	
+	.rating {
+		font-size: clamp(16px, 2.2vw, 18px);
+		margin-bottom: 15px;
+	}
+	
+	.infoItem {
+		font-size: clamp(18px, 2.5vw, 20px);
+		margin-bottom: 10px;
+		padding: 8px;
+	}
+	
+	.sliderContainer {
+		padding: 0 15px;
+	}
+	
+	.slideWrapper {
+		aspect-ratio: 16 / 9;
+		max-height: 400px;
+		min-height: 300px;
+	}
+	
+	.title {
+		margin-bottom: 15px;
+	}
+	
+	.bye {
+		margin-top: 15px;
+	}
+}
+
+/* Мобильные устройства */
+@media (max-width: 767px) {
+	.page {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	
+	.container {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.rating {
+		font-size: clamp(14px, 3.5vw, 16px);
+		margin-bottom: 12px;
+	}
+	
+	.infoItem {
+		font-size: clamp(16px, 4vw, 18px);
+		margin-bottom: 8px;
+		padding: 8px 5px;
+	}
+	
+	.title {
+		font-size: clamp(18px, 5vw, 24px);
+		margin-bottom: 12px;
+		line-height: 1.4;
+	}
+	
+	.sliderContainer {
+		padding: 0 5px;
+	}
+	
+	.slideWrapper {
+		aspect-ratio: 16 / 9;
+		max-height: 250px;
+		min-height: 200px;
+		height: auto;
+	}
+	
+	.image {
+		object-position: center center;
+	}
+	
+	.bye {
+		margin-top: 12px;
+		padding: 0 5px;
+	}
+	
+	.byeText {
+		font-size: clamp(11px, 3vw, 13px);
+		margin-bottom: 8px;
+	}
+	
+	.button {
+		margin-top: 12px;
+		max-width: 100%;
+		padding: 12px 20px;
+		font-size: clamp(14px, 3.5vw, 16px);
+	}
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+	.page {
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+	
+	.container {
+		padding-left: 8px;
+		padding-right: 8px;
+	}
+	
+	.rating {
+		font-size: clamp(12px, 4vw, 14px);
+		margin-bottom: 10px;
+		padding: 0 5px;
+	}
+	
+	.infoItem {
+		font-size: clamp(14px, 4.5vw, 16px);
+		margin-bottom: 6px;
+		padding: 6px 4px;
+		line-height: 1.4;
+	}
+	
+	.title {
+		font-size: clamp(16px, 5.5vw, 20px);
+		margin-bottom: 10px;
+		padding: 0 5px;
+	}
+	
+	.sliderContainer {
+		padding: 0 2px;
+	}
+	
+	.slideWrapper {
+		aspect-ratio: 16 / 9;
+		max-height: 200px;
+		min-height: 180px;
+		height: auto;
+	}
+	
+	.bye {
+		margin-top: 10px;
+		padding: 0 4px;
+	}
+	
+	.byeText {
+		font-size: clamp(10px, 3.5vw, 12px);
+		margin-bottom: 6px;
+	}
+	
+	.button {
+		margin-top: 10px;
+		padding: 10px 16px;
+		font-size: clamp(13px, 4vw, 15px);
+	}
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+	.container {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	
+	.rating {
+		font-size: 12px;
+	}
+	
+	.infoItem {
+		font-size: 14px;
+		padding: 5px 3px;
+	}
+	
+	.title {
+		font-size: 16px;
+	}
+	
+	.slideWrapper {
+		max-height: 180px;
+		min-height: 160px;
+		height: auto;
+	}
+	
+	.byeText {
+		font-size: 10px;
+	}
+	
+	.button {
+		padding: 8px 14px;
+		font-size: 13px;
+	}
+}

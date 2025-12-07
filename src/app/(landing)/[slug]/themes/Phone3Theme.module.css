@@ -1,0 +1,1013 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000000 0%, #8f8282 100%);
+  color: white;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 30%,
+      rgba(41, 196, 255, 0.1) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(255, 41, 112, 0.1) 0%,
+      transparent 40%
+    );
+  pointer-events: none;
+}
+
+.heroSection {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 30px;
+  padding: 3rem;
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+}
+.reviewsSubtitle {
+  color: #323435;
+}
+.heroSection:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.heroContent {
+  flex: 1;
+  color: black;
+}
+
+.heroTitle {
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #1a1a1a 0%, #4a4a4a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.3;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5rem;
+}
+
+.benefits li {
+  margin-bottom: 1.2rem;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 123, 255, 0.08);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 123, 255, 0.1);
+}
+
+.benefits li:hover {
+  transform: translateX(10px);
+  background: rgba(0, 123, 255, 0.12);
+  border-color: rgba(0, 123, 255, 0.2);
+}
+
+.benefits li::before {
+  content: '✓';
+  margin-right: 15px;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.timerBlock {
+  text-align: center;
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.timerBlock p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.quizPrompt {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.3rem;
+  color: #007bff;
+  font-weight: 500;
+  padding: 1rem;
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 15px;
+}
+
+.heroImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.heroImage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.heroImage img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (min-width: 1400px) {
+  .heroImage {
+    max-width: 800px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .heroImage {
+    max-width: 650px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .heroImage {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 767px) {
+  .timerBlock {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+  .heroImage {
+    max-width: 100%;
+    margin-top: 2rem;
+  }
+
+  .heroImage img {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroImage img {
+    max-width: 100%;
+  }
+}
+
+/* Advantages Section */
+.advantagesSection {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 30px;
+  padding: 3rem;
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  color: black;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.advantagesImage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.advantagesImage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 123, 255, 0.1) 0%,
+    rgba(0, 123, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.advantagesImage img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.advantagesList {
+  flex: 1;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(90deg, #1a1a1a 0%, #4a4a4a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.3;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #007bff, transparent);
+  border-radius: 2px;
+}
+
+.advantageItem {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(0, 123, 255, 0.1);
+}
+
+.advantageItem:hover {
+  transform: translateX(10px);
+  background: rgba(0, 123, 255, 0.08);
+  border-color: rgba(0, 123, 255, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.advantageNumber {
+  min-width: 40px;
+  min-height: 40px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.advantageItem h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.advantageItem p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Reviews Section */
+.reviewsSection {
+  text-align: center;
+  margin: 4rem auto;
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem 2rem;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 1400px;
+}
+
+.reviewsSection .sectionTitle {
+  color: #1a1a1a;
+  font-size: 2.8rem;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 1rem;
+}
+
+.reviewsSection .sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff, transparent);
+  border-radius: 2px;
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin: 2.5rem 0;
+}
+
+.reviewCard {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  color: black;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reviewCard::before {
+  content: '"';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 4rem;
+  color: rgba(0, 123, 255, 0.1);
+  font-family: serif;
+  line-height: 1;
+}
+
+.reviewCard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 123, 255, 0.3);
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reviewCard:hover .reviewImage {
+  transform: scale(1.05);
+}
+
+.reviewText {
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.reviewAuthor {
+  font-weight: 600;
+  color: #007bff;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: 20px;
+}
+
+.reviewImageWrapper {
+  position: relative;
+}
+
+.reviewImageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+  .actionButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .reviewsSection {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+  }
+
+  .reviewsSection .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+
+  .reviewCard {
+    padding: 1.5rem;
+  }
+
+  .reviewText {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    line-height: 1.5;
+    padding: 0 0.5rem;
+  }
+
+  .reviewAuthor {
+    font-size: 1.1rem;
+  }
+}
+
+/* Action Button */
+.actionButton {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  padding: 1.2rem 2.8rem;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.actionButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.actionButton:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+  letter-spacing: 2px;
+}
+
+.actionButton:hover::before {
+  left: 100%;
+}
+
+.actionButton:active {
+  transform: translateY(1px);
+}
+
+/* Media Queries - Большие экраны */
+@media (min-width: 1920px) {
+  .container {
+    padding: 3rem 2rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    padding: 4rem;
+    gap: 4rem;
+  }
+
+  .heroTitle {
+    font-size: 3rem;
+  }
+
+  .sectionTitle {
+    font-size: 3rem;
+  }
+
+  .benefits li {
+    font-size: 1.4rem;
+    padding: 1.2rem 2rem;
+  }
+
+  .actionButton {
+    font-size: 1.5rem;
+    padding: 1.5rem 3.5rem;
+    max-width: 350px;
+  }
+}
+
+/* Планшеты в альбомной ориентации */
+@media (min-width: 1024px) and (max-width: 1919px) {
+  .container {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    padding: 3rem 2.5rem;
+    gap: 3rem;
+  }
+}
+
+/* Планшеты */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    flex-direction: column-reverse;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
+    border-radius: 20px;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.8rem, 4.5vw, 2.2rem);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .sectionTitle::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .benefits li {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .timerBlock {
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .timerBlock p {
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+  }
+
+  .quizPrompt {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    padding: 0.9rem;
+  }
+
+  .heroImage {
+    max-width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .heroImage img {
+    max-width: 100%;
+  }
+
+  .advantagesImage {
+    margin-bottom: 2rem;
+  }
+
+  .advantageItem {
+    padding: 1.2rem;
+    gap: 1.2rem;
+  }
+
+  .advantageNumber {
+    min-width: 36px;
+    min-height: 36px;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .advantageItem h3 {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+  }
+
+  .advantageItem p {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .actionButton {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    padding: 1rem 2rem;
+    max-width: 280px;
+  }
+}
+
+/* Мобильные устройства */
+@media (max-width: 767px) {
+  .container {
+    padding: 1rem 0.75rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    flex-direction: column-reverse;
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+  }
+
+  .heroSection:hover {
+    transform: translateY(0);
+  }
+
+  .heroTitle {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.3rem, 5.5vw, 1.6rem);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .sectionTitle::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+  }
+
+  .benefits {
+    margin-bottom: 1.5rem;
+  }
+
+  .benefits li {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .benefits li::before {
+    font-size: 1.1rem;
+    margin-right: 10px;
+  }
+
+  .timerBlock {
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 15px;
+  }
+
+  .timerBlock p {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .quizPrompt {
+    font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+    padding: 0.8rem;
+    margin: 1.5rem 0;
+  }
+
+  .heroImage {
+    max-width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 15px;
+  }
+
+  .heroImage img {
+    max-width: 100%;
+    border-radius: 15px;
+  }
+
+  .advantagesSection {
+    flex-direction: column;
+  }
+
+  .advantagesImage {
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+  }
+
+  .advantagesList {
+    width: 100%;
+  }
+
+  .advantageItem {
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .advantageNumber {
+    min-width: 32px;
+    min-height: 32px;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+  }
+
+  .advantageItem h3 {
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .advantageItem p {
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+    line-height: 1.5;
+  }
+
+  .reviewsSection {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+    border-radius: 20px;
+  }
+
+  .reviewsSection .sectionTitle {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .reviewsSubtitle {
+    font-size: clamp(0.85rem, 3.5vw, 1rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .reviewCard {
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+  }
+
+  .reviewCard::before {
+    font-size: 3rem;
+    top: 15px;
+    left: 15px;
+  }
+
+  .reviewImage {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .reviewText {
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    margin: 1rem 0;
+    line-height: 1.6;
+    padding: 0 0.5rem;
+  }
+
+  .reviewAuthor {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    padding: 0.4rem 1.2rem;
+  }
+
+  .actionButton {
+    font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+    padding: 1rem 2rem;
+    max-width: 100%;
+    letter-spacing: 0.5px;
+  }
+
+  .actionButtonWrapper {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    padding: 1.2rem 0.8rem;
+    gap: 1.2rem;
+    border-radius: 15px;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.1rem, 6vw, 1.3rem);
+    margin-bottom: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.1rem, 6vw, 1.3rem);
+    margin-bottom: 1.2rem;
+  }
+
+  .benefits li {
+    font-size: clamp(0.85rem, 4vw, 1rem);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timerBlock {
+    padding: 0.8rem;
+    margin: 1.2rem 0;
+  }
+
+  .timerBlock p {
+    font-size: clamp(0.85rem, 4vw, 1rem);
+  }
+
+  .quizPrompt {
+    font-size: clamp(0.9rem, 4vw, 1.05rem);
+    padding: 0.7rem;
+    margin: 1.2rem 0;
+  }
+
+  .heroImage {
+    margin-top: 1.2rem;
+  }
+
+  .advantageItem {
+    padding: 0.8rem;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .advantageNumber {
+    min-width: 28px;
+    min-height: 28px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .advantageItem h3 {
+    font-size: clamp(0.9rem, 4vw, 1rem);
+  }
+
+  .advantageItem p {
+    font-size: clamp(0.75rem, 3.5vw, 0.85rem);
+  }
+
+  .reviewsSection {
+    padding: 1.5rem 0.8rem;
+    margin: 1.5rem auto;
+  }
+
+  .reviewsGrid {
+    gap: 1.2rem;
+    margin: 1.2rem 0;
+  }
+
+  .reviewCard {
+    padding: 1.2rem 0.8rem;
+  }
+
+  .reviewText {
+    font-size: clamp(0.85rem, 4vw, 0.95rem);
+    margin: 0.8rem 0;
+  }
+
+  .reviewAuthor {
+    font-size: clamp(0.85rem, 4vw, 1rem);
+    padding: 0.3rem 1rem;
+  }
+
+  .actionButton {
+    font-size: clamp(0.9rem, 4vw, 1.05rem);
+    padding: 0.9rem 1.8rem;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+  .container {
+    padding: 0.5rem 0.4rem;
+  }
+
+  .heroSection,
+  .advantagesSection {
+    padding: 1rem 0.6rem;
+    gap: 1rem;
+  }
+
+  .heroTitle {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .benefits li {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .timerBlock {
+    padding: 0.6rem;
+  }
+
+  .quizPrompt {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .advantageItem {
+    padding: 0.6rem;
+    gap: 0.6rem;
+  }
+
+  .advantageNumber {
+    min-width: 24px;
+    min-height: 24px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .reviewsSection {
+    padding: 1.2rem 0.6rem;
+  }
+
+  .reviewCard {
+    padding: 1rem 0.6rem;
+  }
+
+  .actionButton {
+    font-size: 0.85rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+.actionButtonWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}

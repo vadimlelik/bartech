@@ -108,3 +108,109 @@ export async function uploadImage(file, folder = 'products') {
   }
 }
 
+export async function getImagesFromStorage(folder = null) {
+  try {
+    if (!supabaseAdmin) {
+      throw new Error('Supabase is not configured');
+    }
+
+    const storageMethod = process.env.IMAGE_STORAGE_METHOD || 'supabase';
+
+    if (storageMethod === 'supabase' && supabaseAdmin) {
+      // Получаем все файлы из всех папок
+      // Сначала получаем список всех папок
+      const folders = ['products', 'categories', 'landing'];
+      let allFiles = [];
+
+      for (const folderName of folders) {
+        try {
+          const { data, error } = await supabaseAdmin.storage
+            .from('images')
+            .list(folderName, {
+              limit: 1000,
+              sortBy: { column: 'created_at', order: 'desc' },
+            });
+
+          if (error) {
+            console.warn(`Error listing files in ${folderName}:`, error);
+            continue;
+          }
+
+          if (data && data.length > 0) {
+            const folderFiles = data
+              .filter(item => {
+                // Фильтруем только файлы (не папки)
+                const ext = item.name.split('.').pop()?.toLowerCase();
+                return ext && ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
+              })
+              .map(item => ({
+                ...item,
+                fullPath: `${folderName}/${item.name}`,
+                folder: folderName,
+              }));
+
+            allFiles = allFiles.concat(folderFiles);
+          }
+        } catch (err) {
+          console.warn(`Error processing folder ${folderName}:`, err);
+        }
+      }
+
+      // Фильтруем по папке, если указана
+      if (folder) {
+        allFiles = allFiles.filter(file => file.folder === folder);
+      }
+
+      // Получаем публичные URL для каждого файла
+      const images = allFiles.map(file => {
+        const { data: urlData } = supabaseAdmin.storage
+          .from('images')
+          .getPublicUrl(file.fullPath);
+
+        return {
+          path: urlData.publicUrl,
+          name: file.name,
+          folder: file.folder,
+          fullPath: file.fullPath,
+          createdAt: file.created_at,
+          updatedAt: file.updated_at,
+        };
+      });
+
+      return images;
+    } else {
+      // Для локального хранилища
+      const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+      if (!fs.existsSync(uploadDir)) {
+        return [];
+      }
+
+      const images = [];
+      const folders = folder ? [folder] : fs.readdirSync(uploadDir);
+
+      folders.forEach(folderName => {
+        const folderPath = path.join(uploadDir, folderName);
+        if (fs.statSync(folderPath).isDirectory()) {
+          const files = fs.readdirSync(folderPath);
+          files.forEach(fileName => {
+            const ext = fileName.split('.').pop()?.toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext)) {
+              images.push({
+                path: `/uploads/${folderName}/${fileName}`,
+                name: fileName,
+                folder: folderName,
+                createdAt: null,
+                updatedAt: null,
+              });
+            }
+          });
+        }
+      });
+
+      return images;
+    }
+  } catch (error) {
+    console.error('Error getting images from storage:', error);
+    return [];
+  }
+}
