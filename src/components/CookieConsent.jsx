@@ -88,13 +88,35 @@ const COOKIE_CONSENT_KEY = 'cookie-consent';
 export default function CookieConsent({ onAccept }) {
   const [showBanner, setShowBanner] = useState(false);
 
+  // Синхронная проверка поддомена (выполняется сразу, до рендера)
+  const isSubdomain = (() => {
+    if (typeof window === 'undefined') return false;
+    const hostname = window.location.hostname;
+    
+    // Используем тот же паттерн, что и в middleware
+    const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+    const isSubdomainCheck = domainPattern.test(hostname);
+    
+    // Отладочная информация (всегда логируем для отладки)
+    if (isSubdomainCheck) {
+      console.log('[CookieConsent] поддомен обнаружен, баннер не показывается:', hostname);
+    }
+    
+    return isSubdomainCheck;
+  })();
+
   useEffect(() => {
+    // Если это поддомен, не показываем баннер
+    if (isSubdomain) {
+      return;
+    }
+    
     // Проверяем, было ли уже дано согласие
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!consent) {
       setShowBanner(true);
     }
-  }, []);
+  }, [isSubdomain]);
 
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
@@ -109,7 +131,8 @@ export default function CookieConsent({ onAccept }) {
     setShowBanner(false);
   };
 
-  if (!showBanner) {
+  // Не показываем на поддоменах или если баннер не должен показываться
+  if (isSubdomain || !showBanner) {
     return null;
   }
 
