@@ -1,8 +1,30 @@
 import { supabaseAdmin } from './supabase';
+import { getServerSupabaseClient } from './auth-helpers';
 
 function checkSupabase() {
   if (!supabaseAdmin) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
+  }
+}
+
+// Получаем правильный клиент для операций с категориями
+// Если service role key установлен, используем supabaseAdmin (обходит RLS)
+// Если нет, используем аутентифицированный клиент с контекстом пользователя
+async function getCategoryClient() {
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  // Если service role key установлен, используем supabaseAdmin (обходит RLS)
+  if (supabaseServiceRoleKey) {
+    return supabaseAdmin;
+  }
+  
+  // Иначе используем аутентифицированный клиент с контекстом пользователя
+  // Это необходимо, чтобы RLS мог определить auth.uid()
+  try {
+    return await getServerSupabaseClient();
+  } catch (error) {
+    console.warn('Failed to get authenticated client, falling back to supabaseAdmin:', error);
+    return supabaseAdmin;
   }
 }
 
@@ -94,7 +116,8 @@ export async function addCategory(categoryData) {
       hasImage: !!processedData.image 
     });
 
-    const { data, error } = await supabaseAdmin
+    const client = await getCategoryClient();
+    const { data, error } = await client
       .from('categories')
       .insert([processedData])
       .select()
@@ -149,7 +172,8 @@ export async function updateCategory(id, categoryData) {
       }
     });
 
-    const { data, error } = await supabaseAdmin
+    const client = await getCategoryClient();
+    const { data, error } = await client
       .from('categories')
       .update(processedData)
       .eq('id', id)
@@ -180,7 +204,8 @@ export async function deleteCategory(id) {
       return { success: false, error: 'Category ID is required' };
     }
     
-    const { error } = await supabaseAdmin
+    const client = await getCategoryClient();
+    const { error } = await client
       .from('categories')
       .delete()
       .eq('id', id);
