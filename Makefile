@@ -60,6 +60,21 @@ renew-certs: ## Обновить SSL сертификаты вручную
 	docker-compose exec certbot certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini
 	docker-compose exec nginx nginx -s reload
 
+cleanup-certs: ## Удалить старые сертификаты перед пересозданием (используйте перед init-certs)
+	@echo "⚠️  ВНИМАНИЕ: Это удалит все существующие сертификаты"
+	@read -p "Продолжить? (yes/no): " confirm; \
+	if [ "$$confirm" != "yes" ]; then \
+		echo "Отменено."; \
+		exit 0; \
+	fi; \
+	docker-compose down; \
+	docker run --rm \
+		-v cvirko-vadim_certbot-etc:/etc/letsencrypt \
+		-v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
+		alpine:latest \
+		sh -c "rm -rf /etc/letsencrypt/live/cvirko-vadim.ru* /etc/letsencrypt/renewal/cvirko-vadim.ru* /etc/letsencrypt/archive/cvirko-vadim.ru*"; \
+	echo "✅ Старые сертификаты удалены. Теперь запустите: make init-certs"
+
 health: ## Проверить здоровье приложения
 	@curl -f https://cvirko-vadim.ru/api/health || echo "Health check failed"
 
