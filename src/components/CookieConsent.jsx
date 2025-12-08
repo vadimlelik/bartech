@@ -87,8 +87,28 @@ const COOKIE_CONSENT_KEY = 'cookie-consent';
 
 export default function CookieConsent({ onAccept }) {
   const [showBanner, setShowBanner] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    
+    // Проверяем, находимся ли мы на поддомене
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      // Если это поддомен *.cvirko-vadim.ru (но не основной домен), не показываем баннер
+      const mainDomains = ['cvirko-vadim.ru', 'bartech.by', 'www.cvirko-vadim.ru', 'www.bartech.by'];
+      const isMainDomain = mainDomains.includes(hostname);
+      const isSubdomain = !isMainDomain && hostname.includes('.cvirko-vadim.ru');
+      
+      if (isSubdomain) {
+        // Отладочная информация (можно удалить после проверки)
+        if (process.env.NODE_ENV === 'development') {
+          console.log('CookieConsent - поддомен обнаружен, баннер не показывается:', hostname);
+        }
+        return; // Не показываем на поддоменах
+      }
+    }
+    
     // Проверяем, было ли уже дано согласие
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!consent) {
@@ -109,7 +129,8 @@ export default function CookieConsent({ onAccept }) {
     setShowBanner(false);
   };
 
-  if (!showBanner) {
+  // Не показываем до монтирования или если это поддомен
+  if (!mounted || !showBanner) {
     return null;
   }
 

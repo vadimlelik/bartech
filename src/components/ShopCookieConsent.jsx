@@ -17,15 +17,29 @@ const hasCookieConsent = () => {
 export default function ShopCookieConsent() {
   const pathname = usePathname();
   const [analyticsLoaded, setAnalyticsLoaded] = useState(false);
+  const [isSubdomain, setIsSubdomain] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Проверяем, находимся ли мы на поддомене (синхронно)
-  const isSubdomain = (() => {
-    if (typeof window === 'undefined') return false;
-    const hostname = window.location.hostname;
-    // Проверяем, является ли это поддоменом *.cvirko-vadim.ru (но не основным доменом)
-    const subdomainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
-    return subdomainPattern.test(hostname);
-  })();
+  // Проверяем поддомен после монтирования компонента
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      // Проверяем, является ли это поддоменом *.cvirko-vadim.ru (но не основным доменом)
+      // Основной домен: cvirko-vadim.ru, bartech.by
+      // Поддомены: phone.cvirko-vadim.ru, phone6.cvirko-vadim.ru и т.д.
+      const mainDomains = ['cvirko-vadim.ru', 'bartech.by', 'www.cvirko-vadim.ru', 'www.bartech.by'];
+      const isMainDomain = mainDomains.includes(hostname);
+      const isSubdomainCheck = !isMainDomain && hostname.includes('.cvirko-vadim.ru');
+      
+      setIsSubdomain(isSubdomainCheck);
+      
+      // Отладочная информация (можно удалить после проверки)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('ShopCookieConsent - hostname:', hostname, 'isSubdomain:', isSubdomainCheck, 'isMainDomain:', isMainDomain);
+      }
+    }
+  }, []);
 
   // Загружаем аналитику только если есть согласие
   const loadAnalytics = () => {
@@ -115,8 +129,8 @@ export default function ShopCookieConsent() {
     }
   }, [pathname, analyticsLoaded]);
 
-  // Не показываем cookie consent на поддоменах
-  if (isSubdomain) {
+  // Не показываем cookie consent на поддоменах или до монтирования
+  if (!mounted || isSubdomain) {
     return null;
   }
 
