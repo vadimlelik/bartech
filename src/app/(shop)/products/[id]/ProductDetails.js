@@ -16,6 +16,7 @@ import {
   Paper,
   Dialog,
   DialogContent,
+  DialogTitle,
   IconButton,
   Stack,
   Chip,
@@ -26,11 +27,16 @@ import {
   ListItemAvatar,
   ListItemText,
   Divider,
+  CircularProgress,
+  Alert,
+  TextField,
 } from '@mui/material';
 import Image from 'next/image';
 import { useCartStore } from '@/store/cart';
 import { useFavoritesStore } from '@/store/favorites';
 import { useCompareStore } from '@/store/compare';
+import { useSearchParams } from 'next/navigation';
+import axios from 'axios';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CloseIcon from '@mui/icons-material/Close';
@@ -40,6 +46,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -181,11 +188,27 @@ export default function ProductDetails({ product }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageDialogOpen, setImageDialogOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const [isInstallmentModalOpen, setIsInstallmentModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [phone, setPhone] = useState('+375');
+  const [phoneError, setPhoneError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const { addToCart } = useCartStore();
   const { favorites, addToFavorites, removeFromFavorites } =
     useFavoritesStore();
   const { addToCompare, isInCompare } = useCompareStore();
   const isFavorite = favorites.includes(product.id);
+  const params = useSearchParams();
+
+  const utm_source = params.get('utm_source');
+  const utm_medium = params.get('utm_medium');
+  const utm_content = params.get('utm_content');
+  const utm_campaign = params.get('utm_campaign');
+  const ad = params.get('ad');
+  const ttclid = params.get('ttclid');
 
   const productImages = (() => {
     if (product.images && Array.isArray(product.images) && product.images.length > 0) {
@@ -241,6 +264,122 @@ export default function ProductDetails({ product }) {
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
+  };
+
+  const handleOpenInstallmentModal = () => {
+    setIsInstallmentModalOpen(true);
+    setName('');
+    setNameError('');
+    setPhone('+375');
+    setPhoneError('');
+    setSubmitSuccess(false);
+    setSubmitError('');
+  };
+
+  const handleCloseInstallmentModal = () => {
+    setIsInstallmentModalOpen(false);
+    setName('');
+    setNameError('');
+    setPhone('+375');
+    setPhoneError('');
+    setSubmitSuccess(false);
+    setSubmitError('');
+  };
+
+  const validateName = (nameValue) => {
+    if (!nameValue || nameValue.trim() === '') {
+      return 'Пожалуйста, введите ваше имя';
+    }
+    if (nameValue.trim().length < 2) {
+      return 'Имя должно содержать минимум 2 символа';
+    }
+    return '';
+  };
+
+  const validatePhone = (phoneNumber) => {
+    if (!phoneNumber || phoneNumber === '+375') {
+      return 'Пожалуйста, введите номер телефона';
+    }
+    if (!/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(phoneNumber)) {
+      return 'Введите корректный номер телефона';
+    }
+    return '';
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setNameError('');
+    setSubmitError('');
+  };
+
+  const handlePhoneChange = (value) => {
+    setPhone(value);
+    setPhoneError('');
+    setSubmitError('');
+  };
+
+  const handleSubmitInstallment = async () => {
+    const nameError = validateName(name);
+    const phoneError = validatePhone(phone);
+    
+    if (nameError) {
+      setNameError(nameError);
+    }
+    if (phoneError) {
+      setPhoneError(phoneError);
+    }
+    if (nameError || phoneError) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const formattedPhone = phone.replace(/[^\d+]/g, '');
+      
+      const productInfo = [
+        `Товар: ${product.name}`,
+        `Цена: ${product.price} BYN`,
+        product.oldPrice ? `Старая цена: ${product.oldPrice} BYN` : '',
+        product.description ? `Описание: ${product.description}` : '',
+        product.specifications ? `Характеристики: ${JSON.stringify(product.specifications)}` : '',
+      ].filter(Boolean).join('\n');
+
+      const formData = {
+        FIELDS: {
+          TITLE: `Заявка на рассрочку - ${product.name}`,
+          NAME: name.trim(),
+          COMMENTS: `Заявка на оформление рассрочки\n\n${productInfo}`,
+          PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
+          SOURCE_ID: 'WEB',
+          SOURCE_DESCRIPTION: 'Оформление в рассрочку со страницы товара',
+          STATUS_ID: 'NEW',
+          OPENED: 'Y',
+          TYPE_ID: 'CALLBACK',
+          UTM_SOURCE: utm_source || '',
+          UTM_MEDIUM: utm_medium || '',
+          UTM_CAMPAIGN: utm_campaign || '',
+          UTM_CONTENT: utm_content || '',
+          UTM_TERM: (ad || '') + (ttclid || ''),
+        },
+      };
+
+      await axios.post(
+        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+        formData
+      );
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        handleCloseInstallmentModal();
+      }, 2000);
+    } catch (error) {
+      console.error('Error submitting installment form:', error);
+      setSubmitError('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -441,14 +580,14 @@ export default function ProductDetails({ product }) {
             <Button
               variant="contained"
               size="large"
-              onClick={() => addToCart(product)}
+              onClick={handleOpenInstallmentModal}
               fullWidth
               sx={{
                 height: 48,
                 fontSize: '1.1rem',
               }}
             >
-              В корзину
+              Оформить в рассрочку
             </Button>
             <IconButton
               onClick={() => {
@@ -586,6 +725,131 @@ export default function ProductDetails({ product }) {
                 unoptimized
               />
             )}
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      {/* Модалка оформления в рассрочку */}
+      <Dialog
+        open={isInstallmentModalOpen}
+        onClose={handleCloseInstallmentModal}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h6">Оформить в рассрочку</Typography>
+            <IconButton onClick={handleCloseInstallmentModal}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            {/* Информация о товаре */}
+            <Paper sx={{ p: 2, mb: 3, backgroundColor: 'grey.50' }}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      height: 100,
+                    }}
+                  >
+                    <Image
+                      src={productImages.length > 0 ? productImages[0] : '/logo_techno_bar.svg'}
+                      alt={product.name}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      unoptimized
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="h6" gutterBottom>
+                    {product.name}
+                  </Typography>
+                  <Typography variant="h6" color="primary" gutterBottom>
+                   от {product.price.toFixed(2)} BYN
+                  </Typography>
+                  {product.oldPrice && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ textDecoration: 'line-through' }}
+                    >
+                      {product.oldPrice.toFixed(2)} BYN
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </Paper>
+
+            {/* Форма с именем и телефоном */}
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="body1" gutterBottom sx={{ mb: 2 }}>
+                Введите ваше имя:
+              </Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Ваше имя"
+                value={name}
+                onChange={handleNameChange}
+                error={!!nameError}
+                helperText={nameError}
+                disabled={isSubmitting}
+                sx={{ mb: 3 }}
+              />
+              
+              <Typography variant="body1" gutterBottom sx={{ mb: 2 }}>
+                Введите ваш номер телефона для связи:
+              </Typography>
+              <MaskedPhoneInput
+                value={phone}
+                onChange={handlePhoneChange}
+                error={phoneError}
+                disabled={isSubmitting}
+              />
+            </Box>
+
+            {/* Сообщения об успехе/ошибке */}
+            {submitSuccess && (
+              <Alert severity="success" sx={{ mb: 2 }}>
+                Ваша заявка успешно отправлена! Мы скоро свяжемся с вами.
+              </Alert>
+            )}
+            {submitError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {submitError}
+              </Alert>
+            )}
+
+            {/* Кнопки */}
+            <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+              <Button
+                variant="outlined"
+                onClick={handleCloseInstallmentModal}
+                disabled={isSubmitting}
+                fullWidth
+              >
+                Отмена
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleSubmitInstallment}
+                disabled={isSubmitting}
+                fullWidth
+                sx={{ minHeight: 48 }}
+              >
+                {isSubmitting ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  'Отправить заявку'
+                )}
+              </Button>
+            </Stack>
           </Box>
         </DialogContent>
       </Dialog>
