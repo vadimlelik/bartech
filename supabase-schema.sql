@@ -81,6 +81,40 @@ DROP POLICY IF EXISTS "Allow public read access categories" ON categories;
 CREATE POLICY "Allow public read access categories" ON categories
     FOR SELECT USING (true);
 
+-- Политика для вставки категорий (админы или service role)
+-- Используем функцию is_admin с SECURITY DEFINER, которая обходит RLS
+-- Также проверяем service role через JWT claim
+DROP POLICY IF EXISTS "Allow admin insert categories" ON categories;
+CREATE POLICY "Allow admin insert categories" ON categories
+    FOR INSERT WITH CHECK (
+        (auth.jwt() ->> 'role')::text = 'service_role' OR
+        auth.role() = 'service_role' OR 
+        (auth.uid() IS NOT NULL AND public.is_admin(auth.uid()))
+    );
+
+-- Политика для обновления категорий (админы или service role)
+DROP POLICY IF EXISTS "Allow admin update categories" ON categories;
+CREATE POLICY "Allow admin update categories" ON categories
+    FOR UPDATE USING (
+        (auth.jwt() ->> 'role')::text = 'service_role' OR
+        auth.role() = 'service_role' OR 
+        (auth.uid() IS NOT NULL AND public.is_admin(auth.uid()))
+    )
+    WITH CHECK (
+        (auth.jwt() ->> 'role')::text = 'service_role' OR
+        auth.role() = 'service_role' OR 
+        (auth.uid() IS NOT NULL AND public.is_admin(auth.uid()))
+    );
+
+-- Политика для удаления категорий (админы или service role)
+DROP POLICY IF EXISTS "Allow admin delete categories" ON categories;
+CREATE POLICY "Allow admin delete categories" ON categories
+    FOR DELETE USING (
+        (auth.jwt() ->> 'role')::text = 'service_role' OR
+        auth.role() = 'service_role' OR 
+        (auth.uid() IS NOT NULL AND public.is_admin(auth.uid()))
+    );
+
 -- Создание таблицы profiles для хранения дополнительной информации о пользователях
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -164,9 +198,16 @@ CREATE TRIGGER prevent_role_change_trigger
 
 -- Политика: админы могут читать все профили
 -- Используем функцию для проверки роли, чтобы избежать рекурсии
+-- Функция использует SECURITY DEFINER для обхода RLS при чтении из profiles
 CREATE OR REPLACE FUNCTION public.is_admin(user_id UUID)
 RETURNS BOOLEAN AS $$
 BEGIN
+  -- Если user_id NULL, возвращаем false
+  IF user_id IS NULL THEN
+    RETURN FALSE;
+  END IF;
+  
+  -- Используем SECURITY DEFINER для обхода RLS
   RETURN EXISTS (
     SELECT 1 FROM public.profiles
     WHERE id = user_id AND role = 'admin'

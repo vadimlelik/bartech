@@ -35,10 +35,13 @@ cd /path/to/your/app
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 DOCKERHUB_USERNAME=your_dockerhub_username
 ```
 
-**Важно:** Переменные `NEXT_PUBLIC_*` должны быть доступны как на этапе сборки Docker образа (через build args), так и во время выполнения контейнера. Они встраиваются в клиентский JavaScript bundle во время `npm run build`.
+**Важно:** 
+- Переменные `NEXT_PUBLIC_*` должны быть доступны как на этапе сборки Docker образа (через build args), так и во время выполнения контейнера. Они встраиваются в клиентский JavaScript bundle во время `npm run build`.
+- `SUPABASE_SERVICE_ROLE_KEY` **обязательна** для операций с категориями и других административных операций, которые требуют обхода Row Level Security (RLS). Без этого ключа вы получите ошибку "new row violates row-level security policy". Получите service role key в Supabase Dashboard: Settings → API → service_role key (секретный ключ).
 
 ### 4. Настройка CertBot
 
@@ -76,15 +79,16 @@ chmod +x scripts/init-certbot.sh
 ./scripts/init-certbot.sh
 ```
 
-Или вручную:
+Или вручную (wildcard сертификат для всех поддоменов):
 
 ```bash
 docker run --rm -it \
-  -v certbot-etc:/etc/letsencrypt \
-  -v certbot-var:/var/lib/letsencrypt \
+  -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
+  -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
   -v $(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
   certbot/dns-cloudflare certonly \
   --non-interactive \
+  --force-renewal \
   --dns-cloudflare \
   --dns-cloudflare-credentials /cloudflare.ini \
   --dns-cloudflare-propagation-seconds 60 \
@@ -92,23 +96,10 @@ docker run --rm -it \
   --agree-tos \
   --no-eff-email \
   -d cvirko-vadim.ru \
-  -d phone2.cvirko-vadim.ru \
-  -d tv1.cvirko-vadim.ru \
-  -d 1phonefree.cvirko-vadim.ru \
-  -d 50discount.cvirko-vadim.ru \
-  -d phone.cvirko-vadim.ru \
-  -d phone3.cvirko-vadim.ru \
-  -d phone4.cvirko-vadim.ru \
-  -d phone5.cvirko-vadim.ru \
-  -d phone6.cvirko-vadim.ru \
-  -d laptop.cvirko-vadim.ru \
-  -d bicycles.cvirko-vadim.ru \
-  -d motoblok.cvirko-vadim.ru \
-  -d pc.cvirko-vadim.ru \
-  -d scooter.cvirko-vadim.ru \
-  -d tv2.cvirko-vadim.ru \
-  -d tv3.cvirko-vadim.ru
+  -d "*.cvirko-vadim.ru"
 ```
+
+**Важно:** Wildcard сертификат (`*.cvirko-vadim.ru`) покрывает все поддомены автоматически. Вы можете создавать новые поддомены без перевыпуска сертификатов.
 
 ### 6. Запуск приложения
 
@@ -139,7 +130,9 @@ docker-compose logs -f
 
 1. Зайдите на https://hub.docker.com/settings/security
 2. Создайте новый Access Token
-3. Скопируйте токен и добавьте в GitHub Secrets как `DOCKERHUB_TOKEN`
+3. **Важно:** Убедитесь, что токен имеет права **"Read, Write & Delete"** (полные права), иначе вы получите ошибку "access token has insufficient scopes"
+4. Скопируйте токен и добавьте в GitHub Secrets как `DOCKERHUB_TOKEN`
+5. Убедитесь, что репозиторий `bartech` существует в вашем Docker Hub аккаунте (или измените имя в workflow)
 
 ### Автоматическое развертывание
 
@@ -204,7 +197,9 @@ docker-compose restart nginx
 - Nginx конфигурацию (SSL и проксирование)
 - Next.js middleware (маршрутизация)
 
-Поддерживаемые поддомены:
+**Wildcard SSL сертификат:** Используется wildcard сертификат для `*.cvirko-vadim.ru`, который автоматически покрывает все поддомены. Вы можете создавать новые поддомены без перевыпуска сертификатов.
+
+Примеры существующих поддоменов:
 - phone2.cvirko-vadim.ru
 - tv1.cvirko-vadim.ru
 - 1phonefree.cvirko-vadim.ru
@@ -244,6 +239,71 @@ docker-compose exec nginx nginx -t
 
 # Перезагрузка конфигурации
 docker-compose exec nginx nginx -s reload
+```
+
+### Проблемы с Supabase RLS (Row Level Security)
+
+#### Ошибка: "new row violates row-level security policy for table 'categories'"
+
+Эта ошибка возникает, когда приложение пытается вставить данные в таблицу `categories`, но не может обойти RLS политику.
+
+**Причины:**
+1. Переменная `SUPABASE_SERVICE_ROLE_KEY` не установлена в `.env` файле на сервере
+2. Переменная не передана в Docker контейнер через `docker-compose.yml`
+
+**Решение:**
+
+1. Получите service role key в Supabase Dashboard:
+   - Зайдите в Settings → API
+   - Найдите "service_role key" (секретный ключ)
+   - Скопируйте его
+
+2. Добавьте в `.env` файл на сервере:
+   ```env
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+   ```
+
+3. Убедитесь, что переменная передается в контейнер (уже добавлено в `docker-compose.yml`):
+   ```yaml
+   environment:
+     - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+   ```
+
+4. Перезапустите контейнер:
+   ```bash
+   docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+   ```
+
+5. Проверьте логи на наличие предупреждений:
+   ```bash
+   docker-compose logs nextjs | grep "SUPABASE_SERVICE_ROLE_KEY"
+   ```
+
+**Важно:** Service role key имеет полный доступ к базе данных и обходит все RLS политики. Храните его в безопасности и не коммитьте в Git!
+
+### Проблемы с Docker Hub
+
+#### Ошибка: "access token has insufficient scopes"
+
+Эта ошибка возникает, когда токен Docker Hub не имеет достаточных прав для push в репозиторий.
+
+**Решение:**
+
+1. Создайте новый Access Token на https://hub.docker.com/settings/security
+2. Убедитесь, что токен имеет права **"Read, Write & Delete"** (полные права)
+3. Обновите секрет `DOCKERHUB_TOKEN` в GitHub (Settings → Secrets and variables → Actions)
+4. Убедитесь, что репозиторий `bartech` существует в вашем Docker Hub аккаунте
+5. Если репозиторий не существует, создайте его на https://hub.docker.com/repositories или измените имя в `.github/workflows/docker-build-push.yml`
+
+#### Проверка аутентификации Docker Hub
+
+```bash
+# Локальная проверка входа в Docker Hub
+docker login -u YOUR_USERNAME
+
+# Проверка существования репозитория
+docker pull YOUR_USERNAME/bartech:latest
 ```
 
 ### Очистка Docker

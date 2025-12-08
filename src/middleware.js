@@ -59,32 +59,15 @@ export async function middleware(request) {
     }
   }
 
-  const subdomainMap = {
-    'phone2.cvirko-vadim.ru': '/phone2',
-    'tv1.cvirko-vadim.ru': '/tv1',
-    '1phonefree.cvirko-vadim.ru': '/1phonefree',
-    '50discount.cvirko-vadim.ru': '/50discount',
-    'phone.cvirko-vadim.ru': '/phone',
-    'phone3.cvirko-vadim.ru': '/phone3',
-    'phone4.cvirko-vadim.ru': '/phone4',
-    'phone5.cvirko-vadim.ru': '/phone5',
-    'phone6.cvirko-vadim.ru': '/phone6',
-    'shockproof_phone.cvirko-vadim.ru': '/shockproof_phone',
-    'laptop.cvirko-vadim.ru': '/laptop',
-    'bicycles.cvirko-vadim.ru': '/bicycles',
-    'motoblok.cvirko-vadim.ru': '/motoblok',
-    'pc.cvirko-vadim.ru': '/pc',
-    'scooter.cvirko-vadim.ru': '/scooter',
-    'laptop_2.cvirko-vadim.ru': '/laptop_2',
-    'tv2.cvirko-vadim.ru': '/tv2',
-    'tv3.cvirko-vadim.ru': '/tv3',
-    'motoblok_1.cvirko-vadim.ru': '/motoblok_1',
-    'motoblok_2.cvirko-vadim.ru': '/motoblok_2',
-  };
+  // Оптимизированная обработка поддоменов *.cvirko-vadim.ru
+  // Wildcard SSL сертификат покрывает все поддомены автоматически
+  const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+  const subdomainMatch = hostname?.match(domainPattern);
 
-  if (subdomainMap[hostname]) {
+  if (subdomainMatch) {
+    const subdomain = subdomainMatch[1]; // Извлекаем имя поддомена (например, 'phone2' из 'phone2.cvirko-vadim.ru')
     const newUrl = new URL(request.url);
-    newUrl.pathname = `${subdomainMap[hostname]}${url.pathname}`;
+    newUrl.pathname = `/${subdomain}${url.pathname}`;
 
     return NextResponse.rewrite(newUrl);
   }
