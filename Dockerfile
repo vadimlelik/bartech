@@ -1,5 +1,6 @@
 # Multi-stage build для оптимизации размера образа
-FROM node:18-alpine AS base
+# Next.js 15 рекомендуется использовать Node.js 20+
+FROM node:20-alpine AS base
 
 # Установка зависимостей только если нужно
 FROM base AS deps
@@ -23,6 +24,8 @@ ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# Увеличиваем лимит памяти для процесса сборки
+ENV NODE_OPTIONS="--max_old_space_size=4096"
 RUN npm run build
 
 # Production образ
