@@ -3,7 +3,7 @@
 # Скрипт для очистки старых сертификатов перед пересозданием
 # Использование: ./scripts/cleanup-old-certs.sh
 
-echo "⚠️  ВНИМАНИЕ: Этот скрипт удалит все существующие сертификаты для cvirko-vadim.ru"
+echo "⚠️  ВНИМАНИЕ: Этот скрипт удалит все существующие сертификаты для technobar.by"
 echo "Вы будете пересоздавать сертификаты после очистки"
 read -p "Продолжить? (yes/no): " confirm
 
@@ -20,7 +20,7 @@ docker run --rm \
   -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
   -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
   alpine:latest \
-  sh -c "rm -rf /etc/letsencrypt/live/cvirko-vadim.ru* /etc/letsencrypt/renewal/cvirko-vadim.ru* /etc/letsencrypt/archive/cvirko-vadim.ru*"
+  sh -c "rm -rf /etc/letsencrypt/live/technobar.by* /etc/letsencrypt/renewal/technobar.by* /etc/letsencrypt/archive/technobar.by*"
 
 echo "✅ Старые сертификаты удалены"
 echo ""
@@ -40,6 +40,6 @@ echo "    --dns-cloudflare-propagation-seconds 60 \\"
 echo "    --email your-email@example.com \\"
 echo "    --agree-tos \\"
 echo "    --no-eff-email \\"
-echo "    -d cvirko-vadim.ru \\"
-echo "    -d \"*.cvirko-vadim.ru\""
+echo "    -d technobar.by \\"
+echo "    -d \"*.technobar.by\""
 

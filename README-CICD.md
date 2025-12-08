@@ -145,7 +145,7 @@ make clean
 
 ## Мониторинг
 
-- Health check: `https://cvirko-vadim.ru/api/health`
+- Health check: `https://technobar.by/api/health`
 - Логи: `docker-compose logs -f`
 - Статус: `docker-compose ps`
 

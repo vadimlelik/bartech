@@ -1,4 +1,4 @@
-# Исправление проблемы с сертификатами (cvirko-vadim.ru-0001)
+# Исправление проблемы с сертификатами (technobar.by-0001)
 
 ## Проблема
 
@@ -8,11 +8,11 @@
 
 ### Вариант 1: Обновить путь в nginx.conf (быстрое решение)
 
-Если сертификат уже создан в `cvirko-vadim.ru-0001`, просто обновите путь в `nginx/nginx.conf`:
+Если сертификат уже создан в `technobar.by-0001`, просто обновите путь в `nginx/nginx.conf`:
 
 ```nginx
-ssl_certificate /etc/letsencrypt/live/cvirko-vadim.ru-0001/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/cvirko-vadim.ru-0001/privkey.pem;
+ssl_certificate /etc/letsencrypt/live/technobar.by-0001/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/technobar.by-0001/privkey.pem;
 ```
 
 Затем перезапустите nginx:
@@ -38,13 +38,13 @@ docker-compose restart nginx
      -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
      -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
      alpine:latest \
-     sh -c "rm -rf /etc/letsencrypt/live/cvirko-vadim.ru* /etc/letsencrypt/renewal/cvirko-vadim.ru* /etc/letsencrypt/archive/cvirko-vadim.ru*"
+     sh -c "rm -rf /etc/letsencrypt/live/technobar.by* /etc/letsencrypt/renewal/technobar.by* /etc/letsencrypt/archive/technobar.by*"
    ```
 
 3. **Верните путь в nginx.conf на оригинальный:**
    ```nginx
-   ssl_certificate /etc/letsencrypt/live/cvirko-vadim.ru/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/cvirko-vadim.ru/privkey.pem;
+   ssl_certificate /etc/letsencrypt/live/technobar.by/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/technobar.by/privkey.pem;
    ```
 
 4. **Создайте новые сертификаты:**
@@ -69,7 +69,7 @@ docker exec bartech-nginx ls -la /etc/letsencrypt/live/
 docker exec bartech-nginx nginx -t
 
 # Проверьте SSL соединение
-openssl s_client -connect localhost:443 -servername cvirko-vadim.ru < /dev/null 2>/dev/null | openssl x509 -noout -subject -dates
+openssl s_client -connect localhost:443 -servername technobar.by < /dev/null 2>/dev/null | openssl x509 -noout -subject -dates
 ```
 
 ## Предотвращение проблемы в будущем

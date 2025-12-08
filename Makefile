@@ -36,9 +36,9 @@ clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
 
-init-certs: ## Инициализировать wildcard SSL сертификаты для cvirko-vadim.ru и *.cvirko-vadim.ru
+init-certs: ## Инициализировать wildcard SSL сертификаты для technobar.by и *.technobar.by
 	@echo "Инициализация wildcard SSL сертификатов..."
-	@echo "Сертификат будет работать для cvirko-vadim.ru и всех поддоменов *.cvirko-vadim.ru"
+	@echo "Сертификат будет работать для technobar.by и всех поддоменов *.technobar.by"
 	@read -p "Введите ваш email: " email; \
 	docker run --rm -it \
 		-v cvirko-vadim_certbot-etc:/etc/letsencrypt \
@@ -53,8 +53,8 @@ init-certs: ## Инициализировать wildcard SSL сертифика�
 		--email $$email \
 		--agree-tos \
 		--no-eff-email \
-		-d cvirko-vadim.ru \
-		-d "*.cvirko-vadim.ru"
+		-d technobar.by \
+		-d "*.technobar.by"
 
 renew-certs: ## Обновить SSL сертификаты вручную
 	docker-compose exec certbot certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini
@@ -72,11 +72,11 @@ cleanup-certs: ## Удалить старые сертификаты перед 
 		-v cvirko-vadim_certbot-etc:/etc/letsencrypt \
 		-v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
 		alpine:latest \
-		sh -c "rm -rf /etc/letsencrypt/live/cvirko-vadim.ru* /etc/letsencrypt/renewal/cvirko-vadim.ru* /etc/letsencrypt/archive/cvirko-vadim.ru*"; \
+		sh -c "rm -rf /etc/letsencrypt/live/technobar.by* /etc/letsencrypt/renewal/technobar.by* /etc/letsencrypt/archive/technobar.by*"; \
 	echo "✅ Старые сертификаты удалены. Теперь запустите: make init-certs"
 
 health: ## Проверить здоровье приложения
-	@curl -f https://cvirko-vadim.ru/api/health || echo "Health check failed"
+	@curl -f https://technobar.by/api/health || echo "Health check failed"
 
 status: ## Показать статус всех контейнеров
 	docker-compose ps

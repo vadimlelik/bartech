@@ -39,26 +39,26 @@
 ## Настройки поддоменов
 
 Все поддомены из `src/middleware.js` поддерживаются:
-- phone2.cvirko-vadim.ru
-- tv1.cvirko-vadim.ru
-- 1phonefree.cvirko-vadim.ru
-- 50discount.cvirko-vadim.ru
-- phone.cvirko-vadim.ru
-- phone3.cvirko-vadim.ru
-- phone4.cvirko-vadim.ru
-- phone5.cvirko-vadim.ru
-- phone6.cvirko-vadim.ru
-- shockproof_phone.cvirko-vadim.ru
-- laptop.cvirko-vadim.ru
-- bicycles.cvirko-vadim.ru
-- motoblok.cvirko-vadim.ru
-- pc.cvirko-vadim.ru
-- scooter.cvirko-vadim.ru
-- laptop_2.cvirko-vadim.ru
-- tv2.cvirko-vadim.ru
-- tv3.cvirko-vadim.ru
-- motoblok_1.cvirko-vadim.ru
-- motoblok_2.cvirko-vadim.ru
+- phone2.technobar.by
+- tv1.technobar.by
+- 1phonefree.technobar.by
+- 50discount.technobar.by
+- phone.technobar.by
+- phone3.technobar.by
+- phone4.technobar.by
+- phone5.technobar.by
+- phone6.technobar.by
+- shockproof_phone.technobar.by
+- laptop.technobar.by
+- bicycles.technobar.by
+- motoblok.technobar.by
+- pc.technobar.by
+- scooter.technobar.by
+- laptop_2.technobar.by
+- tv2.technobar.by
+- tv3.technobar.by
+- motoblok_1.technobar.by
+- motoblok_2.technobar.by
 
 ## Что нужно сделать
 
