@@ -35,10 +35,13 @@ cd /path/to/your/app
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 DOCKERHUB_USERNAME=your_dockerhub_username
 ```
 
-**Важно:** Переменные `NEXT_PUBLIC_*` должны быть доступны как на этапе сборки Docker образа (через build args), так и во время выполнения контейнера. Они встраиваются в клиентский JavaScript bundle во время `npm run build`.
+**Важно:** 
+- Переменные `NEXT_PUBLIC_*` должны быть доступны как на этапе сборки Docker образа (через build args), так и во время выполнения контейнера. Они встраиваются в клиентский JavaScript bundle во время `npm run build`.
+- `SUPABASE_SERVICE_ROLE_KEY` **обязательна** для операций с категориями и других административных операций, которые требуют обхода Row Level Security (RLS). Без этого ключа вы получите ошибку "new row violates row-level security policy". Получите service role key в Supabase Dashboard: Settings → API → service_role key (секретный ключ).
 
 ### 4. Настройка CertBot
 
@@ -237,6 +240,47 @@ docker-compose exec nginx nginx -t
 # Перезагрузка конфигурации
 docker-compose exec nginx nginx -s reload
 ```
+
+### Проблемы с Supabase RLS (Row Level Security)
+
+#### Ошибка: "new row violates row-level security policy for table 'categories'"
+
+Эта ошибка возникает, когда приложение пытается вставить данные в таблицу `categories`, но не может обойти RLS политику.
+
+**Причины:**
+1. Переменная `SUPABASE_SERVICE_ROLE_KEY` не установлена в `.env` файле на сервере
+2. Переменная не передана в Docker контейнер через `docker-compose.yml`
+
+**Решение:**
+
+1. Получите service role key в Supabase Dashboard:
+   - Зайдите в Settings → API
+   - Найдите "service_role key" (секретный ключ)
+   - Скопируйте его
+
+2. Добавьте в `.env` файл на сервере:
+   ```env
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+   ```
+
+3. Убедитесь, что переменная передается в контейнер (уже добавлено в `docker-compose.yml`):
+   ```yaml
+   environment:
+     - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+   ```
+
+4. Перезапустите контейнер:
+   ```bash
+   docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+   ```
+
+5. Проверьте логи на наличие предупреждений:
+   ```bash
+   docker-compose logs nextjs | grep "SUPABASE_SERVICE_ROLE_KEY"
+   ```
+
+**Важно:** Service role key имеет полный доступ к базе данных и обходит все RLS политики. Храните его в безопасности и не коммитьте в Git!
 
 ### Проблемы с Docker Hub
 

@@ -53,8 +53,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
   }
 }
 
-const adminKey = supabaseServiceRoleKey || supabaseAnonKey;
-
 let supabase, supabaseAdmin;
 
 try {
@@ -65,12 +63,21 @@ try {
       },
     });
 
+    // Для supabaseAdmin используем service role key если доступен, иначе anon key
+    // Service role key автоматически обходит RLS в Supabase
+    const adminKey = supabaseServiceRoleKey || supabaseAnonKey;
+    
     supabaseAdmin = createClient(supabaseUrl, adminKey, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
       },
     });
+    
+    if (!supabaseServiceRoleKey) {
+      console.warn('⚠️  SUPABASE_SERVICE_ROLE_KEY not set. Admin operations may fail due to RLS policies.');
+      console.warn('   Set SUPABASE_SERVICE_ROLE_KEY in your environment variables to bypass RLS.');
+    }
   } else {
     console.warn('Supabase not configured. Using fallback clients.');
     supabase = null;
