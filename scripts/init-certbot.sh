@@ -1,12 +1,18 @@
 #!/bin/sh
 
-# Скрипт для первоначального получения сертификатов
+# Скрипт для первоначального получения wildcard сертификатов
 # Использование: ./scripts/init-certbot.sh
+# Сертификат будет работать для cvirko-vadim.ru и всех поддоменов *.cvirko-vadim.ru
 
 DOMAIN="cvirko-vadim.ru"
-SUBDOMAINS="phone2.cvirko-vadim.ru,tv1.cvirko-vadim.ru,1phonefree.cvirko-vadim.ru,50discount.cvirko-vadim.ru,phone.cvirko-vadim.ru,phone3.cvirko-vadim.ru,phone4.cvirko-vadim.ru,phone5.cvirko-vadim.ru,phone6.cvirko-vadim.ru,laptop.cvirko-vadim.ru,bicycles.cvirko-vadim.ru,motoblok.cvirko-vadim.ru,pc.cvirko-vadim.ru,scooter.cvirko-vadim.ru,tv2.cvirko-vadim.ru,tv3.cvirko-vadim.ru"
+WILDCARD="*.cvirko-vadim.ru"
 
-echo "Инициализация CertBot для домена $DOMAIN и поддоменов..."
+echo "Инициализация CertBot для wildcard сертификата..."
+echo "Домен: $DOMAIN"
+echo "Wildcard: $WILDCARD"
+echo "Этот сертификат будет работать для основного домена и всех поддоменов"
+
+read -p "Введите ваш email: " email
 
 docker run --rm -it \
   -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
@@ -18,11 +24,12 @@ docker run --rm -it \
   --dns-cloudflare \
   --dns-cloudflare-credentials /cloudflare.ini \
   --dns-cloudflare-propagation-seconds 60 \
-  --email your-email@example.com \
+  --email "$email" \
   --agree-tos \
   --no-eff-email \
   -d "$DOMAIN" \
-  -d "$SUBDOMAINS"
+  -d "$WILDCARD"
 
-echo "Сертификаты получены! Теперь можно запустить docker-compose up -d"
+echo "Wildcard сертификаты получены! Теперь можно запустить docker-compose up -d"
+echo "Вы можете создавать новые поддомены без перевыпуска сертификатов."
 

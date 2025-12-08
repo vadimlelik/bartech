@@ -36,8 +36,9 @@ clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
 
-init-certs: ## Инициализировать SSL сертификаты
-	@echo "Инициализация SSL сертификатов..."
+init-certs: ## Инициализировать wildcard SSL сертификаты для cvirko-vadim.ru и *.cvirko-vadim.ru
+	@echo "Инициализация wildcard SSL сертификатов..."
+	@echo "Сертификат будет работать для cvirko-vadim.ru и всех поддоменов *.cvirko-vadim.ru"
 	@read -p "Введите ваш email: " email; \
 	docker run --rm -it \
 		-v cvirko-vadim_certbot-etc:/etc/letsencrypt \
@@ -53,22 +54,7 @@ init-certs: ## Инициализировать SSL сертификаты
 		--agree-tos \
 		--no-eff-email \
 		-d cvirko-vadim.ru \
-		-d phone2.cvirko-vadim.ru \
-		-d tv1.cvirko-vadim.ru \
-		-d 1phonefree.cvirko-vadim.ru \
-		-d 50discount.cvirko-vadim.ru \
-		-d phone.cvirko-vadim.ru \
-		-d phone3.cvirko-vadim.ru \
-		-d phone4.cvirko-vadim.ru \
-		-d phone5.cvirko-vadim.ru \
-		-d phone6.cvirko-vadim.ru \
-		-d laptop.cvirko-vadim.ru \
-		-d bicycles.cvirko-vadim.ru \
-		-d motoblok.cvirko-vadim.ru \
-		-d pc.cvirko-vadim.ru \
-		-d scooter.cvirko-vadim.ru \
-		-d tv2.cvirko-vadim.ru \
-		-d tv3.cvirko-vadim.ru
+		-d "*.cvirko-vadim.ru"
 
 renew-certs: ## Обновить SSL сертификаты вручную
 	docker-compose exec certbot certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini
