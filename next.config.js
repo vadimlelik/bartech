@@ -1,6 +1,40 @@
 /** @type {import('next').NextConfig} */
+const fs = require('fs');
+const path = require('path');
 
 const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true';
+
+// Автоматически генерируем rewrite-правила на основе папок в src/app/(landing)
+function generateSubdomainRewrites() {
+  const landingDir = path.join(__dirname, 'src', 'app', '(landing)');
+  const rewrites = [];
+  
+  // Исключаем папки, которые не должны быть поддоменами
+  const excludeDirs = ['thank-you'];
+  
+  try {
+    const entries = fs.readdirSync(landingDir, { withFileTypes: true });
+    
+    entries.forEach(entry => {
+      // Пропускаем файлы и исключенные папки
+      if (!entry.isDirectory() || excludeDirs.includes(entry.name)) {
+        return;
+      }
+      
+      const subdomain = entry.name;
+      
+      // Добавляем rewrite-правило для поддомена
+      rewrites.push({
+        source: `/${subdomain}/:path*`,
+        destination: '/:path*',
+      });
+    });
+  } catch (error) {
+    console.warn('Не удалось прочитать папку (landing), используем пустой список:', error.message);
+  }
+  
+  return rewrites;
+}
 
 const nextConfig = {
   output: 'standalone', // Для Docker оптимизации
@@ -25,92 +59,16 @@ const nextConfig = {
     },
   },
   async rewrites() {
-    return [
-      {
-        source: '/phone/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone',
-        destination: '/',
-      },
-      {
-        source: '/tv1/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone2/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone3/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone4/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone5/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/1phonefree/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/50discount/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/phone6/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/shockproof_phone/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/laptop/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/bicycles/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/pc/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/scooter/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/motoblok/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/motoblok_1/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/motoblok_2/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/laptop_2/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/tv2/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/tv3/:path*',
-        destination: '/:path*',
-      },
-    ];
+    // Автоматически генерируем rewrite-правила для всех поддоменов
+    const subdomainRewrites = generateSubdomainRewrites();
+    
+    // Специальное правило для phone (перенаправление на корень)
+    const phoneRewrite = {
+      source: '/phone',
+      destination: '/',
+    };
+    
+    return [...subdomainRewrites, phoneRewrite];
   },
 };
 
