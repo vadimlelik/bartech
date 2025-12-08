@@ -87,26 +87,28 @@ const COOKIE_CONSENT_KEY = 'cookie-consent';
 
 export default function CookieConsent({ onAccept }) {
   const [showBanner, setShowBanner] = useState(false);
-  const [mounted, setMounted] = useState(false);
+
+  // Синхронная проверка поддомена (выполняется сразу, до рендера)
+  const isSubdomain = (() => {
+    if (typeof window === 'undefined') return false;
+    const hostname = window.location.hostname;
+    
+    // Используем тот же паттерн, что и в middleware
+    const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+    const isSubdomainCheck = domainPattern.test(hostname);
+    
+    // Отладочная информация (всегда логируем для отладки)
+    if (isSubdomainCheck) {
+      console.log('[CookieConsent] поддомен обнаружен, баннер не показывается:', hostname);
+    }
+    
+    return isSubdomainCheck;
+  })();
 
   useEffect(() => {
-    setMounted(true);
-    
-    // Проверяем, находимся ли мы на поддомене
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      // Если это поддомен *.cvirko-vadim.ru (но не основной домен), не показываем баннер
-      const mainDomains = ['cvirko-vadim.ru', 'bartech.by', 'www.cvirko-vadim.ru', 'www.bartech.by'];
-      const isMainDomain = mainDomains.includes(hostname);
-      const isSubdomain = !isMainDomain && hostname.includes('.cvirko-vadim.ru');
-      
-      if (isSubdomain) {
-        // Отладочная информация (можно удалить после проверки)
-        if (process.env.NODE_ENV === 'development') {
-          console.log('CookieConsent - поддомен обнаружен, баннер не показывается:', hostname);
-        }
-        return; // Не показываем на поддоменах
-      }
+    // Если это поддомен, не показываем баннер
+    if (isSubdomain) {
+      return;
     }
     
     // Проверяем, было ли уже дано согласие
@@ -114,7 +116,7 @@ export default function CookieConsent({ onAccept }) {
     if (!consent) {
       setShowBanner(true);
     }
-  }, []);
+  }, [isSubdomain]);
 
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
@@ -129,8 +131,8 @@ export default function CookieConsent({ onAccept }) {
     setShowBanner(false);
   };
 
-  // Не показываем до монтирования или если это поддомен
-  if (!mounted || !showBanner) {
+  // Не показываем на поддоменах или если баннер не должен показываться
+  if (isSubdomain || !showBanner) {
     return null;
   }
 
