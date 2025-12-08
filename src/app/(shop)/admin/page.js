@@ -35,6 +35,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Image from 'next/image';
 import AdminGuard from '@/components/AdminGuard';
 import { useAuthStore } from '@/store/auth';
+import ImageSelector from '@/components/admin/ImageSelector';
 
 function AdminPageContent() {
   const router = useRouter();
@@ -46,6 +47,7 @@ function AdminPageContent() {
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [imageSelectorOpen, setImageSelectorOpen] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [categoryFormData, setCategoryFormData] = useState({
     id: '',
@@ -567,20 +569,28 @@ function AdminPageContent() {
                 </Grid>
                 <Grid item xs={12}>
                   <Box sx={{ mb: 2 }}>
-                    <Button
-                      variant="outlined"
-                      component="label"
-                      fullWidth
-                      sx={{ mb: 1 }}
-                    >
-                      Загрузить изображение
-                      <input
-                        type="file"
-                        hidden
-                        accept="image/*"
-                        onChange={handleCategoryImageUpload}
-                      />
-                    </Button>
+                    <Box sx={{ display: 'flex', gap: 2, mb: 1, flexWrap: 'wrap' }}>
+                      <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{ flex: 1, minWidth: '200px' }}
+                      >
+                        Загрузить изображение
+                        <input
+                          type="file"
+                          hidden
+                          accept="image/*"
+                          onChange={handleCategoryImageUpload}
+                        />
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setImageSelectorOpen(true)}
+                        sx={{ flex: 1, minWidth: '200px' }}
+                      >
+                        Выбрать из базы данных
+                      </Button>
+                    </Box>
                     <TextField
                       fullWidth
                       label="Путь к изображению"
@@ -615,6 +625,15 @@ function AdminPageContent() {
           </Dialog>
         </>
       )}
+
+      <ImageSelector
+        open={imageSelectorOpen}
+        onClose={() => setImageSelectorOpen(false)}
+        onSelect={(imageUrl) => {
+          setCategoryFormData((prev) => ({ ...prev, image: imageUrl }));
+        }}
+        currentImage={categoryFormData.image}
+      />
 
       <Snackbar
         open={snackbar.open}

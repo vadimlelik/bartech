@@ -21,6 +21,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Image from 'next/image';
 import AdminGuard from '@/components/AdminGuard';
+import ImageSelector from '@/components/admin/ImageSelector';
 
 function NewProductPageContent() {
   const router = useRouter();
@@ -28,6 +29,7 @@ function NewProductPageContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [imageSelectorOpen, setImageSelectorOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -277,19 +279,27 @@ function NewProductPageContent() {
               name="image"
               value={formData.image || ''}
               onChange={handleInputChange}
-              helperText="Или загрузите файл ниже"
+              helperText="Или загрузите файл ниже, или выберите из базы данных"
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="outlined" component="label">
-              Загрузить изображение
-              <input
-                type="file"
-                hidden
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </Button>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Button variant="outlined" component="label">
+                Загрузить изображение
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setImageSelectorOpen(true)}
+              >
+                Выбрать из базы данных
+              </Button>
+            </Box>
             {formData.image && (
               <Box sx={{ mt: 2 }}>
                 <Image
@@ -450,6 +460,15 @@ function NewProductPageContent() {
           </Grid>
         </Grid>
       </Paper>
+
+      <ImageSelector
+        open={imageSelectorOpen}
+        onClose={() => setImageSelectorOpen(false)}
+        onSelect={(imageUrl) => {
+          setFormData((prev) => ({ ...prev, image: imageUrl }));
+        }}
+        currentImage={formData.image}
+      />
 
       <Snackbar
         open={snackbar.open}

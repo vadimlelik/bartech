@@ -18,6 +18,42 @@ export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const [analyticsLoaded, setAnalyticsLoaded] = useState(false);
 
+  // Проверяем, является ли текущая страница частью shop (а не landing)
+  const isShopPage = () => {
+    // Список путей лендингов, которые НЕ должны показывать cookie banner
+    const landingPaths = [
+      '/phone6',
+      '/tv3',
+      '/bicycles',
+      '/laptop',
+      '/laptop2',
+      '/motoblok',
+      '/motoblok1',
+      '/motoblok2',
+      '/pc',
+      '/phone',
+      '/phone2',
+      '/phone3',
+      '/phone4',
+      '/phone5',
+      '/scooter',
+      '/shockproof-phone',
+      '/tv1',
+      '/tv2',
+      '/1phonefree',
+      '/50discount',
+      '/thank-you',
+    ];
+    
+    // Если путь является лендингом, не показываем cookie banner
+    if (landingPaths.some(path => pathname === path || pathname.startsWith(path + '/'))) {
+      return false;
+    }
+    
+    // Все остальные пути (включая корневой) считаются shop
+    return true;
+  };
+
   // Загружаем аналитику только если есть согласие
   const loadAnalytics = () => {
     if (analyticsLoaded || typeof window === 'undefined') return;
@@ -130,7 +166,7 @@ export default function ClientLayout({ children }) {
           />
         </>
       )}
-      <CookieConsent onAccept={handleCookieAccept} />
+      {isShopPage() && <CookieConsent onAccept={handleCookieAccept} />}
       {children}
     </>
   );
