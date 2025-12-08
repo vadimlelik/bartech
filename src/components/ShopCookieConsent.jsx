@@ -18,6 +18,15 @@ export default function ShopCookieConsent() {
   const pathname = usePathname();
   const [analyticsLoaded, setAnalyticsLoaded] = useState(false);
 
+  // Проверяем, находимся ли мы на поддомене (синхронно)
+  const isSubdomain = (() => {
+    if (typeof window === 'undefined') return false;
+    const hostname = window.location.hostname;
+    // Проверяем, является ли это поддоменом *.cvirko-vadim.ru (но не основным доменом)
+    const subdomainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+    return subdomainPattern.test(hostname);
+  })();
+
   // Загружаем аналитику только если есть согласие
   const loadAnalytics = () => {
     if (analyticsLoaded || typeof window === 'undefined') return;
@@ -105,6 +114,11 @@ export default function ShopCookieConsent() {
       gtag.pageview(pathname);
     }
   }, [pathname, analyticsLoaded]);
+
+  // Не показываем cookie consent на поддоменах
+  if (isSubdomain) {
+    return null;
+  }
 
   return (
     <>
