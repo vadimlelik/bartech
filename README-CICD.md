@@ -89,7 +89,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```bash
 # На сервере
 cd /path/to/app
-git pull
+git pulldd
 docker-compose pull
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
