@@ -1,4 +1,4 @@
-# robots.txt для cvirko-vadim.ru
+# robots.txt для technobar.by
 # Используются только стандартные директивы
 
 User-agent: *
@@ -10,5 +10,5 @@ Disallow: /cart
 Disallow: /favorites
 Disallow: /compare
 
-Sitemap: https://cvirko-vadim.ru/sitemap.xml
+Sitemap: https://technobar.by/sitemap.xml
 

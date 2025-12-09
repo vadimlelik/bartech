@@ -59,13 +59,13 @@ export async function middleware(request) {
     }
   }
 
-  // Оптимизированная обработка поддоменов *.cvirko-vadim.ru
+  // Оптимизированная обработка поддоменов *.technobar.by
   // Wildcard SSL сертификат покрывает все поддомены автоматически
   const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
   const subdomainMatch = hostname?.match(domainPattern);
 
   if (subdomainMatch) {
-    const subdomain = subdomainMatch[1]; // Извлекаем имя поддомена (например, 'phone2' из 'phone2.cvirko-vadim.ru')
+    const subdomain = subdomainMatch[1]; // Извлекаем имя поддомена (например, 'phone2' из 'phone2.technobar.by')
     const newUrl = new URL(request.url);
     newUrl.pathname = `/${subdomain}${url.pathname}`;
 

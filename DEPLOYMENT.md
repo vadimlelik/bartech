@@ -102,11 +102,11 @@ docker run --rm -it \
   --email your-email@example.com \
   --agree-tos \
   --no-eff-email \
-  -d cvirko-vadim.ru \
-  -d "*.cvirko-vadim.ru"
+  -d technobar.by \
+  -d "*.technobar.by"
 ```
 
-**Важно:** Wildcard сертификат (`*.cvirko-vadim.ru`) покрывает все поддомены автоматически. Вы можете создавать новые поддомены без перевыпуска сертификатов.
+**Важно:** Wildcard сертификат (`*.technobar.by`) покрывает все поддомены автоматически. Вы можете создавать новые поддомены без перевыпуска сертификатов.
 
 ### 6. Запуск приложения
 
@@ -172,7 +172,7 @@ docker-compose exec nginx nginx -s reload
 ### Проверка здоровья приложения
 
 ```bash
-curl https://cvirko-vadim.ru/api/health
+curl https://technobar.by/api/health
 ```
 
 ### Просмотр логов
@@ -204,25 +204,25 @@ docker-compose restart nginx
 - Nginx конфигурацию (SSL и проксирование)
 - Next.js middleware (маршрутизация)
 
-**Wildcard SSL сертификат:** Используется wildcard сертификат для `*.cvirko-vadim.ru`, который автоматически покрывает все поддомены. Вы можете создавать новые поддомены без перевыпуска сертификатов.
+**Wildcard SSL сертификат:** Используется wildcard сертификат для `*.technobar.by`, который автоматически покрывает все поддомены. Вы можете создавать новые поддомены без перевыпуска сертификатов.
 
 Примеры существующих поддоменов:
-- phone2.cvirko-vadim.ru
-- tv1.cvirko-vadim.ru
-- 1phonefree.cvirko-vadim.ru
-- 50discount.cvirko-vadim.ru
-- phone.cvirko-vadim.ru
-- phone3.cvirko-vadim.ru
-- phone4.cvirko-vadim.ru
-- phone5.cvirko-vadim.ru
-- phone6.cvirko-vadim.ru
-- laptop.cvirko-vadim.ru
-- bicycles.cvirko-vadim.ru
-- motoblok.cvirko-vadim.ru
-- pc.cvirko-vadim.ru
-- scooter.cvirko-vadim.ru
-- tv2.cvirko-vadim.ru
-- tv3.cvirko-vadim.ru
+- phone2.technobar.by
+- tv1.technobar.by
+- 1phonefree.technobar.by
+- 50discount.technobar.by
+- phone.technobar.by
+- phone3.technobar.by
+- phone4.technobar.by
+- phone5.technobar.by
+- phone6.technobar.by
+- laptop.technobar.by
+- bicycles.technobar.by
+- motoblok.technobar.by
+- pc.technobar.by
+- scooter.technobar.by
+- tv2.technobar.by
+- tv3.technobar.by
 
 **Примечание:** Домены с подчеркиваниями (`shockproof_phone`, `laptop_2`, `motoblok_1`, `motoblok_2`) не могут получить SSL сертификаты, так как подчеркивания недопустимы в DNS именах согласно RFC 1123. Эти домены используются только для внутренней маршрутизации через Next.js middleware.
 

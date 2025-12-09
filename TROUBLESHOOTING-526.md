@@ -1,11 +1,11 @@
-# Решение ошибки 526 для testpage.cvirko-vadim.ru
+# Решение ошибки 526 для testpage.technobar.by
 
 ## 🔍 Пошаговая диагностика
 
 ### Шаг 1: Проверьте SSL режим в Cloudflare (ГЛАВНАЯ ПРИЧИНА!)
 
 1. Зайдите в **Cloudflare Dashboard**: https://dash.cloudflare.com
-2. Выберите домен **cvirko-vadim.ru**
+2. Выберите домен **technobar.by**
 3. Перейдите в **SSL/TLS** → **Overview**
 4. **Убедитесь, что режим установлен на "Full" или "Full (strict)"**
 
@@ -15,16 +15,16 @@
 
 5. **Подождите 1-2 минуты** после изменения режима
 
-### Шаг 2: Проверьте DNS запись для testpage.cvirko-vadim.ru
+### Шаг 2: Проверьте DNS запись для testpage.technobar.by
 
 1. В Cloudflare Dashboard перейдите в **DNS** → **Records**
-2. Проверьте, есть ли запись для `testpage.cvirko-vadim.ru`:
+2. Проверьте, есть ли запись для `testpage.technobar.by`:
    - Если записи нет, создайте **A-запись**:
      - **Name**: `testpage`
      - **IPv4 address**: IP вашего сервера
      - **Proxy status**: **Proxied** (оранжевое облачко) ✅
      - **TTL**: Auto
-3. Или используйте **wildcard запись** `*.cvirko-vadim.ru`:
+3. Или используйте **wildcard запись** `*.technobar.by`:
    - **Name**: `*`
    - **IPv4 address**: IP вашего сервера
    - **Proxy status**: **Proxied** (оранжевое облачко) ✅
@@ -35,10 +35,10 @@
 
 ```bash
 # Проверьте, что сертификат существует и является wildcard
-docker exec bartech-nginx openssl x509 -in /etc/letsencrypt/live/cvirko-vadim.ru/cert.pem -noout -text | grep -A 2 "Subject Alternative Name"
+docker exec bartech-nginx openssl x509 -in /etc/letsencrypt/live/technobar.by/cert.pem -noout -text | grep -A 2 "Subject Alternative Name"
 
 # Должно показать что-то вроде:
-# DNS:*.cvirko-vadim.ru, DNS:cvirko-vadim.ru
+# DNS:*.technobar.by, DNS:technobar.by
 ```
 
 Если wildcard сертификата нет, создайте его:
@@ -67,10 +67,10 @@ docker-compose ps
 
 ```bash
 # С вашего сервера проверьте SSL соединение
-openssl s_client -connect testpage.cvirko-vadim.ru:443 -servername testpage.cvirko-vadim.ru
+openssl s_client -connect testpage.technobar.by:443 -servername testpage.technobar.by
 
 # Или с другого компьютера (замените YOUR_SERVER_IP на IP вашего сервера)
-curl -v https://testpage.cvirko-vadim.ru --resolve testpage.cvirko-vadim.ru:443:YOUR_SERVER_IP
+curl -v https://testpage.technobar.by --resolve testpage.technobar.by:443:YOUR_SERVER_IP
 ```
 
 ### Шаг 6: Перезапустите Nginx
@@ -91,14 +91,14 @@ docker exec bartech-nginx nginx -t
 2. Найдите запись для `testpage` или `*`
 3. Переключите **Proxy status** с **Proxied** на **DNS only** (серое облачко)
 4. Подождите 1-2 минуты
-5. Попробуйте зайти на https://testpage.cvirko-vadim.ru напрямую
+5. Попробуйте зайти на https://testpage.technobar.by напрямую
 
 Если работает напрямую, значит проблема в настройках Cloudflare (скорее всего SSL режим).
 
 ### Вариант 2: Проверьте через онлайн инструменты
 
 1. **SSL Labs**: https://www.ssllabs.com/ssltest/
-   - Введите `testpage.cvirko-vadim.ru`
+   - Введите `testpage.technobar.by`
    - Проверьте оценку SSL
 
 2. **Cloudflare SSL/TLS Analyzer**:
@@ -108,8 +108,8 @@ docker exec bartech-nginx nginx -t
 ## 📋 Чек-лист для проверки
 
 - [ ] SSL режим в Cloudflare установлен на **"Full"** или **"Full (strict)"**
-- [ ] DNS запись для `testpage.cvirko-vadim.ru` существует и **Proxied**
-- [ ] Wildcard сертификат `*.cvirko-vadim.ru` создан и валиден
+- [ ] DNS запись для `testpage.technobar.by` существует и **Proxied**
+- [ ] Wildcard сертификат `*.technobar.by` создан и валиден
 - [ ] Nginx запущен и читает сертификаты без ошибок
 - [ ] Порт 443 открыт в firewall
 - [ ] Сервер доступен напрямую (минуя Cloudflare)
@@ -121,7 +121,7 @@ docker exec bartech-nginx nginx -t
 docker-compose ps
 
 # 2. Проверка сертификата
-docker exec bartech-nginx openssl x509 -in /etc/letsencrypt/live/cvirko-vadim.ru/cert.pem -noout -subject -dates -text | grep -A 5 "Subject Alternative Name"
+docker exec bartech-nginx openssl x509 -in /etc/letsencrypt/live/technobar.by/cert.pem -noout -subject -dates -text | grep -A 5 "Subject Alternative Name"
 
 # 3. Проверка конфигурации nginx
 docker exec bartech-nginx nginx -t
@@ -130,12 +130,12 @@ docker exec bartech-nginx nginx -t
 docker logs bartech-nginx --tail 50
 
 # 5. Проверка SSL соединения
-openssl s_client -connect localhost:443 -servername testpage.cvirko-vadim.ru < /dev/null 2>/dev/null | openssl x509 -noout -subject -dates
+openssl s_client -connect localhost:443 -servername testpage.technobar.by < /dev/null 2>/dev/null | openssl x509 -noout -subject -dates
 ```
 
 ## ⚠️ Важные замечания
 
-1. **Wildcard сертификат** `*.cvirko-vadim.ru` автоматически покрывает все поддомены, включая `testpage.cvirko-vadim.ru`
+1. **Wildcard сертификат** `*.technobar.by` автоматически покрывает все поддомены, включая `testpage.technobar.by`
 2. **Не нужно создавать отдельный сертификат** для каждого поддомена
 3. **Главная причина ошибки 526** - неправильный SSL режим в Cloudflare (обычно "Flexible")
 4. После изменения настроек Cloudflare подождите **1-2 минуты** для применения изменений
@@ -147,7 +147,7 @@ openssl s_client -connect localhost:443 -servername testpage.cvirko-vadim.ru < /
    - Ищите ошибки 526
 
 2. Обратитесь в поддержку Cloudflare:
-   - Укажите домен: `testpage.cvirko-vadim.ru`
+   - Укажите домен: `testpage.technobar.by`
    - Время ошибки
    - Приложите логи nginx
 

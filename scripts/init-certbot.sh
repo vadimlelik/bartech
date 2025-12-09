@@ -2,10 +2,10 @@
 
 # Скрипт для первоначального получения wildcard сертификатов
 # Использование: ./scripts/init-certbot.sh
-# Сертификат будет работать для cvirko-vadim.ru и всех поддоменов *.cvirko-vadim.ru
+# Сертификат будет работать для technobar.by и всех поддоменов *.technobar.by
 
-DOMAIN="cvirko-vadim.ru"
-WILDCARD="*.cvirko-vadim.ru"
+DOMAIN="technobar.by"
+WILDCARD="*.technobar.by"
 
 echo "Инициализация CertBot для wildcard сертификата..."
 echo "Домен: $DOMAIN"

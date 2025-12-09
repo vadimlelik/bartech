@@ -156,7 +156,7 @@ cat ~/.ssh/id_ed25519.pub
 ```bash
 ssh ваш_пользователь@ваш_сервер_IP
 # Например: ssh root@192.168.1.100
-# или: ssh ubuntu@cvirko-vadim.ru
+# или: ssh ubuntu@technobar.by
 ```
 
 2. Убедитесь, что директория `.ssh` существует (если нет - создастся автоматически):
@@ -267,8 +267,8 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub ваш_пользователь@ваш_се
 
 1. Проверьте GitHub Actions: должен быть успешный build
 2. Проверьте Docker Hub: должен появиться образ
-3. Проверьте сайт: https://cvirko-vadim.ru
-4. Проверьте health: https://cvirko-vadim.ru/api/health
+3. Проверьте сайт: https://technobar.by
+4. Проверьте health: https://technobar.by/api/health
 
 ## Полезные команды
 

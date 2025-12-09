@@ -42,7 +42,7 @@ function generateSubdomainRewrites() {
 
 const nextConfig = {
   output: 'standalone', // Для Docker оптимизации
-  assetPrefix: isPhoneSubdomain ? 'https://cvirko-vadim.ru' : '',
+  assetPrefix: isPhoneSubdomain ? 'https://technobar.by' : '',
   reactStrictMode: false,
   eslint: {
     // Игнорировать ESLint ошибки при сборке (для production)

@@ -41,5 +41,5 @@ jobs:
       - name: Health check
         run: |
           sleep 10
-          curl -f https://cvirko-vadim.ru/api/health || exit 1
+          curl -f https://technobar.by/api/health || exit 1
 
