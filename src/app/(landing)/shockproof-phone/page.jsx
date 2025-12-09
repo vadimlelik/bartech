@@ -19,6 +19,7 @@ import {
   PIXEL_8,
   PIXEL_9,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const advantages = [
   {
@@ -102,19 +103,18 @@ export default function ShockproofPhone() {
   }, []);
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.shockproof);
-      window.ttq.load(PIXEL_2.shockproof);
-      window.ttq.load(PIXEL_3.shockproof);
-      window.ttq.load(PIXEL_4.shockproof);
-      window.ttq.load(PIXEL_5.shockproof);
-      window.ttq.load(PIXEL_6.shockproof);
-      window.ttq.load(PIXEL_7.shockproof);
-      window.ttq.load(PIXEL_8.shockproof);
-      window.ttq.load(PIXEL_9.shockproof);
-      window.ttq.load(PIXEL_10.shockproof);
-      window.ttq.page();
-    }
+    loadTikTokPixels([
+      PIXEL.shockproof,
+      PIXEL_2.shockproof,
+      PIXEL_3.shockproof,
+      PIXEL_4.shockproof,
+      PIXEL_5.shockproof,
+      PIXEL_6.shockproof,
+      PIXEL_7.shockproof,
+      PIXEL_8.shockproof,
+      PIXEL_9.shockproof,
+      PIXEL_10.shockproof,
+    ]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

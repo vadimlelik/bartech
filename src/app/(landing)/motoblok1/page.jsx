@@ -8,6 +8,7 @@ import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
   {
@@ -156,12 +157,7 @@ export default function Phone4() {
     },
   ];
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.motoblok1);
-      window.ttq.load(PIXEL_2.motoblok1);
-      window.ttq.load(PIXEL_3.motoblock1);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.motoblok1, PIXEL_2.motoblok1, PIXEL_3.motoblock1]);
   }, []);
   if (!now) return <Loading />;
 

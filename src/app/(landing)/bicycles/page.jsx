@@ -11,6 +11,7 @@ import {
   PIXEL_7,
   PIXEL_8,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -79,17 +80,16 @@ export default function Phone6() {
   }, []);
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.bicycles);
-      window.ttq.load(PIXEL_2.bicycles);
-      window.ttq.load(PIXEL_3.bicycles);
-      window.ttq.load(PIXEL_4.bicycles);
-      window.ttq.load(PIXEL_5.bicycles);
-      window.ttq.load(PIXEL_6.bicycles);
-      window.ttq.load(PIXEL_7.bicycles);
-      window.ttq.load(PIXEL_8.bicycles);
-      window.ttq.page();
-    }
+    loadTikTokPixels([
+      PIXEL.bicycles,
+      PIXEL_2.bicycles,
+      PIXEL_3.bicycles,
+      PIXEL_4.bicycles,
+      PIXEL_5.bicycles,
+      PIXEL_6.bicycles,
+      PIXEL_7.bicycles,
+      PIXEL_8.bicycles,
+    ]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

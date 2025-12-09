@@ -8,6 +8,7 @@ import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import Quiz from '@/components/quiz/Quiz';
 
 const questions = [
@@ -56,11 +57,7 @@ const Phone = () => {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.phone);
-      window.ttq.load(PIXEL_2.phone);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.phone, PIXEL_2.phone]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

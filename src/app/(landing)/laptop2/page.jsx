@@ -13,6 +13,7 @@ import {
   PIXEL_5,
   PIXEL_6,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import Script from 'next/script';
 
 export default function Laptop() {
@@ -56,16 +57,14 @@ export default function Laptop() {
       });
   };
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.laptop2);
-      window.ttq.load(PIXEL_2.laptop2);
-      window.ttq.load(PIXEL_3.laptop2);
-      window.ttq.load(PIXEL_4.laptop2);
-      window.ttq.load(PIXEL_5.laptop2);
-      window.ttq.load(PIXEL_6.laptop2);
-
-      window.ttq.page();
-    }
+    loadTikTokPixels([
+      PIXEL.laptop2,
+      PIXEL_2.laptop2,
+      PIXEL_3.laptop2,
+      PIXEL_4.laptop2,
+      PIXEL_5.laptop2,
+      PIXEL_6.laptop2,
+    ]);
   }, []);
 
   const questions = [

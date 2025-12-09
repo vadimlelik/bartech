@@ -8,6 +8,7 @@ import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
   {
@@ -89,12 +90,7 @@ export default function MotoblocksLandingPage() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.ttq) {
-      window.ttq.load(PIXEL.motoblok2);
-      window.ttq.load(PIXEL_2.motoblok2);
-      window.ttq.load(PIXEL_3.motoblock2);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.motoblok2, PIXEL_2.motoblok2, PIXEL_3.motoblock2]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

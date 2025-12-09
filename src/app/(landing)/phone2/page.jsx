@@ -9,6 +9,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import toast from 'react-hot-toast';
 
 import 'swiper/css';
@@ -70,11 +71,7 @@ const Phone2 = () => {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.phone2);
-      window.ttq.load(PIXEL_2.phone2);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.phone2, PIXEL_2.phone2]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

@@ -9,6 +9,7 @@ import LogoIcon from '@/app/(shop)/components/Logo/Logo';
 import Button from '@/app/(shop)/components/button/Button';
 
 import { PIXEL, PIXEL_2, PIXEL_3 } from '../../../data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const questions = [
   {
@@ -55,12 +56,7 @@ const PhoneFree = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.phoneFree);
-      window.ttq.load(PIXEL_2.phoneFree);
-      window.ttq.load(PIXEL_3.phoneFree);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.phoneFree, PIXEL_2.phoneFree, PIXEL_3.phoneFree]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

@@ -19,6 +19,7 @@ import {
   PIXEL_8,
   PIXEL_9,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
   {
@@ -163,19 +164,18 @@ export default function Phone4() {
   ];
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.phone3);
-      window.ttq.load(PIXEL_2.phone3);
-      window.ttq.load(PIXEL_3.phone3);
-      window.ttq.load(PIXEL_4.phone3);
-      window.ttq.load(PIXEL_5.phone3);
-      window.ttq.load(PIXEL_6.phone3);
-      window.ttq.load(PIXEL_7.phone3);
-      window.ttq.load(PIXEL_8.phone3);
-      window.ttq.load(PIXEL_9.phone3);
-      window.ttq.load(PIXEL_10.phone3);
-      window.ttq.page();
-    }
+    loadTikTokPixels([
+      PIXEL.phone3,
+      PIXEL_2.phone3,
+      PIXEL_3.phone3,
+      PIXEL_4.phone3,
+      PIXEL_5.phone3,
+      PIXEL_6.phone3,
+      PIXEL_7.phone3,
+      PIXEL_8.phone3,
+      PIXEL_9.phone3,
+      PIXEL_10.phone3,
+    ]);
   }, []);
   if (!now) return <Loading />;
 
