@@ -123,10 +123,15 @@ force-update: ## Принудительно обновить образ из Doc
 			echo "ERROR: DOCKERHUB_USERNAME не установлен в .env файле!"; \
 			exit 1; \
 		fi; \
-		echo "Удаление старых образов..."; \
+		echo "Очистка Docker кеша..."; \
+		docker builder prune -f || true; \
+		echo "Удаление старых образов bartech..."; \
 		docker images $$DOCKERHUB_USERNAME/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
-		echo "Принудительная загрузка нового образа..."; \
-		docker pull $$DOCKERHUB_USERNAME/bartech:latest; \
+		docker images | grep bartech | awk "{print \$$3}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		echo "Очистка неиспользуемых образов..."; \
+		docker image prune -f || true; \
+		echo "Принудительная загрузка нового образа (без кеша)..."; \
+		docker pull $$DOCKERHUB_USERNAME/bartech:latest --no-cache || docker pull $$DOCKERHUB_USERNAME/bartech:latest; \
 		echo "Остановка контейнеров..."; \
 		docker-compose -f docker-compose.yml -f docker-compose.prod.yml down; \
 		echo "Удаление старых контейнеров..."; \
