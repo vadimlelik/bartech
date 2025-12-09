@@ -108,7 +108,16 @@ force-update: ## Принудительно обновить образ из Doc
 		fi; \
 		echo "Загрузка переменных из .env..."; \
 		set -a; \
-		source .env; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
 		set +a; \
 		if [ -z "$$DOCKERHUB_USERNAME" ]; then \
 			echo "ERROR: DOCKERHUB_USERNAME не установлен в .env файле!"; \
@@ -144,7 +153,16 @@ rebuild-local: ## Пересобрать образ локально на сер
 		fi; \
 		echo "Загрузка переменных из .env..."; \
 		set -a; \
-		source .env; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
 		set +a; \
 		echo "Проверка обязательных переменных..."; \
 		if [ -z "$$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then \
