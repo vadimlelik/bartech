@@ -61,7 +61,7 @@ export async function middleware(request) {
 
   // Оптимизированная обработка поддоменов *.technobar.by
   // Wildcard SSL сертификат покрывает все поддомены автоматически
-  const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+  const domainPattern = /^([^.]+)\.technobar\.by$/;
   const subdomainMatch = hostname?.match(domainPattern);
 
   if (subdomainMatch) {
