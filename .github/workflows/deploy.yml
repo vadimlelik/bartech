@@ -71,9 +71,22 @@ jobs:
             fi
             echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
             
-            # Обновление образов
+            # Удаление старого образа для принудительного обновления
+            echo "Removing old image to force update..."
+            docker rmi ${DOCKERHUB_USERNAME}/bartech:latest 2>/dev/null || true
+            
+            # Обновление образов (принудительно, игнорируя локальный кеш)
             echo "Pulling latest images..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures
+            
+            # Принудительный pull образа напрямую
+            echo "Force pulling image directly..."
+            docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
+              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+              echo "Available images:"
+              docker images | grep bartech || echo "No bartech images found"
+              exit 1
+            }
             
             # Проверка, что образ был загружен
             if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
@@ -84,13 +97,21 @@ jobs:
             fi
             echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
             
+            # Показываем информацию об образе для отладки
+            echo "Image details:"
+            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
+            
             # Остановка старых контейнеров
             echo "Stopping old containers..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml down || true
             
-            # Запуск новых контейнеров
-            echo "Starting containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            # Удаление старых контейнеров для гарантии чистого запуска
+            echo "Removing old containers..."
+            docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
+            
+            # Запуск новых контейнеров (без кеша, принудительно пересоздавая)
+            echo "Starting containers with --force-recreate..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."
