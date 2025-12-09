@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -98,4 +98,36 @@ prod-up: ## Запустить в production режиме
 
 prod-down: ## Остановить production
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+force-update: ## Принудительно обновить образ из Docker Hub и перезапустить
+	@echo "🔄 Принудительное обновление образа из Docker Hub..."
+	@if [ -z "$$DOCKERHUB_USERNAME" ]; then \
+		echo "ERROR: DOCKERHUB_USERNAME не установлен в .env файле!"; \
+		exit 1; \
+	fi
+	@echo "Удаление старых образов..."
+	@docker images $$DOCKERHUB_USERNAME/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
+	@echo "Принудительная загрузка нового образа..."
+	@docker pull $$DOCKERHUB_USERNAME/bartech:latest
+	@echo "Остановка контейнеров..."
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+	@echo "Удаление старых контейнеров..."
+	@docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
+	@echo "Запуск с новым образом..."
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+	@echo "✅ Обновление завершено!"
+
+rebuild-local: ## Пересобрать образ локально на сервере (если Docker Hub недоступен)
+	@echo "🔨 Локальная пересборка образа..."
+	@if [ ! -f .env ]; then \
+		echo "ERROR: .env file not found!"; \
+		exit 1; \
+	fi
+	@echo "Остановка контейнеров..."
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+	@echo "Пересборка образа без кеша..."
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs
+	@echo "Запуск с локально собранным образом..."
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+	@echo "✅ Локальная пересборка завершена!"
 

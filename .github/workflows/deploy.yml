@@ -95,22 +95,35 @@ jobs:
             fi
             echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
             
-            # Удаление старого образа для принудительного обновления
-            echo "Removing old image to force update..."
-            docker rmi ${DOCKERHUB_USERNAME}/bartech:latest 2>/dev/null || true
+            # Удаление всех старых образов bartech для принудительного обновления
+            echo "Removing all old bartech images to force update..."
+            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
+            docker images | grep bartech | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
             
-            # Обновление образов (принудительно, игнорируя локальный кеш)
-            echo "Pulling latest images..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures
+            # Очистка Docker кеша для гарантии свежего образа
+            echo "Cleaning Docker build cache..."
+            docker builder prune -f || true
             
-            # Принудительный pull образа напрямую
-            echo "Force pulling image directly..."
-            docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
-              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
-              echo "Available images:"
-              docker images | grep bartech || echo "No bartech images found"
-              exit 1
+            # Принудительный pull образа напрямую (без кеша)
+            echo "Force pulling latest image (no cache)..."
+            docker pull ${DOCKERHUB_USERNAME}/bartech:latest --no-cache || {
+              echo "WARNING: Failed to pull with --no-cache, trying normal pull..."
+              docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
+                echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+                echo "Available images:"
+                docker images | grep bartech || echo "No bartech images found"
+                echo "Trying to build image locally instead..."
+                # Если pull не удался, пробуем собрать локально
+                docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
+                  echo "ERROR: Both pull and local build failed!"
+                  exit 1
+                }
+              }
             }
+            
+            # Обновление образов через docker-compose (для других сервисов)
+            echo "Pulling other images via docker-compose..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures || true
             
             # Проверка, что образ был загружен
             if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
@@ -125,17 +138,24 @@ jobs:
             echo "Image details:"
             docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
             
-            # Остановка старых контейнеров
-            echo "Stopping old containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down || true
+            # Полная остановка и удаление всех контейнеров
+            echo "Stopping and removing all containers..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v --remove-orphans || true
             
-            # Удаление старых контейнеров для гарантии чистого запуска
-            echo "Removing old containers..."
+            # Дополнительное удаление контейнеров по имени (на случай если они остались)
+            echo "Force removing containers by name..."
             docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
             
-            # Запуск новых контейнеров (без кеша, принудительно пересоздавая)
-            echo "Starting containers with --force-recreate..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            # Удаление всех остановленных контейнеров
+            docker container prune -f || true
+            
+            # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
+            echo "Starting containers with --force-recreate and --no-deps..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
+            
+            # Запуск зависимых сервисов
+            echo "Starting dependent services..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx certbot
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."
