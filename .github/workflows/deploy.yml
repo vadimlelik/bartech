@@ -40,6 +40,18 @@ jobs:
               exit 1
             fi
             
+            # Создание Docker volumes, если их нет
+            echo "Checking Docker volumes..."
+            if ! docker volume ls | grep -q "technobar_certbot-etc"; then
+              echo "Creating volume technobar_certbot-etc..."
+              docker volume create technobar_certbot-etc
+            fi
+            if ! docker volume ls | grep -q "technobar_certbot-var"; then
+              echo "Creating volume technobar_certbot-var..."
+              docker volume create technobar_certbot-var
+            fi
+            echo "Volumes ready"
+            
             # Загрузка переменных из .env файла
             set -a
             source .env
