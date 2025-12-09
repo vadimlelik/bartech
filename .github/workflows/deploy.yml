@@ -31,15 +31,121 @@ jobs:
       - name: Deploy to server
         run: |
           ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+            set -e
             cd /opt/bartech
+            
+            # Проверка наличия .env файла
+            if [ ! -f .env ]; then
+              echo "ERROR: .env file not found!"
+              exit 1
+            fi
+            
+            # Загрузка переменных из .env файла
+            set -a
+            source .env
+            set +a
+            
+            # Проверка переменных окружения
+            echo "Checking environment variables..."
+            if [ -z "$DOCKERHUB_USERNAME" ]; then
+              echo "ERROR: DOCKERHUB_USERNAME not set in .env file!"
+              exit 1
+            fi
+            if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+              echo "WARNING: NEXT_PUBLIC_SUPABASE_URL not set in .env file!"
+            fi
+            if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+              echo "WARNING: NEXT_PUBLIC_SUPABASE_ANON_KEY not set in .env file!"
+            fi
+            echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+            
+            # Обновление образов
+            echo "Pulling latest images..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            
+            # Проверка, что образ был загружен
+            if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
+              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+              echo "Available images:"
+              docker images | grep bartech || echo "No bartech images found"
+              exit 1
+            fi
+            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
+            
+            # Остановка старых контейнеров
+            echo "Stopping old containers..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down || true
+            
+            # Запуск новых контейнеров
+            echo "Starting containers..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-            docker-compose exec -T nginx nginx -s reload
+            
+            # Ожидание запуска контейнеров
+            echo "Waiting for containers to start..."
+            sleep 5
+            
+            # Проверка статуса контейнеров
+            echo "Checking container status..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            
+            # Ожидание готовности Next.js (проверка health check)
+            echo "Waiting for Next.js to be ready..."
+            max_attempts=30
+            attempt=0
+            while [ $attempt -lt $max_attempts ]; do
+              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+                echo "Next.js is ready!"
+                break
+              fi
+              attempt=$((attempt + 1))
+              echo "Attempt $attempt/$max_attempts: Next.js not ready yet, waiting..."
+              sleep 2
+            done
+            
+            if [ $attempt -eq $max_attempts ]; then
+              echo "ERROR: Next.js failed to start after $max_attempts attempts"
+              echo "Next.js logs:"
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
+              exit 1
+            fi
+            
+            # Перезагрузка Nginx после готовности Next.js
+            echo "Reloading Nginx..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
+            
+            # Очистка старых образов
+            echo "Cleaning up old images..."
             docker image prune -f
+            
+            echo "Deployment completed successfully!"
           EOF
 
       - name: Health check
         run: |
-          sleep 10
-          curl -f https://technobar.by/api/health || exit 1
+          echo "Waiting for application to be fully ready..."
+          sleep 15
+          
+          max_attempts=10
+          attempt=0
+          while [ $attempt -lt $max_attempts ]; do
+            if curl -f https://technobar.by/api/health; then
+              echo "Health check passed!"
+              exit 0
+            fi
+            attempt=$((attempt + 1))
+            echo "Health check attempt $attempt/$max_attempts failed, retrying..."
+            sleep 5
+          done
+          
+          echo "ERROR: Health check failed after $max_attempts attempts"
+          ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+            cd /opt/bartech
+            echo "=== Container Status ==="
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            echo "=== Next.js Logs ==="
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
+            echo "=== Nginx Logs ==="
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nginx --tail=50
+          EOF
+          exit 1
 
