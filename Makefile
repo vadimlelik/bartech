@@ -87,7 +87,14 @@ pull: ## Обновить образы из Docker Hub
 update: pull restart ## Обновить и перезапустить приложение
 
 prod-up: ## Запустить в production режиме
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	@echo "Checking Docker volumes..."
+	@docker volume ls | grep -q technobar_certbot-etc || docker volume create technobar_certbot-etc
+	@docker volume ls | grep -q technobar_certbot-var || docker volume create technobar_certbot-var
+	@echo "Volumes ready"
+	@echo "Removing old containers if they exist..."
+	@docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
+	@echo "Starting containers..."
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
 
 prod-down: ## Остановить production
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
