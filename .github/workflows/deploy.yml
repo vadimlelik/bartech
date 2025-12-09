@@ -52,10 +52,34 @@ jobs:
             fi
             echo "Volumes ready"
             
-            # Загрузка переменных из .env файла
+            # Загрузка переменных из .env файла (безопасный способ)
+            # Используем цикл для правильной обработки всех строк, включая значения с пробелами
+            echo "Loading environment variables from .env file..."
             set -a
-            source .env
+            loaded_count=0
+            while IFS= read -r line || [ -n "$line" ]; do
+              # Пропускаем комментарии и пустые строки
+              case "$line" in
+                \#*|'') continue ;;
+              esac
+              # Удаляем пробелы в начале и конце
+              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+              # Пропускаем пустые строки после обработки
+              [ -z "$line" ] && continue
+              # Проверяем, что строка содержит знак равенства
+              if echo "$line" | grep -q '='; then
+                # Экспортируем переменную (игнорируем ошибки для некорректных строк)
+                if export "$line" 2>/dev/null; then
+                  loaded_count=$((loaded_count + 1))
+                else
+                  echo "WARNING: Failed to load line from .env: ${line:0:50}..."
+                fi
+              else
+                echo "WARNING: Skipping invalid line in .env (no '=' found): ${line:0:50}..."
+              fi
+            done < .env
             set +a
+            echo "Loaded $loaded_count environment variables from .env file"
             
             # Проверка переменных окружения
             echo "Checking environment variables..."
