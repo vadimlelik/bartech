@@ -101,6 +101,23 @@ prod-down: ## Остановить production
 
 force-update: ## Принудительно обновить образ из Docker Hub и перезапустить
 	@echo "🔄 Принудительное обновление образа из Docker Hub..."
+	@if [ ! -f .env ]; then \
+		echo "ERROR: .env file not found!"; \
+		exit 1; \
+	fi
+	@echo "Загрузка переменных из .env..."
+	@set -a; \
+	while IFS= read -r line || [ -n "$$line" ]; do \
+		case "$$line" in \
+			\#*|'') continue ;; \
+		esac; \
+		line=$$(echo "$$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$$//'); \
+		[ -z "$$line" ] && continue; \
+		if echo "$$line" | grep -q '='; then \
+			export "$$line" 2>/dev/null || true; \
+		fi; \
+	done < .env; \
+	set +a
 	@if [ -z "$$DOCKERHUB_USERNAME" ]; then \
 		echo "ERROR: DOCKERHUB_USERNAME не установлен в .env файле!"; \
 		exit 1; \
