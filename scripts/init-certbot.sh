@@ -15,8 +15,8 @@ echo "Этот сертификат будет работать для осно�
 read -p "Введите ваш email: " email
 
 docker run --rm -it \
-  -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
-  -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
+  -v technobar_certbot-etc:/etc/letsencrypt \
+  -v technobar_certbot-var:/var/lib/letsencrypt \
   -v $(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \
   certbot/dns-cloudflare certonly \
   --non-interactive \

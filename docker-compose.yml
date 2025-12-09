@@ -35,8 +35,8 @@ services:
       - '443:443'
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - cvirko-vadim_certbot-etc:/etc/letsencrypt:ro
-      - cvirko-vadim_certbot-var:/var/lib/letsencrypt:ro
+      - technobar_certbot-etc:/etc/letsencrypt:ro
+      - technobar_certbot-var:/var/lib/letsencrypt:ro
     networks:
       - app-network
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
@@ -46,17 +46,17 @@ services:
     container_name: bartech-certbot
     restart: unless-stopped
     volumes:
-      - cvirko-vadim_certbot-etc:/etc/letsencrypt
-      - cvirko-vadim_certbot-var:/var/lib/letsencrypt
+      - technobar_certbot-etc:/etc/letsencrypt
+      - technobar_certbot-var:/var/lib/letsencrypt
       - ./certbot/cloudflare.ini:/cloudflare.ini:ro
     networks:
       - app-network
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --quiet; sleep 12h & wait $${!}; done'"
 
 volumes:
-  cvirko-vadim_certbot-etc:
+  technobar_certbot-etc:
     external: true
-  cvirko-vadim_certbot-var:
+  technobar_certbot-var:
     external: true
 
 networks:

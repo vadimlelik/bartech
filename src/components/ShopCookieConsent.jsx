@@ -24,7 +24,7 @@ export default function ShopCookieConsent() {
     const hostname = window.location.hostname;
     
     // Используем тот же паттерн, что и в middleware
-    const domainPattern = /^([^.]+)\.cvirko-vadim\.ru$/;
+    const domainPattern = /^([^.]+)\.technobar\.ru$/;
     const isSubdomainCheck = domainPattern.test(hostname);
     
     // Отладочная информация (всегда логируем для отладки)

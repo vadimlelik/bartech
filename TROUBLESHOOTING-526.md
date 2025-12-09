@@ -45,8 +45,8 @@ docker exec bartech-nginx openssl x509 -in /etc/letsencrypt/live/technobar.by/ce
 
 ```bash
 # Создайте volumes (если еще не созданы)
-docker volume create cvirko-vadim_certbot-etc
-docker volume create cvirko-vadim_certbot-var
+docker volume create technobar_certbot-etc
+docker volume create technobar_certbot-var
 
 # Создайте wildcard сертификат
 make init-certs

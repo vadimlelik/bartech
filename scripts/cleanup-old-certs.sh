@@ -17,8 +17,8 @@ docker-compose down
 
 echo "Удаление старых сертификатов из volume..."
 docker run --rm \
-  -v cvirko-vadim_certbot-etc:/etc/letsencrypt \
-  -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \
+  -v technobar_certbot-etc:/etc/letsencrypt \
+  -v technobar_certbot-var:/var/lib/letsencrypt \
   alpine:latest \
   sh -c "rm -rf /etc/letsencrypt/live/technobar.by* /etc/letsencrypt/renewal/technobar.by* /etc/letsencrypt/archive/technobar.by*"
 
@@ -29,8 +29,8 @@ echo "  make init-certs"
 echo ""
 echo "Или вручную:"
 echo "  docker run --rm -it \\"
-echo "    -v cvirko-vadim_certbot-etc:/etc/letsencrypt \\"
-echo "    -v cvirko-vadim_certbot-var:/var/lib/letsencrypt \\"
+echo "    -v technobar_certbot-etc:/etc/letsencrypt \\"
+echo "    -v technobar_certbot-var:/var/lib/letsencrypt \\"
 echo "    -v \$(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro \\"
 echo "    certbot/dns-cloudflare certonly \\"
 echo "    --non-interactive \\"
