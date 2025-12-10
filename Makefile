@@ -56,9 +56,11 @@ init-certs: ## Инициализировать wildcard SSL сертифика�
 		-d technobar.by \
 		-d "*.technobar.by"
 
-renew-certs: ## Обновить SSL сертификаты вручную
-	docker-compose exec certbot certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini
-	docker-compose exec nginx nginx -s reload
+renew-certs: ## Обновить SSL сертификаты вручную (автоматическое обновление настроено в docker-compose.yml)
+	docker-compose exec certbot certbot renew \
+		--dns-cloudflare \
+		--dns-cloudflare-credentials /cloudflare.ini \
+		--post-hook "/reload-nginx.sh"
 
 cleanup-certs: ## Удалить старые сертификаты перед пересозданием (используйте перед init-certs)
 	@echo "⚠️  ВНИМАНИЕ: Это удалит все существующие сертификаты"

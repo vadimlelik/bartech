@@ -49,9 +49,12 @@ services:
       - technobar_certbot-etc:/etc/letsencrypt
       - technobar_certbot-var:/var/lib/letsencrypt
       - ./certbot/cloudflare.ini:/cloudflare.ini:ro
+      - ./scripts/auto-renew-certs.sh:/auto-renew-certs.sh:ro
+      - ./scripts/reload-nginx.sh:/reload-nginx.sh:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - app-network
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --quiet; sleep 12h & wait $${!}; done'"
+    entrypoint: "/bin/sh -c 'chmod +x /auto-renew-certs.sh /reload-nginx.sh && trap exit TERM; while :; do /auto-renew-certs.sh; sleep 12h & wait $${!}; done'"
 
 volumes:
   technobar_certbot-etc:
