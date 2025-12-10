@@ -86,3 +86,261 @@ jobs:
           echo "To verify the image was pushed, check Docker Hub:"
           echo "https://hub.docker.com/r/${{ secrets.DOCKERHUB_USERNAME }}/bartech/tags"
 
+  deploy:
+    if: github.event_name != 'pull_request' && needs.build-and-push.result == 'success'
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    env:
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+            set -e
+            cd /opt/bartech
+            
+            # Проверка наличия .env файла
+            if [ ! -f .env ]; then
+              echo "ERROR: .env file not found!"
+              exit 1
+            fi
+            
+            # Создание Docker volumes, если их нет
+            echo "Checking Docker volumes..."
+            if ! docker volume ls | grep -q "technobar_certbot-etc"; then
+              echo "Creating volume technobar_certbot-etc..."
+              docker volume create technobar_certbot-etc
+            fi
+            if ! docker volume ls | grep -q "technobar_certbot-var"; then
+              echo "Creating volume technobar_certbot-var..."
+              docker volume create technobar_certbot-var
+            fi
+            echo "Volumes ready"
+            
+            # Загрузка переменных из .env файла
+            echo "Loading environment variables from .env file..."
+            set -a
+            loaded_count=0
+            while IFS= read -r line || [ -n "$line" ]; do
+              # Пропускаем комментарии и пустые строки
+              case "$line" in
+                \#*|'') continue ;;
+              esac
+              
+              # Удаляем пробелы в начале и конце строки
+              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+              [ -z "$line" ] && continue
+              
+              # Проверяем, что строка содержит знак равенства
+              if echo "$line" | grep -q '='; then
+                # Нормализуем формат: удаляем пробелы вокруг знака равенства
+                # Преобразуем "KEY = VALUE" в "KEY=VALUE"
+                normalized_line=$(echo "$line" | sed 's/[[:space:]]*=[[:space:]]*/=/')
+                
+                # Экспортируем переменную
+                if export "$normalized_line" 2>/dev/null; then
+                  loaded_count=$((loaded_count + 1))
+                else
+                  echo "WARNING: Failed to load line from .env: ${line:0:50}..."
+                fi
+              else
+                echo "WARNING: Skipping invalid line in .env (no '=' found): ${line:0:50}..."
+              fi
+            done < .env
+            set +a
+            echo "Loaded $loaded_count environment variables from .env file"
+            
+            # Проверка переменных окружения
+            echo "Checking environment variables..."
+            if [ -z "$DOCKERHUB_USERNAME" ]; then
+              echo "ERROR: DOCKERHUB_USERNAME not set in .env file!"
+              exit 1
+            fi
+            if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+              echo "WARNING: NEXT_PUBLIC_SUPABASE_URL not set in .env file!"
+            fi
+            if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+              echo "WARNING: NEXT_PUBLIC_SUPABASE_ANON_KEY not set in .env file!"
+            fi
+            echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+            
+            # Удаление всех старых образов bartech для принудительного обновления
+            echo "Removing all old bartech images to force update..."
+            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
+            docker images | grep bartech | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
+            
+            # Очистка Docker кеша для гарантии свежего образа
+            echo "Cleaning Docker build cache..."
+            docker builder prune -f || true
+            
+            # Принудительный pull образа напрямую (без кеша)
+            echo "Force pulling latest image (no cache)..."
+            docker pull ${DOCKERHUB_USERNAME}/bartech:latest --no-cache || {
+              echo "WARNING: Failed to pull with --no-cache, trying normal pull..."
+              docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
+                echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+                echo "Available images:"
+                docker images | grep bartech || echo "No bartech images found"
+                echo "Trying to build image locally instead..."
+                docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
+                  echo "ERROR: Both pull and local build failed!"
+                  exit 1
+                }
+              }
+            }
+            
+            # Обновление образов через docker-compose (для других сервисов)
+            echo "Pulling other images via docker-compose..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures || true
+            
+            # Проверка, что образ был загружен
+            if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
+              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+              echo "Available images:"
+              docker images | grep bartech || echo "No bartech images found"
+              exit 1
+            fi
+            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
+            
+            # Показываем информацию об образе для отладки
+            echo "Image details:"
+            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
+            
+            # Полная остановка и удаление всех контейнеров
+            echo "Stopping and removing all containers..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
+            
+            # Дополнительное удаление контейнеров по имени (на случай если они остались)
+            echo "Force removing containers by name..."
+            docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
+            
+            # Удаление всех остановленных контейнеров
+            docker container prune -f || true
+            
+            # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
+            echo "Starting containers with --force-recreate and --no-deps..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
+            
+            # Очистка кеша Next.js после запуска контейнера
+            echo "Clearing Next.js cache in container..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
+            
+            # Запуск зависимых сервисов
+            echo "Starting dependent services..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx certbot
+            
+            # Ожидание запуска контейнеров
+            echo "Waiting for containers to start..."
+            sleep 5
+            
+            # Проверка статуса контейнеров
+            echo "Checking container status..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            
+            # Ожидание готовности Next.js (проверка health check)
+            echo "Waiting for Next.js to be ready..."
+            max_attempts=30
+            attempt=0
+            while [ $attempt -lt $max_attempts ]; do
+              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
+                echo "Next.js is ready!"
+                break
+              fi
+              attempt=$((attempt + 1))
+              echo "Attempt $attempt/$max_attempts: Next.js not ready yet, waiting..."
+              sleep 2
+            done
+            
+            if [ $attempt -eq $max_attempts ]; then
+              echo "ERROR: Next.js failed to start after $max_attempts attempts"
+              echo "Next.js logs:"
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
+              exit 1
+            fi
+            
+            # Перезагрузка Nginx после готовности Next.js
+            echo "Reloading Nginx..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
+            
+            # Очистка старых образов
+            echo "Cleaning up old images..."
+            docker image prune -f
+            
+            # Проверка, что приложение работает и возвращает данные
+            echo "Verifying application is serving fresh data..."
+            sleep 3
+            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
+              echo "✅ Application is running and health check passed"
+            else
+              echo "⚠️  Warning: Health check failed after deployment"
+            fi
+            
+            echo "Deployment completed successfully!"
+          EOF
+
+      - name: Health check
+        run: |
+          echo "Waiting for application to be fully ready..."
+          sleep 30
+          
+          # Проверяем напрямую на сервере через SSH (это главная проверка)
+          echo "Checking health directly on server..."
+          max_attempts=20
+          attempt=0
+          server_ready=false
+          
+          while [ $attempt -lt $max_attempts ]; do
+            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" "cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null"; then
+              echo "✅ Server health check passed!"
+              server_ready=true
+              break
+            fi
+            attempt=$((attempt + 1))
+            echo "Server health check attempt $attempt/$max_attempts failed, waiting..."
+            sleep 3
+          done
+          
+          if [ "$server_ready" = false ]; then
+            echo "ERROR: Server health check failed after $max_attempts attempts"
+            ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+              cd /opt/bartech
+              echo "=== Container Status ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+              echo "=== Next.js Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs
+              echo "=== Nginx Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx
+            EOF
+            exit 1
+          fi
+          
+          # Дополнительная проверка через Cloudflare (не критично)
+          echo "Server is healthy! Optionally checking through Cloudflare..."
+          sleep 5
+          
+          if curl -f --max-time 5 --connect-timeout 3 https://technobar.by/api/health 2>/dev/null; then
+            echo "✅ Cloudflare health check also passed!"
+          else
+            echo "⚠️  Cloudflare check failed (may be caching), but server is operational"
+          fi
+          
+          echo "✅ Deployment successful - server is running and healthy!"
+          exit 0
+

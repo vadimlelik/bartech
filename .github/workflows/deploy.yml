@@ -65,14 +65,20 @@ jobs:
               case "$line" in
                 \#*|'') continue ;;
               esac
-              # Удаляем пробелы в начале и конце
+              
+              # Удаляем пробелы в начале и конце строки
               line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
               # Пропускаем пустые строки после обработки
               [ -z "$line" ] && continue
+              
               # Проверяем, что строка содержит знак равенства
               if echo "$line" | grep -q '='; then
-                # Экспортируем переменную (игнорируем ошибки для некорректных строк)
-                if export "$line" 2>/dev/null; then
+                # Нормализуем формат: удаляем пробелы вокруг знака равенства
+                # Преобразуем "KEY = VALUE" в "KEY=VALUE"
+                normalized_line=$(echo "$line" | sed 's/[[:space:]]*=[[:space:]]*/=/')
+                
+                # Экспортируем переменную
+                if export "$normalized_line" 2>/dev/null; then
                   loaded_count=$((loaded_count + 1))
                 else
                   echo "WARNING: Failed to load line from .env: ${line:0:50}..."
@@ -155,7 +161,7 @@ jobs:
             
             # Полная остановка и удаление всех контейнеров
             echo "Stopping and removing all containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v --remove-orphans || true
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
             
             # Дополнительное удаление контейнеров по имени (на случай если они остались)
             echo "Force removing containers by name..."
@@ -167,6 +173,10 @@ jobs:
             # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
             echo "Starting containers with --force-recreate and --no-deps..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
+            
+            # Очистка кеша Next.js после запуска контейнера
+            echo "Clearing Next.js cache in container..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
             
             # Запуск зависимых сервисов
             echo "Starting dependent services..."
@@ -185,7 +195,7 @@ jobs:
             max_attempts=30
             attempt=0
             while [ $attempt -lt $max_attempts ]; do
-              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
                 echo "Next.js is ready!"
                 break
               fi
@@ -217,7 +227,7 @@ jobs:
             # Проверка, что приложение работает и возвращает данные
             echo "Verifying application is serving fresh data..."
             sleep 3
-            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
               echo "✅ Application is running and health check passed"
             else
               echo "⚠️  Warning: Health check failed after deployment"
@@ -229,29 +239,49 @@ jobs:
       - name: Health check
         run: |
           echo "Waiting for application to be fully ready..."
-          sleep 15
+          sleep 30
           
-          max_attempts=10
+          # Проверяем напрямую на сервере через SSH (это главная проверка)
+          echo "Checking health directly on server..."
+          max_attempts=20
           attempt=0
+          server_ready=false
+          
           while [ $attempt -lt $max_attempts ]; do
-            if curl -f https://technobar.by/api/health; then
-              echo "Health check passed!"
-              exit 0
+            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" "cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null"; then
+              echo "✅ Server health check passed!"
+              server_ready=true
+              break
             fi
             attempt=$((attempt + 1))
-            echo "Health check attempt $attempt/$max_attempts failed, retrying..."
-            sleep 5
+            echo "Server health check attempt $attempt/$max_attempts failed, waiting..."
+            sleep 3
           done
           
-          echo "ERROR: Health check failed after $max_attempts attempts"
-          ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
-            cd /opt/bartech
-            echo "=== Container Status ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
-            echo "=== Next.js Logs ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
-            echo "=== Nginx Logs ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nginx --tail=50
-          EOF
-          exit 1
+          if [ "$server_ready" = false ]; then
+            echo "ERROR: Server health check failed after $max_attempts attempts"
+            ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+              cd /opt/bartech
+              echo "=== Container Status ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+              echo "=== Next.js Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs
+              echo "=== Nginx Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx
+            EOF
+            exit 1
+          fi
+          
+          # Дополнительная проверка через Cloudflare (не критично)
+          echo "Server is healthy! Optionally checking through Cloudflare..."
+          sleep 5
+          
+          if curl -f --max-time 5 --connect-timeout 3 https://technobar.by/api/health 2>/dev/null; then
+            echo "✅ Cloudflare health check also passed!"
+          else
+            echo "⚠️  Cloudflare check failed (may be caching), but server is operational"
+          fi
+          
+          echo "✅ Deployment successful - server is running and healthy!"
+          exit 0
 

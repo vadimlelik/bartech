@@ -67,7 +67,11 @@ export async function getCategoryById(id) {
       .single();
 
     if (error) {
-      console.error('Error fetching category:', error);
+      // PGRST116 - это нормальная ошибка, когда категория не найдена
+      // Не логируем её как ошибку, только другие ошибки
+      if (error.code !== 'PGRST116') {
+        console.error('Error fetching category:', error);
+      }
       return null;
     }
 
