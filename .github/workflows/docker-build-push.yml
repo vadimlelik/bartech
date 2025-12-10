@@ -132,13 +132,23 @@ jobs:
             set -a
             loaded_count=0
             while IFS= read -r line || [ -n "$line" ]; do
+              # Пропускаем комментарии и пустые строки
               case "$line" in
                 \#*|'') continue ;;
               esac
+              
+              # Удаляем пробелы в начале и конце строки
               line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
               [ -z "$line" ] && continue
+              
+              # Проверяем, что строка содержит знак равенства
               if echo "$line" | grep -q '='; then
-                if export "$line" 2>/dev/null; then
+                # Нормализуем формат: удаляем пробелы вокруг знака равенства
+                # Преобразуем "KEY = VALUE" в "KEY=VALUE"
+                normalized_line=$(echo "$line" | sed 's/[[:space:]]*=[[:space:]]*/=/')
+                
+                # Экспортируем переменную
+                if export "$normalized_line" 2>/dev/null; then
                   loaded_count=$((loaded_count + 1))
                 else
                   echo "WARNING: Failed to load line from .env: ${line:0:50}..."
