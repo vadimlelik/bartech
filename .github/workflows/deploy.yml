@@ -143,7 +143,7 @@ jobs:
             
             # Полная остановка и удаление всех контейнеров
             echo "Stopping and removing all containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v --remove-orphans || true
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
             
             # Дополнительное удаление контейнеров по имени (на случай если они остались)
             echo "Force removing containers by name..."
@@ -155,6 +155,10 @@ jobs:
             # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
             echo "Starting containers with --force-recreate and --no-deps..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
+            
+            # Очистка кеша Next.js после запуска контейнера
+            echo "Clearing Next.js cache in container..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
             
             # Запуск зависимых сервисов
             echo "Starting dependent services..."
@@ -173,7 +177,7 @@ jobs:
             max_attempts=30
             attempt=0
             while [ $attempt -lt $max_attempts ]; do
-              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
                 echo "Next.js is ready!"
                 break
               fi
@@ -200,7 +204,7 @@ jobs:
             # Проверка, что приложение работает и возвращает данные
             echo "Verifying application is serving fresh data..."
             sleep 3
-            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
               echo "✅ Application is running and health check passed"
             else
               echo "⚠️  Warning: Health check failed after deployment"

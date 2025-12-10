@@ -18,6 +18,8 @@ ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# Очищаем кеш Next.js перед сборкой для предотвращения проблем с require
+RUN rm -rf .next || true
 # Увеличиваем лимит памяти для процесса сборки
 ENV NODE_OPTIONS="--max_old_space_size=4096"
 RUN npm run build
@@ -28,6 +30,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Устанавливаем wget для health check
+RUN apk add --no-cache wget
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
