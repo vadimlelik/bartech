@@ -74,16 +74,24 @@ jobs:
             fi
             echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
             
-            # Удаление старого образа для принудительного обновления
-            echo "Removing old image to force update..."
-            docker rmi ${DOCKERHUB_USERNAME}/bartech:latest 2>/dev/null || true
+            # Сохраняем информацию о старом образе для сравнения
+            echo "Checking current image..."
+            OLD_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null || echo "")
+            if [ -n "$OLD_IMAGE_ID" ]; then
+              echo "Current image ID: $OLD_IMAGE_ID"
+              docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
+            fi
             
-            # Обновление образов (принудительно, игнорируя локальный кеш)
-            echo "Pulling latest images..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures
+            # Удаление всех старых образов bartech для принудительного обновления
+            echo "Removing all old bartech images to force update..."
+            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
             
-            # Принудительный pull образа напрямую
-            echo "Force pulling image directly..."
+            # Очистка кеша Docker для гарантии свежего pull
+            echo "Pruning Docker build cache..."
+            docker builder prune -f || true
+            
+            # Принудительный pull образа (всегда загружает последнюю версию из registry)
+            echo "Force pulling latest image from registry..."
             docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
               echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
               echo "Available images:"
@@ -92,17 +100,29 @@ jobs:
             }
             
             # Проверка, что образ был загружен
-            if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
+            NEW_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null)
+            if [ -z "$NEW_IMAGE_ID" ]; then
               echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
               echo "Available images:"
               docker images | grep bartech || echo "No bartech images found"
               exit 1
             fi
-            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
             
-            # Показываем информацию об образе для отладки
+            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
+            echo "New image ID: $NEW_IMAGE_ID"
+            
+            # Проверка, что образ действительно обновился
+            if [ -n "$OLD_IMAGE_ID" ] && [ "$OLD_IMAGE_ID" = "$NEW_IMAGE_ID" ]; then
+              echo "⚠️  WARNING: Image ID hasn't changed! The image might not have been updated."
+              echo "This could mean the image in Docker Hub is the same as before."
+            else
+              echo "✅ Image updated successfully (old: ${OLD_IMAGE_ID:-none}, new: $NEW_IMAGE_ID)"
+            fi
+            
+            # Показываем детальную информацию об образе для отладки
             echo "Image details:"
-            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
+            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
+            docker inspect ${DOCKERHUB_USERNAME}/bartech:latest --format "Created: {{.Created}}, Digest: {{.RepoDigests}}" || true
             
             # Остановка старых контейнеров
             echo "Stopping old containers..."
@@ -112,9 +132,27 @@ jobs:
             echo "Removing old containers..."
             docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
             
+            # Удаление старых volumes контейнера (если есть) для полной очистки
+            echo "Cleaning up any orphaned volumes..."
+            docker volume prune -f || true
+            
             # Запуск новых контейнеров (без кеша, принудительно пересоздавая)
-            echo "Starting containers with --force-recreate..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            echo "Starting containers with --force-recreate and --no-deps..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans --no-deps nextjs || {
+              echo "Failed to start with --no-deps, trying without..."
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            }
+            
+            # Проверка, что контейнер использует правильный образ
+            echo "Verifying container is using the new image..."
+            CONTAINER_IMAGE_ID=$(docker inspect bartech-nextjs --format "{{.Image}}" 2>/dev/null || echo "")
+            if [ -n "$CONTAINER_IMAGE_ID" ] && [ "$CONTAINER_IMAGE_ID" != "$NEW_IMAGE_ID" ]; then
+              echo "⚠️  WARNING: Container might not be using the latest image!"
+              echo "Container image: $CONTAINER_IMAGE_ID"
+              echo "Expected image: $NEW_IMAGE_ID"
+            else
+              echo "✅ Container is using the correct image"
+            fi
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."
@@ -149,8 +187,13 @@ jobs:
             echo "Reloading Nginx..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
             
-            # Очистка старых образов
-            echo "Cleaning up old images..."
+            # Очистка кеша Next.js внутри контейнера (если есть)
+            echo "Clearing Next.js cache if needed..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache/* 2>/dev/null || true" || true
+            
+            # Очистка старых образов (кроме текущего)
+            echo "Cleaning up old images (keeping current)..."
+            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}} {{.Tag}}" | grep -v "latest\|$NEW_IMAGE_ID" | awk '{print $1}' | xargs -r docker rmi -f 2>/dev/null || true
             docker image prune -f
             
             # Проверка, что приложение работает и возвращает данные

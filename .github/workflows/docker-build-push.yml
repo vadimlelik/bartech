@@ -69,13 +69,20 @@ jobs:
           platforms: linux/amd64
 
       - name: Image digest
+        if: github.event_name != 'pull_request'
         run: |
           echo "Built and pushed images:"
           echo "${{ steps.meta.outputs.tags }}"
+          echo ""
+          echo "Image digest:"
+          docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest --format "{{json .}}" | jq -r '.digest' || echo "Digest not available"
           
       - name: Verify build
         if: github.event_name != 'pull_request'
         run: |
           echo "✅ Docker image built and pushed successfully"
           echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          echo ""
+          echo "To verify the image was pushed, check Docker Hub:"
+          echo "https://hub.docker.com/r/${{ secrets.DOCKERHUB_USERNAME }}/bartech/tags"
 
