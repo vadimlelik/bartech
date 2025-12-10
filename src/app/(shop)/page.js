@@ -39,8 +39,15 @@ export const metadata = {
   },
 };
 
+export const revalidate = 0; // Отключаем кеширование для актуальных данных
+
 export default async function Home() {
   const categories = await getCategories();
+
+  // Фильтруем категории с валидным ID и названием
+  const validCategories = categories.filter(
+    (category) => category && category.id && category.id.trim() !== '' && category.name && category.name.trim() !== ''
+  );
 
   const organizationSchema = getOrganizationSchema();
   const websiteSchema = getWebSiteSchema();
@@ -71,13 +78,19 @@ export default async function Home() {
           >
             Категории товаров
           </Typography>
-          <Grid container spacing={3}>
-            {categories.map((category) => (
-              <Grid item xs={12} sm={6} md={4} key={category.id}>
-                <CategoryCard category={category} />
-              </Grid>
-            ))}
-          </Grid>
+          {validCategories.length > 0 ? (
+            <Grid container spacing={3}>
+              {validCategories.map((category) => (
+                <Grid item xs={12} sm={6} md={4} key={category.id}>
+                  <CategoryCard category={category} />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="body1" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              Категории пока не добавлены
+            </Typography>
+          )}
         </Container>
       </Box>
     </>

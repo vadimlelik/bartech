@@ -42,7 +42,7 @@ export async function GET(request) {
       );
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       products: result.products || [],
       filters: result.filters || {},
       pagination: {
@@ -52,6 +52,13 @@ export async function GET(request) {
         pages: result.pagination?.pages || 1,
       },
     });
+    
+    // Отключаем кеширование для API ответов, чтобы новые данные отображались сразу после деплоя
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    
+    return response;
   } catch (error) {
     'Error in products API:', error;
     return NextResponse.json(

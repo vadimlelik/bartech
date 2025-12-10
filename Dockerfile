@@ -2,12 +2,6 @@
 # Next.js 15 рекомендуется использовать Node.js 20+
 FROM node:20-alpine AS base
 
-# Установка зависимостей только если нужно
-FROM base AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --only=production && npm cache clean --force
-
 # Сборка приложения
 FROM base AS builder
 WORKDIR /app
@@ -42,6 +36,8 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+# Копируем директорию data для fallback JSON файлов (используются в runtime)
+COPY --from=builder /app/data ./data
 
 # Устанавливаем права
 RUN chown -R nextjs:nodejs /app

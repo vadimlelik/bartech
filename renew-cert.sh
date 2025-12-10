@@ -1,10 +1,13 @@
 #!/bin/sh
 
-docker run --rm \
-  -v "$(pwd)/certbot:/etc/letsencrypt" \
-  -v "$(pwd)/certbot:/var/lib/letsencrypt" \
-  -v "$(pwd)/certbot/cloudflare.ini:/cloudflare.ini:ro" \
-  certbot/dns-cloudflare \
-  renew \
+# Скрипт для ручного обновления SSL сертификатов
+# Автоматическое обновление настроено в docker-compose.yml
+
+echo "Обновление SSL сертификатов..."
+
+docker-compose exec certbot certbot renew \
+  --dns-cloudflare \
   --dns-cloudflare-credentials /cloudflare.ini \
-  --quiet
+  --post-hook "/reload-nginx.sh"
+
+echo "Сертификаты обновлены!"
