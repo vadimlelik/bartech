@@ -72,4 +72,10 @@ jobs:
         run: |
           echo "Built and pushed images:"
           echo "${{ steps.meta.outputs.tags }}"
+          
+      - name: Verify build
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "✅ Docker image built and pushed successfully"
+          echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
 

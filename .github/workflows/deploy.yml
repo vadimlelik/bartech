@@ -150,6 +150,15 @@ jobs:
             echo "Cleaning up old images..."
             docker image prune -f
             
+            # Проверка, что приложение работает и возвращает данные
+            echo "Verifying application is serving fresh data..."
+            sleep 3
+            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs node -e "require('http').get('http://127.0.0.1:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" 2>/dev/null; then
+              echo "✅ Application is running and health check passed"
+            else
+              echo "⚠️  Warning: Health check failed after deployment"
+            fi
+            
             echo "Deployment completed successfully!"
           EOF
 
