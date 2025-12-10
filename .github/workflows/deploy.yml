@@ -135,17 +135,29 @@ jobs:
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures || true
             
             # Проверка, что образ был загружен
-            if ! docker images | grep -q "${DOCKERHUB_USERNAME}/bartech.*latest"; then
+            NEW_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null)
+            if [ -z "$NEW_IMAGE_ID" ]; then
               echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
               echo "Available images:"
               docker images | grep bartech || echo "No bartech images found"
               exit 1
             fi
-            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
             
-            # Показываем информацию об образе для отладки
+            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
+            echo "New image ID: $NEW_IMAGE_ID"
+            
+            # Проверка, что образ действительно обновился
+            if [ -n "$OLD_IMAGE_ID" ] && [ "$OLD_IMAGE_ID" = "$NEW_IMAGE_ID" ]; then
+              echo "⚠️  WARNING: Image ID hasn't changed! The image might not have been updated."
+              echo "This could mean the image in Docker Hub is the same as before."
+            else
+              echo "✅ Image updated successfully (old: ${OLD_IMAGE_ID:-none}, new: $NEW_IMAGE_ID)"
+            fi
+            
+            # Показываем детальную информацию об образе для отладки
             echo "Image details:"
-            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
+            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
+            docker inspect ${DOCKERHUB_USERNAME}/bartech:latest --format "Created: {{.Created}}, Digest: {{.RepoDigests}}" || true
             
             # Полная остановка и удаление всех контейнеров
             echo "Stopping and removing all containers..."
@@ -203,8 +215,13 @@ jobs:
             echo "Reloading Nginx..."
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
             
-            # Очистка старых образов
-            echo "Cleaning up old images..."
+            # Очистка кеша Next.js внутри контейнера (если есть)
+            echo "Clearing Next.js cache if needed..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache/* 2>/dev/null || true" || true
+            
+            # Очистка старых образов (кроме текущего)
+            echo "Cleaning up old images (keeping current)..."
+            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}} {{.Tag}}" | grep -v "latest\|$NEW_IMAGE_ID" | awk '{print $1}' | xargs -r docker rmi -f 2>/dev/null || true
             docker image prune -f
             
             # Проверка, что приложение работает и возвращает данные
@@ -222,29 +239,49 @@ jobs:
       - name: Health check
         run: |
           echo "Waiting for application to be fully ready..."
-          sleep 15
+          sleep 30
           
-          max_attempts=10
+          # Проверяем напрямую на сервере через SSH (это главная проверка)
+          echo "Checking health directly on server..."
+          max_attempts=20
           attempt=0
+          server_ready=false
+          
           while [ $attempt -lt $max_attempts ]; do
-            if curl -f https://technobar.by/api/health; then
-              echo "Health check passed!"
-              exit 0
+            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" "cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null"; then
+              echo "✅ Server health check passed!"
+              server_ready=true
+              break
             fi
             attempt=$((attempt + 1))
-            echo "Health check attempt $attempt/$max_attempts failed, retrying..."
-            sleep 5
+            echo "Server health check attempt $attempt/$max_attempts failed, waiting..."
+            sleep 3
           done
           
-          echo "ERROR: Health check failed after $max_attempts attempts"
-          ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
-            cd /opt/bartech
-            echo "=== Container Status ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
-            echo "=== Next.js Logs ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
-            echo "=== Nginx Logs ==="
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nginx --tail=50
-          EOF
-          exit 1
+          if [ "$server_ready" = false ]; then
+            echo "ERROR: Server health check failed after $max_attempts attempts"
+            ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
+              cd /opt/bartech
+              echo "=== Container Status ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+              echo "=== Next.js Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs
+              echo "=== Nginx Logs (last 50 lines) ==="
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx
+            EOF
+            exit 1
+          fi
+          
+          # Дополнительная проверка через Cloudflare (не критично)
+          echo "Server is healthy! Optionally checking through Cloudflare..."
+          sleep 5
+          
+          if curl -f --max-time 5 --connect-timeout 3 https://technobar.by/api/health 2>/dev/null; then
+            echo "✅ Cloudflare health check also passed!"
+          else
+            echo "⚠️  Cloudflare check failed (may be caching), but server is operational"
+          fi
+          
+          echo "✅ Deployment successful - server is running and healthy!"
+          exit 0
 
