@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -100,4 +100,94 @@ prod-up: ## Запустить в production режиме
 
 prod-down: ## Остановить production
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+force-update: ## Принудительно обновить образ из Docker Hub и перезапустить
+	@echo "🔄 Принудительное обновление образа из Docker Hub..."
+	@bash -c '\
+		if [ ! -f .env ]; then \
+			echo "ERROR: .env file not found!"; \
+			exit 1; \
+		fi; \
+		echo "Загрузка переменных из .env..."; \
+		set -a; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
+		set +a; \
+		if [ -z "$$DOCKERHUB_USERNAME" ]; then \
+			echo "ERROR: DOCKERHUB_USERNAME не установлен в .env файле!"; \
+			exit 1; \
+		fi; \
+		echo "Очистка Docker кеша..."; \
+		docker builder prune -f || true; \
+		echo "Удаление старых образов bartech..."; \
+		docker images $$DOCKERHUB_USERNAME/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		docker images | grep bartech | awk "{print \$$3}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		echo "Очистка неиспользуемых образов..."; \
+		docker image prune -f || true; \
+		echo "Принудительная загрузка нового образа (без кеша)..."; \
+		docker pull $$DOCKERHUB_USERNAME/bartech:latest --no-cache || docker pull $$DOCKERHUB_USERNAME/bartech:latest; \
+		echo "Остановка контейнеров..."; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml down; \
+		echo "Удаление старых контейнеров..."; \
+		docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true; \
+		echo "Запуск с новым образом..."; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans; \
+		echo "✅ Обновление завершено!" \
+	'
+
+rebuild-local: ## Пересобрать образ локально на сервере (если Docker Hub недоступен)
+	@echo "🔨 Локальная пересборка образа..."
+	@bash -c '\
+		if [ ! -f .env ]; then \
+			echo "ERROR: .env file not found!"; \
+			exit 1; \
+		fi; \
+		if [ ! -f Dockerfile ]; then \
+			echo "ERROR: Dockerfile not found!"; \
+			exit 1; \
+		fi; \
+		if [ ! -f package.json ]; then \
+			echo "ERROR: package.json not found!"; \
+			exit 1; \
+		fi; \
+		echo "Загрузка переменных из .env..."; \
+		set -a; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
+		set +a; \
+		echo "Проверка обязательных переменных..."; \
+		if [ -z "$$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then \
+			echo "ERROR: NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY должны быть в .env файле!"; \
+			exit 1; \
+		fi; \
+		echo "Остановка контейнеров..."; \
+		docker-compose -f docker-compose.yml down || true; \
+		docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true; \
+		echo "Пересборка образа без кеша (используя docker-compose.yml для локальной сборки)..."; \
+		echo "Это может занять несколько минут..."; \
+		if ! docker-compose -f docker-compose.yml build --no-cache nextjs; then \
+			echo "ERROR: Build failed! Проверьте логи выше."; \
+			exit 1; \
+		fi; \
+		echo "Запуск с локально собранным образом..."; \
+		docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans; \
+		echo "✅ Локальная пересборка завершена!"; \
+		echo "Проверьте статус: docker-compose ps" \
+	'
 

@@ -21,6 +21,7 @@ import {
   PIXEL_8,
   PIXEL_9,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const ThankYouPage = () => {
   const searchParams = useSearchParams();
@@ -28,40 +29,26 @@ const ThankYouPage = () => {
 
   useEffect(() => {
     if (source) {
-      const pixelId = PIXEL[source];
-      const pixelId_2 = PIXEL_2[source];
-      const pixelId_3 = PIXEL_3[source];
-      const pixelId_4 = PIXEL_4[source];
-      const pixelId_5 = PIXEL_5[source];
-      const pixelId_6 = PIXEL_6[source];
-      const pixelId_7 = PIXEL_7[source];
-      const pixelId_8 = PIXEL_8[source];
-      const pixelId_9 = PIXEL_9[source];
-      const pixelId_10 = PIXEL_10[source];
-      const pixelId_11 = PIXEL_11[source];
-      const pixelId_12 = PIXEL_12[source];
-      const pixelId_13 = PIXEL_13[source];
-      const pixelId_14 = PIXEL_14[source];
-      const pixelId_15 = PIXEL_15[source];
+      const pixelIds = [
+        PIXEL[source],
+        PIXEL_2[source],
+        PIXEL_3[source],
+        PIXEL_4[source],
+        PIXEL_5[source],
+        PIXEL_6[source],
+        PIXEL_7[source],
+        PIXEL_8[source],
+        PIXEL_9[source],
+        PIXEL_10[source],
+        PIXEL_11[source],
+        PIXEL_12[source],
+        PIXEL_13[source],
+        PIXEL_14[source],
+        PIXEL_15[source],
+      ].filter(Boolean); // Фильтруем undefined значения
 
-      if (window.ttq) {
-        window.ttq.load(pixelId);
-        window.ttq.load(pixelId_2);
-        window.ttq.load(pixelId_3);
-        window.ttq.load(pixelId_4);
-        window.ttq.load(pixelId_5);
-        window.ttq.load(pixelId_6);
-        window.ttq.load(pixelId_7);
-        window.ttq.load(pixelId_8);
-        window.ttq.load(pixelId_9);
-        window.ttq.load(pixelId_10);
-        window.ttq.load(pixelId_11);
-        window.ttq.load(pixelId_12);
-        window.ttq.load(pixelId_13);
-        window.ttq.load(pixelId_14);
-        window.ttq.load(pixelId_15);
-
-        window.ttq.page();
+      if (pixelIds.length > 0) {
+        loadTikTokPixels(pixelIds);
       }
     }
   }, [source]);

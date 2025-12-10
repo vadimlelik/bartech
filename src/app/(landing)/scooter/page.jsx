@@ -2,6 +2,7 @@
 
 import Loading from '@/app/loading';
 import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -70,13 +71,7 @@ export default function MotoBlok() {
   }, []);
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.scooter);
-      window.ttq.load(PIXEL_2.scooter);
-      window.ttq.load(PIXEL_3.scooter);
-      window.ttq.load(PIXEL_4.scooter);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.scooter, PIXEL_2.scooter, PIXEL_3.scooter, PIXEL_4.scooter]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

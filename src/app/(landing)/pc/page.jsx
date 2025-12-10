@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/components/quiz/Quiz';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const advantages = [
   {
@@ -90,12 +91,7 @@ export default function PC() {
   }, []);
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.pc);
-      window.ttq.load(PIXEL_2.pc);
-      window.ttq.load(PIXEL_3.pc);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.pc, PIXEL_2.pc, PIXEL_3.pc]);
   }, []);
 
   const handleQuizSubmit = async (data) => {

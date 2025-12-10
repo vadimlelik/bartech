@@ -55,10 +55,34 @@ jobs:
             fi
             echo "Volumes ready"
             
-            # Загрузка переменных из .env файла
+            # Загрузка переменных из .env файла (безопасный способ)
+            # Используем цикл для правильной обработки всех строк, включая значения с пробелами
+            echo "Loading environment variables from .env file..."
             set -a
-            source .env
+            loaded_count=0
+            while IFS= read -r line || [ -n "$line" ]; do
+              # Пропускаем комментарии и пустые строки
+              case "$line" in
+                \#*|'') continue ;;
+              esac
+              # Удаляем пробелы в начале и конце
+              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+              # Пропускаем пустые строки после обработки
+              [ -z "$line" ] && continue
+              # Проверяем, что строка содержит знак равенства
+              if echo "$line" | grep -q '='; then
+                # Экспортируем переменную (игнорируем ошибки для некорректных строк)
+                if export "$line" 2>/dev/null; then
+                  loaded_count=$((loaded_count + 1))
+                else
+                  echo "WARNING: Failed to load line from .env: ${line:0:50}..."
+                fi
+              else
+                echo "WARNING: Skipping invalid line in .env (no '=' found): ${line:0:50}..."
+              fi
+            done < .env
             set +a
+            echo "Loaded $loaded_count environment variables from .env file"
             
             # Проверка переменных окружения
             echo "Checking environment variables..."
@@ -74,30 +98,35 @@ jobs:
             fi
             echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
             
-            # Сохраняем информацию о старом образе для сравнения
-            echo "Checking current image..."
-            OLD_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null || echo "")
-            if [ -n "$OLD_IMAGE_ID" ]; then
-              echo "Current image ID: $OLD_IMAGE_ID"
-              docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
-            fi
-            
             # Удаление всех старых образов bartech для принудительного обновления
             echo "Removing all old bartech images to force update..."
             docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
+            docker images | grep bartech | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
             
-            # Очистка кеша Docker для гарантии свежего pull
-            echo "Pruning Docker build cache..."
+            # Очистка Docker кеша для гарантии свежего образа
+            echo "Cleaning Docker build cache..."
             docker builder prune -f || true
             
-            # Принудительный pull образа (всегда загружает последнюю версию из registry)
-            echo "Force pulling latest image from registry..."
-            docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
-              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
-              echo "Available images:"
-              docker images | grep bartech || echo "No bartech images found"
-              exit 1
+            # Принудительный pull образа напрямую (без кеша)
+            echo "Force pulling latest image (no cache)..."
+            docker pull ${DOCKERHUB_USERNAME}/bartech:latest --no-cache || {
+              echo "WARNING: Failed to pull with --no-cache, trying normal pull..."
+              docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
+                echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+                echo "Available images:"
+                docker images | grep bartech || echo "No bartech images found"
+                echo "Trying to build image locally instead..."
+                # Если pull не удался, пробуем собрать локально
+                docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
+                  echo "ERROR: Both pull and local build failed!"
+                  exit 1
+                }
+              }
             }
+            
+            # Обновление образов через docker-compose (для других сервисов)
+            echo "Pulling other images via docker-compose..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures || true
             
             # Проверка, что образ был загружен
             NEW_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null)
@@ -124,35 +153,24 @@ jobs:
             docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
             docker inspect ${DOCKERHUB_USERNAME}/bartech:latest --format "Created: {{.Created}}, Digest: {{.RepoDigests}}" || true
             
-            # Остановка старых контейнеров
-            echo "Stopping old containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down || true
+            # Полная остановка и удаление всех контейнеров
+            echo "Stopping and removing all containers..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v --remove-orphans || true
             
-            # Удаление старых контейнеров для гарантии чистого запуска
-            echo "Removing old containers..."
+            # Дополнительное удаление контейнеров по имени (на случай если они остались)
+            echo "Force removing containers by name..."
             docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
             
-            # Удаление старых volumes контейнера (если есть) для полной очистки
-            echo "Cleaning up any orphaned volumes..."
-            docker volume prune -f || true
+            # Удаление всех остановленных контейнеров
+            docker container prune -f || true
             
-            # Запуск новых контейнеров (без кеша, принудительно пересоздавая)
+            # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
             echo "Starting containers with --force-recreate and --no-deps..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans --no-deps nextjs || {
-              echo "Failed to start with --no-deps, trying without..."
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
-            }
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
             
-            # Проверка, что контейнер использует правильный образ
-            echo "Verifying container is using the new image..."
-            CONTAINER_IMAGE_ID=$(docker inspect bartech-nextjs --format "{{.Image}}" 2>/dev/null || echo "")
-            if [ -n "$CONTAINER_IMAGE_ID" ] && [ "$CONTAINER_IMAGE_ID" != "$NEW_IMAGE_ID" ]; then
-              echo "⚠️  WARNING: Container might not be using the latest image!"
-              echo "Container image: $CONTAINER_IMAGE_ID"
-              echo "Expected image: $NEW_IMAGE_ID"
-            else
-              echo "✅ Container is using the correct image"
-            fi
+            # Запуск зависимых сервисов
+            echo "Starting dependent services..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx certbot
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."

@@ -7,6 +7,7 @@ import Button from '@/app/(shop)/components/button/Button';
 import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import Quiz from '@/components/quiz/Quiz';
 import Script from 'next/script';
 
@@ -64,12 +65,7 @@ export default function TvLandingPage() {
   ];
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.ttq) {
-      window.ttq.load(PIXEL.tv3);
-      window.ttq.load(PIXEL_2.tv3);
-      window.ttq.load(PIXEL_3.tv3);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.tv3, PIXEL_2.tv3, PIXEL_3.tv3]);
   }, []);
 
   useEffect(() => {

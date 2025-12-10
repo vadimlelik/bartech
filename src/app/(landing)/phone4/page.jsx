@@ -8,6 +8,7 @@ import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
   {
@@ -62,12 +63,7 @@ export default function Phone4() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.phone4);
-      window.ttq.load(PIXEL_2.phone4);
-      window.ttq.load(PIXEL_3.phone4);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.phone4, PIXEL_2.phone4, PIXEL_3.phone4]);
   }, []);
   const [now, setNow] = useState(null);
   useEffect(() => {

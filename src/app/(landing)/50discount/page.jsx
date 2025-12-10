@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import Loading from '@/app/loading';
 import Button from '@/app/(shop)/components/button/Button';
 import Quiz from '@/components/quiz/Quiz';
@@ -58,11 +59,7 @@ export default function DiscountPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.discount50);
-      window.ttq.load(PIXEL_3.discount50);
-      window.ttq.page();
-    }
+    loadTikTokPixels([PIXEL.discount50, PIXEL_3.discount50]);
   }, []);
 
   const closeQuiz = () => {

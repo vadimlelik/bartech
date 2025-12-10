@@ -24,6 +24,7 @@ import {
   PIXEL_8,
   PIXEL_9,
 } from '@/data/pixel';
+import { loadTikTokPixels } from '@/shared/utils';
 import Script from 'next/script';
 
 const advantages = [
@@ -109,25 +110,23 @@ export default function Laptop() {
       });
   };
   useEffect(() => {
-    if (window.ttq) {
-      window.ttq.load(PIXEL.laptop);
-      window.ttq.load(PIXEL_2.laptop);
-      window.ttq.load(PIXEL_3.laptop);
-      window.ttq.load(PIXEL_4.laptop);
-      window.ttq.load(PIXEL_5.laptop);
-      window.ttq.load(PIXEL_6.laptop);
-      window.ttq.load(PIXEL_7.laptop);
-      window.ttq.load(PIXEL_8.laptop);
-      window.ttq.load(PIXEL_9.laptop);
-      window.ttq.load(PIXEL_10.laptop);
-      window.ttq.load(PIXEL_11.laptop);
-      window.ttq.load(PIXEL_12.laptop);
-      window.ttq.load(PIXEL_13.laptop);
-      window.ttq.load(PIXEL_14.laptop);
-      window.ttq.load(PIXEL_15.laptop);
-
-      window.ttq.page();
-    }
+    loadTikTokPixels([
+      PIXEL.laptop,
+      PIXEL_2.laptop,
+      PIXEL_3.laptop,
+      PIXEL_4.laptop,
+      PIXEL_5.laptop,
+      PIXEL_6.laptop,
+      PIXEL_7.laptop,
+      PIXEL_8.laptop,
+      PIXEL_9.laptop,
+      PIXEL_10.laptop,
+      PIXEL_11.laptop,
+      PIXEL_12.laptop,
+      PIXEL_13.laptop,
+      PIXEL_14.laptop,
+      PIXEL_15.laptop,
+    ]);
   }, []);
 
   const questions = [
