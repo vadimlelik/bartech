@@ -42,7 +42,12 @@ export async function getAllCategories() {
       return [];
     }
 
-    return data || [];
+    // Фильтруем категории с валидным ID и названием
+    const validCategories = (data || []).filter(
+      (category) => category && category.id && category.id.trim() !== '' && category.name && category.name.trim() !== ''
+    );
+
+    return validCategories;
   } catch (error) {
     console.error('Error in getAllCategories:', error);
     return [];

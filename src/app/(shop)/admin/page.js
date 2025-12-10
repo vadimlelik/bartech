@@ -276,18 +276,36 @@ function AdminPageContent() {
   };
 
   const handleCategorySubmit = async () => {
+    // Валидация перед отправкой
+    if (!categoryFormData.name || categoryFormData.name.trim() === '') {
+      showSnackbar('Название категории обязательно', 'error');
+      return;
+    }
+
     try {
       const url = editingCategory
         ? `/api/admin/categories/${editingCategory.id}`
         : '/api/admin/categories';
       const method = editingCategory ? 'PUT' : 'POST';
 
+      // Подготавливаем данные для отправки
+      const dataToSend = {
+        name: categoryFormData.name.trim(),
+        image: categoryFormData.image?.trim() || null,
+        description: categoryFormData.description?.trim() || null,
+      };
+
+      // Добавляем ID только если он указан (для новых категорий ID будет сгенерирован на сервере)
+      if (categoryFormData.id && categoryFormData.id.trim() !== '') {
+        dataToSend.id = categoryFormData.id.trim();
+      }
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(categoryFormData),
+        body: JSON.stringify(dataToSend),
       });
 
       const data = await response.json();
