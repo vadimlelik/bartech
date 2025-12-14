@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -38,6 +38,9 @@ clean: ## Очистить неиспользуемые Docker ресурсы
 
 diagnose-build: ## Диагностика проблем со сборкой Next.js
 	@bash scripts/diagnose-build.sh
+
+build-push-local: ## Собрать образ локально и опубликовать в Docker Hub (для случаев, когда сборка на сервере зависает)
+	@bash scripts/build-and-push-local.sh
 
 init-certs: ## Инициализировать wildcard SSL сертификаты для technobar.by и *.technobar.by
 	@echo "Инициализация wildcard SSL сертификатов..."
