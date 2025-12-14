@@ -83,8 +83,9 @@ health: ## Проверить здоровье приложения
 status: ## Показать статус всех контейнеров
 	docker-compose ps
 
-pull: ## Обновить образы из Docker Hub
-	docker-compose pull
+pull: ## Обновить образы из Docker Hub и перезапустить контейнеры
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
 
 update: pull restart ## Обновить и перезапустить приложение
 
