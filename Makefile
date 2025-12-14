@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -194,6 +194,87 @@ rebuild-local: ## Пересобрать образ локально на сер
 		echo "Запуск с локально собранным образом..."; \
 		docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans; \
 		echo "✅ Локальная пересборка завершена!"; \
+		echo "Проверьте статус: docker-compose ps" \
+	'
+
+clean-rebuild: ## Полная очистка и пересборка всех контейнеров без кэша
+	@echo "🧹 Полная очистка Docker ресурсов..."
+	@bash -c '\
+		echo "1. Остановка всех контейнеров..."; \
+		docker-compose -f docker-compose.yml down 2>/dev/null || true; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml down 2>/dev/null || true; \
+		echo "2. Удаление всех контейнеров проекта..."; \
+		docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true; \
+		docker ps -a --filter "name=bartech" --format "{{.ID}}" | xargs -r docker rm -f 2>/dev/null || true; \
+		echo "3. Удаление всех образов проекта..."; \
+		docker images --filter "reference=*bartech*" --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		docker images --filter "reference=*nextjs*" --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		if [ -f .env ]; then \
+			set -a; \
+			while IFS= read -r line || [ -n "$$line" ]; do \
+				case "$$line" in \
+					\#*|"") continue ;; \
+				esac; \
+				line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+				[ -z "$$line" ] && continue; \
+				if echo "$$line" | grep -q "="; then \
+					export "$$line" 2>/dev/null || true; \
+				fi; \
+			done < .env; \
+			set +a; \
+			if [ -n "$$DOCKERHUB_USERNAME" ]; then \
+				echo "Удаление образов из Docker Hub..."; \
+				docker images $$DOCKERHUB_USERNAME/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+			fi; \
+		fi; \
+		echo "4. Очистка build cache..."; \
+		docker builder prune -af || true; \
+		echo "5. Очистка неиспользуемых образов..."; \
+		docker image prune -af || true; \
+		echo "6. Очистка неиспользуемых контейнеров..."; \
+		docker container prune -f || true; \
+		echo "7. Очистка неиспользуемых сетей..."; \
+		docker network prune -f || true; \
+		echo "8. Полная очистка системы Docker (кроме volumes)..."; \
+		docker system prune -af || true; \
+		echo "✅ Очистка завершена!"; \
+		echo ""; \
+		echo "🔨 Пересборка всех контейнеров без кэша..."; \
+		if [ ! -f .env ]; then \
+			echo "ERROR: .env file not found!"; \
+			exit 1; \
+		fi; \
+		if [ ! -f Dockerfile ]; then \
+			echo "ERROR: Dockerfile not found!"; \
+			exit 1; \
+		fi; \
+		echo "Загрузка переменных из .env..."; \
+		set -a; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
+		set +a; \
+		echo "Проверка обязательных переменных..."; \
+		if [ -z "$$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then \
+			echo "ERROR: NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY должны быть в .env файле!"; \
+			exit 1; \
+		fi; \
+		echo "Пересборка образа без кэша..."; \
+		echo "Это может занять несколько минут..."; \
+		if ! docker-compose -f docker-compose.yml build --no-cache nextjs; then \
+			echo "ERROR: Build failed! Проверьте логи выше."; \
+			exit 1; \
+		fi; \
+		echo "Запуск всех контейнеров..."; \
+		docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans; \
+		echo "✅ Полная пересборка завершена!"; \
 		echo "Проверьте статус: docker-compose ps" \
 	'
 
