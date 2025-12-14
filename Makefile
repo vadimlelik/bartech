@@ -84,10 +84,15 @@ status: ## Показать статус всех контейнеров
 	docker-compose ps
 
 pull: ## Обновить образы из Docker Hub и перезапустить контейнеры
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+	@if [ -f docker-compose.prod.yml ]; then \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans; \
+	else \
+		docker-compose pull; \
+		docker-compose up -d --force-recreate --remove-orphans; \
+	fi
 
-update: pull restart ## Обновить и перезапустить приложение
+update: pull ## Обновить и перезапустить приложение (pull уже включает перезапуск)
 
 prod-up: ## Запустить в production режиме
 	@echo "Checking Docker volumes..."
