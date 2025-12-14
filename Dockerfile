@@ -20,8 +20,12 @@ RUN npm ci
 COPY . .
 # Очищаем кеш Next.js перед сборкой для предотвращения проблем с require
 RUN rm -rf .next || true
-# Увеличиваем лимит памяти для процесса сборки
-ENV NODE_OPTIONS="--max_old_space_size=4096"
+# Увеличиваем лимит памяти для процесса сборки (до 8GB)
+# Добавляем дополнительные флаги для стабильности
+ENV NODE_OPTIONS="--max_old_space_size=8192 --max-semi-space-size=128"
+# Отключаем телеметрию Next.js для ускорения сборки
+ENV NEXT_TELEMETRY_DISABLED=1
+# Запускаем сборку
 RUN npm run build
 
 # Production образ

@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -35,6 +35,9 @@ logs-certbot: ## Показать логи CertBot
 clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
+
+diagnose-build: ## Диагностика проблем со сборкой Next.js
+	@bash scripts/diagnose-build.sh
 
 init-certs: ## Инициализировать wildcard SSL сертификаты для technobar.by и *.technobar.by
 	@echo "Инициализация wildcard SSL сертификатов..."
