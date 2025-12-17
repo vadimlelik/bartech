@@ -61,6 +61,7 @@ function AdminPageContent() {
   const [storageImages, setStorageImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(false);
   const [imageGalleryOpen, setImageGalleryOpen] = useState(false);
+  const [imagePickerTarget, setImagePickerTarget] = useState(null);
   const [categoryFormData, setCategoryFormData] = useState({
     id: '',
     name: '',
@@ -73,7 +74,60 @@ function AdminPageContent() {
     content: {
       rating: '',
       title: '',
+      h1: '',
+      subtitle: '',
+      ctaText: '',
+      ctaNote: '',
+      heroImage: '',
+      heroAlt: '',
+      offer: {
+        title: '',
+        subtitle: '',
+        price: '',
+        oldPrice: '',
+        discountText: '',
+        note: '',
+        fineprint: '',
+        buttonText: '',
+        bullets: [],
+        showTimer: false,
+        timerLabel: '',
+      },
+      topBarText: '',
+      trustItems: [
+        { icon: '/delivery.png', title: 'Доставка', text: 'Быстро по Минску и РБ' },
+        { icon: '/warranty.png', title: 'Гарантия', text: 'Официально и прозрачно' },
+        { icon: '/iconCheck.svg', title: 'Подбор', text: 'Поможем выбрать под бюджет' },
+      ],
+      stickyCta: {
+        enabled: true,
+        price: '',
+        note: '',
+        buttonText: '',
+      },
+      stepsTitle: '',
+      stepsSubtitle: '',
+      steps: [],
+      guaranteesTitle: '',
+      guaranteesSubtitle: '',
+      guarantees: [],
+      paymentTitle: '',
+      paymentLogos: [],
+      seo: {
+        metaTitle: '',
+        metaDescription: '',
+        keywords: '',
+        canonical: '',
+        ogTitle: '',
+        ogDescription: '',
+        ogImage: '',
+        twitterTitle: '',
+        twitterDescription: '',
+        noindex: false,
+        nofollow: false,
+      },
       infoItems: [],
+      badges: [],
       heroTitle: '',
       benefits: [],
       advantages: [],
@@ -81,6 +135,9 @@ function AdminPageContent() {
       quizPrompt: '',
       buttonText: '',
       questions: [],
+      imageAlts: [],
+      imageCaptions: [],
+      faq: [],
     },
     images: [],
     pixels: [],
@@ -564,6 +621,10 @@ function AdminPageContent() {
     if (landingPage) {
       setEditingLandingPage(landingPage);
       const content = landingPage.content || {};
+      const seo = content.seo || {};
+      const offer = content.offer || {};
+      const trustItems = Array.isArray(content.trustItems) ? content.trustItems : [];
+      const stickyCta = content.stickyCta || {};
       setLandingFormData({
         slug: landingPage.slug || '',
         title: landingPage.title || '',
@@ -571,7 +632,60 @@ function AdminPageContent() {
         content: {
           rating: content.rating || '',
           title: content.title || '',
+          h1: content.h1 || '',
+          subtitle: content.subtitle || '',
+          ctaText: content.ctaText || '',
+          ctaNote: content.ctaNote || '',
+          heroImage: content.heroImage || '',
+          heroAlt: content.heroAlt || '',
+          offer: {
+            title: offer.title || '',
+            subtitle: offer.subtitle || '',
+            price: offer.price || '',
+            oldPrice: offer.oldPrice || '',
+            discountText: offer.discountText || '',
+            note: offer.note || '',
+            fineprint: offer.fineprint || '',
+            buttonText: offer.buttonText || '',
+            bullets: Array.isArray(offer.bullets) ? offer.bullets : [],
+            showTimer: offer.showTimer || false,
+            timerLabel: offer.timerLabel || '',
+          },
+          topBarText: content.topBarText || '',
+          trustItems: trustItems.length > 0 ? trustItems : [
+            { icon: '/delivery.png', title: 'Доставка', text: 'Быстро по Минску и РБ' },
+            { icon: '/warranty.png', title: 'Гарантия', text: 'Официально и прозрачно' },
+            { icon: '/iconCheck.svg', title: 'Подбор', text: 'Поможем выбрать под бюджет' },
+          ],
+          stickyCta: {
+            enabled: stickyCta.enabled !== undefined ? !!stickyCta.enabled : true,
+            price: stickyCta.price || '',
+            note: stickyCta.note || '',
+            buttonText: stickyCta.buttonText || '',
+          },
+          stepsTitle: content.stepsTitle || '',
+          stepsSubtitle: content.stepsSubtitle || '',
+          steps: Array.isArray(content.steps) ? content.steps : [],
+          guaranteesTitle: content.guaranteesTitle || '',
+          guaranteesSubtitle: content.guaranteesSubtitle || '',
+          guarantees: Array.isArray(content.guarantees) ? content.guarantees : [],
+          paymentTitle: content.paymentTitle || '',
+          paymentLogos: Array.isArray(content.paymentLogos) ? content.paymentLogos : [],
+          seo: {
+            metaTitle: seo.metaTitle || '',
+            metaDescription: seo.metaDescription || '',
+            keywords: seo.keywords || '',
+            canonical: seo.canonical || '',
+            ogTitle: seo.ogTitle || '',
+            ogDescription: seo.ogDescription || '',
+            ogImage: seo.ogImage || '',
+            twitterTitle: seo.twitterTitle || '',
+            twitterDescription: seo.twitterDescription || '',
+            noindex: !!seo.noindex,
+            nofollow: !!seo.nofollow,
+          },
           infoItems: content.infoItems || [],
+          badges: Array.isArray(content.badges) ? content.badges : [],
           heroTitle: content.heroTitle || '',
           benefits: content.benefits || [],
           advantages: content.advantages || [],
@@ -579,6 +693,9 @@ function AdminPageContent() {
           quizPrompt: content.quizPrompt || '',
           buttonText: content.buttonText || '',
           questions: Array.isArray(content.questions) ? content.questions : [],
+          imageAlts: Array.isArray(content.imageAlts) ? content.imageAlts : [],
+          imageCaptions: Array.isArray(content.imageCaptions) ? content.imageCaptions : [],
+          faq: Array.isArray(content.faq) ? content.faq : [],
         },
         images: Array.isArray(landingPage.images) ? landingPage.images : [],
         pixels: Array.isArray(landingPage.pixels) ? landingPage.pixels : [],
@@ -593,7 +710,60 @@ function AdminPageContent() {
         content: {
           rating: '',
           title: '',
+          h1: '',
+          subtitle: '',
+          ctaText: '',
+          ctaNote: '',
+          heroImage: '',
+          heroAlt: '',
+          offer: {
+            title: '',
+            subtitle: '',
+            price: '',
+            oldPrice: '',
+            discountText: '',
+            note: '',
+            fineprint: '',
+            buttonText: '',
+            bullets: [],
+            showTimer: false,
+            timerLabel: '',
+          },
+          topBarText: '',
+          trustItems: [
+            { icon: '/delivery.png', title: 'Доставка', text: 'Быстро по Минску и РБ' },
+            { icon: '/warranty.png', title: 'Гарантия', text: 'Официально и прозрачно' },
+            { icon: '/iconCheck.svg', title: 'Подбор', text: 'Поможем выбрать под бюджет' },
+          ],
+          stickyCta: {
+            enabled: true,
+            price: '',
+            note: '',
+            buttonText: '',
+          },
+          stepsTitle: '',
+          stepsSubtitle: '',
+          steps: [],
+          guaranteesTitle: '',
+          guaranteesSubtitle: '',
+          guarantees: [],
+          paymentTitle: '',
+          paymentLogos: [],
+          seo: {
+            metaTitle: '',
+            metaDescription: '',
+            keywords: '',
+            canonical: '',
+            ogTitle: '',
+            ogDescription: '',
+            ogImage: '',
+            twitterTitle: '',
+            twitterDescription: '',
+            noindex: false,
+            nofollow: false,
+          },
           infoItems: [],
+          badges: [],
           heroTitle: '',
           benefits: [],
           advantages: [],
@@ -601,6 +771,9 @@ function AdminPageContent() {
           quizPrompt: '',
           buttonText: '',
           questions: [],
+          imageAlts: [],
+          imageCaptions: [],
+          faq: [],
         },
         images: [],
         pixels: [],
@@ -620,6 +793,58 @@ function AdminPageContent() {
       content: {
         rating: '',
         title: '',
+        h1: '',
+        subtitle: '',
+        ctaText: '',
+        ctaNote: '',
+        heroImage: '',
+        heroAlt: '',
+        offer: {
+          title: '',
+          subtitle: '',
+          price: '',
+          oldPrice: '',
+          discountText: '',
+          note: '',
+          fineprint: '',
+          buttonText: '',
+          bullets: [],
+          showTimer: false,
+          timerLabel: '',
+        },
+        topBarText: '',
+        trustItems: [
+          { icon: '/delivery.png', title: 'Доставка', text: 'Быстро по Минску и РБ' },
+          { icon: '/warranty.png', title: 'Гарантия', text: 'Официально и прозрачно' },
+          { icon: '/iconCheck.svg', title: 'Подбор', text: 'Поможем выбрать под бюджет' },
+        ],
+        stickyCta: {
+          enabled: true,
+          price: '',
+          note: '',
+          buttonText: '',
+        },
+        stepsTitle: '',
+        stepsSubtitle: '',
+        steps: [],
+        guaranteesTitle: '',
+        guaranteesSubtitle: '',
+        guarantees: [],
+        paymentTitle: '',
+        paymentLogos: [],
+        seo: {
+          metaTitle: '',
+          metaDescription: '',
+          keywords: '',
+          canonical: '',
+          ogTitle: '',
+          ogDescription: '',
+          ogImage: '',
+          twitterTitle: '',
+          twitterDescription: '',
+          noindex: false,
+          nofollow: false,
+        },
         infoItems: [],
         heroTitle: '',
         benefits: [],
@@ -627,6 +852,10 @@ function AdminPageContent() {
         reviews: [],
         quizPrompt: '',
         buttonText: '',
+        questions: [],
+        imageAlts: [],
+        imageCaptions: [],
+        faq: [],
       },
       images: [],
       pixels: [],
@@ -636,15 +865,28 @@ function AdminPageContent() {
 
   const handleLandingInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const setDeep = (obj, path, nextValue) => {
+      if (!path || path.length === 0) return obj;
+      const [head, ...rest] = path;
+      const current = obj && typeof obj === 'object' ? obj : Array.isArray(obj) ? [] : {};
+      const isArr = Array.isArray(current);
+      const key = isArr && String(Number(head)) === head ? Number(head) : head;
+      const clone = isArr ? [...current] : { ...current };
+      if (rest.length === 0) {
+        clone[key] = nextValue;
+        return clone;
+      }
+      clone[key] = setDeep(current[key], rest, nextValue);
+      return clone;
+    };
+
     if (name.startsWith('content.')) {
-      const contentKey = name.split('.')[1];
-      setLandingFormData({
-        ...landingFormData,
-        content: {
-          ...landingFormData.content,
-          [contentKey]: value,
-        },
-      });
+      const path = name.split('.').slice(1); // supports nested keys: content.seo.metaTitle, content.offer.price, etc.
+      const nextValue = type === 'checkbox' ? checked : value;
+      setLandingFormData((prev) => ({
+        ...prev,
+        content: setDeep(prev.content, path, nextValue),
+      }));
     } else if (name === 'is_active') {
       setLandingFormData({
         ...landingFormData,
@@ -825,7 +1067,8 @@ function AdminPageContent() {
     }
   };
 
-  const handleOpenImageGallery = () => {
+  const handleOpenImageGallery = (target = null) => {
+    setImagePickerTarget(target);
     setImageGalleryOpen(true);
     if (storageImages.length === 0) {
       fetchStorageImages();
@@ -833,15 +1076,42 @@ function AdminPageContent() {
   };
 
   const handleSelectImageFromGallery = (imagePath) => {
-    if (!landingFormData.images.includes(imagePath)) {
+    // If no target specified -> behave like before: append into landing images gallery
+    if (!imagePickerTarget) {
+      if (!landingFormData.images.includes(imagePath)) {
+        setLandingFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, imagePath],
+        }));
+        showSnackbar('Изображение добавлено', 'success');
+      } else {
+        showSnackbar('Изображение уже добавлено', 'warning');
+      }
+      setImageGalleryOpen(false);
+      return;
+    }
+
+    // Targeted assignment (hero/SEO/review avatar etc.)
+    if (imagePickerTarget.type === 'contentPath' && typeof imagePickerTarget.path === 'string') {
+      const name = `content.${imagePickerTarget.path}`;
+      handleLandingInputChange({ target: { name, value: imagePath, type: 'text' } });
+      showSnackbar('Изображение выбрано', 'success');
+    }
+
+    if (imagePickerTarget.type === 'reviewImage' && imagePickerTarget.reviewId) {
+      const reviewId = imagePickerTarget.reviewId;
       setLandingFormData((prev) => ({
         ...prev,
-        images: [...prev.images, imagePath],
+        content: {
+          ...prev.content,
+          reviews: (prev.content?.reviews || []).map((r) =>
+            r && r.id === reviewId ? { ...r, image: imagePath } : r
+          ),
+        },
       }));
-      showSnackbar('Изображение добавлено', 'success');
-    } else {
-      showSnackbar('Изображение уже добавлено', 'warning');
+      showSnackbar('Изображение выбрано', 'success');
     }
+
     setImageGalleryOpen(false);
   };
 
@@ -871,13 +1141,80 @@ function AdminPageContent() {
         .map(p => p.trim())
         .filter(p => p !== '');
 
+      // Очистка отзывов (убираем пустые, нормализуем структуру)
+      const cleanedReviews = (landingFormData.content?.reviews || [])
+        .map((r) => {
+          const review = typeof r === 'object' && r ? r : { text: String(r || '') };
+          return {
+            id: review.id || undefined,
+            name: review.name || '',
+            text: review.text || '',
+            image: review.image || '',
+            rating: review.rating ?? undefined,
+            date: review.date || '',
+          };
+        })
+        .filter((r) => (r.text || '').trim() !== '');
+
+      const cleanedSteps = (landingFormData.content?.steps || [])
+        .map((s) => {
+          const step = typeof s === 'object' && s ? s : { title: '', text: String(s || '') };
+          return {
+            id: step.id || undefined,
+            icon: step.icon || '',
+            title: step.title || '',
+            text: step.text || '',
+          };
+        })
+        .filter((s) => (s.title || s.text || '').toString().trim() !== '');
+
+      const cleanedGuarantees = (landingFormData.content?.guarantees || [])
+        .map((g) => {
+          const item = typeof g === 'object' && g ? g : { title: '', text: String(g || '') };
+          return {
+            id: item.id || undefined,
+            icon: item.icon || '',
+            title: item.title || '',
+            text: item.text || '',
+          };
+        })
+        .filter((g) => (g.title || g.text || '').toString().trim() !== '');
+
+      const cleanedTrustItems = (landingFormData.content?.trustItems || [])
+        .map((t) => {
+          const item = typeof t === 'object' && t ? t : { title: '', text: String(t || '') };
+          return {
+            icon: item.icon || '',
+            title: item.title || '',
+            text: item.text || '',
+          };
+        })
+        .filter((t) => (t.title || t.text || t.icon || '').toString().trim() !== '');
+
+      const cleanedPaymentLogos = (landingFormData.content?.paymentLogos || [])
+        .map((x) => String(x || '').trim())
+        .filter(Boolean);
+
+      const cleanedOfferBullets = (landingFormData.content?.offer?.bullets || [])
+        .map((x) => String(x || '').trim())
+        .filter(Boolean);
+
       const submitData = {
         slug: landingFormData.slug,
         title: landingFormData.title,
         theme: landingFormData.theme,
         content: {
           ...landingFormData.content,
+          offer: {
+            ...(landingFormData.content?.offer || {}),
+            bullets: cleanedOfferBullets,
+          },
+          trustItems: cleanedTrustItems,
+          paymentLogos: cleanedPaymentLogos,
+          steps: cleanedSteps,
+          guarantees: cleanedGuarantees,
           questions: cleanedQuestions,
+          reviews: cleanedReviews,
         },
         images: landingFormData.images,
         pixels: cleanedPixels,
@@ -1574,6 +1911,7 @@ function AdminPageContent() {
                       <MenuItem value="phone2">Phone2</MenuItem>
                       <MenuItem value="phone3">Phone3</MenuItem>
                       <MenuItem value="phone4">Phone4</MenuItem>
+                      <MenuItem value="universal4">Universal4 (SEO)</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -1647,6 +1985,756 @@ function AdminPageContent() {
                     rows={2}
                   />
                 </Grid>
+
+                {landingFormData.theme === 'universal4' && (
+                  <>
+                    <Grid item xs={12}>
+                      <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                        Universal4: продающий оффер + доверие + шаги + гарантии + отзывы
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Top bar text (верхняя строка)"
+                        name="content.topBarText"
+                        value={landingFormData.content?.topBarText || ''}
+                        onChange={handleLandingInputChange}
+                        helperText="Если пусто — будет дефолтный текст"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        SEO (авто: “купить в рассрочку без переплат”, если пусто)
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Meta title"
+                        name="content.seo.metaTitle"
+                        value={landingFormData.content?.seo?.metaTitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Keywords"
+                        name="content.seo.keywords"
+                        value={landingFormData.content?.seo?.keywords || ''}
+                        onChange={handleLandingInputChange}
+                        helperText="Через запятую. Если пусто — подставим рассрочку/без переплат/доставка"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Meta description"
+                        name="content.seo.metaDescription"
+                        value={landingFormData.content?.seo?.metaDescription || ''}
+                        onChange={handleLandingInputChange}
+                        multiline
+                        rows={2}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={8}>
+                      <TextField
+                        fullWidth
+                        label="OG image (URL)"
+                        name="content.seo.ogImage"
+                        value={landingFormData.content?.seo?.ogImage || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleOpenImageGallery({ type: 'contentPath', path: 'seo.ogImage' })}
+                        sx={{ mt: { xs: 0, md: 1 } }}
+                        fullWidth
+                      >
+                        Выбрать из Storage
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <input
+                          type="checkbox"
+                          id="seo_noindex"
+                          name="content.seo.noindex"
+                          checked={!!landingFormData.content?.seo?.noindex}
+                          onChange={handleLandingInputChange}
+                          style={{ marginRight: 8 }}
+                        />
+                        <label htmlFor="seo_noindex">noindex</label>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <input
+                          type="checkbox"
+                          id="seo_nofollow"
+                          name="content.seo.nofollow"
+                          checked={!!landingFormData.content?.seo?.nofollow}
+                          onChange={handleLandingInputChange}
+                          style={{ marginRight: 8 }}
+                        />
+                        <label htmlFor="seo_nofollow">nofollow</label>
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Trust items (3 карточки под hero)
+                      </Typography>
+                    </Grid>
+                    {[0, 1, 2].map((i) => (
+                      <Grid item xs={12} key={`trust-${i}`}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={3}>
+                            <TextField
+                              fullWidth
+                              label={`Иконка URL #${i + 1}`}
+                              name={`content.trustItems.${i}.icon`}
+                              value={landingFormData.content?.trustItems?.[i]?.icon || ''}
+                              onChange={handleLandingInputChange}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <Button
+                              variant="outlined"
+                              onClick={() => handleOpenImageGallery({ type: 'contentPath', path: `trustItems.${i}.icon` })}
+                              sx={{ mt: { xs: 0, md: 1 } }}
+                              fullWidth
+                            >
+                              Storage
+                            </Button>
+                          </Grid>
+                          <Grid item xs={12} md={3}>
+                            <TextField
+                              fullWidth
+                              label={`Заголовок #${i + 1}`}
+                              name={`content.trustItems.${i}.title`}
+                              value={landingFormData.content?.trustItems?.[i]?.title || ''}
+                              onChange={handleLandingInputChange}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <TextField
+                              fullWidth
+                              label={`Описание #${i + 1}`}
+                              name={`content.trustItems.${i}.text`}
+                              value={landingFormData.content?.trustItems?.[i]?.text || ''}
+                              onChange={handleLandingInputChange}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    ))}
+
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Цена (offer.price)"
+                        name="content.offer.price"
+                        value={landingFormData.content?.offer?.price || ''}
+                        onChange={handleLandingInputChange}
+                        placeholder="например: 49 BYN/мес"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Старая цена (offer.oldPrice)"
+                        name="content.offer.oldPrice"
+                        value={landingFormData.content?.offer?.oldPrice || ''}
+                        onChange={handleLandingInputChange}
+                        placeholder="например: 79 BYN/мес"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Бейдж скидки (offer.discountText)"
+                        name="content.offer.discountText"
+                        value={landingFormData.content?.offer?.discountText || ''}
+                        onChange={handleLandingInputChange}
+                        placeholder="например: -40% сегодня"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Offer note"
+                        name="content.offer.note"
+                        value={landingFormData.content?.offer?.note || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Offer bullets (каждая строка = пункт)"
+                        value={(landingFormData.content?.offer?.bullets || []).join('\n')}
+                        onChange={(e) => {
+                          // Keep raw lines while typing so Enter works (cleanup happens on Save)
+                          const lines = e.target.value.split(/\r?\n/);
+                          setLandingFormData((prev) => ({
+                            ...prev,
+                            content: {
+                              ...prev.content,
+                              offer: {
+                                ...(prev.content?.offer || {}),
+                                bullets: lines,
+                              },
+                            },
+                          }));
+                        }}
+                        multiline
+                        rows={4}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Текст кнопки (offer.buttonText)"
+                        name="content.offer.buttonText"
+                        value={landingFormData.content?.offer?.buttonText || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <input
+                          type="checkbox"
+                          id="offer_showTimer"
+                          name="content.offer.showTimer"
+                          checked={!!landingFormData.content?.offer?.showTimer}
+                          onChange={handleLandingInputChange}
+                          style={{ marginRight: 8 }}
+                        />
+                        <label htmlFor="offer_showTimer">Показывать таймер</label>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Timer label"
+                        name="content.offer.timerLabel"
+                        value={landingFormData.content?.offer?.timerLabel || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Sticky CTA (мобильная кнопка снизу)
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <input
+                          type="checkbox"
+                          id="sticky_enabled"
+                          name="content.stickyCta.enabled"
+                          checked={!!landingFormData.content?.stickyCta?.enabled}
+                          onChange={handleLandingInputChange}
+                          style={{ marginRight: 8 }}
+                        />
+                        <label htmlFor="sticky_enabled">Включено</label>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Sticky price (опц.)"
+                        name="content.stickyCta.price"
+                        value={landingFormData.content?.stickyCta?.price || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Sticky button text (опц.)"
+                        name="content.stickyCta.buttonText"
+                        value={landingFormData.content?.stickyCta?.buttonText || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Sticky note"
+                        name="content.stickyCta.note"
+                        value={landingFormData.content?.stickyCta?.note || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Steps / Как это работает
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Steps title"
+                        name="content.stepsTitle"
+                        value={landingFormData.content?.stepsTitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Steps subtitle"
+                        name="content.stepsSubtitle"
+                        value={landingFormData.content?.stepsSubtitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                          const step = { id: Date.now(), icon: '', title: '', text: '' };
+                          setLandingFormData((prev) => ({
+                            ...prev,
+                            content: {
+                              ...prev.content,
+                              steps: [...(prev.content?.steps || []), step],
+                            },
+                          }));
+                        }}
+                        size="small"
+                      >
+                        Добавить шаг
+                      </Button>
+                    </Grid>
+                    {Array.isArray(landingFormData.content?.steps) && landingFormData.content.steps.length > 0 ? (
+                      <Grid item xs={12}>
+                        {landingFormData.content.steps.map((step, idx) => (
+                          <Accordion key={step.id || idx} sx={{ mb: 1 }}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                              <Typography variant="subtitle1">
+                                Шаг {idx + 1}: {step.title || 'Без названия'}
+                              </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item xs={12} md={8}>
+                                  <TextField
+                                    fullWidth
+                                    label="Icon (URL)"
+                                    name={`content.steps.${idx}.icon`}
+                                    value={step.icon || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12} md={4}>
+                                  <Button
+                                    variant="outlined"
+                                    onClick={() => handleOpenImageGallery({ type: 'contentPath', path: `steps.${idx}.icon` })}
+                                    sx={{ mt: { xs: 0, md: 1 } }}
+                                    fullWidth
+                                  >
+                                    Storage
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Title"
+                                    name={`content.steps.${idx}.title`}
+                                    value={step.title || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Text"
+                                    name={`content.steps.${idx}.text`}
+                                    value={step.text || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<DeleteIcon />}
+                                    onClick={() => {
+                                      setLandingFormData((prev) => ({
+                                        ...prev,
+                                        content: {
+                                          ...prev.content,
+                                          steps: (prev.content?.steps || []).filter((_, i2) => i2 !== idx),
+                                        },
+                                      }));
+                                    }}
+                                    size="small"
+                                  >
+                                    Удалить шаг
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+                        ))}
+                      </Grid>
+                    ) : null}
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Guarantees / Гарантии и условия
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Guarantees title"
+                        name="content.guaranteesTitle"
+                        value={landingFormData.content?.guaranteesTitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Guarantees subtitle"
+                        name="content.guaranteesSubtitle"
+                        value={landingFormData.content?.guaranteesSubtitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                          const g = { id: Date.now(), icon: '', title: '', text: '' };
+                          setLandingFormData((prev) => ({
+                            ...prev,
+                            content: {
+                              ...prev.content,
+                              guarantees: [...(prev.content?.guarantees || []), g],
+                            },
+                          }));
+                        }}
+                        size="small"
+                      >
+                        Добавить гарантию
+                      </Button>
+                    </Grid>
+                    {Array.isArray(landingFormData.content?.guarantees) && landingFormData.content.guarantees.length > 0 ? (
+                      <Grid item xs={12}>
+                        {landingFormData.content.guarantees.map((g, idx) => (
+                          <Accordion key={g.id || idx} sx={{ mb: 1 }}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                              <Typography variant="subtitle1">
+                                Гарантия {idx + 1}: {g.title || 'Без названия'}
+                              </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item xs={12} md={8}>
+                                  <TextField
+                                    fullWidth
+                                    label="Icon (URL)"
+                                    name={`content.guarantees.${idx}.icon`}
+                                    value={g.icon || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12} md={4}>
+                                  <Button
+                                    variant="outlined"
+                                    onClick={() => handleOpenImageGallery({ type: 'contentPath', path: `guarantees.${idx}.icon` })}
+                                    sx={{ mt: { xs: 0, md: 1 } }}
+                                    fullWidth
+                                  >
+                                    Storage
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Title"
+                                    name={`content.guarantees.${idx}.title`}
+                                    value={g.title || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Text"
+                                    name={`content.guarantees.${idx}.text`}
+                                    value={g.text || ''}
+                                    onChange={handleLandingInputChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<DeleteIcon />}
+                                    onClick={() => {
+                                      setLandingFormData((prev) => ({
+                                        ...prev,
+                                        content: {
+                                          ...prev.content,
+                                          guarantees: (prev.content?.guarantees || []).filter((_, i2) => i2 !== idx),
+                                        },
+                                      }));
+                                    }}
+                                    size="small"
+                                  >
+                                    Удалить гарантию
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+                        ))}
+                      </Grid>
+                    ) : null}
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Payment logos (каждая строка = URL)
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        label="Payment logos"
+                        value={(landingFormData.content?.paymentLogos || []).join('\n')}
+                        onChange={(e) => {
+                          // Keep raw lines while typing so Enter works (cleanup happens on Save)
+                          const lines = e.target.value.split(/\r?\n/);
+                          setLandingFormData((prev) => ({
+                            ...prev,
+                            content: {
+                              ...prev.content,
+                              paymentLogos: lines,
+                            },
+                          }));
+                        }}
+                        multiline
+                        rows={3}
+                        helperText="Если пусто — будут дефолтные логотипы"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Payment title"
+                        name="content.paymentTitle"
+                        value={landingFormData.content?.paymentTitle || ''}
+                        onChange={handleLandingInputChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                        Отзывы (можно фейковые)
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Button
+                          variant="outlined"
+                          startIcon={<AddIcon />}
+                          onClick={() => {
+                            const newReview = {
+                              id: Date.now(),
+                              name: '',
+                              text: '',
+                              image: '',
+                              rating: 5,
+                              date: '',
+                            };
+                            setLandingFormData((prev) => ({
+                              ...prev,
+                              content: {
+                                ...prev.content,
+                                reviews: [...(prev.content?.reviews || []), newReview],
+                              },
+                            }));
+                          }}
+                          size="small"
+                        >
+                          Добавить отзыв
+                        </Button>
+                      </Box>
+                      {Array.isArray(landingFormData.content?.reviews) && landingFormData.content.reviews.length > 0 && (
+                        <Box sx={{ mb: 2 }}>
+                          {landingFormData.content.reviews.map((review, rIndex) => (
+                            <Accordion key={review.id || rIndex} sx={{ mb: 1 }}>
+                              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <Typography variant="subtitle1">
+                                  Отзыв {rIndex + 1}: {review.name || 'Без имени'}
+                                </Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <Grid container spacing={2}>
+                                  <Grid item xs={12} md={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Имя"
+                                      value={review.name || ''}
+                                      onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).map((r) =>
+                                              r.id === review.id ? { ...r, name: v } : r
+                                            ),
+                                          },
+                                        }));
+                                      }}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} md={3}>
+                                    <TextField
+                                      fullWidth
+                                      label="Рейтинг (1-5)"
+                                      type="number"
+                                      value={review.rating ?? 5}
+                                      onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).map((r) =>
+                                              r.id === review.id ? { ...r, rating: Number(v) } : r
+                                            ),
+                                          },
+                                        }));
+                                      }}
+                                      inputProps={{ min: 1, max: 5 }}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} md={3}>
+                                    <TextField
+                                      fullWidth
+                                      label="Дата"
+                                      value={review.date || ''}
+                                      onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).map((r) =>
+                                              r.id === review.id ? { ...r, date: v } : r
+                                            ),
+                                          },
+                                        }));
+                                      }}
+                                      placeholder="например: 12.12.2025"
+                                    />
+                                  </Grid>
+
+                                  <Grid item xs={12} md={8}>
+                                    <TextField
+                                      fullWidth
+                                      label="Аватар (URL)"
+                                      value={review.image || ''}
+                                      onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).map((r) =>
+                                              r.id === review.id ? { ...r, image: v } : r
+                                            ),
+                                          },
+                                        }));
+                                      }}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} md={4}>
+                                    <Button
+                                      variant="outlined"
+                                      onClick={() => handleOpenImageGallery({ type: 'reviewImage', reviewId: review.id })}
+                                      sx={{ mt: { xs: 0, md: 1 } }}
+                                      fullWidth
+                                    >
+                                      Выбрать из Storage
+                                    </Button>
+                                  </Grid>
+                                  {review.image ? (
+                                    <Grid item xs={12}>
+                                      <Image
+                                        src={review.image}
+                                        alt={review.name ? `Фото: ${review.name}` : 'Фото'}
+                                        width={80}
+                                        height={80}
+                                        style={{ objectFit: 'cover', borderRadius: 999 }}
+                                      />
+                                    </Grid>
+                                  ) : null}
+
+                                  <Grid item xs={12}>
+                                    <TextField
+                                      fullWidth
+                                      label="Текст отзыва"
+                                      value={review.text || ''}
+                                      onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).map((r) =>
+                                              r.id === review.id ? { ...r, text: v } : r
+                                            ),
+                                          },
+                                        }));
+                                      }}
+                                      multiline
+                                      rows={3}
+                                    />
+                                  </Grid>
+
+                                  <Grid item xs={12}>
+                                    <Button
+                                      variant="outlined"
+                                      color="error"
+                                      startIcon={<DeleteIcon />}
+                                      onClick={() => {
+                                        setLandingFormData((prev) => ({
+                                          ...prev,
+                                          content: {
+                                            ...prev.content,
+                                            reviews: (prev.content?.reviews || []).filter((r) => r.id !== review.id),
+                                          },
+                                        }));
+                                      }}
+                                      size="small"
+                                    >
+                                      Удалить отзыв
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+                              </AccordionDetails>
+                            </Accordion>
+                          ))}
+                        </Box>
+                      )}
+                    </Grid>
+                  </>
+                )}
                 <Grid item xs={12}>
                   <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
                     Изображения
@@ -1661,7 +2749,7 @@ function AdminPageContent() {
                         onChange={handleLandingImageUpload}
                       />
                     </Button>
-                    <Button variant="outlined" onClick={handleOpenImageGallery}>
+                    <Button variant="outlined" onClick={() => handleOpenImageGallery(null)}>
                       Выбрать из Storage
                     </Button>
                   </Box>

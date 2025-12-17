@@ -3,9 +3,13 @@ import styles from './CountdownTimer.module.css';
 import classNames from 'classnames';
 
 export default function CountdownTimer({ className }) {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  // Avoid SSR hydration mismatch: render stable initial values, then calculate on mount.
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    // Initialize on client after mount
+    setTimeLeft(calculateTimeLeft());
+
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);

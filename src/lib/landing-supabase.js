@@ -91,8 +91,8 @@ export async function addLandingPage(landingData) {
       return { success: false, error: 'Slug and title are required' };
     }
 
-    if (!['phone2', 'phone3', 'phone4'].includes(processedData.theme)) {
-      return { success: false, error: 'Theme must be phone2, phone3, or phone4' };
+    if (!['phone2', 'phone3', 'phone4', 'universal4'].includes(processedData.theme)) {
+      return { success: false, error: 'Theme must be phone2, phone3, phone4, or universal4' };
     }
 
     console.log('Attempting to insert landing page:', { 
@@ -141,8 +141,8 @@ export async function updateLandingPage(id, landingData) {
       return { success: false, error: 'Slug and title are required' };
     }
 
-    if (!['phone2', 'phone3', 'phone4'].includes(processedData.theme)) {
-      return { success: false, error: 'Theme must be phone2, phone3, or phone4' };
+    if (!['phone2', 'phone3', 'phone4', 'universal4'].includes(processedData.theme)) {
+      return { success: false, error: 'Theme must be phone2, phone3, phone4, or universal4' };
     }
 
     console.log('Attempting to update landing page:', { 

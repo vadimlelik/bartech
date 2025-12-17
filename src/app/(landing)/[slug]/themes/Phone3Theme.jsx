@@ -7,6 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { loadTikTokPixel } from '@/shared/utils';
 
 const defaultQuestions = [
   {
@@ -87,18 +88,24 @@ export default function Phone3Theme({ landingPage }) {
   }, []);
 
   useEffect(() => {
-    if (window.ttq && pixels && pixels.length > 0) {
-      // Фильтруем и загружаем только валидные пиксели (непустые строки)
-      const validPixels = pixels.filter(p => p && typeof p === 'string' && p.trim() !== '');
-      validPixels.forEach((pixel) => {
-        const pixelId = pixel.trim();
-        if (pixelId) {
-          window.ttq.load(pixelId);
-        }
-      });
-      if (validPixels.length > 0) {
-        window.ttq.page();
-      }
+    if (!pixels || pixels.length === 0) return;
+    if (typeof window === 'undefined') return;
+
+    const consent = localStorage.getItem('cookie-consent');
+    if (consent !== 'accepted') return;
+
+    const validPixels = pixels
+      .filter((p) => p && typeof p === 'string' && p.trim() !== '')
+      .map((p) => p.trim());
+    if (validPixels.length === 0) return;
+
+    if (!window.ttq) {
+      loadTikTokPixel(validPixels[0]);
+    }
+
+    if (window.ttq) {
+      validPixels.forEach((id) => window.ttq.load(id));
+      window.ttq.page();
     }
   }, [pixels]);
 

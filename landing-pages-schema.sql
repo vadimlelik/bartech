@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS landing_pages (
   id BIGSERIAL PRIMARY KEY,
   slug TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
-  theme TEXT NOT NULL CHECK (theme IN ('phone2', 'phone3', 'phone4')),
+  theme TEXT NOT NULL CHECK (theme IN ('phone2', 'phone3', 'phone4', 'universal4')),
   content JSONB DEFAULT '{}'::jsonb,
   images JSONB DEFAULT '[]'::jsonb,
   pixels JSONB DEFAULT '[]'::jsonb,
