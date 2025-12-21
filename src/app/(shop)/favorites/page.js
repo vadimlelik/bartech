@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useFavoritesStore } from '@/store/favorites';
 import { useCartStore } from '@/store/cart';
 import {
@@ -39,7 +39,6 @@ export default function FavoritesPage() {
           return;
         }
 
-        'Favorites from store:', favorites;
         const response = await fetch(
           `/api/products?ids=${favorites.join(',')}`
         );
@@ -47,7 +46,6 @@ export default function FavoritesPage() {
           throw new Error('Failed to fetch products');
         }
         const data = await response.json();
-        'Products from API:', data.products;
         setProducts(data.products || []);
       } catch (error) {
         setSnackbarMessage('Ошибка при загрузке товаров');
@@ -60,23 +58,46 @@ export default function FavoritesPage() {
     fetchProducts();
   }, [favorites]);
 
-  const handleRemoveFromFavorites = (productId) => {
+  const handleRemoveFromFavorites = useCallback((productId) => {
     removeFromFavorites(productId);
     setSnackbarMessage('Товар удален из избранного');
     setSnackbarOpen(true);
-  };
+  }, [removeFromFavorites]);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = useCallback((product) => {
     if (!product) return;
     addToCart(product);
     setSnackbarMessage('Товар добавлен в корзину');
     setSnackbarOpen(true);
-  };
+  }, [addToCart]);
+
+  // Мемоизируем количество товаров
+  const productsCount = useMemo(() => products.length, [products.length]);
 
   if (loading) {
     return (
-      <Container sx={{ py: 4, textAlign: 'center' }}>
-        <CircularProgress />
+      <Container sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+          Избранное
+        </Typography>
+        <Grid container spacing={3}>
+          {[...Array(6)].map((_, index) => (
+            <Grid item xs={12} sm={6} md={4} key={`skeleton-${index}`}>
+              <Box
+                sx={{
+                  height: 400,
+                  borderRadius: 2,
+                  bgcolor: 'grey.200',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     );
   }
@@ -103,7 +124,7 @@ export default function FavoritesPage() {
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Избранное ({products.length})
+        Избранное ({productsCount})
       </Typography>
       <Grid container spacing={3}>
         {products.map((product) => {
@@ -125,6 +146,8 @@ export default function FavoritesPage() {
                       objectFit: 'contain',
                       padding: '20px',
                     }}
+                    sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                    loading="lazy"
                   />
                 </Link>
               </Box>

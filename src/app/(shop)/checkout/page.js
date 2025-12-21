@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Container,
@@ -25,19 +25,19 @@ import Image from 'next/image';
 import { useCartStore } from '@/store/cart';
 import { useRouter } from 'next/navigation';
 
-// Регулярные выражения для валидации
-const PHONE_REGEX = /^(\+375|375|80)?(29|25|44|33)(\d{3})(\d{2})(\d{2})$/;
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-const NAME_REGEX = /^[A-Za-zА-Яа-яЁё\s-]{2,50}$/;
+import { VALIDATION, EXTERNAL_SERVICES, CURRENCY } from '@/config/constants';
 
-const BITRIX24_WEBHOOK_URL =
-  'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json';
+const BITRIX24_WEBHOOK_URL = EXTERNAL_SERVICES.BITRIX24_WEBHOOK;
+const PHONE_REGEX = VALIDATION.PHONE_SIMPLE_REGEX;
+const EMAIL_REGEX = VALIDATION.EMAIL_REGEX;
+const NAME_REGEX = VALIDATION.NAME_REGEX;
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { cartItems, getCartTotal, clearCart } = useCartStore();
   const [activeStep, setActiveStep] = useState(0);
   const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -128,23 +128,28 @@ export default function CheckoutPage() {
     }
   };
 
-  const onSubmit = async (data) => {
+  // Мемоизируем итоговую сумму
+  const cartTotal = useMemo(() => getCartTotal(), [ getCartTotal]);
+
+  const onSubmit = useCallback(async (data) => {
     try {
       setSubmitError('');
+      setIsSubmitting(true);
       const orderData = {
         items: cartItems,
-        totalPrice: getCartTotal(),
+        totalPrice: cartTotal,
         customerInfo: data,
       };
 
-      await sendToBitrix24(orderData).finally(() => {
-        clearCart();
-        router.push('/thank-you');
-      });
+      await sendToBitrix24(orderData);
+      clearCart();
+      router.push('/thank-you');
     } catch (error) {
-      setSubmitError(error.message);
+      setSubmitError(error.message || 'Произошла ошибка при оформлении заказа');
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }, [cartItems, cartTotal, clearCart, router]);
 
   const renderCartItems = () => (
     <List>
@@ -152,14 +157,15 @@ export default function CheckoutPage() {
         <ListItem key={item.id}>
           <ListItemAvatar>
             <Avatar>
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={40}
-                height={40}
-                style={{ objectFit: 'contain' }}
-                unoptimized
-              />
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={40}
+                  height={40}
+                  style={{ objectFit: 'contain' }}
+                  sizes="40px"
+                  loading="lazy"
+                />
             </Avatar>
           </ListItemAvatar>
           <ListItemText
@@ -214,6 +220,7 @@ export default function CheckoutPage() {
             type="email"
             error={!!errors.email}
             helperText={errors.email?.message}
+            disabled={isSubmitting}
             {...register('email', {
               required: 'Email обязателен',
               pattern: {

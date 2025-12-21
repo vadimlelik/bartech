@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Grid,
@@ -71,9 +71,7 @@ export default function ProductList({ categoryId }) {
   const [previewCount, setPreviewCount] = useState(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
-  useEffect(() => {
-    'Favorites updated:', favorites;
-  }, [favorites]);
+  // Удален console.log для production
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -96,7 +94,7 @@ export default function ProductList({ categoryId }) {
         setTotalPages(data.pagination.pages);
         setAvailableFilters(data.filters);
       } catch (err) {
-        'Error fetching products:', err;
+        console.error('Error fetching products:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -108,28 +106,29 @@ export default function ProductList({ categoryId }) {
     }
   }, [categoryId, sort, sortBy, page, searchTerm, activeFilters]);
 
-  const handleSortChange = (event) => {
+  // Мемоизированные обработчики для предотвращения лишних ререндеров
+  const handleSortChange = useCallback((event) => {
     setSortBy(event.target.value);
     setPage(1);
     updateUrl({ sortBy: event.target.value });
-  };
+  }, []);
 
-  const handleOrderChange = (event) => {
+  const handleOrderChange = useCallback((event) => {
     setSort(event.target.value);
     setPage(1);
     updateUrl({ sort: event.target.value });
-  };
+  }, []);
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = useCallback((event, value) => {
     setPage(value);
     updateUrl({ page: value });
-  };
+  }, []);
 
-  const handleSearch = (event) => {
+  const handleSearch = useCallback((event) => {
     setSearchTerm(event.target.value);
     setPage(1);
     updateUrl({ search: event.target.value, page: 1 });
-  };
+  }, []);
 
   const handleFilterChange = async (field, value) => {
     const newFilters = { ...previewFilters };
@@ -149,9 +148,9 @@ export default function ProductList({ categoryId }) {
       const response = await fetch(`/api/products?${params}`);
       const data = await response.json();
       setPreviewCount(data.pagination.total);
-    } catch (error) {
-      'Error fetching preview count:', error;
-    }
+      } catch (error) {
+        console.error('Error fetching preview count:', error);
+      }
     setIsPreviewLoading(false);
   };
 
@@ -181,7 +180,7 @@ export default function ProductList({ categoryId }) {
     router.push(`?${currentParams.toString()}`);
   };
 
-  const handleCompareToggle = (product) => {
+  const handleCompareToggle = useCallback((product) => {
     if (isInCompare(product.id)) {
       removeFromCompare(product.id);
       setSnackbarMessage('Товар удален из сравнения');
@@ -194,23 +193,18 @@ export default function ProductList({ categoryId }) {
       }
     }
     setSnackbarOpen(true);
-  };
+  }, [isInCompare, removeFromCompare, addToCompare, compareItems.length]);
 
-  const handleFavoriteClick = (productId) => {
-    'Clicking favorite for product:', productId;
-    'Current favorites before:', favorites;
+  const handleFavoriteClick = useCallback((productId) => {
     if (isInFavorites(productId)) {
-      ('Removing from favorites');
       removeFromFavorites(productId);
       setSnackbarMessage('Товар удален из избранного');
     } else {
-      ('Adding to favorites');
       addToFavorites(productId);
       setSnackbarMessage('Товар добавлен в избранное');
     }
-    'Current favorites after:', favorites;
     setSnackbarOpen(true);
-  };
+  }, [isInFavorites, removeFromFavorites, addToFavorites]);
 
   const filterSections = [
     { key: 'memory', label: 'Память' },
@@ -386,15 +380,25 @@ export default function ProductList({ categoryId }) {
       {loading ? (
         <Grid container spacing={3}>
           {[...Array(6)].map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} key={`skeleton-${index}`}>
               <Skeleton
                 variant="rectangular"
                 height={400}
                 sx={{ borderRadius: 2 }}
+                animation="wave"
               />
             </Grid>
           ))}
         </Grid>
+      ) : products.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            Товары не найдены
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Попробуйте изменить фильтры или поисковый запрос
+          </Typography>
+        </Box>
       ) : (
         <Grid container spacing={3}>
           {products.map((product) => {
