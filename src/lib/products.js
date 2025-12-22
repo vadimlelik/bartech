@@ -69,36 +69,23 @@ export async function getProducts({
     }
 
     let filteredProducts = getAllProductsFromJSON() || [];
-    'Total products:', filteredProducts.length;
 
     if (ids && ids.length > 0) {
-      'Filtering by IDs:', ids;
       filteredProducts = (filteredProducts || []).filter((product) => {
         const productIdStr = String(product.id);
         const isIncluded = ids.includes(productIdStr);
-        'Product ID:', productIdStr, 'isIncluded:', isIncluded;
         return isIncluded;
       });
-      'Found products:', filteredProducts;
     } else {
       if (categoryId) {
-        'Filtering by categoryId:', categoryId;
         filteredProducts = (filteredProducts || []).filter((product) => {
           if (!product) return false;
           const matchCategory = product.categoryId === categoryId;
           const matchBrand =
             product.specifications?.brand?.toLowerCase() ===
             categoryId.toLowerCase();
-          'Product:',
-            product.name,
-            'categoryId:',
-            product.categoryId,
-            'brand:',
-            product.specifications?.brand;
-          'Matches:', { matchCategory, matchBrand };
           return matchCategory || matchBrand;
         });
-        'Filtered products:', filteredProducts.length;
       }
 
       if (search && search.trim()) {
@@ -213,7 +200,7 @@ export async function getProducts({
       },
     };
   } catch (error) {
-    'Error in getProducts:', error;
+    console.error('Error in getProducts:', error);
     return {
       products: [],
       filters: {},

@@ -307,7 +307,7 @@ jobs:
           server_ready=false
           
           while [ $attempt -lt $max_attempts ]; do
-            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" "cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null"; then
+            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null'; then
               echo "✅ Server health check passed!"
               server_ready=true
               break
@@ -319,15 +319,7 @@ jobs:
           
           if [ "$server_ready" = false ]; then
             echo "ERROR: Server health check failed after $max_attempts attempts"
-            ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
-              cd /opt/bartech
-              echo "=== Container Status ==="
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
-              echo "=== Next.js Logs (last 50 lines) ==="
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs
-              echo "=== Nginx Logs (last 50 lines) ==="
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx
-            EOF
+            ssh "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && echo "=== Container Status ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps && echo "=== Next.js Logs (last 50 lines) ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs && echo "=== Nginx Logs (last 50 lines) ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx'
             exit 1
           fi
           
@@ -342,5 +334,4 @@ jobs:
           fi
           
           echo "✅ Deployment successful - server is running and healthy!"
-          exit 0
 

@@ -22,14 +22,15 @@ export async function GET(request, { params }) {
     }
 
     const response = NextResponse.json({ product });
-    
+
     // Отключаем кеширование для API ответов, чтобы новые данные отображались сразу после деплоя
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     response.headers.set('Pragma', 'no-cache');
     response.headers.set('Expires', '0');
-    
+
     return response;
   } catch (error) {
+    console.error('Error in products/[id] API:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

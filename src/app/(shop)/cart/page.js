@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Box,
   Container,
@@ -34,14 +34,14 @@ export default function CartPage() {
     useCartStore();
   const [promoCode, setPromoCode] = useState('');
 
-  const handleQuantityChange = (productId, newQuantity) => {
+  const handleQuantityChange = useCallback((productId, newQuantity) => {
     if (newQuantity > 0) {
       updateQuantity(productId, newQuantity);
     }
-  };
-  console.log(cartItems, 'cartItems');
+  }, [updateQuantity]);
 
-  const cartTotal = getCartTotal();
+  // Мемоизируем итоговую сумму корзины
+  const cartTotal = useMemo(() => getCartTotal(), [ getCartTotal]);
 
   if (!cartItems.length) {
     return (
@@ -126,7 +126,8 @@ export default function CartPage() {
                                   alt={item.name}
                                   fill
                                   style={{ objectFit: 'contain' }}
-                                  unoptimized
+                                  sizes="80px"
+                                  loading="lazy"
                                 />
                               </Box>
                               <div

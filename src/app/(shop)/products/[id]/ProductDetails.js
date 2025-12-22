@@ -39,14 +39,16 @@ import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import CloseIcon from '@mui/icons-material/Close';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import CloseIcon from '@mui/icons-material/Close';
 import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask';
+import ProductImageGallery from './components/ProductImageGallery';
+import ProductDelivery from './components/ProductDelivery';
+import ProductReviews from './components/ProductReviews';
+import { EXTERNAL_SERVICES, VALIDATION, CURRENCY } from '@/config/constants';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -62,131 +64,7 @@ function TabPanel({ children, value, index, ...other }) {
   );
 }
 
-function Reviews() {
-  const reviews = [
-    {
-      id: 1,
-      author: 'Александр',
-      rating: 5,
-      date: '15.12.2023',
-      text: 'Отличный телефон, всем рекомендую!',
-    },
-    {
-      id: 2,
-      author: 'Мария',
-      rating: 4,
-      date: '10.12.2023',
-      text: 'Хороший телефон, но дороговато',
-    },
-    {
-      id: 3,
-      author: 'Дмитрий',
-      rating: 5,
-      date: '05.12.2023',
-      text: 'Камера супер, батарея держит долго',
-    },
-  ];
-
-  return (
-    <List>
-      {reviews.map((review, index) => (
-        <div key={review.id}>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar>{review.author[0]}</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography component="span" variant="subtitle1">
-                    {review.author}
-                  </Typography>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {review.date}
-                  </Typography>
-                </Box>
-              }
-              secondary={
-                <>
-                  <Rating
-                    value={review.rating}
-                    readOnly
-                    size="small"
-                    sx={{ mt: 1 }}
-                  />
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="text.primary"
-                    sx={{ display: 'block', mt: 1 }}
-                  >
-                    {review.text}
-                  </Typography>
-                </>
-              }
-            />
-          </ListItem>
-          {index < reviews.length - 1 && (
-            <Divider variant="inset" component="li" />
-          )}
-        </div>
-      ))}
-    </List>
-  );
-}
-
-function Delivery() {
-  return (
-    <Box>
-      <List>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <LocalShippingIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary="Бесплатная доставка"
-            secondary="При заказе от 1000 рублей"
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <PaymentIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary="Оплата при получении"
-            secondary="Наличными или картой"
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <ScheduleIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Срок доставки" secondary="1-3 рабочих дня" />
-        </ListItem>
-      </List>
-    </Box>
-  );
-}
-
 export default function ProductDetails({ product }) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isImageDialogOpen, setImageDialogOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [isInstallmentModalOpen, setIsInstallmentModalOpen] = useState(false);
   const [name, setName] = useState('');
@@ -210,6 +88,7 @@ export default function ProductDetails({ product }) {
   const ad = params.get('ad');
   const ttclid = params.get('ttclid');
 
+  // Получаем изображения товара
   const productImages = (() => {
     if (product.images && Array.isArray(product.images) && product.images.length > 0) {
       return product.images.filter(img => img && img.trim() !== '');
@@ -238,29 +117,7 @@ export default function ProductDetails({ product }) {
     return specificationTranslations[key] || key;
   };
 
-  const handleImageClick = () => {
-    if (productImages.length > 0) {
-      setImageDialogOpen(true);
-    }
-  };
-
-  const handlePrevImage = (e) => {
-    if (e) {
-      e.stopPropagation();
-    }
-    setCurrentImageIndex((prev) =>
-      prev > 0 ? prev - 1 : productImages.length - 1
-    );
-  };
-
-  const handleNextImage = (e) => {
-    if (e) {
-      e.stopPropagation();
-    }
-    setCurrentImageIndex((prev) =>
-      prev < productImages.length - 1 ? prev + 1 : 0
-    );
-  };
+  // Удалены обработчики изображений - теперь в ProductImageGallery
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -300,7 +157,7 @@ export default function ProductDetails({ product }) {
     if (!phoneNumber || phoneNumber === '+375') {
       return 'Пожалуйста, введите номер телефона';
     }
-    if (!/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(phoneNumber)) {
+    if (!VALIDATION.PHONE_REGEX.test(phoneNumber)) {
       return 'Введите корректный номер телефона';
     }
     return '';
@@ -366,7 +223,7 @@ export default function ProductDetails({ product }) {
       };
 
       await axios.post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
+        EXTERNAL_SERVICES.BITRIX24_WEBHOOK || 'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
         formData
       );
 
@@ -386,95 +243,10 @@ export default function ProductDetails({ product }) {
     <Box>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              position: 'relative',
-              width: '100%',
-              height: '500px',
-              cursor: 'pointer',
-            }}
-            onClick={handleImageClick}
-          >
-            {productImages.length > 0 && productImages[currentImageIndex] && (
-              <Image
-                src={productImages[currentImageIndex]}
-                alt={`${product.name} - изображение ${currentImageIndex + 1}`}
-                fill
-                style={{ objectFit: 'contain' }}
-                unoptimized
-                priority
-              />
-            )}
-            {productImages.length > 1 && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  p: 2,
-                  zIndex: 1,
-                }}
-              >
-                <IconButton
-                  onClick={handlePrevImage}
-                  sx={{
-                    bgcolor: 'background.paper',
-                    '&:hover': { bgcolor: 'background.paper' },
-                  }}
-                >
-                  <ArrowBackIcon />
-                </IconButton>
-                <IconButton
-                  onClick={handleNextImage}
-                  sx={{
-                    bgcolor: 'background.paper',
-                    '&:hover': { bgcolor: 'background.paper' },
-                  }}
-                >
-                  <ArrowForwardIcon />
-                </IconButton>
-              </Box>
-            )}
-          </Box>
-          {productImages.length > 1 && (
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 2,
-                mt: 2,
-                justifyContent: 'center',
-              }}
-            >
-              {productImages.map((img, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    position: 'relative',
-                    cursor: 'pointer',
-                    border:
-                      index === currentImageIndex
-                        ? '2px solid primary.main'
-                        : 'none',
-                    opacity: index === currentImageIndex ? 1 : 0.7,
-                  }}
-                  onClick={() => setCurrentImageIndex(index)}
-                >
-                  <Image
-                    src={img}
-                    alt={`${product.name} - миниатюра ${index + 1}`}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    unoptimized
-                  />
-                </Box>
-              ))}
-            </Box>
-          )}
+          <ProductImageGallery 
+            images={productImages}
+            productName={product.name}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="h4" gutterBottom>
@@ -591,12 +363,9 @@ export default function ProductDetails({ product }) {
             </Button>
             <IconButton
               onClick={() => {
-                'Product ID:', product.id, 'type:', typeof product.id;
-                'Current favorites:', favorites;
                 isFavorite
                   ? removeFromFavorites(product.id)
                   : addToFavorites(product.id);
-                'Updated favorites:', favorites;
               }}
               color={isFavorite ? 'error' : 'default'}
               sx={{ height: 48, width: 48 }}
@@ -671,63 +440,16 @@ export default function ProductDetails({ product }) {
           </TabPanel>
 
           <TabPanel value={tabValue} index={1}>
-            <Delivery />
+            <ProductDelivery />
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
-            <Reviews />
+            <ProductReviews />
           </TabPanel>
         </Paper>
       </Box>
 
-      <Dialog
-        open={isImageDialogOpen}
-        onClose={() => setImageDialogOpen(false)}
-        maxWidth="xl"
-        fullWidth
-      >
-        <DialogContent sx={{ position: 'relative', p: 0, height: '80vh' }}>
-          <IconButton
-            onClick={() => setImageDialogOpen(false)}
-            sx={{ position: 'absolute', right: 8, top: 8, zIndex: 1 }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <IconButton
-            onClick={handlePrevImage}
-            sx={{
-              position: 'absolute',
-              left: 8,
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <IconButton
-            onClick={handleNextImage}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-          >
-            <ArrowForwardIcon />
-          </IconButton>
-          <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-            {productImages.length > 0 && productImages[currentImageIndex] && (
-              <Image
-                src={productImages[currentImageIndex]}
-                alt={`${product.name} - изображение ${currentImageIndex + 1}`}
-                fill
-                style={{ objectFit: 'contain' }}
-                unoptimized
-              />
-            )}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      {/* Диалог изображений теперь в ProductImageGallery */}
 
       {/* Модалка оформления в рассрочку */}
       <Dialog

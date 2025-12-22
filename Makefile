@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -35,6 +35,12 @@ logs-certbot: ## Показать логи CertBot
 clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
+
+diagnose-build: ## Диагностика проблем со сборкой Next.js
+	@bash scripts/diagnose-build.sh
+
+build-push-local: ## Собрать образ локально и опубликовать в Docker Hub (для случаев, когда сборка на сервере зависает)
+	@bash scripts/build-and-push-local.sh
 
 init-certs: ## Инициализировать wildcard SSL сертификаты для technobar.by и *.technobar.by
 	@echo "Инициализация wildcard SSL сертификатов..."
@@ -83,10 +89,16 @@ health: ## Проверить здоровье приложения
 status: ## Показать статус всех контейнеров
 	docker-compose ps
 
-pull: ## Обновить образы из Docker Hub
-	docker-compose pull
+pull: ## Обновить образы из Docker Hub и перезапустить контейнеры
+	@if [ -f docker-compose.prod.yml ]; then \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans; \
+	else \
+		docker-compose pull; \
+		docker-compose up -d --force-recreate --remove-orphans; \
+	fi
 
-update: pull restart ## Обновить и перезапустить приложение
+update: pull ## Обновить и перезапустить приложение (pull уже включает перезапуск)
 
 prod-up: ## Запустить в production режиме
 	@echo "Checking Docker volumes..."
@@ -188,6 +200,87 @@ rebuild-local: ## Пересобрать образ локально на сер
 		echo "Запуск с локально собранным образом..."; \
 		docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans; \
 		echo "✅ Локальная пересборка завершена!"; \
+		echo "Проверьте статус: docker-compose ps" \
+	'
+
+clean-rebuild: ## Полная очистка и пересборка всех контейнеров без кэша
+	@echo "🧹 Полная очистка Docker ресурсов..."
+	@bash -c '\
+		echo "1. Остановка всех контейнеров..."; \
+		docker-compose -f docker-compose.yml down 2>/dev/null || true; \
+		docker-compose -f docker-compose.yml -f docker-compose.prod.yml down 2>/dev/null || true; \
+		echo "2. Удаление всех контейнеров проекта..."; \
+		docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true; \
+		docker ps -a --filter "name=bartech" --format "{{.ID}}" | xargs -r docker rm -f 2>/dev/null || true; \
+		echo "3. Удаление всех образов проекта..."; \
+		docker images --filter "reference=*bartech*" --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		docker images --filter "reference=*nextjs*" --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+		if [ -f .env ]; then \
+			set -a; \
+			while IFS= read -r line || [ -n "$$line" ]; do \
+				case "$$line" in \
+					\#*|"") continue ;; \
+				esac; \
+				line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+				[ -z "$$line" ] && continue; \
+				if echo "$$line" | grep -q "="; then \
+					export "$$line" 2>/dev/null || true; \
+				fi; \
+			done < .env; \
+			set +a; \
+			if [ -n "$$DOCKERHUB_USERNAME" ]; then \
+				echo "Удаление образов из Docker Hub..."; \
+				docker images $$DOCKERHUB_USERNAME/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true; \
+			fi; \
+		fi; \
+		echo "4. Очистка build cache..."; \
+		docker builder prune -af || true; \
+		echo "5. Очистка неиспользуемых образов..."; \
+		docker image prune -af || true; \
+		echo "6. Очистка неиспользуемых контейнеров..."; \
+		docker container prune -f || true; \
+		echo "7. Очистка неиспользуемых сетей..."; \
+		docker network prune -f || true; \
+		echo "8. Полная очистка системы Docker (кроме volumes)..."; \
+		docker system prune -af || true; \
+		echo "✅ Очистка завершена!"; \
+		echo ""; \
+		echo "🔨 Пересборка всех контейнеров без кэша..."; \
+		if [ ! -f .env ]; then \
+			echo "ERROR: .env file not found!"; \
+			exit 1; \
+		fi; \
+		if [ ! -f Dockerfile ]; then \
+			echo "ERROR: Dockerfile not found!"; \
+			exit 1; \
+		fi; \
+		echo "Загрузка переменных из .env..."; \
+		set -a; \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				\#*|"") continue ;; \
+			esac; \
+			line=$$(echo "$$line" | sed "s/^[[:space:]]*//;s/[[:space:]]*$$//" | sed "s/[[:space:]]*=[[:space:]]*/=/"); \
+			[ -z "$$line" ] && continue; \
+			if echo "$$line" | grep -q "="; then \
+				export "$$line" 2>/dev/null || true; \
+			fi; \
+		done < .env; \
+		set +a; \
+		echo "Проверка обязательных переменных..."; \
+		if [ -z "$$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then \
+			echo "ERROR: NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY должны быть в .env файле!"; \
+			exit 1; \
+		fi; \
+		echo "Пересборка образа без кэша..."; \
+		echo "Это может занять несколько минут..."; \
+		if ! docker-compose -f docker-compose.yml build --no-cache nextjs; then \
+			echo "ERROR: Build failed! Проверьте логи выше."; \
+			exit 1; \
+		fi; \
+		echo "Запуск всех контейнеров..."; \
+		docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans; \
+		echo "✅ Полная пересборка завершена!"; \
 		echo "Проверьте статус: docker-compose ps" \
 	'
 
