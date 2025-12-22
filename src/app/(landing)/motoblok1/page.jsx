@@ -182,11 +182,10 @@ export default function Phone4() {
             </li>
             <li className={styles.benefit}>
               <span className={styles.bold}>4</span>Года продаем мотоблоки МТЗ
-              напрямую с завода по самым низким ценам в РБ
+              напрямую с завода в РБ
             </li>
             <li className={styles.benefit}>
-              <span className={styles.bold}>1</span> Место, которое мы заняли в
-              рейтинге клиентов в 2024 году
+              <span className={styles.bold}> до 5 лет</span> Расширенной гарантии от магазина
             </li>
           </ul>
 

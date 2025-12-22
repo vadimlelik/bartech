@@ -469,12 +469,6 @@ export default function TvLandingPage() {
           role="dialog"
           aria-hidden={!isQuizOpen}
         >
-          <Button
-            label="Узнать цену и подобрать платеж"
-            color="orange"
-            size="large"
-            onClick={() => setIsQuizOpen(true)}
-          />
         </div>
 
         <Quiz
