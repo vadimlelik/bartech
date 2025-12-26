@@ -28,28 +28,47 @@ const ThankYouPage = () => {
   const source = searchParams.get('source');
 
   useEffect(() => {
-    if (source) {
-      const pixelIds = [
-        PIXEL[source],
-        PIXEL_2[source],
-        PIXEL_3[source],
-        PIXEL_4[source],
-        PIXEL_5[source],
-        PIXEL_6[source],
-        PIXEL_7[source],
-        PIXEL_8[source],
-        PIXEL_9[source],
-        PIXEL_10[source],
-        PIXEL_11[source],
-        PIXEL_12[source],
-        PIXEL_13[source],
-        PIXEL_14[source],
-        PIXEL_15[source],
-      ].filter(Boolean); // Фильтруем undefined значения
+    if (!source) return;
 
-      if (pixelIds.length > 0) {
-        loadTikTokPixels(pixelIds);
-      }
+    // Сначала проверяем статические пиксели (для старых лендингов)
+    const staticPixelIds = [
+      PIXEL[source],
+      PIXEL_2[source],
+      PIXEL_3[source],
+      PIXEL_4[source],
+      PIXEL_5[source],
+      PIXEL_6[source],
+      PIXEL_7[source],
+      PIXEL_8[source],
+      PIXEL_9[source],
+      PIXEL_10[source],
+      PIXEL_11[source],
+      PIXEL_12[source],
+      PIXEL_13[source],
+      PIXEL_14[source],
+      PIXEL_15[source],
+    ].filter(Boolean); // Фильтруем undefined значения
+
+    // Если есть статические пиксели, используем их
+    if (staticPixelIds.length > 0) {
+      loadTikTokPixels(staticPixelIds);
+    } else {
+      // Если статических пикселей нет, пытаемся получить из базы данных (динамические лендинги)
+      fetch(`/api/landings/${source}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Landing not found');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data.landing && Array.isArray(data.landing.pixels) && data.landing.pixels.length > 0) {
+            loadTikTokPixels(data.landing.pixels);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching landing pixels:', error);
+        });
     }
   }, [source]);
 

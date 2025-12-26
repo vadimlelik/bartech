@@ -10,8 +10,6 @@ export default function LandingLayout({ children }) {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        bgcolor: 'black',
-        color: 'white',
       }}
     >
       {children}

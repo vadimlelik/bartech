@@ -1,0 +1,458 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  background: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.header {
+  background: var(--color-header, #1a1a1a);
+  padding: 20px;
+  text-align: center;
+}
+
+.mainTitle {
+  color: white;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.mainSection {
+  padding: 20px;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.textContent {
+  text-align: left;
+}
+
+.title {
+  font-size: 28px;
+  margin: 0 0 20px;
+  font-weight: bold;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.checkmarkItem {
+  margin-bottom: 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  color: inherit;
+  position: relative;
+  padding-left: 30px;
+}
+
+.checkmarkItem::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.timerSection {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.timerSection p {
+  margin-bottom: 10px;
+  color: inherit;
+}
+
+.surveyText {
+  font-size: 16px;
+  margin: 20px 0;
+  color: inherit;
+  line-height: 1.4;
+}
+
+.priceButton {
+  background: var(--color-button, #4caf50);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+  margin: 20px 0;
+  transition: background-color 0.3s ease;
+}
+
+.priceButton:hover {
+  background: var(--color-buttonHover, #45a049);
+  transform: scale(1.02);
+}
+
+.imageContainer {
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.mainImage,
+.featuresImage {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.mainImage:hover,
+.featuresImage:hover {
+  transform: scale(1.05);
+}
+
+.advantagesSection {
+  padding: 40px 20px;
+  margin: 30px 0;
+  background: #f9f9f9;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: slideUp 1s forwards;
+}
+
+.advantagesImage {
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.advantagesList {
+  margin-top: 30px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: inherit;
+  text-align: center;
+}
+
+.advantageItem {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.advantageNumber {
+  background: #2196f3;
+  color: white;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.advantageItem h3 {
+  margin: 0 0 10px;
+  color: inherit;
+  font-size: 18px;
+}
+
+.advantageItem p {
+  margin: 0;
+  color: inherit;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.reviewsSection {
+  padding: 40px 20px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.reviewsTitle {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: inherit;
+  text-align: center;
+}
+
+.reviewsGrid {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reviewCard {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: block;
+  position: relative;
+}
+
+.reviewText {
+  font-size: 14px;
+  line-height: 1.6;
+  color: inherit;
+  margin: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mainTitle {
+    font-size: 32px;
+  }
+
+  .mainSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .checkmarkItem {
+    font-size: 18px;
+  }
+
+  .advantagesSection {
+    padding: 60px 40px;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .reviewCard {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .reviewImage {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .priceButton {
+    width: auto;
+    padding: 15px 40px;
+  }
+}
+
+@media (max-width: 763px) {
+  .mainSection {
+    padding-top: 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .checkmarkItem {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .benefits {
+    margin: 10px 0px;
+  }
+  .title {
+    text-align: center;
+    font-size: 24px;
+  }
+  .advantagesSection {
+    padding: 15px 10px;
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+  }
+  .priceButton {
+    padding: 12px 15px;
+    margin: 10px 0px;
+  }
+  .header {
+    padding: 10px;
+  }
+  .mainTitle {
+    font-size: 20px;
+  }
+  .sectionTitle {
+    margin-bottom: 10px;
+  }
+  .reviewsTitle {
+    margin-bottom: 15px;
+  }
+  .imageContainer,
+  .advantagesImage {
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+  .mainImage,
+  .featuresImage,
+  .reviewImage {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .reviewCard {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 15px;
+  }
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    width: 100%;
+  }
+  .reviewsSection {
+    padding: 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+/* Desktop Styles */
+@media (min-width: 1025px) {
+  .mainTitle {
+    font-size: 36px;
+  }
+
+  .mainSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 60px;
+  }
+
+  .title {
+    font-size: 42px;
+  }
+
+  .checkmarkItem {
+    font-size: 20px;
+  }
+
+  .advantagesSection {
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .sectionTitle {
+    font-size: 36px;
+    text-align: left;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .reviewCard {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .reviewImage {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .priceButton {
+    width: auto;
+    padding: 15px 50px;
+  }
+
+  .advantageItem:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+  }
+}
+
