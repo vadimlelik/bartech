@@ -234,17 +234,14 @@ jobs:
             # Удаление всех остановленных контейнеров
             docker container prune -f || true
             
-            # Запуск новых контейнеров (принудительно пересоздавая, без кеша)
-            echo "Starting containers with --force-recreate and --no-deps..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps --remove-orphans nextjs
+            # Запуск всех контейнеров (принудительно пересоздавая)
+            echo "Starting all containers with --force-recreate..."
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
             
             # Очистка кеша Next.js после запуска контейнера
             echo "Clearing Next.js cache in container..."
+            sleep 3
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
-            
-            # Запуск зависимых сервисов
-            echo "Starting dependent services..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx certbot
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."
