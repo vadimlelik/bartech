@@ -54,8 +54,8 @@ services:
       - technobar_certbot-etc:/etc/letsencrypt
       - technobar_certbot-var:/var/lib/letsencrypt
       - ./certbot/cloudflare.ini:/cloudflare.ini:ro
-      - ./scripts/auto-renew-certs.sh:/auto-renew-certs.sh:ro
-      - ./scripts/reload-nginx.sh:/reload-nginx.sh:ro
+      - ./scripts/auto-renew-certs.sh:/auto-renew-certs.sh
+      - ./scripts/reload-nginx.sh:/reload-nginx.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - app-network
