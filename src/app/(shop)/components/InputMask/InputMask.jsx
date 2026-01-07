@@ -2,7 +2,7 @@ import React from 'react';
 import MaskedInput from 'react-text-mask';
 import './InputMask.css';
 
-const MaskedPhoneInput = ({ value, onChange, error, disabled }) => {
+const MaskedPhoneInput = React.forwardRef(({ value, onChange, error, disabled }, ref) => {
   const phoneMask = [
     '+',
     '3',
@@ -28,6 +28,7 @@ const MaskedPhoneInput = ({ value, onChange, error, disabled }) => {
   return (
     <div className="masked-input-container">
       <MaskedInput
+        ref={ref}
         mask={phoneMask}
         className={`masked-input ${error ? 'input-error' : ''}`}
         value={value}
@@ -38,6 +39,8 @@ const MaskedPhoneInput = ({ value, onChange, error, disabled }) => {
       {error && <span className="error-message">{error}</span>}
     </div>
   );
-};
+});
+
+MaskedPhoneInput.displayName = 'MaskedPhoneInput';
 
 export default MaskedPhoneInput;

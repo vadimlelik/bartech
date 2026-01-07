@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask';
 import {
@@ -34,6 +34,7 @@ const Quiz = ({
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [validationError, setValidationError] = useState('');
+  const phoneInputRef = useRef(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -41,6 +42,41 @@ const Quiz = ({
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  // Автофокус на поле телефона при переходе на вопрос с телефоном
+  useEffect(() => {
+    if (isOpen && questions[currentQuestion]?.type === 'text') {
+      // Небольшая задержка для корректной установки фокуса после рендера
+      const timer = setTimeout(() => {
+        let inputElement = null;
+
+        // Пробуем получить inputElement через ref (react-text-mask предоставляет inputElement)
+        if (phoneInputRef.current) {
+          inputElement = phoneInputRef.current.inputElement || phoneInputRef.current;
+        }
+
+        // Если не получилось, ищем input через querySelector
+        if (!inputElement || !inputElement.focus) {
+          const container = document.querySelector('.masked-input-container');
+          if (container) {
+            inputElement = container.querySelector('input');
+          }
+        }
+
+        if (inputElement && inputElement.focus) {
+          inputElement.focus();
+          // Устанавливаем курсор после "+375 "
+          const cursorPosition = 5; // Позиция после "+375 "
+          try {
+            inputElement.setSelectionRange(cursorPosition, cursorPosition);
+          } catch (e) {
+            // Игнорируем ошибки установки курсора (может не поддерживаться в некоторых браузерах)
+          }
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [currentQuestion, isOpen, questions]);
 
   const goToQuestion = (index) => {
     setValidationError('');
@@ -220,7 +256,7 @@ const Quiz = ({
                 <Controller
                   name={fieldName}
                   control={control}
-                  defaultValue={getValues(fieldName) ?? ''}
+                  defaultValue={getValues(fieldName) || '+375'}
                   rules={{
                     validate: (value) => {
                       if (!value || value === '+375')
@@ -235,6 +271,7 @@ const Quiz = ({
                   }}
                   render={({ field, fieldState }) => (
                     <MaskedPhoneInput
+                      ref={phoneInputRef}
                       mask="+375 (99) 999-99-99"
                       placeholder="+375 (__) ___-__-__"
                       value={field.value || '+375'}

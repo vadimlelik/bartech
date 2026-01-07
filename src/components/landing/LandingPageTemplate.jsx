@@ -14,7 +14,7 @@ const quizQuestions = [
   {
     id: 1,
     question: 'Выберите срок рассрочки для расчета платежей',
-    type: 'checkbox',
+    type: 'radio',
     options: [
       { value: '1 год', label: '1 год' },
       { value: '2 года', label: '2 года' },
