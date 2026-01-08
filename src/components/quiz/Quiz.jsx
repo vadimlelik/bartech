@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import MaskedPhoneInput from '@/app/(shop)/components/InputMask/InputMask';
+import { TextField } from '@mui/material';
 import {
   QuizOverlay,
   QuizContainer,
@@ -48,27 +48,12 @@ const Quiz = ({
     if (isOpen && questions[currentQuestion]?.type === 'text') {
       // Небольшая задержка для корректной установки фокуса после рендера
       const timer = setTimeout(() => {
-        let inputElement = null;
-
-        // Пробуем получить inputElement через ref (react-text-mask предоставляет inputElement)
         if (phoneInputRef.current) {
-          inputElement = phoneInputRef.current.inputElement || phoneInputRef.current;
-        }
-
-        // Если не получилось, ищем input через querySelector
-        if (!inputElement || !inputElement.focus) {
-          const container = document.querySelector('.masked-input-container');
-          if (container) {
-            inputElement = container.querySelector('input');
-          }
-        }
-
-        if (inputElement && inputElement.focus) {
-          inputElement.focus();
-          // Устанавливаем курсор после "+375 "
-          const cursorPosition = 5; // Позиция после "+375 "
+          phoneInputRef.current.focus();
+          // Устанавливаем курсор после "+375"
+          const cursorPosition = 4; // Позиция после "+375"
           try {
-            inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            phoneInputRef.current.setSelectionRange(cursorPosition, cursorPosition);
           } catch (e) {
             // Игнорируем ошибки установки курсора (может не поддерживаться в некоторых браузерах)
           }
@@ -77,6 +62,36 @@ const Quiz = ({
       return () => clearTimeout(timer);
     }
   }, [currentQuestion, isOpen, questions]);
+
+  // Обработчик изменения телефона
+  const handlePhoneChange = (onChange, value) => {
+    // Удаляем все символы кроме цифр и +
+    const digits = value.replace(/[^\d+]/g, '');
+
+    // Если начинается не с +375, устанавливаем +375
+    if (!digits.startsWith('+375')) {
+      onChange('+375');
+      return;
+    }
+
+    // Ограничиваем длину до +375 + 9 цифр (всего 13 символов)
+    if (digits.length <= 13) {
+      onChange(digits);
+    }
+  };
+
+  // Обработчик нажатия клавиш для защиты префикса +375
+  const handlePhoneKeyDown = (e) => {
+    // Запрещаем удаление префикса +375
+    const cursorPosition = e.target.selectionStart;
+    if (e.key === 'Backspace' && cursorPosition <= 4) {
+      e.preventDefault();
+    }
+    // Запрещаем удаление в начале
+    if (e.key === 'Delete' && cursorPosition < 4) {
+      e.preventDefault();
+    }
+  };
 
   const goToQuestion = (index) => {
     setValidationError('');
@@ -258,36 +273,48 @@ const Quiz = ({
                   control={control}
                   defaultValue={getValues(fieldName) || '+375'}
                   rules={{
+                    required: 'Пожалуйста, ответьте на вопрос.',
+                    pattern: {
+                      value: /^\+375\d{9}$/,
+                      message: 'Телефон должен быть в формате +375XXXXXXXXX',
+                    },
                     validate: (value) => {
                       if (!value || value === '+375')
                         return 'Пожалуйста, ответьте на вопрос.';
-                      if (
-                        !/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(value)
-                      ) {
-                        return 'Введите корректный номер телефона';
+                      if (!/^\+375\d{9}$/.test(value)) {
+                        return 'Телефон должен быть в формате +375XXXXXXXXX';
                       }
                       return true;
                     },
                   }}
                   render={({ field, fieldState }) => (
-                    <MaskedPhoneInput
-                      ref={phoneInputRef}
-                      mask="+375 (99) 999-99-99"
-                      placeholder="+375 (__) ___-__-__"
+                    <TextField
+                      {...field}
+                      inputRef={phoneInputRef}
+                      variant="outlined"
+                      placeholder="+375XXXXXXXXX"
                       value={field.value || '+375'}
                       onChange={(e) => {
-                        field.onChange(e);
+                        handlePhoneChange(field.onChange, e.target.value);
                         clearErrors(fieldName);
                         setValidationError('');
                       }}
+                      onKeyDown={handlePhoneKeyDown}
                       error={
+                        !!(
+                          validationError ||
+                          (fieldState.error?.message &&
+                            !/^\+375\d{9}$/.test(field.value))
+                        )
+                      }
+                      helperText={
                         validationError ||
                         (fieldState.error?.message &&
-                          !/^\+375\s\(\d{2}\)\s\d{3}-\d{2}-\d{2}$/.test(
-                            field.value
-                          ))
+                          !/^\+375\d{9}$/.test(field.value) &&
+                          fieldState.error.message)
                       }
                       disabled={isLoading}
+                      sx={{ width: '100%' }}
                     />
                   )}
                 />
