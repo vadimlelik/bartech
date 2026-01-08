@@ -292,6 +292,13 @@ const Quiz = ({
                       {...field}
                       inputRef={phoneInputRef}
                       variant="outlined"
+                      type="tel"
+                      slotProps={{
+                        input: {
+                          inputMode: 'numeric',
+                          pattern: '[0-9+]*',
+                        },
+                      }}
                       placeholder="+375XXXXXXXXX"
                       value={field.value || '+375'}
                       onChange={(e) => {
