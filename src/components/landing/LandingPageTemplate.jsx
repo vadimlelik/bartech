@@ -138,7 +138,7 @@ export default function LandingPageTemplate({ landing }) {
         }
       );
       setIsLoading(false);
-      router.push(`/thank-you?source=${landing.slug}`);
+      router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
     } catch (error) {
       console.error('Error submitting quiz:', error);
       setIsLoading(false);
