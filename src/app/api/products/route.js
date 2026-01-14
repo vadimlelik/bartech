@@ -1,5 +1,6 @@
 import { getProducts } from '@/lib/products';
 import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 
 export async function GET(request) {
   try {
@@ -36,7 +37,22 @@ export async function GET(request) {
       if (value) params.filters[field] = value;
     });
 
-    const result = await getProducts(params);
+    // Кэшируем результаты запросов на 5 минут для снижения нагрузки на Supabase
+    // Создаем уникальный ключ кэша на основе параметров запроса
+    const cacheKey = `products-${JSON.stringify(params)}`;
+    
+    const getCachedProducts = unstable_cache(
+      async (params) => {
+        return await getProducts(params);
+      },
+      [cacheKey], // Уникальный ключ для каждого набора параметров
+      {
+        revalidate: 300, // 5 минут
+        tags: ['products'],
+      }
+    );
+
+    const result = await getCachedProducts(params);
 
     if (!result) {
       return NextResponse.json(
@@ -56,10 +72,9 @@ export async function GET(request) {
       },
     });
 
-    // Отключаем кеширование для API ответов, чтобы новые данные отображались сразу после деплоя
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    response.headers.set('Pragma', 'no-cache');
-    response.headers.set('Expires', '0');
+    // Кэшируем ответ на клиенте на 1 минуту (данные уже кэшированы на сервере)
+    // Это снижает количество запросов к Supabase при частых обращениях
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 
     return response;
   } catch (error) {

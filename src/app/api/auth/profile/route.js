@@ -1,5 +1,6 @@
 import { getServerSupabaseClient } from '@/lib/auth-helpers';
 import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 
 export async function GET(request) {
   try {
@@ -22,11 +23,30 @@ export async function GET(request) {
       );
     }
     
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
+    // Кэшируем профиль пользователя на 2 минуты для снижения нагрузки на Supabase
+    // Профиль пользователя меняется редко, поэтому кэширование безопасно
+    // Используем userId в ключе кэша для уникальности каждого пользователя
+    const getCachedProfile = unstable_cache(
+      async (userId) => {
+        const supabase = await getServerSupabaseClient();
+        if (!supabase) {
+          return { profile: null, profileError: new Error('Supabase client not initialized') };
+        }
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        return { profile, profileError };
+      },
+      [`user-profile-${user.id}`], // Уникальный ключ для каждого пользователя
+      {
+        revalidate: 120, // 2 минуты
+        tags: ['profiles', `profile-${user.id}`],
+      }
+    );
+    
+    const { profile, profileError } = await getCachedProfile(user.id);
     
     if (profileError) {
       if (profileError.code === 'PGRST116') {

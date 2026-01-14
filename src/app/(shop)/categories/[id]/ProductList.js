@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Grid,
@@ -73,6 +73,12 @@ export default function ProductList({ categoryId }) {
 
   // Удален console.log для production
 
+  // Мемоизируем строковое представление activeFilters для предотвращения лишних запросов
+  // Это решает проблему, когда объект создается заново при каждом рендере
+  const activeFiltersKey = useMemo(() => {
+    return JSON.stringify(activeFilters);
+  }, [activeFilters]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -104,7 +110,9 @@ export default function ProductList({ categoryId }) {
     if (categoryId) {
       fetchProducts();
     }
-  }, [categoryId, sort, sortBy, page, searchTerm, activeFilters]);
+    // Используем activeFiltersKey вместо activeFilters для предотвращения лишних запросов
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryId, sort, sortBy, page, searchTerm, activeFiltersKey]);
 
   // Мемоизированные обработчики для предотвращения лишних ререндеров
   const handleSortChange = useCallback((event) => {
@@ -130,7 +138,10 @@ export default function ProductList({ categoryId }) {
     updateUrl({ search: event.target.value, page: 1 });
   }, []);
 
-  const handleFilterChange = async (field, value) => {
+  // Debounce для handleFilterChange - предотвращает частые запросы при изменении фильтров
+  const filterChangeTimeoutRef = useRef(null);
+  
+  const handleFilterChange = useCallback(async (field, value) => {
     const newFilters = { ...previewFilters };
     if (newFilters[field] === value) {
       delete newFilters[field];
@@ -139,20 +150,29 @@ export default function ProductList({ categoryId }) {
     }
     setPreviewFilters(newFilters);
 
-    setIsPreviewLoading(true);
-    try {
-      const params = new URLSearchParams({
-        categoryId,
-        ...newFilters,
-      });
-      const response = await fetch(`/api/products?${params}`);
-      const data = await response.json();
-      setPreviewCount(data.pagination.total);
+    // Очищаем предыдущий таймер
+    if (filterChangeTimeoutRef.current) {
+      clearTimeout(filterChangeTimeoutRef.current);
+    }
+
+    // Устанавливаем новый таймер - запрос выполнится только через 500ms после последнего изменения
+    filterChangeTimeoutRef.current = setTimeout(async () => {
+      setIsPreviewLoading(true);
+      try {
+        const params = new URLSearchParams({
+          categoryId,
+          ...newFilters,
+        });
+        const response = await fetch(`/api/products?${params}`);
+        const data = await response.json();
+        setPreviewCount(data.pagination.total);
       } catch (error) {
         console.error('Error fetching preview count:', error);
+      } finally {
+        setIsPreviewLoading(false);
       }
-    setIsPreviewLoading(false);
-  };
+    }, 500);
+  }, [previewFilters, categoryId]);
 
   const applyFilters = () => {
     setActiveFilters(previewFilters);
