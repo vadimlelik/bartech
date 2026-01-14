@@ -306,7 +306,9 @@ export const useAuthStore = create((set, get) => {
             user: data.user,
             loading: computeLoading({ ...state, user: data.user })
           }));
-          await new Promise(resolve => setTimeout(resolve, 500));
+          // Увеличиваем задержку до 1 секунды, чтобы дать время триггеру Supabase создать профиль
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          // fetchProfile имеет retry логику и может создать профиль вручную, если его нет
           await get().fetchProfile(data.user.id);
         }
 
