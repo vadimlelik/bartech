@@ -1,10 +1,26 @@
 import { Container, Box } from '@mui/material';
+import { unstable_cache } from 'next/cache';
 import ProductDetails from './ProductDetails';
 import { getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import { getProductSchema, getBreadcrumbSchema } from '@/lib/seo';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+
+// Кэшируем запросы к Supabase на 1 час для снижения нагрузки
+const getCachedProductById = unstable_cache(
+  async (id) => {
+    return await getProductById(id);
+  },
+  ['product-by-id'],
+  {
+    revalidate: 3600,
+    tags: ['products'],
+  }
+);
+
+// Кэшируем страницу на 1 час
+export const revalidate = 3600;
 
 // Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
@@ -14,7 +30,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { id } = await Promise.resolve(params);
   try {
-    const product = await getProductById(id);
+    const product = await getCachedProductById(id);
 
     if (!product) {
       return {

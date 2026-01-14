@@ -39,7 +39,9 @@ export const metadata = {
   },
 };
 
-export const revalidate = 0; // Отключаем кеширование для актуальных данных
+// Кэшируем страницу на 1 час (3600 секунд) для снижения нагрузки на Supabase
+// При необходимости обновить данные можно использовать revalidateTag('categories')
+export const revalidate = 3600;
 
 export default async function Home() {
   const categories = await getCategories();
