@@ -116,6 +116,8 @@ export const PIXEL_10 = {
 };
 export const PIXEL_11 = {
   laptop: 'D38J06BC77U6IE15NCUG',
+  shockproof:"D5JMHFBC77UDMGSG1FL0",
+  phone3:"D5JMJTBC77U2941FSGUG"
 };
 export const PIXEL_12 = {
   laptop: 'D33ST9BC77U1PDQ722G0',
