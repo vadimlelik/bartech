@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local
+.PHONY: help build up down restart logs clean init-certs renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local clean-logs
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -35,6 +35,22 @@ logs-certbot: ## Показать логи CertBot
 clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
+
+clean-logs: ## Очистить старые логи контейнеров (освобождает место на диске)
+	@echo "🧹 Очистка старых логов контейнеров..."
+	@bash -c '\
+		echo "Размер логов до очистки:"; \
+		du -sh /var/lib/docker/containers 2>/dev/null || echo "Не удалось проверить размер"; \
+		echo ""; \
+		echo "Очистка логов остановленных контейнеров..."; \
+		find /var/lib/docker/containers/ -name "*-json.log" -type f -exec truncate -s 0 {} \; 2>/dev/null || true; \
+		echo "Очистка завершена!"; \
+		echo ""; \
+		echo "Размер логов после очистки:"; \
+		du -sh /var/lib/docker/containers 2>/dev/null || echo "Не удалось проверить размер"; \
+		echo ""; \
+		echo "✅ Логи очищены! Работающие контейнеры продолжат писать логи с ротацией." \
+	'
 
 diagnose-build: ## Диагностика проблем со сборкой Next.js
 	@bash scripts/diagnose-build.sh
