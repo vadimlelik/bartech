@@ -28,6 +28,11 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   nginx:
     image: nginx:stable-alpine
@@ -45,6 +50,11 @@ services:
     networks:
       - app-network
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   certbot:
     image: certbot/dns-cloudflare:latest
@@ -60,6 +70,11 @@ services:
     networks:
       - app-network
     entrypoint: "/bin/sh -c 'apk add --no-cache docker-cli >/dev/null 2>&1 || true; chmod +x /auto-renew-certs.sh /reload-nginx.sh && trap exit TERM; while :; do /auto-renew-certs.sh; sleep 12h & wait $${!}; done'"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   technobar_certbot-etc:
