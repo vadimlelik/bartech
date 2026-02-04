@@ -104,6 +104,17 @@ const Footer = () => {
                     Акции
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    className={styles['footer__offer__link']}
+                    href={
+                      'https://drive.google.com/drive/folders/1FGlmNEqbBpMffkOpQqsT53d5G3cAMhU5'
+                    }
+                    target="_blank"
+                  >
+                    Сертификаты
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
