@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import styles from './footer.module.css';
 import Link from 'next/link';
 import CreditCardsModal from '@/components/CreditCards/CreditCardsModal';
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
   const [creditModalOpen, setCreditModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleCreditClick = (e) => {
     e.preventDefault();
@@ -69,7 +71,7 @@ const Footer = () => {
                 <li>
                   <Link
                     className={styles['footer__offer__link']}
-                    href={'pk'}
+                    href={'https://technobar.by/pk'}
                     target="_blank"
                   >
                     Политика конфиденциальности
@@ -79,7 +81,7 @@ const Footer = () => {
                   <Link
                     target="_blank"
                     className={styles['footer__offer__link']}
-                    href={'po'}
+                    href={'https://technobar.by/po'}
                   >
                     Публичная оферта
                   </Link>
@@ -87,7 +89,7 @@ const Footer = () => {
                 <li>
                   <Link
                     target="_blank"
-                    href={'guarantee'}
+                    href={'https://technobar.by/guarantee'}
                     className={styles['footer__offer__link']}
                   >
                     Возврат товара
@@ -96,7 +98,7 @@ const Footer = () => {
                 <li>
                   <Link
                     className={styles['footer__offer__link']}
-                    href={'sales'}
+                    href={'https://technobar.by/sales'}
                     target="_blank"
                   >
                     Акции
