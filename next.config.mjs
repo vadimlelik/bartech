@@ -10,23 +10,23 @@ const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true';
 
 // Автоматически генерируем rewrite-правила на основе папок в src/app/(landing)
 function generateSubdomainRewrites() {
-  const landingDir = path.join(__dirname, 'src', 'app', '(landing)');
+  const landingDir = path.join(__dirname, 'src', 'app', '(landing)', '*');
   const rewrites = [];
-  
+
   // Исключаем папки, которые не должны быть поддоменами
   const excludeDirs = ['thank-you'];
-  
+
   try {
     const entries = fs.readdirSync(landingDir, { withFileTypes: true });
-    
-    entries.forEach(entry => {
+
+    entries.forEach((entry) => {
       // Пропускаем файлы и исключенные папки
       if (!entry.isDirectory() || excludeDirs.includes(entry.name)) {
         return;
       }
-      
+
       const subdomain = entry.name;
-      
+
       // Добавляем rewrite-правило для поддомена
       rewrites.push({
         source: `/${subdomain}/:path*`,
@@ -34,9 +34,12 @@ function generateSubdomainRewrites() {
       });
     });
   } catch (error) {
-    console.warn('Не удалось прочитать папку (landing), используем пустой список:', error.message);
+    console.warn(
+      'Не удалось прочитать папку (landing), используем пустой список:',
+      error.message
+    );
   }
-  
+
   return rewrites;
 }
 
@@ -65,16 +68,15 @@ const nextConfig = {
   async rewrites() {
     // Автоматически генерируем rewrite-правила для всех поддоменов
     const subdomainRewrites = generateSubdomainRewrites();
-    
+
     // Специальное правило для phone (перенаправление на корень)
     const phoneRewrite = {
       source: '/phone',
       destination: '/',
     };
-    
+
     return [...subdomainRewrites, phoneRewrite];
   },
 };
 
 export default nextConfig;
-

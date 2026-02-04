@@ -69,7 +69,7 @@ const Footer = () => {
                 <li>
                   <Link
                     className={styles['footer__offer__link']}
-                    href={'/pk'}
+                    href={'pk'}
                     target="_blank"
                   >
                     Политика конфиденциальности
