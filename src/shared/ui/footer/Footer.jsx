@@ -4,11 +4,9 @@ import React, { useState } from 'react';
 import styles from './footer.module.css';
 import Link from 'next/link';
 import CreditCardsModal from '@/components/CreditCards/CreditCardsModal';
-import { useRouter } from 'next/navigation';
 
 const Footer = () => {
   const [creditModalOpen, setCreditModalOpen] = useState(false);
-  const router = useRouter();
 
   const handleCreditClick = (e) => {
     e.preventDefault();

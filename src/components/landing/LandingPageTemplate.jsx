@@ -176,6 +176,25 @@ export default function LandingPageTemplate({ landing }) {
         <h1 className={styles.mainTitle}>
           {landing.main_title || landing.title}
         </h1>
+
+        <a
+          href="tel:+375447883122"
+          className={styles.priceButton}
+          style={{
+            backgroundColor: buttonBg,
+            display: 'inline-block',
+            marginTop: '10px',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = buttonHover;
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = buttonBg;
+          }}
+          rel="noreferrer"
+        >
+          {'Позвонить '}
+        </a>
       </div>
 
       <div
