@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/components/landing/LandingPageTemplate';
-import { getLandingBySlug } from '@/lib/landings-supabase';
+import { getAllLandings, getLandingBySlug } from '@/lib/landings-supabase';
 
 // Кэшируем запросы к Supabase на 1 минуту (60 секунд)
 // Это снизит количество запросов к Supabase, но позволит видеть изменения быстрее
@@ -21,7 +21,7 @@ const getCachedLandingBySlug = unstable_cache(
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
-  const resolvedParams = await Promise.resolve(params);
+  const resolvedParams = await params;
   const { slug } = resolvedParams;
 
   try {
@@ -47,6 +47,14 @@ export async function generateMetadata({ params }) {
   }
 }
 
+export const generateStaticParams = async () => {
+  const landings = await getAllLandings();
+
+  return landings.map((landing) => ({
+    slug: landing.slug,
+  }));
+};
+
 export default async function LandingPage({ params }) {
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams;
@@ -65,4 +73,3 @@ export default async function LandingPage({ params }) {
     notFound();
   }
 }
-

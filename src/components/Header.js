@@ -46,7 +46,13 @@ export default function Header() {
   const router = useRouter();
   const { cartItems } = useCartStore();
   const { favorites } = useFavoritesStore();
-  const { user, profile, signOut, isAdmin, loading: authLoading } = useAuthStore();
+  const {
+    user,
+    profile,
+    signOut,
+    isAdmin,
+    loading: authLoading,
+  } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);
@@ -123,7 +129,11 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 passHref
-                style={{ textDecoration: 'none' }}
+                style={{
+                  all: 'unset',
+                  display: 'inline-block',
+                  cursor: 'pointer',
+                }}
               >
                 <Button color="inherit" startIcon={item.icon}>
                   {item.text}

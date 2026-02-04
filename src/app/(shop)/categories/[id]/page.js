@@ -2,7 +2,7 @@ import { Container, Typography, Box } from '@mui/material';
 import { unstable_cache } from 'next/cache';
 import BackButton from './BackButton';
 import ProductList from './ProductList';
-import { getCategoryById } from '@/lib/categories';
+import { getCategories, getCategoryById } from '@/lib/categories';
 import { getProductsByCategory } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import { getCollectionPageSchema, getBreadcrumbSchema } from '@/lib/seo';
@@ -35,8 +35,16 @@ const getCachedProductsByCategory = unstable_cache(
 // Кэшируем страницу на 1 час
 export const revalidate = 3600;
 
+export async function generateStaticParams() {
+  const categories = await getCategories();
+
+  return categories.map((category) => ({
+    id: category.id.toString(),
+  }));
+}
+
 export async function generateMetadata({ params }) {
-  const { id } = await Promise.resolve(params);
+  const { id } = await params;
   try {
     if (!id) {
       return {
@@ -112,7 +120,7 @@ export default async function CategoryPage({ params }) {
     // Получаем продукты для структурированных данных
     const products = await getCachedProductsByCategory(category.id);
     const collectionSchema = getCollectionPageSchema(category, products);
-    
+
     // Breadcrumbs для категории
     const breadcrumbs = [
       { name: 'Главная', url: '/' },
@@ -125,13 +133,17 @@ export default async function CategoryPage({ params }) {
         {collectionSchema && (
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(collectionSchema),
+            }}
           />
         )}
         {breadcrumbSchema && (
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(breadcrumbSchema),
+            }}
           />
         )}
         <Box

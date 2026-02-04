@@ -19,13 +19,12 @@ export const useAuthStore = create((set, get) => {
     return state._loading || !supabase || (state.user && !state.profile);
   };
 
-
   const initialize = async () => {
     const supabase = getSupabase();
     if (!supabase) {
-      set((state) => ({ 
-        _loading: false, 
-        loading: computeLoading({ ...state, _loading: false })
+      set((state) => ({
+        _loading: false,
+        loading: computeLoading({ ...state, _loading: false }),
       }));
       return;
     }
@@ -34,49 +33,59 @@ export const useAuthStore = create((set, get) => {
 
     const initializeAuth = async () => {
       try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
         if (sessionError) {
           if (mounted) {
-            set((state) => ({ 
-              _loading: false, 
-              loading: computeLoading({ ...state, _loading: false })
+            set((state) => ({
+              _loading: false,
+              loading: computeLoading({ ...state, _loading: false }),
             }));
           }
           return;
         }
 
         if (session?.user && mounted) {
-          set((state) => ({ 
-            user: session.user, 
+          set((state) => ({
+            user: session.user,
             _loading: true,
-            loading: computeLoading({ ...state, user: session.user, _loading: true })
+            loading: computeLoading({
+              ...state,
+              user: session.user,
+              _loading: true,
+            }),
           }));
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
           if (mounted) {
             await get().fetchProfile(session.user.id);
             if (mounted) {
-              set((state) => ({ 
+              set((state) => ({
                 _loading: false,
-                loading: computeLoading({ ...state, _loading: false })
+                loading: computeLoading({ ...state, _loading: false }),
               }));
             }
           }
         } else if (mounted) {
-  
-          set((state) => ({ 
-            user: null, 
-            profile: null, 
+          set((state) => ({
+            user: null,
+            profile: null,
             _loading: false,
-            loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
+            loading: computeLoading({
+              ...state,
+              user: null,
+              profile: null,
+              _loading: false,
+            }),
           }));
         }
       } catch (error) {
-  
         if (mounted) {
-          set((state) => ({ 
+          set((state) => ({
             _loading: false,
-            loading: computeLoading({ ...state, _loading: false })
+            loading: computeLoading({ ...state, _loading: false }),
           }));
         }
       }
@@ -85,69 +94,90 @@ export const useAuthStore = create((set, get) => {
     initializeAuth();
 
     // Подписка на изменения аутентификации
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!mounted) return;
-        
-        
-        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          if (session?.user && mounted) {
-            set((state) => ({ 
-              user: session.user, 
-              _loading: true,
-              loading: computeLoading({ ...state, user: session.user, _loading: true })
-            }));
-            await new Promise(resolve => setTimeout(resolve, 100));
-            if (mounted) {
-              await get().fetchProfile(session.user.id);
-              if (mounted) {
-                set((state) => ({ 
-                  _loading: false,
-                  loading: computeLoading({ ...state, _loading: false })
-                }));
-              }
-            }
-          } else if (mounted) {
-            set((state) => ({ 
-              _loading: false,
-              loading: computeLoading({ ...state, _loading: false })
-            }));
-          }
-        } else if (event === 'SIGNED_OUT') {
-          if (mounted) {
-            set((state) => ({ 
-              user: null, 
-              profile: null, 
-              _loading: false,
-              loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
-            }));
-          }
-        } else if (session?.user && mounted) {
-          set((state) => ({ 
-            user: session.user, 
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+
+      if (
+        event === 'INITIAL_SESSION' ||
+        event === 'SIGNED_IN' ||
+        event === 'TOKEN_REFRESHED'
+      ) {
+        if (session?.user && mounted) {
+          set((state) => ({
+            user: session.user,
             _loading: true,
-            loading: computeLoading({ ...state, user: session.user, _loading: true })
+            loading: computeLoading({
+              ...state,
+              user: session.user,
+              _loading: true,
+            }),
           }));
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
           if (mounted) {
             await get().fetchProfile(session.user.id);
             if (mounted) {
-              set((state) => ({ 
+              set((state) => ({
                 _loading: false,
-                loading: computeLoading({ ...state, _loading: false })
+                loading: computeLoading({ ...state, _loading: false }),
               }));
             }
           }
         } else if (mounted) {
-          set((state) => ({ 
-            user: null, 
-            profile: null, 
+          set((state) => ({
             _loading: false,
-            loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
+            loading: computeLoading({ ...state, _loading: false }),
           }));
         }
+      } else if (event === 'SIGNED_OUT') {
+        if (mounted) {
+          set((state) => ({
+            user: null,
+            profile: null,
+            _loading: false,
+            loading: computeLoading({
+              ...state,
+              user: null,
+              profile: null,
+              _loading: false,
+            }),
+          }));
+        }
+      } else if (session?.user && mounted) {
+        set((state) => ({
+          user: session.user,
+          _loading: true,
+          loading: computeLoading({
+            ...state,
+            user: session.user,
+            _loading: true,
+          }),
+        }));
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        if (mounted) {
+          await get().fetchProfile(session.user.id);
+          if (mounted) {
+            set((state) => ({
+              _loading: false,
+              loading: computeLoading({ ...state, _loading: false }),
+            }));
+          }
+        }
+      } else if (mounted) {
+        set((state) => ({
+          user: null,
+          profile: null,
+          _loading: false,
+          loading: computeLoading({
+            ...state,
+            user: null,
+            profile: null,
+            _loading: false,
+          }),
+        }));
       }
-    );
+    });
 
     authSubscription = subscription;
 
@@ -189,46 +219,47 @@ export const useAuthStore = create((set, get) => {
       if (!supabase) {
         return;
       }
-      
-      
+
       try {
         const startTime = Date.now();
-        
+
         const response = await fetch('/api/auth/profile', {
           method: 'GET',
           credentials: 'include',
         });
-        
+
         const duration = Date.now() - startTime;
-        
+
         if (!response.ok) {
           if (response.status === 401) {
-            set((state) => ({ 
+            set((state) => ({
               profile: null,
-              loading: computeLoading({ ...state, profile: null })
+              loading: computeLoading({ ...state, profile: null }),
             }));
             return;
           }
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+          throw new Error(
+            errorData.error || `HTTP error! status: ${response.status}`
+          );
         }
-        
+
         const { profile: data } = await response.json();
-        
+
         if (!data) {
           if (retries > 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             return get().fetchProfile(userId, retries - 1);
           } else {
             const supabase = getSupabase();
             if (!supabase) {
-              set((state) => ({ 
+              set((state) => ({
                 profile: null,
-                loading: computeLoading({ ...state, profile: null })
+                loading: computeLoading({ ...state, profile: null }),
               }));
               return;
             }
-            
+
             try {
               const { data: userData } = await supabase.auth.getUser();
               if (userData?.user) {
@@ -244,40 +275,40 @@ export const useAuthStore = create((set, get) => {
                   .single();
 
                 if (createError) {
-                  set((state) => ({ 
+                  set((state) => ({
                     profile: null,
-                    loading: computeLoading({ ...state, profile: null })
+                    loading: computeLoading({ ...state, profile: null }),
                   }));
                 } else {
-                  set((state) => ({ 
+                  set((state) => ({
                     profile: newProfile,
-                    loading: computeLoading({ ...state, profile: newProfile })
+                    loading: computeLoading({ ...state, profile: newProfile }),
                   }));
                 }
               } else {
-                set((state) => ({ 
+                set((state) => ({
                   profile: null,
-                  loading: computeLoading({ ...state, profile: null })
+                  loading: computeLoading({ ...state, profile: null }),
                 }));
               }
             } catch (createError) {
-              set((state) => ({ 
+              set((state) => ({
                 profile: null,
-                loading: computeLoading({ ...state, profile: null })
+                loading: computeLoading({ ...state, profile: null }),
               }));
             }
             return;
           }
         }
-        
-        set((state) => ({ 
+
+        set((state) => ({
           profile: data,
-          loading: computeLoading({ ...state, profile: data })
+          loading: computeLoading({ ...state, profile: data }),
         }));
       } catch (error) {
-        set((state) => ({ 
+        set((state) => ({
           profile: null,
-          loading: computeLoading({ ...state, profile: null })
+          loading: computeLoading({ ...state, profile: null }),
         }));
       }
     },
@@ -285,9 +316,12 @@ export const useAuthStore = create((set, get) => {
     signUp: async (email, password, fullName = '') => {
       const supabase = getSupabase();
       if (!supabase) {
-        return { data: null, error: new Error('Supabase client not initialized') };
+        return {
+          data: null,
+          error: new Error('Supabase client not initialized'),
+        };
       }
-      
+
       try {
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -302,12 +336,12 @@ export const useAuthStore = create((set, get) => {
         if (error) throw error;
 
         if (data.user) {
-          set((state) => ({ 
+          set((state) => ({
             user: data.user,
-            loading: computeLoading({ ...state, user: data.user })
+            loading: computeLoading({ ...state, user: data.user }),
           }));
           // Увеличиваем задержку до 1 секунды, чтобы дать время триггеру Supabase создать профиль
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           // fetchProfile имеет retry логику и может создать профиль вручную, если его нет
           await get().fetchProfile(data.user.id);
         }
@@ -321,9 +355,12 @@ export const useAuthStore = create((set, get) => {
     signIn: async (email, password) => {
       const supabase = getSupabase();
       if (!supabase) {
-        return { data: null, error: new Error('Supabase client not initialized') };
+        return {
+          data: null,
+          error: new Error('Supabase client not initialized'),
+        };
       }
-      
+
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
@@ -333,11 +370,11 @@ export const useAuthStore = create((set, get) => {
         if (error) throw error;
 
         if (data.user) {
-          set((state) => ({ 
+          set((state) => ({
             user: data.user,
-            loading: computeLoading({ ...state, user: data.user })
+            loading: computeLoading({ ...state, user: data.user }),
           }));
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
           await get().fetchProfile(data.user.id);
         }
 
@@ -350,14 +387,19 @@ export const useAuthStore = create((set, get) => {
     signOut: async (router) => {
       const supabase = getSupabase();
       if (!supabase) return;
-      
+
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      set((state) => ({ 
-        user: null, 
-        profile: null, 
+      set((state) => ({
+        user: null,
+        profile: null,
         _loading: false,
-        loading: computeLoading({ ...state, user: null, profile: null, _loading: false })
+        loading: computeLoading({
+          ...state,
+          user: null,
+          profile: null,
+          _loading: false,
+        }),
       }));
       // Используем router если передан, иначе window.location
       if (router) {
@@ -377,4 +419,3 @@ export const useAuthStore = create((set, get) => {
     },
   };
 });
-

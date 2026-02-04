@@ -2,7 +2,7 @@
  * SEO utilities for generating structured data and metadata
  */
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
 
 /**
  * Generate Organization structured data
@@ -11,7 +11,7 @@ export function getOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Bartech',
+    name: 'Technobar',
     url: siteUrl,
     logo: `${siteUrl}/logo_techno_bar.svg`,
     description: 'Интернет-магазин техники в Минске',
@@ -32,28 +32,34 @@ export function getOrganizationSchema() {
 export function getProductSchema(product) {
   if (!product) return null;
 
-  const images = product.images && product.images.length > 0 
-    ? product.images.map(img => ({
-        '@type': 'ImageObject',
-        url: img.startsWith('http') ? img : `${siteUrl}${img}`,
-      }))
-    : product.image 
-      ? [{
+  const images =
+    product.images && product.images.length > 0
+      ? product.images.map((img) => ({
           '@type': 'ImageObject',
-          url: product.image.startsWith('http') ? product.image : `${siteUrl}${product.image}`,
-        }]
-      : [];
+          url: img.startsWith('http') ? img : `${siteUrl}${img}`,
+        }))
+      : product.image
+        ? [
+            {
+              '@type': 'ImageObject',
+              url: product.image.startsWith('http')
+                ? product.image
+                : `${siteUrl}${product.image}`,
+            },
+          ]
+        : [];
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description: product.description || `Купить ${product.name} в Минске с доставкой`,
-    image: images.map(img => img.url),
+    description:
+      product.description || `Купить ${product.name} в Минске с доставкой`,
+    image: images.map((img) => img.url),
     sku: String(product.id),
     brand: {
       '@type': 'Brand',
-      name: product.specifications?.brand || 'Bartech',
+      name: product.specifications?.brand || 'Technobar',
     },
     offers: {
       '@type': 'Offer',
@@ -63,7 +69,7 @@ export function getProductSchema(product) {
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: 'Bartech',
+        name: 'Technobar',
       },
     },
   };
@@ -71,7 +77,7 @@ export function getProductSchema(product) {
   // Добавляем спецификации если они есть
   if (product.specifications) {
     const additionalProperty = [];
-    
+
     Object.entries(product.specifications).forEach(([key, value]) => {
       if (value && key !== 'brand') {
         additionalProperty.push({
@@ -143,19 +149,19 @@ export function getCollectionPageSchema(category, products) {
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: products?.length || 0,
-      itemListElement: products?.slice(0, 10).map((product, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        item: {
-          '@type': 'Product',
-          name: product.name,
-          url: `${siteUrl}/products/${product.id}`,
-          image: product.image?.startsWith('http') 
-            ? product.image 
-            : `${siteUrl}${product.image}`,
-        },
-      })) || [],
+      itemListElement:
+        products?.slice(0, 10).map((product, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: {
+            '@type': 'Product',
+            name: product.name,
+            url: `${siteUrl}/products/${product.id}`,
+            image: product.image?.startsWith('http')
+              ? product.image
+              : `${siteUrl}${product.image}`,
+          },
+        })) || [],
     },
   };
 }
-

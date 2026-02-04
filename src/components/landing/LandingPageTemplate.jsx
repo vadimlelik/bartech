@@ -52,7 +52,8 @@ const quizQuestions = [
   },
   {
     id: 4,
-    question: 'Укажите на какой номер прислать каталог с ценами и графиками платежей',
+    question:
+      'Укажите на какой номер прислать каталог с ценами и графиками платежей',
     type: 'text',
   },
 ];
@@ -95,7 +96,11 @@ export default function LandingPageTemplate({ landing }) {
 
   // Загрузка пикселей TikTok
   useEffect(() => {
-    if (landing?.pixels && Array.isArray(landing.pixels) && landing.pixels.length > 0) {
+    if (
+      landing?.pixels &&
+      Array.isArray(landing.pixels) &&
+      landing.pixels.length > 0
+    ) {
       loadTikTokPixels(landing.pixels);
     }
   }, [landing]);
@@ -142,14 +147,18 @@ export default function LandingPageTemplate({ landing }) {
     } catch (error) {
       console.error('Error submitting quiz:', error);
       setIsLoading(false);
-      alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      alert(
+        'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+      );
     }
   };
 
   if (!now) return <Loading />;
 
   const benefits = Array.isArray(landing.benefits) ? landing.benefits : [];
-  const advantages = Array.isArray(landing.advantages) ? landing.advantages : [];
+  const advantages = Array.isArray(landing.advantages)
+    ? landing.advantages
+    : [];
   const reviews = Array.isArray(landing.reviews) ? landing.reviews : [];
   const colors = landing.colors || {};
   const headerBg = colors.header || '#1a1a1a';
@@ -159,11 +168,11 @@ export default function LandingPageTemplate({ landing }) {
   const textColor = colors.textColor || '#1a1a1a';
 
   return (
-    <div className={styles.container} style={{ backgroundColor, color: textColor }}>
-      <div
-        className={styles.header}
-        style={{ backgroundColor: headerBg }}
-      >
+    <div
+      className={styles.container}
+      style={{ backgroundColor, color: textColor }}
+    >
+      <div className={styles.header} style={{ backgroundColor: headerBg }}>
         <h1 className={styles.mainTitle}>
           {landing.main_title || landing.title}
         </h1>
@@ -248,7 +257,9 @@ export default function LandingPageTemplate({ landing }) {
           )}
 
           <div className={styles.advantagesList}>
-            <h2 className={styles.sectionTitle}>Преимущества нашего магазина</h2>
+            <h2 className={styles.sectionTitle}>
+              Преимущества нашего магазина
+            </h2>
 
             {advantages.map((advantage, index) => (
               <div
@@ -298,19 +309,31 @@ export default function LandingPageTemplate({ landing }) {
                 style={{ animationDelay: `${index * 0.3}s` }}
               >
                 {review.image && (
-                  <div style={{ width: '100%', overflow: 'hidden', borderRadius: '10px' }}>
+                  <div
+                    style={{
+                      width: '100%',
+                      overflow: 'hidden',
+                      borderRadius: '10px',
+                    }}
+                  >
                     <Image
                       src={review.image}
                       alt="Отзыв покупателя"
                       width={300}
                       height={200}
                       className={styles.reviewImage}
-                      style={{ width: '100%', height: 'auto', maxWidth: '100%' }}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        maxWidth: '100%',
+                      }}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 300px"
                     />
                   </div>
                 )}
-                <p className={styles.reviewText}>{review.text || review.comment || ''}</p>
+                <p className={styles.reviewText}>
+                  {review.text || review.comment || ''}
+                </p>
               </div>
             ))}
           </div>
@@ -343,4 +366,3 @@ export default function LandingPageTemplate({ landing }) {
     </div>
   );
 }
-

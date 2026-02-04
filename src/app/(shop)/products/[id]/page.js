@@ -4,8 +4,9 @@ import ProductDetails from './ProductDetails';
 import { getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import { getProductSchema, getBreadcrumbSchema } from '@/lib/seo';
+import { getAllProducts } from '@/lib/products-supabase-read';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
 
 // Кэшируем запросы к Supabase на 1 час для снижения нагрузки
 const getCachedProductById = unstable_cache(
@@ -19,16 +20,18 @@ const getCachedProductById = unstable_cache(
   }
 );
 
-// Кэшируем страницу на 1 час
 export const revalidate = 3600;
 
-// Эта функция нужна для получения статических параметров при сборке
 export async function generateStaticParams() {
-  return [];
+  const products = await getAllProducts();
+
+  return products.map((product) => ({
+    id: product.id.toString(),
+  }));
 }
 
 export async function generateMetadata({ params }) {
-  const { id } = await Promise.resolve(params);
+  const { id } = await params;
   try {
     const product = await getCachedProductById(id);
 
@@ -39,15 +42,19 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const productImage = product.images && product.images.length > 0
-      ? product.images[0]
-      : product.image || '/logo_techno_bar.svg';
-    
+    const productImage =
+      product.images && product.images.length > 0
+        ? product.images[0]
+        : product.image || '/logo_techno_bar.svg';
+
     // Обработка URL изображения
     let imageUrl;
     if (!productImage) {
       imageUrl = `${siteUrl}/logo_techno_bar.svg`;
-    } else if (productImage.startsWith('http://') || productImage.startsWith('https://')) {
+    } else if (
+      productImage.startsWith('http://') ||
+      productImage.startsWith('https://')
+    ) {
       imageUrl = productImage;
     } else if (productImage.startsWith('/')) {
       imageUrl = `${siteUrl}${productImage}`;
@@ -55,11 +62,12 @@ export async function generateMetadata({ params }) {
       imageUrl = `${siteUrl}/${productImage}`;
     }
 
-    const description = product.description || 
+    const description =
+      product.description ||
       `Купить ${product.name} в Минске с доставкой. ${product.specifications?.brand ? `Бренд: ${product.specifications.brand}.` : ''} Цена: ${product.price} BYN. Рассрочка без переплат.`;
 
     return {
-      title: `${product.name} - Купить в Bartech`,
+      title: `${product.name} - Купить в Technobar`,
       description,
       keywords: [
         product.name,
@@ -69,7 +77,7 @@ export async function generateMetadata({ params }) {
         product.category || product.categoryId,
       ].filter(Boolean),
       openGraph: {
-        title: `${product.name} - Купить в Bartech`,
+        title: `${product.name} - Купить в Technobar`,
         description,
         type: 'website',
         url: `${siteUrl}/products/${id}`,
@@ -84,7 +92,7 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${product.name} - Купить в Bartech`,
+        title: `${product.name} - Купить в Technobar`,
         description,
         images: [imageUrl],
       },
@@ -110,11 +118,13 @@ export default async function ProductPage({ params }) {
   }
 
   const productSchema = getProductSchema(product);
-  
+
   // Breadcrumbs для продукта
   const breadcrumbs = [
     { name: 'Главная', url: '/' },
-    ...(product.categoryId ? [{ name: product.categoryId, url: `/categories/${product.categoryId}` }] : []),
+    ...(product.categoryId
+      ? [{ name: product.categoryId, url: `/categories/${product.categoryId}` }]
+      : []),
     { name: product.name, url: `/products/${id}` },
   ];
   const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);

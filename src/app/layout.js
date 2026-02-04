@@ -16,9 +16,10 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: 'Bartech - Интернет-магазин техники в Минске',
-    template: '%s | Bartech',
+    template: '%s | Texnobar',
   },
-  description: 'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники. Рассрочка без переплат.',
+  description:
+    'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники. Рассрочка без переплат.',
   keywords: [
     'техника',
     'электроника',
@@ -30,9 +31,9 @@ export const metadata = {
     'интернет-магазин техники',
     'техника в рассрочку',
   ],
-  authors: [{ name: 'Bartech' }],
-  creator: 'Bartech',
-  publisher: 'Bartech',
+  authors: [{ name: 'Texnobar' }],
+  creator: 'Texnobar',
+  publisher: 'Texnobar',
   robots: {
     index: true,
     follow: true,
@@ -48,22 +49,24 @@ export const metadata = {
     type: 'website',
     locale: 'ru_BY',
     url: siteUrl,
-    siteName: 'Bartech',
-    title: 'Bartech - Интернет-магазин техники в Минске',
-    description: 'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
+    siteName: 'Texnobar',
+    title: 'Texnobar - Интернет-магазин техники в Минске',
+    description:
+      'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
     images: [
       {
         url: `${siteUrl}/logo_techno_bar.svg`,
         width: 1200,
         height: 630,
-        alt: 'Bartech - Интернет-магазин техники',
+        alt: 'Texnobar - Интернет-магазин техники',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bartech - Интернет-магазин техники в Минске',
-    description: 'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
+    title: 'Texnobar - Интернет-магазин техники в Минске',
+    description:
+      'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
     images: [`${siteUrl}/logo_techno_bar.svg`],
   },
   icons: {
@@ -91,9 +94,7 @@ export default function RootLayout({ children }) {
       <body>
         <StyledComponentsRegistry>
           <Providers>
-            <ClientLayout>
-              {children}
-            </ClientLayout>
+            <ClientLayout>{children}</ClientLayout>
           </Providers>
         </StyledComponentsRegistry>
       </body>
