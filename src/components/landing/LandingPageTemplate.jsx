@@ -129,7 +129,7 @@ export default function LandingPageTemplate({ landing }) {
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await axios.post('/api/quiz', {
+      const response = await axios.post('/api/quiz', {
         FIELDS: {
           ...data.FIELDS,
           UTM_SOURCE: utm_source || '',
@@ -139,14 +139,23 @@ export default function LandingPageTemplate({ landing }) {
           UTM_TERM: (ad || '') + (ttclid || ''),
         },
       });
-      setIsLoading(false);
-      router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
+
+      if (response.data?.success) {
+        router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
+      } else {
+        alert('Форма отправлена слишком часто. Попробуйте через минуту.');
+      }
     } catch (error) {
       console.error('Error submitting quiz:', error);
+      if (error.response?.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+      } else {
+        alert(
+          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+        );
+      }
+    } finally {
       setIsLoading(false);
-      alert(
-        'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-      );
     }
   };
 
