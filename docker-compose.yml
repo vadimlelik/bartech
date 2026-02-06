@@ -47,6 +47,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - technobar_certbot-etc:/etc/letsencrypt:ro
       - technobar_certbot-var:/var/lib/letsencrypt:ro
+      - nginx_cache:/var/cache/nginx
     networks:
       - app-network
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
@@ -81,6 +82,8 @@ volumes:
     external: true
   technobar_certbot-var:
     external: true
+  nginx_cache:
+    driver: local
 
 networks:
   app-network:
