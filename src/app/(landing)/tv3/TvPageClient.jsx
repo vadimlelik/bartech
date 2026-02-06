@@ -117,29 +117,35 @@ export default function TvLandingPage() {
   }, []);
 
   const closeQuiz = () => setIsQuizOpen(false);
+
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await axios.post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        {
-          FIELDS: {
-            ...data.FIELDS,
-            UTM_SOURCE: utm.utm_source,
-            UTM_MEDIUM: utm.utm_medium,
-            UTM_CAMPAIGN: utm.utm_campaign,
-            UTM_CONTENT: utm.utm_content,
-            UTM_TERM: `${utm.ad}${utm.ttclid}`,
-          },
-        }
-      );
-      setIsQuizOpen(false);
-      router.push('/thank-you?source=tv3');
-    } catch (err) {
-      console.error(err);
-      alert(
-        'Не удалось отправить заявку — проверьте интернет и попробуйте снова.'
-      );
+      const response = await axios.post('/api/quiz', {
+        FIELDS: {
+          ...data.FIELDS,
+          UTM_SOURCE: utm.utm_source || '',
+          UTM_MEDIUM: utm.utm_medium || '',
+          UTM_CAMPAIGN: utm.utm_campaign || '',
+          UTM_CONTENT: utm.utm_content || '',
+          UTM_TERM: (utm.ad || '') + (utm.ttclid || ''),
+        },
+      });
+
+      if (response.data?.success) {
+        router.push('https://technobar.by/thank-you?source=tv3');
+      } else {
+        alert('Форма отправлена слишком часто. Попробуйте через минуту.');
+      }
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      if (error.response?.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+      } else {
+        alert(
+          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -468,8 +474,7 @@ export default function TvLandingPage() {
           className={styles.bottomBtn}
           role="dialog"
           aria-hidden={!isQuizOpen}
-        >
-        </div>
+        ></div>
 
         <Quiz
           isOpen={isQuizOpen}

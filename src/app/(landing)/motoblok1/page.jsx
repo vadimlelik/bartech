@@ -72,26 +72,35 @@ export default function Phone4() {
 
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
-    axios
-      .post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-
-        {
-          FIELDS: {
-            ...data.FIELDS,
-            UTM_SOURCE: utm_source || '',
-            UTM_MEDIUM: utm_medium || '',
-            UTM_CAMPAIGN: utm_campaign || '',
-            UTM_CONTENT: utm_content || '',
-            UTM_TERM: ad + ttclid || '',
-          },
-        }
-      )
-      .then(() => {
-        setIsQuizOpen(false);
-        setIsLoading(false);
-        router.push('/thank-you?source=motoblock1');
+    try {
+      const response = await axios.post('/api/quiz', {
+        FIELDS: {
+          ...data.FIELDS,
+          UTM_SOURCE: utm_source || '',
+          UTM_MEDIUM: utm_medium || '',
+          UTM_CAMPAIGN: utm_campaign || '',
+          UTM_CONTENT: utm_content || '',
+          UTM_TERM: (ad || '') + (ttclid || ''),
+        },
       });
+
+      if (response.data?.success) {
+        router.push('https://technobar.by/thank-you?source=motoblok1');
+      } else {
+        alert('Форма отправлена слишком часто. Попробуйте через минуту.');
+      }
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      if (error.response?.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+      } else {
+        alert(
+          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const closeQuiz = () => {
@@ -185,7 +194,8 @@ export default function Phone4() {
               напрямую с завода в РБ
             </li>
             <li className={styles.benefit}>
-              <span className={styles.bold}> до 5 лет</span> Расширенной гарантии от магазина
+              <span className={styles.bold}> до 5 лет</span> Расширенной
+              гарантии от магазина
             </li>
           </ul>
 
