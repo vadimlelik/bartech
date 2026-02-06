@@ -8,7 +8,10 @@ export async function POST(req) {
   globalThis._quiz ??= {};
   const last = globalThis._quiz[ip];
   if (last && Date.now() - last < 60_000) {
-    return NextResponse.json({ success: true });
+    return NextResponse.json(
+      { success: false, reason: 'rate_limited' },
+      { status: 429 }
+    );
   }
   globalThis._quiz[ip] = Date.now();
   await axios.post(
