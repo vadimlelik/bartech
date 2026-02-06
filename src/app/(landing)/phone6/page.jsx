@@ -95,7 +95,7 @@ export default function Phone6() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=phone6');
+        router.push('https://technobar.by/thank-you?source=phone6');
       });
   };
   const questions = [

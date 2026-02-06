@@ -71,7 +71,12 @@ export default function MotoBlok() {
   }, []);
 
   useEffect(() => {
-    loadTikTokPixels([PIXEL.scooter, PIXEL_2.scooter, PIXEL_3.scooter, PIXEL_4.scooter]);
+    loadTikTokPixels([
+      PIXEL.scooter,
+      PIXEL_2.scooter,
+      PIXEL_3.scooter,
+      PIXEL_4.scooter,
+    ]);
   }, []);
 
   const handleQuizSubmit = async (data) => {
@@ -92,7 +97,7 @@ export default function MotoBlok() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=scooter');
+        router.push('https://technobar.by/thank-you?source=scooter');
       });
   };
   const questions = [

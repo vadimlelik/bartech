@@ -47,7 +47,7 @@ export default function Phone5() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=phone5');
+        router.push('https://technobar.by/thank-you?source=phone5');
       });
   };
 

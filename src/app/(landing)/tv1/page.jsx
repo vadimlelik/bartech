@@ -78,7 +78,7 @@ const Tv = () => {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=tv');
+        router.push('https://technobar.by/thank-you?source=tv');
       });
   };
 

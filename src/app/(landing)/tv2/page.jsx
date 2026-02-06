@@ -99,7 +99,7 @@ export default function CatalogPage() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=tv2');
+        router.push('/https://technobar.by/thank-you?source=tv2');
       });
   };
   return (
