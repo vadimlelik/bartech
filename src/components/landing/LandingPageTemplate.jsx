@@ -129,19 +129,16 @@ export default function LandingPageTemplate({ landing }) {
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await axios.post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        {
-          FIELDS: {
-            ...data.FIELDS,
-            UTM_SOURCE: utm_source || '',
-            UTM_MEDIUM: utm_medium || '',
-            UTM_CAMPAIGN: utm_campaign || '',
-            UTM_CONTENT: utm_content || '',
-            UTM_TERM: (ad || '') + (ttclid || ''),
-          },
-        }
-      );
+      await axios.post('/api/quiz', {
+        FIELDS: {
+          ...data.FIELDS,
+          UTM_SOURCE: utm_source || '',
+          UTM_MEDIUM: utm_medium || '',
+          UTM_CAMPAIGN: utm_campaign || '',
+          UTM_CONTENT: utm_content || '',
+          UTM_TERM: (ad || '') + (ttclid || ''),
+        },
+      });
       setIsLoading(false);
       router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
     } catch (error) {
