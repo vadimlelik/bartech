@@ -100,7 +100,7 @@ export default function Phone4() {
       .then(() => {
         setIsQuizOpen(false);
         setIsLoading(false);
-        router.push('/thank-you?source=phone3');
+        router.push('https://technobar.by/thank-you?source=phone3');
       });
   };
 
