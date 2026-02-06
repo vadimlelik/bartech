@@ -93,7 +93,7 @@ const Phone2 = () => {
         )
         .then(() => {
           setIsQuizOpen(false);
-          router.push('/thank-you?source=phone2');
+          router.push('https://technobar.by/thank-you?source=phone2');
         });
     } catch (error) {
       toast.error('Ошибка при отправке заявки. Попробуйте еще раз.');

@@ -139,7 +139,7 @@ export default function ShockproofPhone() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=shockproof');
+        router.push('https://technobar.by/thank-you?source=shockproof');
       });
   };
 

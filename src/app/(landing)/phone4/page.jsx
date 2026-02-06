@@ -88,7 +88,7 @@ export default function Phone4() {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=phone4');
+        router.push('https://technobar.by/thank-you?source=phone4');
       });
   };
 

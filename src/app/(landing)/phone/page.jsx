@@ -78,7 +78,7 @@ const Phone = () => {
       )
       .then(() => {
         setIsLoading(false);
-        router.push('/thank-you?source=phone');
+        router.push('https://technobar.by/thank-you?source=phone');
       });
   };
 
