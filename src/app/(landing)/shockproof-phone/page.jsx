@@ -11,6 +11,7 @@ import {
   PIXEL,
   PIXEL_10,
   PIXEL_11,
+  PIXEL_12,
   PIXEL_2,
   PIXEL_3,
   PIXEL_4,
@@ -116,6 +117,7 @@ export default function ShockproofPhone() {
       PIXEL_9.shockproof,
       PIXEL_10.shockproof,
       PIXEL_11.shockproof,
+      PIXEL_12.shockproof,
     ]);
   }, []);
 
