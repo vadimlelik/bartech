@@ -116,21 +116,27 @@ export const PIXEL_10 = {
 };
 export const PIXEL_11 = {
   laptop: 'D38J06BC77U6IE15NCUG',
-  shockproof:"D5JMHFBC77UDMGSG1FL0",
-  phone3:"D5JMJTBC77U2941FSGUG"
+  shockproof: 'D5JMHFBC77UDMGSG1FL0',
+  phone3: 'D5JMJTBC77U2941FSGUG',
 };
 export const PIXEL_12 = {
   laptop: 'D33ST9BC77U1PDQ722G0',
-  phone3:"D62ODTBC77UC1EV4B710",
-  shockproof:"D62OE83C77UC1EV4B730"
+  phone3: 'D62ODTBC77UC1EV4B710',
+  shockproof: 'D62OE83C77UC1EV4B730',
 };
 export const PIXEL_13 = {
   laptop: 'D1V4DP3C77UCQ41MKFAG',
+  shockproof:"D63S7UBC77UC1EV4CLDG"
+  phone3: 'D63S653C77U6OVTJLB8G',
 };
 export const PIXEL_14 = {
   laptop: 'D38J153C77UFRPGCT5KG',
+  shockproof:"D63S943C77U5GADIJ4O0"
+  phone3: 'D63S723C77U6E0JT84AG',
 };
 
 export const PIXEL_15 = {
   laptop: 'D3JTCBRC77U8DNMA5LR0',
+  shockproof:"D62TT23C77U6LCNG4I40"
+  phone3: 'D644T6JC77U0T3RJ4O8G',
 };

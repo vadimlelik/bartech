@@ -62,7 +62,11 @@ const ThankYouPage = () => {
           return res.json();
         })
         .then((data) => {
-          if (data.landing && Array.isArray(data.landing.pixels) && data.landing.pixels.length > 0) {
+          if (
+            data.landing &&
+            Array.isArray(data.landing.pixels) &&
+            data.landing.pixels.length > 0
+          ) {
             loadTikTokPixels(data.landing.pixels);
           }
         })
