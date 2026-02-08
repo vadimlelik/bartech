@@ -126,17 +126,17 @@ export const PIXEL_12 = {
 };
 export const PIXEL_13 = {
   laptop: 'D1V4DP3C77UCQ41MKFAG',
-  shockproof:"D63S7UBC77UC1EV4CLDG"
+  shockproof: 'D63S7UBC77UC1EV4CLDG',
   phone3: 'D63S653C77U6OVTJLB8G',
 };
 export const PIXEL_14 = {
   laptop: 'D38J153C77UFRPGCT5KG',
-  shockproof:"D63S943C77U5GADIJ4O0"
+  shockproof: 'D63S943C77U5GADIJ4O0',
   phone3: 'D63S723C77U6E0JT84AG',
 };
 
 export const PIXEL_15 = {
   laptop: 'D3JTCBRC77U8DNMA5LR0',
-  shockproof:"D62TT23C77U6LCNG4I40"
+  shockproof: 'D62TT23C77U6LCNG4I40',
   phone3: 'D644T6JC77U0T3RJ4O8G',
 };
