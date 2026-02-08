@@ -7,7 +7,7 @@ export async function POST(req) {
 
   globalThis._quiz ??= {};
   const last = globalThis._quiz[ip];
-  if (last && Date.now() - last < 60 * 5 * 1000) {
+  if (last && Date.now() - last < 60 * 1 * 1000) {
     return NextResponse.json(
       { success: false, reason: 'rate_limited' },
       { status: 429 }
