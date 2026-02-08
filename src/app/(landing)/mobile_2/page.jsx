@@ -171,8 +171,8 @@ export default function Phone4() {
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h2 className={styles.heroTitle}>
-            Покупай новый телефон в Рассрочку, <br />а на второй забирай со
-            скидкой 99.9%
+            Покупай новый телефон в <br />
+            Рассрочку, а на второй забирай со скидкой 99.9%
           </h2>
 
           <ul className={styles.benefits}>
