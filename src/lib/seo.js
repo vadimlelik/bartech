@@ -121,7 +121,7 @@ export function getWebSiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Bartech',
+    name: 'technobar',
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',

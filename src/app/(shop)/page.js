@@ -5,11 +5,12 @@ import CategoryCarousel from '@/components/CategoryCarousel/CategoryCarousel';
 import Features from '@/components/Features/Features';
 import { getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
 
 export const metadata = {
-  title: 'Bartech - Интернет-магазин техники в Минске',
-  description: 'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники. Рассрочка без переплат.',
+  title: 'Technobar - Интернет-магазин техники в Минске',
+  description:
+    'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники. Рассрочка без переплат.',
   keywords: [
     'техника',
     'электроника',
@@ -21,8 +22,9 @@ export const metadata = {
     'рассрочка',
   ],
   openGraph: {
-    title: 'Bartech - Интернет-магазин техники в Минске',
-    description: 'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
+    title: 'Technobar - Интернет-магазин техники в Минске',
+    description:
+      'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
     type: 'website',
     url: siteUrl,
     images: [
@@ -30,7 +32,7 @@ export const metadata = {
         url: `${siteUrl}/logo_techno_bar.svg`,
         width: 1200,
         height: 630,
-        alt: 'Bartech - Интернет-магазин техники',
+        alt: 'Technobar - Интернет-магазин техники',
       },
     ],
   },
@@ -48,7 +50,12 @@ export default async function Home() {
 
   // Фильтруем категории с валидным ID и названием
   const validCategories = categories.filter(
-    (category) => category && category.id && category.id.trim() !== '' && category.name && category.name.trim() !== ''
+    (category) =>
+      category &&
+      category.id &&
+      category.id.trim() !== '' &&
+      category.name &&
+      category.name.trim() !== ''
   );
 
   const organizationSchema = getOrganizationSchema();
@@ -89,7 +96,10 @@ export default async function Home() {
               ))}
             </Grid>
           ) : (
-            <Typography variant="body1" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
               Категории пока не добавлены
             </Typography>
           )}
