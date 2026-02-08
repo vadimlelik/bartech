@@ -10,12 +10,12 @@ const roboto = Roboto({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Bartech - Интернет-магазин техники в Минске',
+    default: 'Texnobar - Интернет-магазин техники в Минске',
     template: '%s | Texnobar',
   },
   description:
