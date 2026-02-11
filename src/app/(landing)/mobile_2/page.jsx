@@ -7,7 +7,7 @@ import Loading from '@/app/loading';
 import Quiz from '@/components/quiz/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/data/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
@@ -162,7 +162,7 @@ export default function Phone4() {
   ];
 
   useEffect(() => {
-    loadTikTokPixels([PIXEL.mobile_2]);
+    loadTikTokPixels([PIXEL.mobile_2, PIXEL_2.mobile_2]);
   }, []);
   if (!now) return <Loading />;
 
@@ -172,7 +172,7 @@ export default function Phone4() {
         <div className={styles.heroContent}>
           <h2 className={styles.heroTitle}>
             Покупай новый телефон в <br />
-            Рассрочку, а на второй забирай со скидкой 99.9%
+            Рассрочку, а второй забирай со скидкой 99.9%
           </h2>
 
           <ul className={styles.benefits}>

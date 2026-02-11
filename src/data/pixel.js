@@ -24,6 +24,7 @@ export const PIXEL = {
 };
 
 export const PIXEL_2 = {
+  mobile_2: 'D65JF4BC77U1M7M29CBG',
   tv: 'CV127C3C77U2T2VFO7T0',
   tv2: ' D2SJ1SRC77U68RC9SM30',
   tv3: 'D2SJ2B3C77UBEOV047HG',
@@ -141,4 +142,8 @@ export const PIXEL_15 = {
   laptop: 'D3JTCBRC77U8DNMA5LR0',
   shockproof: 'D62TT23C77U6LCNG4I40',
   phone3: 'D644T6JC77U0T3RJ4O8G',
+};
+export const PIXEL_16 = {
+  phone3: 'D65JEEBC77U1M7M29C8G',
+  shockproof: 'D65JEOBC77U5GADIL4T0',
 };
