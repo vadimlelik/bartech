@@ -145,5 +145,5 @@ export const PIXEL_15 = {
 };
 export const PIXEL_16 = {
   phone3: 'D65JEEBC77U1M7M29C8G',
-  shockproof: 'D65JEOBC77U5GADIL4T0',
+  shockproof: 'D66UP53C77U5P7UM1450',
 };
