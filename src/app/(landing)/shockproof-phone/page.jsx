@@ -144,7 +144,7 @@ export default function ShockproofPhone() {
       });
 
       if (response.data?.success) {
-        router.push('https://technobar.by/thank-you?source=shockproof-phone');
+        router.push('https://technobar.by/thank-you?source=shockproof');
       } else {
         alert('Форма отправлена слишком часто. Попробуйте через минуту.');
       }
