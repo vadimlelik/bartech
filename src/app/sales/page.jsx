@@ -3,7 +3,7 @@ import style from './sales.module.css';
 const Sales = () => {
   return (
     <div className={style.promo}>
-      <h2 className={style.title}>АКЦИЯ с 14.11.2025 по 14.02.2026</h2>
+      <h2 className={style.title}>АКЦИЯ сс 15.02.2026 по 15.05.2026</h2>
 
       <div className={style.block}>
         <h3>1. При покупке смартфона</h3>

@@ -176,7 +176,7 @@ export default function Header() {
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccessTimeIcon sx={{ mr: 1, fontSize: '1rem' }} />
-                <Typography variant="body2">пн.- пт.: 9:30 - 21:30</Typography>
+                <Typography variant="body2">пн.- пт.: 9:00 - 21:00</Typography>
               </Box>
             </Box>
 
@@ -343,7 +343,7 @@ export default function Header() {
                     +375 44 741-84-23
                   </Typography>
                 }
-                secondary="пн.- пт.: 9:30 - 21:30"
+                secondary="пн.- пт.: 9:00 - 21:00"
               />
             </ListItem>
           </List>

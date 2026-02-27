@@ -125,14 +125,16 @@ export default function Footer() {
                   Условия рассрочки и сертификация
                 </Typography>
               </Link>
-              <Typography variant="body2" color="text.secondary">
-                +375 17 318-13-33; +375 17 360-82-11 – администрация Советского
-                района г. Минска;
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                +37517-218-00-82 – главное управление торговли и услуг
-                Мингорисполкома.
-              </Typography>
+              <Link href="/service" tyle={{ textDecoration: 'none' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Сервисные центры
+                </Typography>
+              </Link>
+              <Link href="/pk" tyle={{ textDecoration: 'none' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Политика обработки персональных данных
+                </Typography>
+              </Link>
             </Box>
           </Grid>
 

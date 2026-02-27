@@ -18,6 +18,7 @@ import {
   Navigation,
   NavButton,
 } from './QuizStyles';
+import Link from 'next/link';
 
 const Quiz = ({
   isOpen,
@@ -53,7 +54,10 @@ const Quiz = ({
           // Устанавливаем курсор после "+375"
           const cursorPosition = 4; // Позиция после "+375"
           try {
-            phoneInputRef.current.setSelectionRange(cursorPosition, cursorPosition);
+            phoneInputRef.current.setSelectionRange(
+              cursorPosition,
+              cursorPosition
+            );
           } catch (e) {
             // Игнорируем ошибки установки курсора (может не поддерживаться в некоторых браузерах)
           }
@@ -360,7 +364,10 @@ const Quiz = ({
                           lineHeight: '1.4',
                         }}
                       >
-                        Даю согласие на обработку персональных данных
+                        Даю согласие на обработку {''}
+                        <Link href="https://technobar.by/pk">
+                          персональных данных
+                        </Link>
                       </span>
                     </>
                   )}

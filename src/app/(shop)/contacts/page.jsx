@@ -45,7 +45,7 @@ export default function Contacts() {
                   <Typography variant="h6">Адрес</Typography>
                 </Box>
                 <Typography variant="body1" sx={{ pl: 5 }}>
-                  220068, г. Минск, ул. Червякова, д. 60, пом. 179
+                  220013, г. Минск, ул. Сурганова, д. 43, пом. 804
                 </Typography>
               </Box>
 
@@ -58,7 +58,7 @@ export default function Contacts() {
                   <Typography variant="h6">Время работы</Typography>
                 </Box>
                 <Typography variant="body1" sx={{ pl: 5 }}>
-                  Понедельник - пятница, с 9:30 до 21:30
+                  Понедельник - пятница, с 9:00 до 21:00
                 </Typography>
               </Box>
             </Grid>
@@ -112,19 +112,25 @@ export default function Contacts() {
                     color="primary"
                     sx={{ fontSize: 30, mr: 2 }}
                   />
-                  <Typography variant="h6">Банковские реквизиты</Typography>
+                  <Typography variant="h6">
+                    Органы, осуществляющие контроль за деятельностью
+                  </Typography>
                 </Box>
                 <Typography variant="body1" sx={{ pl: 5 }}>
-                  Текущий (расчетный):
-                </Typography>
-                <Typography variant="body1" sx={{ pl: 5 }}>
-                  BY07BPSB30123442980159330000 в BYN
-                </Typography>
-                <Typography variant="body1" sx={{ pl: 5 }}>
-                  в ОАО &ldquo;Сбербанк&quot;
-                </Typography>
-                <Typography variant="body1" sx={{ pl: 5 }}>
-                  БИК: BPSBBY2X
+                  +375 17 318-13-33; +375 17 360-82-11 – администрация
+                  Советского района г. Минска, отдел торговли
+                  <br />
+                  Адрес: г. Минск, ул. Дорошевича, 8
+                  <br />
+                  Электронный адрес: sovadm@minsk.gov.by
+                  <br />
+                  +375 17 218-00-82 – главное управление торговли и услуг
+                  Мингорисполкома
+                  <br />
+                  Лицо, уполномоченное рассматривать обращения покупателей о
+                  нарушении их прав, предусмотренных законодательством о защите
+                  прав потребителей, – специалист отдела рекламаций, контактный
+                  телефон +375 44 741-84-23
                 </Typography>
               </Box>
             </Grid>
