@@ -1,0 +1,75 @@
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  
+  .pdfWrap {
+    margin-top: 24px;
+  }
+  
+  .pdfToolbar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  
+  .pdfLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    color: #0b0f19;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1;
+  }
+  
+  .pdfFrame {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #0b0f19;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  }
+  
+  .pdfObject {
+    display: block;
+    width: 100%;
+    height: 80vh;
+    min-height: 680px;
+  }
+  
+  .pdfIframe {
+    display: block;
+    width: 100%;
+    height: 80vh;
+    min-height: 680px;
+    border: 0;
+  }
+  
+  @media (max-width: 900px) {
+    .pdfFrame {
+      max-width: 100%;
+      border-radius: 14px;
+    }
+    .pdfObject,
+    .pdfIframe {
+      height: 75vh;
+      min-height: 520px;
+    }
+  }
+  
