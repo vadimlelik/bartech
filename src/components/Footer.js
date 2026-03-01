@@ -59,8 +59,7 @@ export default function Footer() {
               paragraph
               sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
             >
-              Юридический и почтовый адрес: 220068, г. Минск, ул. Червякова, д.
-              60, пом. 179
+              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д. 43, пом. 804
             </Typography>
             <Typography
               variant="body2"
@@ -96,9 +95,9 @@ export default function Footer() {
                 },
               }}
             >
-              <Link href="/privacy" passHref style={{ textDecoration: 'none' }}>
+              <Link href="/videowatching" passHref style={{ textDecoration: 'none' }}>
                 <Typography variant="body2" color="text.secondary">
-                  Политика конфиденциальности
+                Правила видионадлюдения в помещении
                 </Typography>
               </Link>
               <Link href="/po" passHref style={{ textDecoration: 'none' }}>
@@ -120,11 +119,11 @@ export default function Footer() {
                   Возврат товара
                 </Typography>
               </Link>
-              <Link href="/pass" passHref style={{ textDecoration: 'none' }}>
+              {/* <Link href="/pass" passHref style={{ textDecoration: 'none' }}>
                 <Typography variant="body2" color="text.secondary">
                   Условия рассрочки и сертификация
                 </Typography>
-              </Link>
+              </Link> */}
               <Link href="/service" tyle={{ textDecoration: 'none' }}>
                 <Typography variant="body2" color="text.secondary">
                   Сервисные центры

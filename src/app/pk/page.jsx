@@ -19,9 +19,6 @@ const PK = () => {
           >
             Открыть PDF в новой вкладке
           </a>
-          <a className={styles.pdfLink} href={pdfSrc} download>
-            Скачать
-          </a>
         </div>
 
         <div className={styles.pdfFrame}>
