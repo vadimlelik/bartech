@@ -46,6 +46,9 @@ function AdminPageContent() {
   const [categories, setCategories] = useState([]);
   const [landings, setLandings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productsLoaded, setProductsLoaded] = useState(false);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const [landingsLoaded, setLandingsLoaded] = useState(false);
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
   const [openLandingDialog, setOpenLandingDialog] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -81,6 +84,20 @@ function AdminPageContent() {
   const initialLoadDoneRef = useRef(false);
   const prevAuthLoadingRef = useRef(authLoading);
 
+  const loadTabData = async (tabIndex) => {
+    try {
+      if (tabIndex === 0 && !productsLoaded) {
+        await fetchProducts();
+      } else if (tabIndex === 1 && !categoriesLoaded) {
+        await fetchCategories();
+      } else if (tabIndex === 2 && !landingsLoaded) {
+        await fetchLandings();
+      }
+    } catch (error) {
+      console.error('Error loading tab data:', error);
+    }
+  };
+
   useEffect(() => {
     // Если уже загружали данные, больше не загружаем - это ключевая проверка!
     if (initialLoadDoneRef.current) {
@@ -102,41 +119,25 @@ function AdminPageContent() {
       initialLoadDoneRef.current = true;
 
 
-      const loadData = async () => {
-        try {
-          await Promise.all([
-            fetchProducts(),
-            fetchCategories(),
-            fetchLandings(),
-          ]);
-        } catch (error) {
-          // Если произошла ошибка, сбрасываем флаг, чтобы можно было попробовать снова
-          initialLoadDoneRef.current = false;
-        }
-      };
-
-      loadData();
+      loadTabData(activeTab);
     } else if (prevAuthLoading === false && authLoading === false && profile && !initialLoadDoneRef.current) {
       // Если изначально authLoading был false (уже загружен), загружаем данные один раз
       initialLoadDoneRef.current = true;
 
 
-      const loadData = async () => {
-        try {
-          await Promise.all([
-            fetchProducts(),
-            fetchCategories(),
-            fetchLandings(),
-          ]);
-        } catch (error) {
-          initialLoadDoneRef.current = false;
-        }
-      };
-
-      loadData();
+      loadTabData(activeTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading]); // Зависим только от authLoading
+  }, [authLoading, profile, activeTab]); // Зависим от authLoading, профиля и активного таба
+
+  // Догружаем данные при смене таба после первой инициализации
+  useEffect(() => {
+    if (!initialLoadDoneRef.current || authLoading || !profile) {
+      return;
+    }
+    loadTabData(activeTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   const fetchProducts = async () => {
     try {
@@ -159,6 +160,7 @@ function AdminPageContent() {
       } else {
         setProducts([]);
       }
+      setProductsLoaded(true);
     } catch (error) {
       console.error('Error fetching products:', error);
       showSnackbar(error.message || 'Ошибка загрузки товаров', 'error');
@@ -170,6 +172,7 @@ function AdminPageContent() {
 
   const fetchCategories = async () => {
     try {
+      setLoading(true);
       const response = await fetch('/api/admin/categories');
 
       if (!response.ok) {
@@ -186,14 +189,21 @@ function AdminPageContent() {
         setCategories(data.categories);
       } else if (Array.isArray(data)) {
         setCategories(data);
+      } else {
+        setCategories([]);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
+      setCategories([]);
+    } finally {
+      setCategoriesLoaded(true);
+      setLoading(false);
     }
   };
 
   const fetchLandings = async () => {
     try {
+      setLoading(true);
       const response = await fetch('/api/admin/landings');
 
       if (!response.ok) {
@@ -213,6 +223,10 @@ function AdminPageContent() {
       }
     } catch (error) {
       console.error('Error fetching landings:', error);
+      setLandings([]);
+    } finally {
+      setLandingsLoaded(true);
+      setLoading(false);
     }
   };
 
@@ -624,6 +638,9 @@ function AdminPageContent() {
           fetchCategories(),
           fetchLandings(),
         ]);
+        setProductsLoaded(true);
+        setCategoriesLoaded(true);
+        setLandingsLoaded(true);
       } else {
         showSnackbar(data.error || 'Ошибка инициализации базы данных', 'error');
       }
