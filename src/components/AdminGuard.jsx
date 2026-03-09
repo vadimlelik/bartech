@@ -5,13 +5,22 @@ import { useAuthStore } from '@/store/auth';
 import { Box, CircularProgress, Typography, Container } from '@mui/material';
 
 export default function AdminGuard({ children }) {
-  const { user, profile, loading, init } = useAuthStore();
+  const { user, profile, loading, init, fetchProfile } = useAuthStore();
   const accessGrantedRef = useRef(false);
+  const profileRequestedRef = useRef(false);
 
-  // Убеждаемся, что auth store инициализирован
+  // Инициализируем auth store при монтировании
   useEffect(() => {
     init();
   }, [init]);
+
+  // Ленивая загрузка профиля только на админской странице
+  useEffect(() => {
+    if (!loading && user && !profile && !profileRequestedRef.current) {
+      profileRequestedRef.current = true;
+      fetchProfile(user.id);
+    }
+  }, [loading, user, profile, fetchProfile]);
 
   // Если доступ уже был предоставлен, сохраняем это состояние
   useEffect(() => {
@@ -21,7 +30,8 @@ export default function AdminGuard({ children }) {
   }, [loading, user, profile]);
 
   // Если доступ уже был предоставлен, не скрываем содержимое при временных изменениях loading
-  const shouldShowLoading = (!accessGrantedRef.current && (loading || !user || !profile));
+  const shouldShowLoading =
+    !accessGrantedRef.current && (loading || !user || !profile);
 
   if (shouldShowLoading) {
     return (
@@ -44,7 +54,7 @@ export default function AdminGuard({ children }) {
     );
   }
 
-  if (profile.role !== 'admin') {
+  if (!profile || profile.role !== 'admin') {
     return (
       <Container maxWidth="xl" sx={{ py: 8 }}>
         <Box
@@ -66,6 +76,7 @@ export default function AdminGuard({ children }) {
       </Container>
     );
   }
+
   return <>{children}</>;
 }
 
