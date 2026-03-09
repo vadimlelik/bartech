@@ -16,7 +16,9 @@ const getSupabase = () => {
 export const useAuthStore = create((set, get) => {
   const computeLoading = (state) => {
     const supabase = getSupabase();
-    return state._loading || !supabase || (state.user && !state.profile);
+    // Загрузка зависит только от внутренних флагов и инициализации supabase,
+    // а не от того, успели ли мы подтянуть профиль.
+    return state._loading || !supabase;
   };
 
   const initialize = async () => {
@@ -31,69 +33,56 @@ export const useAuthStore = create((set, get) => {
 
     let mounted = true;
 
-    const initializeAuth = async () => {
-      try {
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession();
+    // Однократно проверяем текущую сессию, чтобы восстановить пользователя
+    // после перезагрузки страницы, не трогая профиль.
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
-        if (sessionError) {
-          if (mounted) {
-            set((state) => ({
-              _loading: false,
-              loading: computeLoading({ ...state, _loading: false }),
-            }));
-          }
-          return;
-        }
+      if (!mounted) return;
 
-        if (session?.user && mounted) {
-          set((state) => ({
-            user: session.user,
-            _loading: true,
-            loading: computeLoading({
-              ...state,
-              user: session.user,
-              _loading: true,
-            }),
-          }));
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          if (mounted) {
-            await get().fetchProfile(session.user.id);
-            if (mounted) {
-              set((state) => ({
-                _loading: false,
-                loading: computeLoading({ ...state, _loading: false }),
-              }));
-            }
-          }
-        } else if (mounted) {
-          set((state) => ({
+      if (sessionError) {
+        set((state) => ({
+          user: null,
+          profile: null,
+          _loading: false,
+          loading: computeLoading({
+            ...state,
             user: null,
             profile: null,
             _loading: false,
-            loading: computeLoading({
-              ...state,
-              user: null,
-              profile: null,
-              _loading: false,
-            }),
-          }));
-        }
-      } catch (error) {
-        if (mounted) {
-          set((state) => ({
+          }),
+        }));
+      } else {
+        set((state) => ({
+          user: session?.user || null,
+          _loading: false,
+          loading: computeLoading({
+            ...state,
+            user: session?.user || null,
             _loading: false,
-            loading: computeLoading({ ...state, _loading: false }),
-          }));
-        }
+          }),
+        }));
       }
-    };
+    } catch (error) {
+      if (mounted) {
+        set((state) => ({
+          user: null,
+          profile: null,
+          _loading: false,
+          loading: computeLoading({
+            ...state,
+            user: null,
+            profile: null,
+            _loading: false,
+          }),
+        }));
+      }
+    }
 
-    initializeAuth();
-
-    // Подписка на изменения аутентификации
+    // Подписка на изменения аутентификации.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -104,30 +93,17 @@ export const useAuthStore = create((set, get) => {
         event === 'SIGNED_IN' ||
         event === 'TOKEN_REFRESHED'
       ) {
-        if (session?.user && mounted) {
+        if (mounted) {
+          // Ленивая модель: только синхронизируем пользователя из Supabase,
+          // профиль подтягиваем по явному запросу (signIn / админка и т.п.).
           set((state) => ({
-            user: session.user,
-            _loading: true,
+            user: session?.user || null,
+            _loading: false,
             loading: computeLoading({
               ...state,
-              user: session.user,
-              _loading: true,
+              user: session?.user || null,
+              _loading: false,
             }),
-          }));
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          if (mounted) {
-            await get().fetchProfile(session.user.id);
-            if (mounted) {
-              set((state) => ({
-                _loading: false,
-                loading: computeLoading({ ...state, _loading: false }),
-              }));
-            }
-          }
-        } else if (mounted) {
-          set((state) => ({
-            _loading: false,
-            loading: computeLoading({ ...state, _loading: false }),
           }));
         }
       } else if (event === 'SIGNED_OUT') {
@@ -147,23 +123,13 @@ export const useAuthStore = create((set, get) => {
       } else if (session?.user && mounted) {
         set((state) => ({
           user: session.user,
-          _loading: true,
+          _loading: false,
           loading: computeLoading({
             ...state,
             user: session.user,
-            _loading: true,
+            _loading: false,
           }),
         }));
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        if (mounted) {
-          await get().fetchProfile(session.user.id);
-          if (mounted) {
-            set((state) => ({
-              _loading: false,
-              loading: computeLoading({ ...state, _loading: false }),
-            }));
-          }
-        }
       } else if (mounted) {
         set((state) => ({
           user: null,
@@ -193,8 +159,8 @@ export const useAuthStore = create((set, get) => {
   return {
     user: null,
     profile: null,
-    _loading: true,
-    loading: true,
+    _loading: false,
+    loading: false,
     initialized: false,
 
     // Инициализация (вызывается один раз)

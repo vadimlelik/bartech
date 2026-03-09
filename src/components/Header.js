@@ -52,6 +52,7 @@ export default function Header() {
     signOut,
     isAdmin,
     loading: authLoading,
+    init,
   } = useAuthStore();
 
   useEffect(() => {
@@ -216,16 +217,18 @@ export default function Header() {
               </Link>
 
               {mounted && !authLoading && isAdmin() && (
-                <Link
-                  href="/admin"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <Tooltip title="Админ-панель">
-                    <IconButton color="inherit">
-                      <AdminPanelSettingsIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Link>
+                <Tooltip title="Админ-панель">
+                  <IconButton
+                    color="inherit"
+                    onClick={async () => {
+                      // Ленивая инициализация auth: только при переходе в админку
+                      await init();
+                      router.push('/admin');
+                    }}
+                  >
+                    <AdminPanelSettingsIcon />
+                  </IconButton>
+                </Tooltip>
               )}
 
               {mounted && !authLoading && (
@@ -286,17 +289,19 @@ export default function Header() {
                   />
                 </ListItem>
                 {isAdmin() && (
-                  <Link
-                    href="/admin"
-                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  <ListItem
+                    button
+                    onClick={async () => {
+                      await init();
+                      router.push('/admin');
+                      toggleMobileMenu();
+                    }}
                   >
-                    <ListItem button>
-                      <ListItemIcon>
-                        <AdminPanelSettingsIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Админ-панель" />
-                    </ListItem>
-                  </Link>
+                    <ListItemIcon>
+                      <AdminPanelSettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Админ-панель" />
+                  </ListItem>
                 )}
                 <ListItem
                   button
