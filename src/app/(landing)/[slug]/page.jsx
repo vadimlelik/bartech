@@ -16,8 +16,7 @@ const getCachedLandingBySlug = unstable_cache(
   }
 );
 
-// Настройка кэширования страницы.
-// В development режиме Next.js кэш часто отключён/ведёт себя иначе.
+
 export const revalidate = 86400;
 
 export async function generateMetadata({ params }) {
