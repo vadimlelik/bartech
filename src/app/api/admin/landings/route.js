@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createLanding, getAllLandings } from '@/lib/landings-supabase';
 import { requireAdmin } from '@/lib/auth-helpers';
+import { revalidateTag } from 'next/cache';
 
 export async function GET() {
   try {
@@ -41,6 +42,8 @@ export async function POST(request) {
     const result = await createLanding(body);
     
     if (result.success) {
+      // Сбрасываем кэш лендингов, чтобы новые/обновлённые данные стали видны без короткого revalidate
+      revalidateTag('landings');
       return NextResponse.json(
         { message: 'Landing created successfully', landing: result.landing },
         { status: 201 }
