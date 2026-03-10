@@ -3,22 +3,22 @@ import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/components/landing/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/lib/landings-supabase';
 
-// Кэшируем запросы к Supabase на 1 минуту (60 секунд)
-// Это снизит количество запросов к Supabase, но позволит видеть изменения быстрее
+// Кэшируем запросы к Supabase (в проде это напрямую снижает Supabase Cached Egress).
+// Обновление данных делаем через on-demand revalidateTag('landings') из админки.
 const getCachedLandingBySlug = unstable_cache(
   async (slug) => {
     return await getLandingBySlug(slug);
   },
   ['landing-by-slug'],
   {
-    revalidate: 60, // Кэш на 1 минуту
+    revalidate: 86400, // 24 часа
     tags: ['landings'],
   }
 );
 
-// Настройка кэширования страницы - обновляем каждую минуту
-// В development режиме Next.js автоматически отключает кэш
-export const revalidate = 60;
+// Настройка кэширования страницы.
+// В development режиме Next.js кэш часто отключён/ведёт себя иначе.
+export const revalidate = 86400;
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;

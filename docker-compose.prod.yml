@@ -2,7 +2,7 @@ version: '3.8'
 
 # Production override для docker-compose
 # Использование: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-# 
+#
 # Примечание: Этот файл использует готовый образ из Docker Hub.
 # Если образ не найден и нужна локальная сборка, раскомментируйте секцию build ниже
 # и закомментируйте строку image.
@@ -18,7 +18,7 @@ services:
     #   args:
     #     - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
     #     - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-    restart: always
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
@@ -30,4 +30,3 @@ services:
 
   certbot:
     restart: always
-

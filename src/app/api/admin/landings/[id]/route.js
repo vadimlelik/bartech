@@ -5,6 +5,7 @@ import {
   deleteLanding,
 } from '@/lib/landings-supabase';
 import { requireAdmin } from '@/lib/auth-helpers';
+import { revalidateTag } from 'next/cache';
 
 export async function GET(request, { params }) {
   try {
@@ -61,6 +62,8 @@ export async function PUT(request, { params }) {
     const result = await updateLanding(id, body);
 
     if (result.success) {
+      // Инвалидируем кэш лендингов после обновления
+      revalidateTag('landings');
       return NextResponse.json({
         message: 'Landing updated successfully',
         landing: result.landing,
@@ -97,6 +100,8 @@ export async function DELETE(request, { params }) {
     const result = await deleteLanding(id);
 
     if (result.success) {
+      // Инвалидируем кэш лендингов после удаления
+      revalidateTag('landings');
       return NextResponse.json({
         message: 'Landing deleted successfully',
       });
