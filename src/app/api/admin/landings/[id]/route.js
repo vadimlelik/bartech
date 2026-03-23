@@ -3,7 +3,7 @@ import {
   getLandingById,
   updateLanding,
   deleteLanding,
-} from '@/lib/landings-supabase';
+} from '@/lib/landings-db';
 import { requireAdmin } from '@/lib/auth-helpers';
 import { revalidateTag } from 'next/cache';
 

@@ -9,7 +9,10 @@
     "start": "next start",
     "lint": "next lint",
     "init-db": "node src/scripts/init-categories.mjs && node src/scripts/init-phones.mjs",
-    "seed": "node src/scripts/init-phones.mjs"
+    "seed": "node src/scripts/init-phones.mjs",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -18,6 +21,7 @@
     "@mui/material": "^6.2.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.84.0",
+    "@prisma/client": "^6.0.0",
     "audit": "^0.0.6",
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
@@ -48,6 +52,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "prisma": "^6.0.0"
   }
 }

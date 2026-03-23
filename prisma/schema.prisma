@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String    @id
+  name        String
+  image       String?
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  category    String?
+  categoryId  String?   @map("category_id")
+  categoryRel Category? @relation(fields: [categoryId], references: [id])
+  price       Int       @default(0)
+  image       String?
+  images      String[]  @default([])
+  description String?
+  specifications Json?  @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model Landing {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  mainTitle String?  @map("main_title")
+  description String?
+
+  mainImage      String? @map("main_image")
+  secondaryImage String? @map("secondary_image")
+
+  benefits   Json?
+  advantages Json?
+  reviews    Json?
+  pixels     Json?
+
+  buttonText String? @map("button_text")
+  surveyText String? @map("survey_text")
+
+  colors Json?
+  styles Json?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("landing_pages")
+}
+
+

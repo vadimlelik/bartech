@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createLanding, getAllLandings } from '@/lib/landings-supabase';
+import { createLanding, getAllLandings } from '@/lib/landings-db';
 import { requireAdmin } from '@/lib/auth-helpers';
 import { revalidateTag } from 'next/cache';
 

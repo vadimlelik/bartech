@@ -1,9 +1,9 @@
 import {
-  getAllProducts as getAllProductsFromSupabase,
-  getProducts as getProductsFromSupabase,
-  getProductById as getProductByIdFromSupabase,
-  getProductsByCategory as getProductsByCategoryFromSupabase,
-} from './products-supabase-read';
+  getAllProducts as getAllProductsFromDb,
+  getProducts as getProductsFromDb,
+  getProductById as getProductByIdFromDb,
+  getProductsByCategory as getProductsByCategoryFromDb,
+} from './products-db';
 
 import fs from 'fs';
 import path from 'path';
@@ -24,16 +24,14 @@ function getAllProductsFromJSON() {
   }
 }
 
-const useSupabase =
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const useDb = Boolean(process.env.DATABASE_URL);
 
 export async function getAllProducts() {
-  if (useSupabase) {
+  if (useDb) {
     try {
-      return await getAllProductsFromSupabase();
+      return await getAllProductsFromDb();
     } catch (error) {
-      console.error('Error fetching from Supabase, falling back to JSON:', error);
+      console.error('Error fetching from DB, falling back to JSON:', error);
       return getAllProductsFromJSON();
     }
   }
@@ -51,9 +49,9 @@ export async function getProducts({
   filters = {},
 } = {}) {
   try {
-    if (useSupabase) {
+    if (useDb) {
       try {
-        return await getProductsFromSupabase({
+        return await getProductsFromDb({
           categoryId,
           search,
           sort,
@@ -64,7 +62,7 @@ export async function getProducts({
           filters,
         });
       } catch (error) {
-        console.error('Error fetching from Supabase, falling back to JSON:', error);
+        console.error('Error fetching from DB, falling back to JSON:', error);
       }
     }
 
@@ -220,11 +218,11 @@ export async function getProductById(id) {
   }
 
   try {
-    if (useSupabase) {
+    if (useDb) {
       try {
-        return await getProductByIdFromSupabase(id);
+        return await getProductByIdFromDb(id);
       } catch (error) {
-        console.error('Error fetching from Supabase, falling back to JSON:', error);
+        console.error('Error fetching from DB, falling back to JSON:', error);
       }
     }
 
@@ -246,11 +244,11 @@ export async function getProductById(id) {
 export async function getProductsByCategory(categoryId) {
   if (!categoryId) return [];
   try {
-    if (useSupabase) {
+    if (useDb) {
       try {
-        return await getProductsByCategoryFromSupabase(categoryId);
+        return await getProductsByCategoryFromDb(categoryId);
       } catch (error) {
-        console.error('Error fetching from Supabase, falling back to JSON:', error);
+        console.error('Error fetching from DB, falling back to JSON:', error);
       }
     }
 

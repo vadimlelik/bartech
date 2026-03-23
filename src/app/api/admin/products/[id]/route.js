@@ -3,7 +3,7 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-} from '@/lib/products-supabase';
+} from '@/lib/products-db';
 import { requireAdmin } from '@/lib/auth-helpers';
 
 export async function GET(request, { params }) {

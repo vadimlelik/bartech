@@ -80,22 +80,21 @@ export default function Phone6() {
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/quiz', {
-        FIELDS: {
-          ...data.FIELDS,
-          UTM_SOURCE: utm_source || '',
-          UTM_MEDIUM: utm_medium || '',
-          UTM_CAMPAIGN: utm_campaign || '',
-          UTM_CONTENT: utm_content || '',
-          UTM_TERM: (ad || '') + (ttclid || ''),
-        },
-      });
-
-      if (response.data?.success) {
-        router.push('https://technobar.by/thank-you?source=phone6');
-      } else {
-        alert('Форма отправлена слишком часто. Попробуйте через минуту.');
-      }
+      // const response = await axios.post('/api/quiz', {
+      //   FIELDS: {
+      //     ...data.FIELDS,
+      //     UTM_SOURCE: utm_source || '',
+      //     UTM_MEDIUM: utm_medium || '',
+      //     UTM_CAMPAIGN: utm_campaign || '',
+      //     UTM_CONTENT: utm_content || '',
+      //     UTM_TERM: (ad || '') + (ttclid || ''),
+      //   },
+      // });
+      // if (response.data?.success) {
+      //   router.push('https://technobar.by/thank-you?source=phone6');
+      // } else {
+      //   alert('Форма отправлена слишком часто. Попробуйте через минуту.');
+      // }
     } catch (error) {
       console.error('Error submitting quiz:', error);
       if (error.response?.status === 429) {

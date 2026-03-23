@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/components/landing/LandingPageTemplate';
-import { getAllLandings, getLandingBySlug } from '@/lib/landings-supabase';
+import { getAllLandings, getLandingBySlug } from '@/lib/landings-db';
 
 // Кэшируем запросы к Supabase (в проде это напрямую снижает Supabase Cached Egress).
 // Обновление данных делаем через on-demand revalidateTag('landings') из админки.

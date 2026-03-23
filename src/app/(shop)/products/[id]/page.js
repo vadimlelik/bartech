@@ -4,7 +4,7 @@ import ProductDetails from './ProductDetails';
 import { getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import { getProductSchema, getBreadcrumbSchema } from '@/lib/seo';
-import { getAllProducts } from '@/lib/products-supabase-read';
+import { getAllProducts } from '@/lib/products';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
 

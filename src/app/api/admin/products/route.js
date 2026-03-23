@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { addProduct, getAllProducts } from '@/lib/products-supabase';
+import { addProduct, getAllProducts } from '@/lib/products-db';
 import { requireAdmin } from '@/lib/auth-helpers';
 
 export async function GET() {

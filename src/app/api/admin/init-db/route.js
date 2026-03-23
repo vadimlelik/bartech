@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/auth-helpers';
-import { addProduct } from '@/lib/products-supabase';
+import { addProduct } from '@/lib/products-db';
 import { addCategory } from '@/lib/categories';
 import fs from 'fs';
 import path from 'path';

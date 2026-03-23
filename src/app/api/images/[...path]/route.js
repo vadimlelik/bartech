@@ -1,90 +1,82 @@
 import { NextResponse } from 'next/server';
+import { getMinioClient, getMinioBucket } from '@/lib/minio';
 
 /**
- * API Route для проксирования изображений из Supabase Storage с кешированием
- * Это уменьшает исходящий трафик, так как изображения кешируются на сервере Next.js
- * 
- * Использование: /api/images/[supabase-image-url]
- * Пример: /api/images/https://xxxxx.supabase.co/storage/v1/object/public/images/products/image.jpg
+ * API Route для выдачи изображений из MinIO (или совместимого S3-хранилища) с кешированием
+ *
+ * Использование: /api/images/[objectKey]
+ * Пример: /api/images/products%2Fimage.jpg  (objectKey = "products/image.jpg")
  */
 export async function GET(request, { params }) {
   try {
     const { path } = params;
-    
-    // Восстанавливаем полный URL из пути
-    // path может быть массивом частей URL или закодированной строкой
-    let imageUrl;
+
+    // Восстанавливаем objectKey из пути
+    let objectKey;
     if (Array.isArray(path)) {
-      // Если это массив, объединяем части и декодируем
-      imageUrl = decodeURIComponent(path.join('/'));
+      objectKey = decodeURIComponent(path.join('/'));
     } else {
-      // Если это строка, декодируем её
-      imageUrl = decodeURIComponent(path);
+      objectKey = decodeURIComponent(path);
     }
-    
-    // Проверяем, что URL начинается с http:// или https://
-    if (!imageUrl || (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://'))) {
+
+    if (!objectKey) {
+      return NextResponse.json({ error: 'Invalid image path' }, { status: 400 });
+    }
+
+    const client = getMinioClient();
+    const bucket = getMinioBucket();
+
+    if (!client) {
       return NextResponse.json(
-        { error: 'Invalid image URL' },
-        { status: 400 }
+        { error: 'MinIO is not configured on the server' },
+        { status: 500 },
       );
     }
 
-    // Проверяем, что URL ведет на Supabase Storage
-    if (!imageUrl.includes('.supabase.co') && !imageUrl.includes('storage')) {
-      return NextResponse.json(
-        { error: 'Only Supabase Storage URLs are allowed' },
-        { status: 403 }
-      );
+    let stream;
+    try {
+      stream = await client.getObject(bucket, objectKey);
+    } catch (err) {
+      console.error('Error fetching object from MinIO:', err);
+      return NextResponse.json({ error: 'Image not found' }, { status: 404 });
     }
 
-    // Загружаем изображение с Supabase
-    const response = await fetch(imageUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-      },
-      // Таймаут для предотвращения зависания
-      signal: AbortSignal.timeout(10000), // 10 секунд
+    const chunks = [];
+    const readerPromise = new Promise((resolve, reject) => {
+      stream.on('data', (chunk) => chunks.push(chunk));
+      stream.on('end', resolve);
+      stream.on('error', reject);
     });
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch image' },
-        { status: response.status }
-      );
-    }
+    await readerPromise;
+    const buffer = Buffer.concat(chunks);
 
-    // Получаем тип контента и данные изображения
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
-    const imageBuffer = await response.arrayBuffer();
+    // Определяем content-type по расширению файла
+    const ext = objectKey.split('.').pop()?.toLowerCase();
+    const contentTypeMap = {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      webp: 'image/webp',
+      gif: 'image/gif',
+      svg: 'image/svg+xml',
+    };
+    const contentType = contentTypeMap[ext] || 'application/octet-stream';
 
-    // Возвращаем изображение с заголовками кеширования
-    return new NextResponse(imageBuffer, {
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
         'Content-Type': contentType,
-        // Кешируем на 30 дней на стороне клиента
-        'Cache-Control': 'public, max-age=2592000, s-maxage=2592000, stale-while-revalidate=86400',
-        // Кешируем на 7 дней на стороне сервера (CDN/proxy)
-        'CDN-Cache-Control': 'public, max-age=604800',
-        // ETag для валидации кеша
-        'ETag': `"${Buffer.from(imageBuffer).toString('base64').substring(0, 20)}"`,
+        'Cache-Control':
+          'public, max-age=2592000, s-maxage=2592000, stale-while-revalidate=86400',
       },
     });
   } catch (error) {
-    console.error('Error proxying image:', error);
-    
-    // Если ошибка таймаута или сети, возвращаем 504
-    if (error.name === 'TimeoutError' || error.name === 'AbortError') {
-      return NextResponse.json(
-        { error: 'Image fetch timeout' },
-        { status: 504 }
-      );
-    }
+    console.error('Error serving image from MinIO:', error);
 
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -92,4 +84,3 @@ export async function GET(request, { params }) {
 // Настройка кеширования для этого route
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic'; // Отключаем статическую генерацию для динамических изображений
-
