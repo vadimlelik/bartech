@@ -148,6 +148,10 @@ const Quiz = ({
 
             return `${question.question}: ${answer}`;
           })
+          .filter(
+            (comment) =>
+              !comment.includes('Выберите срок рассрочки для расчета платежей')
+          )
           .join('\n');
 
         const phoneQuestion = questions.find((q) => q.type === 'text');
