@@ -150,7 +150,7 @@ const Quiz = ({
           })
           .filter(
             (comment) =>
-              !comment.includes('Выберите срок рассрочки для расчета платежей')
+              !comment.includes('рассрочки') && !comment.includes('Срок')
           )
           .join('\n');
 
