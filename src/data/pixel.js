@@ -153,3 +153,11 @@ export const PIXEL_17 = {
 export const PIXEL_18 = {
   phone3: 'D6IOSTRC77U61H03M610',
 };
+
+export const PIXEL_19 = {
+  phone3: 'D75QSQ3C77U5P0Q2AS40',
+};
+
+export const PIXEL_20 = {
+  phone3: 'D75QU5RC77UCP36TBMEG',
+};
