@@ -22,8 +22,8 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_BUCKET=images
-      # PostgreSQL для Prisma
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-bartech}:${POSTGRES_PASSWORD:-bartech_password}@postgres:5432/${POSTGRES_DB:-bartech}?schema=public
+      # Prisma: явный DATABASE_URL из .env или сборка для сервиса postgres в этом compose (prod не должен затирать пустым ${DATABASE_URL})
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-bartech}:${POSTGRES_PASSWORD:-bartech_password}@postgres:5432/${POSTGRES_DB:-bartech}?schema=public}
     networks:
       - app-network
     healthcheck:

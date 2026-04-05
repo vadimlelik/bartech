@@ -26,8 +26,7 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_BUCKET=${MINIO_BUCKET}
-      # PostgreSQL для Prisma
-      - DATABASE_URL=${DATABASE_URL}
+      # DATABASE_URL задаётся в docker-compose.yml: из .env или postgresql://...@postgres из POSTGRES_* (не переопределять здесь пустым значением)
 
   nginx:
     restart: always
