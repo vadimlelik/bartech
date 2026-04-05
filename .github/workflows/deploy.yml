@@ -192,7 +192,11 @@ REMOTE
             # Пересоздаём только nextjs, если стек уже запущен; иначе — первый подъём всего compose
             if docker ps --format '{{.Names}}' | grep -q '^bartech-nginx$'; then
               echo "Recreating nextjs container only (postgres, minio, nginx, certbot keep running)..."
-              docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate nextjs
+              # После сбойного recreate имя может остаться занятым (Conflict: already in use)
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml stop nextjs 2>/dev/null || true
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml rm -f nextjs 2>/dev/null || true
+              docker ps -aq --filter "name=bartech-nextjs" | xargs -r docker rm -f 2>/dev/null || true
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps nextjs
             else
               echo "Nginx not running — starting full stack (first deploy or after manual down)..."
               docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
