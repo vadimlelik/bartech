@@ -43,13 +43,15 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 # Копируем директорию data для fallback JSON файлов (используются в runtime)
 COPY --from=builder /app/data ./data
-# Схема и миграции + CLI Prisma для `npx prisma migrate deploy` на сервере (на хосте Node не нужен)
+# Схема и миграции
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-
-# npx prisma в standalone-образе не видит .bin — Makefile вызывает node …/prisma/build/index.js
-RUN mkdir -p node_modules/.bin \
+# CLI Prisma в образе: только копировать node_modules/prisma недостаточно (@prisma/config тянет effect и др.)
+COPY --from=builder /app/package.json /tmp/bartech-package.json
+USER root
+RUN cd /app && npm install "prisma@$(node -p "const p=require('/tmp/bartech-package.json');p.devDependencies?.prisma||p.dependencies?.prisma||'6'")" \
+	--omit=dev --ignore-scripts --no-audit --no-fund --no-save \
+	&& rm -f /tmp/bartech-package.json \
+	&& mkdir -p node_modules/.bin \
 	&& ln -sf ../prisma/build/index.js node_modules/.bin/prisma \
 	&& chmod +x node_modules/prisma/build/index.js 2>/dev/null || true
 
