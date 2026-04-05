@@ -16,6 +16,15 @@ function generateSubdomainRewrites() {
   // Исключаем папки, которые не должны быть поддоменами
   const excludeDirs = ['thank-you'];
 
+  if (!fs.existsSync(landingDir)) {
+    console.warn(
+      'Папка лендингов не найдена (ожидался путь',
+      landingDir,
+      ') — rewrite для поддоменов отключены.',
+    );
+    return rewrites;
+  }
+
   try {
     const entries = fs.readdirSync(landingDir, { withFileTypes: true });
 
@@ -47,6 +56,13 @@ const nextConfig = {
   output: 'standalone', // Для Docker оптимизации
   assetPrefix: isPhoneSubdomain ? 'https://technobar.by' : '',
   reactStrictMode: false,
+  // На маленьком диске VPS webpack persistent cache даёт ENOSPC; в Docker отключаем (см. Dockerfile DOCKER_BUILD)
+  webpack: (config, { dev }) => {
+    if (!dev && process.env.DOCKER_BUILD === '1') {
+      config.cache = false;
+    }
+    return config;
+  },
   eslint: {
     // Игнорировать ESLint ошибки при сборке (для production)
     // TODO: Исправить все ESLint ошибки и вернуть false

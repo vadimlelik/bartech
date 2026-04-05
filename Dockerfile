@@ -19,8 +19,10 @@ RUN rm -rf .next || true
 ENV NODE_OPTIONS="--max_old_space_size=8192 --max-semi-space-size=128"
 # Отключаем телеметрию Next.js для ускорения сборки
 ENV NEXT_TELEMETRY_DISABLED=1
-# Запускаем сборку
-RUN npm run build
+# Меньше места на диске при сборке (иначе webpack PackFileCache → ENOSPC на маленьких VPS)
+ENV DOCKER_BUILD=1
+# Сборка и очистка тяжёлых кешей в том же слое (экономия места на диске хоста при build)
+RUN npm run build && rm -rf .next/cache node_modules/.cache 2>/dev/null || true
 
 # Production образ
 FROM base AS runner
