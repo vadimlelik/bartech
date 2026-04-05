@@ -25,13 +25,15 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
 }
 
 // Функция для поиска использования файла в коде
-function searchInFiles(filePath, searchPaths) {
-  const relativePath = filePath.replace(/\\/g, '/').replace(/^public\//, '/');
+function searchInFiles(filePath, searchPaths, publicDir) {
+  const relFromPublic = path.relative(publicDir, filePath).replace(/\\/g, '/');
+  const relativePath = `/${relFromPublic}`;
   const fileName = path.basename(filePath);
   const fileNameWithoutExt = path.basename(filePath, path.extname(filePath));
   
   const searchTerms = [
     relativePath,
+    relFromPublic,
     fileName,
     fileNameWithoutExt,
   ];
@@ -81,7 +83,7 @@ function getAllCodeFiles(dirPath) {
         getAllCodeFiles(filePath);
       }
     } else {
-      if (/\.(js|jsx|ts|tsx|json|css)$/i.test(file)) {
+      if (/\.(js|jsx|ts|tsx|json|css|sql)$/i.test(file)) {
         searchFiles.push(filePath);
       }
     }
@@ -99,9 +101,10 @@ const unusedImages = [];
 const usedImages = [];
 
 imageFiles.forEach((imgPath) => {
-  const relativePath = imgPath.replace(/\\/g, '/').replace(/^public\//, '/');
-  
-  if (searchInFiles(imgPath, searchFiles)) {
+  const relFromPublic = path.relative(publicDir, imgPath).replace(/\\/g, '/');
+  const relativePath = `/${relFromPublic}`;
+
+  if (searchInFiles(imgPath, searchFiles, publicDir)) {
     usedImages.push(relativePath);
   } else {
     unusedImages.push(relativePath);

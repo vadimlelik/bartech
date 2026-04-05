@@ -1,5 +1,5 @@
 'use client';
-import { useCartStore } from '@/store/cart';
+import { useCartStore } from '@/entities/cart';
 import styles from './page.module.css';
 import { useParams } from 'next/navigation';
 

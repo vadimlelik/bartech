@@ -1,59 +1,29 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { getSessionUser, toPublicUser, toPublicProfile } from '@/shared/lib/auth-helpers';
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get('sb-access-token')?.value;
-    const refreshToken = cookieStore.get('sb-refresh-token')?.value;
+    const user = await getSessionUser();
 
-    if (!supabaseUrl || !supabaseAnonKey) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Supabase not configured' },
-        { status: 500 }
+        { user: null, profile: null, isAdmin: false },
+        { status: 401 }
       );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-      },
+    const profile = toPublicProfile(user);
+
+    return NextResponse.json({
+      user: toPublicUser(user),
+      profile,
+      isAdmin: profile.role === 'admin',
     });
-
-    if (accessToken) {
-      const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
-      
-      if (user && !userError) {
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-
-        if (profile && !profileError) {
-          return NextResponse.json({
-            user,
-            profile,
-            isAdmin: profile.role === 'admin',
-          });
-        }
-      }
-    }
-
-    return NextResponse.json(
-      { user: null, profile: null, isAdmin: false },
-      { status: 401 }
-    );
   } catch (error) {
-    console.error('Error checking auth:', error);
+    console.error('GET /api/auth/check:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
-

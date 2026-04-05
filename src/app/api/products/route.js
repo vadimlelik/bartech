@@ -1,4 +1,4 @@
-import { getProducts } from '@/lib/products';
+import { getProducts } from '@/entities/product/model/products';
 import { NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
 

@@ -78,10 +78,10 @@ echo ""
 # 6. Проверка переменных окружения
 echo "6️⃣ Проверка переменных окружения:"
 if [ -f ".env" ]; then
-    if grep -q "NEXT_PUBLIC_SUPABASE_URL" .env && grep -q "NEXT_PUBLIC_SUPABASE_ANON_KEY" .env; then
-        echo -e "${GREEN}✅ Необходимые переменные окружения найдены${NC}"
+    if grep -q "AUTH_SECRET" .env; then
+        echo -e "${GREEN}✅ AUTH_SECRET найден в .env${NC}"
     else
-        echo -e "${RED}❌ Отсутствуют необходимые переменные окружения!${NC}"
+        echo -e "${YELLOW}⚠️  Добавьте AUTH_SECRET (≥32 символов) для production / Docker${NC}"
     fi
 else
     echo -e "${RED}❌ Файл .env не найден!${NC}"

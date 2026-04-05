@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export default function robots() {
   return {

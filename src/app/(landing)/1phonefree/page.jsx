@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
-import Quiz from '@/components/quiz/Quiz';
-import LogoIcon from '@/app/(shop)/components/Logo/Logo';
-import Button from '@/app/(shop)/components/button/Button';
+import Quiz from '@/features/quiz/ui/Quiz';
+import LogoIcon from '@/shared/ui/logo/Logo';
+import Button from '@/shared/ui/button/Button';
 
-import { PIXEL, PIXEL_2, PIXEL_3 } from '../../../data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 const questions = [

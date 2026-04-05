@@ -4,7 +4,7 @@ import styles from './page.module.css';
 import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Quiz from '@/components/quiz/Quiz';
+import Quiz from '@/features/quiz/ui/Quiz';
 import {
   PIXEL,
   PIXEL_2,
@@ -12,7 +12,7 @@ import {
   PIXEL_4,
   PIXEL_5,
   PIXEL_6,
-} from '@/data/pixel';
+} from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 import Script from 'next/script';
 

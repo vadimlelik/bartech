@@ -14,7 +14,6 @@ import {
   MenuItem,
   TextField,
   Stack,
-  Pagination,
   Chip,
   IconButton,
   Snackbar,
@@ -37,8 +36,8 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCompareStore } from '@/store/compare';
-import { useFavoritesStore } from '@/store/favorites';
+import { useCompareStore } from '@/entities/compare';
+import { useFavoritesStore } from '@/entities/favorites';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -46,6 +45,20 @@ import TuneIcon from '@mui/icons-material/Tune';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import PaymentIcon from '@mui/icons-material/Payment';
+
+const PAGE_SIZE = 24;
+
+const FILTER_URL_KEYS = [
+  'memory',
+  'ram',
+  'processor',
+  'display',
+  'camera',
+  'battery',
+  'os',
+  'color',
+  'year',
+];
 
 export default function ProductList({ categoryId }) {
   const router = useRouter();
@@ -56,8 +69,14 @@ export default function ProductList({ categoryId }) {
   const [sortBy, setSortBy] = useState('name');
   const [sort, setSort] = useState('asc');
   const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [totalPages, setTotalPages] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const loadMoreSentinelRef = useRef(null);
+  const hasMoreRef = useRef(false);
+  const loadingMoreRef = useRef(false);
+  const initialLoadingRef = useRef(false);
   const { compareItems, addToCompare, removeFromCompare, isInCompare } =
     useCompareStore();
   const { favorites, addToFavorites, removeFromFavorites, isInFavorites } =
@@ -80,14 +99,75 @@ export default function ProductList({ categoryId }) {
   }, [activeFilters]);
 
   useEffect(() => {
+    setPage(1);
+  }, [categoryId]);
+
+  const didInitSearchRef = useRef(false);
+  useEffect(() => {
+    if (didInitSearchRef.current) {
+      return;
+    }
+    didInitSearchRef.current = true;
+    const q = searchParams.get('search');
+    if (q) {
+      setSearchInput(q);
+      setSearchTerm(q.trim());
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const trimmed = searchInput.trim();
+      if (trimmed === searchTerm) {
+        return;
+      }
+      setSearchTerm(trimmed);
+      setPage(1);
+      const currentParams = new URLSearchParams(window.location.search);
+      if (trimmed) {
+        currentParams.set('search', trimmed);
+      } else {
+        currentParams.delete('search');
+      }
+      currentParams.delete('page');
+      router.replace(`?${currentParams.toString()}`, { scroll: false });
+    }, 350);
+    return () => clearTimeout(t);
+  }, [searchInput, router, searchTerm]);
+
+  useEffect(() => {
+    hasMoreRef.current = hasMore;
+  }, [hasMore]);
+
+  useEffect(() => {
+    loadingMoreRef.current = loadingMore;
+  }, [loadingMore]);
+
+  useEffect(() => {
+    initialLoadingRef.current = loading;
+  }, [loading]);
+
+  useEffect(() => {
+    let cancelled = false;
+
     const fetchProducts = async () => {
+      if (!categoryId) {
+        return;
+      }
+      const isFirstPage = page === 1;
       try {
-        setLoading(true);
+        if (isFirstPage) {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+        setError(null);
         const params = new URLSearchParams({
           categoryId,
           sort,
           sortBy,
-          page: page.toString(),
+          page: String(page),
+          limit: String(PAGE_SIZE),
           search: searchTerm,
           ...activeFilters,
         });
@@ -96,46 +176,117 @@ export default function ProductList({ categoryId }) {
           throw new Error('Не удалось загрузить продукты');
         }
         const data = await response.json();
-        setProducts(data.products);
-        setTotalPages(data.pagination.pages);
-        setAvailableFilters(data.filters);
+        if (cancelled) {
+          return;
+        }
+        const batch = data.products || [];
+        const pages = data.pagination?.pages ?? 0;
+
+        if (isFirstPage) {
+          setProducts(batch);
+        } else {
+          setProducts((prev) => {
+            const seen = new Set(prev.map((p) => p.id));
+            const merged = [...prev];
+            for (const p of batch) {
+              if (p?.id !== undefined && p?.id !== null && !seen.has(p.id)) {
+                seen.add(p.id);
+                merged.push(p);
+              }
+            }
+            return merged;
+          });
+        }
+        setAvailableFilters(data.filters || {});
+        setHasMore(pages > 0 && page < pages);
       } catch (err) {
-        console.error('Error fetching products:', err);
-        setError(err.message);
+        if (!cancelled) {
+          console.error('Error fetching products:', err);
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          if (isFirstPage) {
+            setLoading(false);
+          } else {
+            setLoadingMore(false);
+          }
+        }
       }
     };
 
-    if (categoryId) {
-      fetchProducts();
-    }
-    // Используем activeFiltersKey вместо activeFilters для предотвращения лишних запросов
+    fetchProducts();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId, sort, sortBy, page, searchTerm, activeFiltersKey]);
 
+  useEffect(() => {
+    const el = loadMoreSentinelRef.current;
+    if (!el || loading) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry?.isIntersecting) {
+          return;
+        }
+        if (
+          !hasMoreRef.current ||
+          loadingMoreRef.current ||
+          initialLoadingRef.current
+        ) {
+          return;
+        }
+        setPage((p) => p + 1);
+      },
+      { root: null, rootMargin: '320px', threshold: 0 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loading, products.length, categoryId, hasMore]);
+
+  const updateUrl = useCallback(
+    (params) => {
+      const currentParams = new URLSearchParams(searchParams.toString());
+      currentParams.delete('page');
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          currentParams.set(key, value);
+        } else {
+          currentParams.delete(key);
+        }
+      });
+      router.push(`?${currentParams.toString()}`);
+    },
+    [router, searchParams],
+  );
+
   // Мемоизированные обработчики для предотвращения лишних ререндеров
-  const handleSortChange = useCallback((event) => {
-    setSortBy(event.target.value);
-    setPage(1);
-    updateUrl({ sortBy: event.target.value });
-  }, []);
+  const handleSortChange = useCallback(
+    (event) => {
+      setSortBy(event.target.value);
+      setPage(1);
+      updateUrl({ sortBy: event.target.value });
+    },
+    [updateUrl],
+  );
 
-  const handleOrderChange = useCallback((event) => {
-    setSort(event.target.value);
-    setPage(1);
-    updateUrl({ sort: event.target.value });
-  }, []);
+  const handleOrderChange = useCallback(
+    (event) => {
+      setSort(event.target.value);
+      setPage(1);
+      updateUrl({ sort: event.target.value });
+    },
+    [updateUrl],
+  );
 
-  const handlePageChange = useCallback((event, value) => {
-    setPage(value);
-    updateUrl({ page: value });
-  }, []);
-
-  const handleSearch = useCallback((event) => {
-    setSearchTerm(event.target.value);
-    setPage(1);
-    updateUrl({ search: event.target.value, page: 1 });
+  const handleSearchChange = useCallback((event) => {
+    setSearchInput(event.target.value);
   }, []);
 
   // Debounce для handleFilterChange - предотвращает частые запросы при изменении фильтров
@@ -177,7 +328,7 @@ export default function ProductList({ categoryId }) {
   const applyFilters = () => {
     setActiveFilters(previewFilters);
     setPage(1);
-    updateUrl({ ...previewFilters, page: 1 });
+    updateUrl({ ...previewFilters });
     setDrawerOpen(false);
   };
 
@@ -185,18 +336,10 @@ export default function ProductList({ categoryId }) {
     setPreviewFilters({});
     setActiveFilters({});
     setPreviewCount(null);
-    updateUrl({ page: 1 });
-  };
-
-  const updateUrl = (params) => {
+    setPage(1);
     const currentParams = new URLSearchParams(searchParams.toString());
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        currentParams.set(key, value);
-      } else {
-        currentParams.delete(key);
-      }
-    });
+    FILTER_URL_KEYS.forEach((key) => currentParams.delete(key));
+    currentParams.delete('page');
     router.push(`?${currentParams.toString()}`);
   };
 
@@ -263,8 +406,8 @@ export default function ProductList({ categoryId }) {
           <TextField
             label="Поиск"
             variant="outlined"
-            value={searchTerm}
-            onChange={handleSearch}
+            value={searchInput}
+            onChange={handleSearchChange}
             sx={{ flexGrow: 1 }}
           />
           <FormControl sx={{ minWidth: 120 }}>
@@ -421,7 +564,7 @@ export default function ProductList({ categoryId }) {
         </Box>
       ) : (
         <Grid container spacing={3}>
-          {products.map((product) => {
+          {products.map((product, index) => {
             if (!product.id || !product.image) {
               return null;
             }
@@ -518,7 +661,8 @@ export default function ProductList({ categoryId }) {
                           objectFit: 'contain',
                           padding: '20px',
                         }}
-                        priority={true}
+                        sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                        priority={index < 6}
                       />
                     )}
                   </Box>
@@ -711,14 +855,14 @@ export default function ProductList({ categoryId }) {
         </Grid>
       )}
 
-      {totalPages > 1 && (
-        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-          />
+      {!loading && products.length > 0 && (
+        <Box sx={{ mt: 2, minHeight: 24 }}>
+          {loadingMore && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+              <CircularProgress size={32} />
+            </Box>
+          )}
+          <Box ref={loadMoreSentinelRef} sx={{ height: 24 }} aria-hidden />
         </Box>
       )}
 

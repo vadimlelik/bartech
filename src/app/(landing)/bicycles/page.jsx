@@ -10,15 +10,15 @@ import {
   PIXEL_6,
   PIXEL_7,
   PIXEL_8,
-} from '@/data/pixel';
+} from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
-import Quiz from '@/components/quiz/Quiz';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
+import Quiz from '@/features/quiz/ui/Quiz';
 
 const advantages = [
   {

@@ -21,8 +21,7 @@ if [ ! -f .env ]; then
     echo -e "${RED}❌ ОШИБКА: Файл .env не найден!${NC}"
     echo "Создайте файл .env с необходимыми переменными:"
     echo "  - DOCKERHUB_USERNAME=yourusername"
-    echo "  - NEXT_PUBLIC_SUPABASE_URL=..."
-    echo "  - NEXT_PUBLIC_SUPABASE_ANON_KEY=..."
+    echo "  - AUTH_SECRET=... (минимум 32 символа, для сессий)"
     exit 1
 fi
 
@@ -48,9 +47,9 @@ if [ -z "$DOCKERHUB_USERNAME" ]; then
     exit 1
 fi
 
-if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
-    echo -e "${YELLOW}⚠️  ПРЕДУПРЕЖДЕНИЕ: NEXT_PUBLIC_SUPABASE_URL или NEXT_PUBLIC_SUPABASE_ANON_KEY не установлены!${NC}"
-    echo "Сборка может завершиться с ошибкой."
+if [ -z "$AUTH_SECRET" ] || [ ${#AUTH_SECRET} -lt 32 ]; then
+    echo -e "${YELLOW}⚠️  ПРЕДУПРЕЖДЕНИЕ: AUTH_SECRET не задан или короче 32 символов.${NC}"
+    echo "Для production задайте длинный случайный секрет в .env."
     read -p "Продолжить? (y/n): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then

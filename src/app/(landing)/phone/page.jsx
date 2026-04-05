@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import styles from './phonePage.module.css';
 import Image from 'next/image';
-import LogoIcon from '@/app/(shop)/components/Logo/Logo';
-import Button from '@/app/(shop)/components/button/Button';
+import LogoIcon from '@/shared/ui/logo/Logo';
+import Button from '@/shared/ui/button/Button';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import { PIXEL, PIXEL_2 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
-import Quiz from '@/components/quiz/Quiz';
+import Quiz from '@/features/quiz/ui/Quiz';
 
 const questions = [
   {

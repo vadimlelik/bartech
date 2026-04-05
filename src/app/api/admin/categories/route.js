@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getCategories, addCategory } from '@/lib/categories';
-import { requireAdmin } from '@/lib/auth-helpers';
+import { getCategories, addCategory } from '@/entities/category/model/categories';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 
 export async function GET() {
   try {

@@ -1,56 +1,20 @@
-import { getServerSupabaseClient } from '@/lib/auth-helpers';
 import { NextResponse } from 'next/server';
+import { getSessionUser, toPublicProfile } from '@/shared/lib/auth-helpers';
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const supabase = await getServerSupabaseClient();
-    
-    if (!supabase) {
-      console.error('getServerSupabaseClient returned null/undefined');
-      return NextResponse.json(
-        { error: 'Supabase client not initialized' },
-        { status: 500 }
-      );
+    const user = await getSessionUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    // НЕ кэшируем профиль пользователя - это критично для корректной работы регистрации и входа
-    // Профиль может быть создан сразу после регистрации, и кэш может не видеть новый профиль
-    // Для снижения нагрузки на Supabase лучше оптимизировать другие запросы
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-    
-    if (profileError) {
-      if (profileError.code === 'PGRST116') {
-        return NextResponse.json(
-          { profile: null },
-          { status: 200 }
-        );
-      }
-      return NextResponse.json(
-        { error: profileError.message },
-        { status: 500 }
-      );
-    }
-    
-    return NextResponse.json({ profile });
+
+    return NextResponse.json({ profile: toPublicProfile(user) });
   } catch (error) {
-    console.error('Error fetching profile:', error);
+    console.error('GET /api/auth/profile:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
-

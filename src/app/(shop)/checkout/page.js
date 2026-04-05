@@ -22,10 +22,10 @@ import {
   Alert,
 } from '@mui/material';
 import Image from 'next/image';
-import { useCartStore } from '@/store/cart';
+import { useCartStore } from '@/entities/cart';
 import { useRouter } from 'next/navigation';
 
-import { VALIDATION, EXTERNAL_SERVICES, CURRENCY } from '@/config/constants';
+import { VALIDATION, EXTERNAL_SERVICES, CURRENCY } from '@/shared/config/constants';
 
 const BITRIX24_WEBHOOK_URL = EXTERNAL_SERVICES.BITRIX24_WEBHOOK;
 const PHONE_REGEX = VALIDATION.PHONE_SIMPLE_REGEX;

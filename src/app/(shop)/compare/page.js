@@ -14,7 +14,7 @@ import {
   Box,
 } from '@mui/material';
 import Image from 'next/image';
-import { useCompareStore } from '@/store/compare';
+import { useCompareStore } from '@/entities/compare';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function ComparePage() {

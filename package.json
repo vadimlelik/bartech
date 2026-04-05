@@ -5,26 +5,33 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "init-db": "node src/scripts/init-categories.mjs && node src/scripts/init-phones.mjs",
-    "seed": "node src/scripts/init-phones.mjs"
+    "seed": "node src/scripts/init-phones.mjs",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.2.0",
     "@mui/material": "^6.2.0",
-    "@supabase/ssr": "^0.7.0",
-    "@supabase/supabase-js": "^2.84.0",
+    "@prisma/client": "^6.0.0",
     "audit": "^0.0.6",
     "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
     "classnames": "^2.5.1",
     "cloudinary": "^2.8.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "framer-motion": "^11.11.17",
+    "jose": "^5.9.6",
+    "minio": "^8.0.7",
     "next": "^15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -48,6 +55,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "prisma": "^6.0.0"
   }
 }

@@ -6,18 +6,12 @@ FROM node:20-alpine AS base
 FROM base AS builder
 WORKDIR /app
 
-# Принимаем build arguments для NEXT_PUBLIC переменных
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# Устанавливаем их как environment variables для сборки
-# Используем значения по умолчанию, если не переданы
-ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
-
 COPY package.json package-lock.json ./
-RUN npm ci
+# postinstall (prisma generate) требует prisma/schema.prisma — его ещё нет до COPY . .
+RUN npm ci --ignore-scripts
 COPY . .
+# Prisma Client (без подключения к БД на этапе сборки)
+RUN npx prisma generate
 # Очищаем кеш Next.js перед сборкой для предотвращения проблем с require
 RUN rm -rf .next || true
 # Увеличиваем лимит памяти для процесса сборки (до 8GB)

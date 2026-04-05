@@ -1,13 +1,26 @@
 import { NextResponse } from 'next/server';
-import { addProduct, getAllProducts } from '@/lib/products-supabase';
-import { requireAdmin } from '@/lib/auth-helpers';
+import { addProduct, listProductsForAdmin } from '@/entities/product/model/products-db';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 
-export async function GET() {
+export async function GET(request) {
   try {
     await requireAdmin();
-    
-    const products = await getAllProducts();
-    return NextResponse.json({ products });
+
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '40', 10);
+    const search = searchParams.get('search') || '';
+
+    const result = await listProductsForAdmin({
+      page: Number.isNaN(page) ? 1 : page,
+      limit: Number.isNaN(limit) ? 40 : limit,
+      search,
+    });
+
+    return NextResponse.json({
+      products: result.products,
+      pagination: result.pagination,
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     

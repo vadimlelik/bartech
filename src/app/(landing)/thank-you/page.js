@@ -25,7 +25,7 @@ import {
   PIXEL_7,
   PIXEL_8,
   PIXEL_9,
-} from '@/data/pixel';
+} from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 const ThankYouPage = () => {

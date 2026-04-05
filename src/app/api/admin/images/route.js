@@ -1,128 +1,125 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getMinioClient, getMinioBucket } from '@/shared/lib/minio';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
+import { listImagesUnderPublic } from '@/shared/lib/public-static-images';
 
-// Функция для получения всех файлов из папки (включая подпапки)
-async function getAllFilesFromFolder(folder = '') {
-  try {
-    const { data, error } = await supabaseAdmin.storage
-      .from('images')
-      .list(folder, {
-        limit: 1000,
-        offset: 0,
-        sortBy: { column: 'created_at', order: 'desc' },
-      });
+async function getAllFilesFromPrefix(prefix = '') {
+  const client = getMinioClient();
+  const bucket = getMinioBucket();
 
-    if (error) {
-      console.error(`Error listing folder ${folder}:`, error);
-      return [];
-    }
-
-    if (!data) return [];
-
-    const files = [];
-    
-    for (const item of data) {
-      // Проверяем, является ли элемент файлом (имеет расширение)
-      const hasExtension = item.name.includes('.') && 
-        item.name.split('.').length > 1 &&
-        item.name.split('.').pop().length <= 5; // Расширение обычно короткое
-      
-      if (hasExtension) {
-        // Это файл
-        const filePath = folder ? `${folder}/${item.name}` : item.name;
-        files.push({
-          name: item.name,
-          path: filePath,
-          metadata: item.metadata,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-        });
-      } else {
-        // Возможно, это папка - получаем файлы из неё
-        const subFolder = folder ? `${folder}/${item.name}` : item.name;
-        const subFiles = await getAllFilesFromFolder(subFolder);
-        files.push(...subFiles);
-      }
-    }
-
-    return files;
-  } catch (error) {
-    console.error(`Error in getAllFilesFromFolder for ${folder}:`, error);
+  if (!client) {
     return [];
   }
+
+  const objectsStream = client.listObjectsV2(bucket, prefix || '', true);
+  const files = [];
+
+  const readerPromise = new Promise((resolve, reject) => {
+    objectsStream.on('data', (obj) => {
+      if (!obj.name) return;
+
+      const name = obj.name.split('/').pop();
+      const hasExtension =
+        name.includes('.') &&
+        name.split('.').length > 1 &&
+        name.split('.').pop().length <= 5;
+
+      if (hasExtension) {
+        files.push({
+          name,
+          path: obj.name,
+          size: obj.size || 0,
+          lastModified: obj.lastModified,
+        });
+      }
+    });
+    objectsStream.on('end', resolve);
+    objectsStream.on('error', reject);
+  });
+
+  await readerPromise;
+  return files;
+}
+
+function minioFilesToImages(allFiles) {
+  return allFiles
+    .filter((file) => {
+      const ext = file.name.toLowerCase().split('.').pop();
+      return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
+    })
+    .map((file) => {
+      const url = `/api/images/${encodeURIComponent(file.path)}`;
+      return {
+        name: file.name,
+        path: file.path,
+        url,
+        size: file.size || 0,
+        created_at: file.lastModified,
+        updated_at: file.lastModified,
+        source: 'minio',
+      };
+    });
 }
 
 export async function GET(request) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        { error: 'Supabase is not configured' },
-        { status: 500 }
-      );
-    }
+    await requireAdmin();
+  } catch (e) {
+    const status =
+      e.message === 'Unauthorized' ? 401 : e.message?.includes('Forbidden') ? 403 : 403;
+    return NextResponse.json({ error: e.message }, { status });
+  }
 
+  try {
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder') || '';
 
-    let allFiles = [];
+    let minioImages = [];
+    const client = getMinioClient();
 
-    if (folder) {
-      // Получаем файлы из указанной папки
-      allFiles = await getAllFilesFromFolder(folder);
-    } else {
-      // Получаем файлы из корня и основных папок
-      const folders = ['', 'products', 'categories'];
-      
-      for (const folderPath of folders) {
-        const files = await getAllFilesFromFolder(folderPath);
-        allFiles = [...allFiles, ...files];
+    if (client) {
+      let allFiles = [];
+      if (folder) {
+        allFiles = await getAllFilesFromPrefix(folder);
+      } else {
+        const prefixes = ['', 'products', 'categories'];
+        for (const prefix of prefixes) {
+          const files = await getAllFilesFromPrefix(prefix);
+          allFiles = [...allFiles, ...files];
+        }
+      }
+      minioImages = minioFilesToImages(allFiles);
+    }
+
+    const publicImages = listImagesUnderPublic();
+
+    const byUrl = new Map();
+    for (const img of [...minioImages, ...publicImages]) {
+      if (!byUrl.has(img.url)) {
+        byUrl.set(img.url, img);
       }
     }
 
-    // Преобразуем данные в массив с публичными URL и фильтруем только изображения
-    const imagesWithUrls = await Promise.all(
-      allFiles
-        .filter((file) => {
-          const ext = file.name.toLowerCase().split('.').pop();
-          return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
-        })
-        .map(async (file) => {
-          const { data: urlData } = supabaseAdmin.storage
-            .from('images')
-            .getPublicUrl(file.path);
-
-          return {
-            name: file.name,
-            path: file.path,
-            url: urlData.publicUrl,
-            size: file.metadata?.size || 0,
-            created_at: file.created_at,
-            updated_at: file.updated_at,
-          };
-        })
-    );
-
-    // Удаляем дубликаты по URL (один и тот же файл может быть в разных папках)
-    const uniqueImagesMap = new Map();
-    imagesWithUrls.forEach((img) => {
-      // Используем URL как ключ для удаления дубликатов
-      if (!uniqueImagesMap.has(img.url)) {
-        uniqueImagesMap.set(img.url, img);
-      }
-    });
-
-    const images = Array.from(uniqueImagesMap.values());
-
-    // Сортируем по дате создания (новые первыми)
+    const images = Array.from(byUrl.values());
     images.sort((a, b) => {
-      const dateA = new Date(a.created_at || 0);
-      const dateB = new Date(b.created_at || 0);
+      const dateA = new Date(a.updated_at || a.created_at || 0);
+      const dateB = new Date(b.updated_at || b.created_at || 0);
       return dateB - dateA;
     });
 
+    const offset = Math.max(0, parseInt(searchParams.get('offset') || '0', 10));
+    const limit = Math.min(
+      200,
+      Math.max(1, parseInt(searchParams.get('limit') || '48', 10)),
+    );
+    const slice = images.slice(offset, offset + limit);
+
     return NextResponse.json({
-      images: images,
+      images: slice,
       total: images.length,
+      offset,
+      limit,
+      hasMore: offset + limit < images.length,
     });
   } catch (error) {
     console.error('Error in GET /api/admin/images:', error);
@@ -132,4 +129,3 @@ export async function GET(request) {
     );
   }
 }
-

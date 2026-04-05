@@ -1,7 +1,6 @@
-import { getAllProducts } from '@/lib/products';
-import { getCategories } from '@/lib/categories';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+import { getAllProducts } from '@/entities/product/model/products';
+import { getCategories } from '@/entities/category/model/categories';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export default async function sitemap() {
   const baseRoutes = [
@@ -12,28 +11,22 @@ export default async function sitemap() {
       priority: 1,
     },
     {
-      url: `${siteUrl}/cart`,
+      url: `${siteUrl}/installment`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/favorites`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/compare`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
+      priority: 0.95,
     },
     {
       url: `${siteUrl}/payment_delivery`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/contacts`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.65,
     },
     {
       url: `${siteUrl}/privacy`,

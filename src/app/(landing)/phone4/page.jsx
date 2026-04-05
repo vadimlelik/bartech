@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import Loading from '@/app/loading';
-import Quiz from '@/components/quiz/Quiz';
+import Quiz from '@/features/quiz/ui/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [

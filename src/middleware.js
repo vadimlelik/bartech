@@ -1,71 +1,31 @@
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
+import {
+  verifySessionToken,
+  SESSION_COOKIE_NAME,
+} from '@/shared/lib/auth-session';
 
 export async function middleware(request) {
   const url = request.nextUrl;
   const hostname = request.headers.get('host');
-  const response = NextResponse.next();
 
   if (url.pathname.startsWith('/admin')) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    const payload = await verifySessionToken(token);
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return response;
+    if (!payload || payload.role !== 'admin') {
+      const redirectUrl = new URL('/auth/login', request.url);
+      redirectUrl.searchParams.set('redirect', url.pathname);
+      return NextResponse.redirect(redirectUrl);
     }
 
-    try {
-      const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-        cookies: {
-          get(name) {
-            return request.cookies.get(name)?.value;
-          },
-          set(name, value, options) {
-            request.cookies.set({ name, value, ...options });
-            response.cookies.set({ name, value, ...options });
-          },
-          remove(name, options) {
-            request.cookies.set({ name, value: '', ...options });
-            response.cookies.set({ name, value: '', ...options });
-          },
-        },
-      });
-
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (!user || userError) {
-        const redirectUrl = new URL('/auth/login', request.url);
-        redirectUrl.searchParams.set('redirect', url.pathname);
-        return NextResponse.redirect(redirectUrl);
-      }
-
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-
-      if (!profile || profileError || profile.role !== 'admin') {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-
-      return response;
-    } catch (error) {
-      console.error('Error in admin middleware:', error);
-      return NextResponse.redirect(new URL('/', request.url));
-    }
+    return NextResponse.next();
   }
 
-  // Оптимизированная обработка поддоменов *.technobar.by
-  // Wildcard SSL сертификат покрывает все поддомены автоматически
   const domainPattern = /^([^.]+)\.technobar\.by$/;
   const subdomainMatch = hostname?.match(domainPattern);
 
   if (subdomainMatch) {
-    const subdomain = subdomainMatch[1]; // Извлекаем имя поддомена (например, 'phone2' из 'phone2.technobar.by')
+    const subdomain = subdomainMatch[1];
     const newUrl = new URL(request.url);
     newUrl.pathname = `/${subdomain}${url.pathname}`;
 
@@ -81,7 +41,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

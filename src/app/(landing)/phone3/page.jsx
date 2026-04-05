@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import Loading from '@/app/loading';
-import Quiz from '@/components/quiz/Quiz';
+import Quiz from '@/features/quiz/ui/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -28,7 +28,7 @@ import {
   PIXEL_7,
   PIXEL_8,
   PIXEL_9,
-} from '@/data/pixel';
+} from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 const reviews = [
