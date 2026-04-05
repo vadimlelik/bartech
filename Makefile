@@ -56,10 +56,10 @@ migrate-deploy: ## Применить миграции Prisma (exec если nex
 		DC="docker compose"; \
 	fi; \
 	if $$DC exec -T nextjs true 2>/dev/null; then \
-		$$DC exec -T nextjs sh -lc 'node node_modules/prisma/build/index.js migrate deploy'; \
+		$$DC exec -T nextjs sh -lc 'node /prisma-cli/node_modules/prisma/build/index.js migrate deploy --schema /app/prisma/schema.prisma'; \
 	else \
 		echo "nextjs не запущен — docker compose run (нужен доступ к БД по DATABASE_URL, postgres в сети compose)"; \
-		$$DC run --rm -T --no-deps nextjs sh -lc 'node node_modules/prisma/build/index.js migrate deploy'; \
+		$$DC run --rm -T --no-deps nextjs sh -lc 'node /prisma-cli/node_modules/prisma/build/index.js migrate deploy --schema /app/prisma/schema.prisma'; \
 	fi
 
 clean-logs: ## Очистить старые логи контейнеров (освобождает место на диске)

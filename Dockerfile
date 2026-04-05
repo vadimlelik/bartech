@@ -45,15 +45,19 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/data ./data
 # Схема и миграции
 COPY --from=builder /app/prisma ./prisma
-# Prisma CLI: при NODE_ENV=production npm режет дерево → нет effect/c12 и т.д.; ставим до production
+# Prisma CLI в отдельном каталоге: npm install в /app смешивается с slim standalone → пропадают fast-check и др.
 COPY --from=builder /app/package.json /tmp/bartech-package.json
 USER root
-RUN cd /app && npm install "prisma@$(node -p "const p=require('/tmp/bartech-package.json');p.devDependencies?.prisma||p.dependencies?.prisma||'6'")" \
-	--ignore-scripts --no-audit --no-fund --no-save \
+RUN mkdir -p /prisma-cli \
+	&& node -e "\
+const p=require('/tmp/bartech-package.json');\
+const v=p.devDependencies?.prisma||p.dependencies?.prisma||'6';\
+require('fs').writeFileSync('/prisma-cli/package.json',JSON.stringify({private:true,dependencies:{prisma:v}},null,2));\
+" \
+	&& cd /prisma-cli && npm install --ignore-scripts --no-audit --no-fund \
 	&& rm -f /tmp/bartech-package.json \
-	&& mkdir -p node_modules/.bin \
-	&& ln -sf ../prisma/build/index.js node_modules/.bin/prisma \
-	&& chmod +x node_modules/prisma/build/index.js 2>/dev/null || true
+	&& npm cache clean --force \
+	&& chown -R nextjs:nodejs /prisma-cli
 
 ENV NODE_ENV=production
 
