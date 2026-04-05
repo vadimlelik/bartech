@@ -28,7 +28,7 @@ RUN npm run build && rm -rf .next/cache node_modules/.cache 2>/dev/null || true
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+# NODE_ENV=production только после установки prisma CLI: иначе npm отрезает зависимости (effect, c12, …)
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Устанавливаем wget для health check
@@ -45,15 +45,20 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/data ./data
 # Схема и миграции
 COPY --from=builder /app/prisma ./prisma
-# CLI Prisma в образе: только копировать node_modules/prisma недостаточно (@prisma/config тянет effect и др.)
-COPY --from=builder /app/package.json /tmp/bartech-package.json
+# Полное дерево зависимостей Prisma CLI из builder (надёжнее npm install в slim standalone)
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/effect ./node_modules/effect
+COPY --from=builder /app/node_modules/c12 ./node_modules/c12
+COPY --from=builder /app/node_modules/deepmerge-ts ./node_modules/deepmerge-ts
+COPY --from=builder /app/node_modules/empathic ./node_modules/empathic
+
 USER root
-RUN cd /app && npm install "prisma@$(node -p "const p=require('/tmp/bartech-package.json');p.devDependencies?.prisma||p.dependencies?.prisma||'6'")" \
-	--omit=dev --ignore-scripts --no-audit --no-fund --no-save \
-	&& rm -f /tmp/bartech-package.json \
-	&& mkdir -p node_modules/.bin \
+RUN mkdir -p node_modules/.bin \
 	&& ln -sf ../prisma/build/index.js node_modules/.bin/prisma \
 	&& chmod +x node_modules/prisma/build/index.js 2>/dev/null || true
+
+ENV NODE_ENV=production
 
 # Устанавливаем права
 RUN chown -R nextjs:nodejs /app
