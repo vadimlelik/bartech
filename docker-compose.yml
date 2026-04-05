@@ -22,10 +22,6 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_BUCKET=images
-      # Опционально Supabase (без :- Compose выводит WARN при каждом вызове, если переменных нет в .env)
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
       # Prisma: явный DATABASE_URL из .env или сборка для сервиса postgres в этом compose (prod не должен затирать пустым ${DATABASE_URL})
       - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-bartech}:${POSTGRES_PASSWORD:-bartech_password}@postgres:5432/${POSTGRES_DB:-bartech}?schema=public}
     networks:
