@@ -62,6 +62,30 @@ migrate-deploy: ## Применить миграции Prisma (exec если nex
 		$$DC run --rm -T --no-deps nextjs sh -lc 'node /prisma-cli/node_modules/prisma/build/index.js migrate deploy --schema /app/prisma/schema.prisma'; \
 	fi
 
+seed: ## Заполнить БД данными из папки data/ (categories, products, landing_pages)
+	@if ! docker ps --format '{{.Names}}' | grep -q '^bartech-postgres$$'; then \
+		echo "ERROR: bartech-postgres не запущен. Запустите: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d postgres"; \
+		exit 1; \
+	fi
+	@PG_USER=$$(grep '^POSTGRES_USER=' .env 2>/dev/null | cut -d= -f2 | tr -d '"' || echo bartech); \
+	PG_DB=$$(grep '^POSTGRES_DB=' .env 2>/dev/null | cut -d= -f2 | tr -d '"' || echo bartech); \
+	echo "БД: $$PG_DB, пользователь: $$PG_USER"; \
+	echo "Копируем SQL-файлы в контейнер..."; \
+	docker cp data/categories_rows.sql bartech-postgres:/tmp/categories_rows.sql; \
+	docker cp data/products_rows.sql bartech-postgres:/tmp/products_rows.sql; \
+	docker cp data/landing_pages_rows.sql bartech-postgres:/tmp/landing_pages_rows.sql; \
+	echo "Загружаем категории..."; \
+	docker exec bartech-postgres psql -U "$$PG_USER" -d "$$PG_DB" -f /tmp/categories_rows.sql; \
+	echo "Загружаем товары..."; \
+	docker exec bartech-postgres psql -U "$$PG_USER" -d "$$PG_DB" -f /tmp/products_rows.sql; \
+	echo "Загружаем лендинги..."; \
+	docker exec bartech-postgres psql -U "$$PG_USER" -d "$$PG_DB" -f /tmp/landing_pages_rows.sql; \
+	echo ""; \
+	echo "✅ Данные загружены!"; \
+	echo "   Профили пользователей (profiles_rows.sql) не импортируются автоматически,"; \
+	echo "   т.к. в текущей схеме пользователи хранятся в таблице 'users' с паролями."; \
+	echo "   Зарегистрируйте администратора через /register после запуска сайта."
+
 clean-logs: ## Очистить старые логи контейнеров (освобождает место на диске)
 	@echo "🧹 Очистка старых логов контейнеров..."
 	@bash -c '\
