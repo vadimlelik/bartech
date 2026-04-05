@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import { Container, Grid, Typography, Box } from '@mui/material';
 import CategoryCard from '@/entities/category/ui/category-card/CategoryCard';
 import { getCategories } from '@/entities/category/model/categories';
@@ -44,11 +45,11 @@ export const metadata = {
   },
 };
 
-// Кэш главной (~1 ч), снижает нагрузку на БД
-// При необходимости обновить данные можно использовать revalidateTag('categories')
-export const revalidate = 3600;
+// Главная не кешируется статически: при docker build нет DATABASE_URL, иначе в HTML
+// попадает пустой список категорий («Категории пока не добавлены»), хотя /api/categories с БД работает.
 
 export default async function Home() {
+  noStore();
   const categories = await getCategories();
 
   // Фильтруем категории с валидным ID и названием
