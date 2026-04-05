@@ -1,4 +1,4 @@
-import ProductCard from '../components/ProductCard/ProductCard.module';
+import ProductCard from '@/entities/product/ui/product-card/ProductCard.module';
 import styles from './page.module.css';
 
 const products = [

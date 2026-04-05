@@ -1,555 +1,213 @@
-# 🚀 Полный процесс сборки и деплоя проекта Bartech
+# Деплой и CI/CD (Bartech)
 
-## 📋 Обзор архитектуры
-
-Проект использует:
-- **Next.js 15** (React 18) - фронтенд/бэкенд фреймворк
-- **Docker** - контейнеризация
-- **Docker Compose** - оркестрация контейнеров
-- **GitHub Actions** - CI/CD автоматизация
-- **Nginx** - reverse proxy и SSL терминация
-- **Certbot** - автоматическое обновление SSL сертификатов
+Полная схема: **Next.js** в Docker → **Docker Hub** → **сервер** (`/opt/bartech`) через **GitHub Actions** и SSH. Рядом в compose: **PostgreSQL**, **MinIO**, **Nginx**, **Certbot** (Cloudflare DNS).
 
 ---
 
-## 🏗️ Этап 1: Сборка Docker образа
+## 1. Архитектура
 
-### 1.1 Multi-stage Dockerfile
+| Компонент | Назначение |
+|-----------|------------|
+| `Dockerfile` | Multi-stage: `npm ci` → `prisma generate` → `next build` → образ на `node:20-alpine` с `output: 'standalone'` |
+| `docker-compose.yml` | Базовый стек: nextjs, nginx, minio, postgres, certbot |
+| `docker-compose.prod.yml` | Подмена сервиса `nextjs` на образ `${DOCKERHUB_USERNAME}/bartech:latest`; переменные подставляются из `/opt/bartech/.env` (файл перезаписывается при каждом деплое из **GitHub Actions secrets**) |
+| GitHub Actions | Сборка и пуш образа; деплой по SSH на сервер |
 
-Dockerfile использует **multi-stage build** для оптимизации размера:
-
-#### Stage 1: `base` (Node.js 20 Alpine)
-```dockerfile
-FROM node:20-alpine AS base
-```
-- Базовый образ с Node.js 20
-- Alpine Linux для минимального размера
-
-#### Stage 2: `builder` (Сборка приложения)
-```dockerfile
-FROM base AS builder
-WORKDIR /app
-```
-
-**Процесс сборки:**
-1. **Копирование зависимостей:**
-   ```dockerfile
-   COPY package.json package-lock.json ./
-   RUN npm ci  # Установка зависимостей (чистая установка)
-   ```
-
-2. **Копирование исходного кода:**
-   ```dockerfile
-   COPY . .
-   ```
-
-3. **Очистка кеша Next.js:**
-   ```dockerfile
-   RUN rm -rf .next || true
-   ```
-
-4. **Настройка памяти для сборки:**
-   ```dockerfile
-   ENV NODE_OPTIONS="--max_old_space_size=4096"
-   ```
-
-5. **Сборка Next.js:**
-   ```dockerfile
-   RUN npm run build
-   ```
-   - Выполняет `next build` из package.json
-   - Создает оптимизированную production сборку
-   - Генерирует `.next/standalone` (благодаря `output: 'standalone'` в next.config.mjs)
-
-#### Stage 3: `runner` (Production образ)
-```dockerfile
-FROM base AS runner
-WORKDIR /app
-```
-
-**Оптимизация:**
-- Копируются только необходимые файлы:
-  - `public/` - статические файлы
-  - `.next/standalone/` - standalone сервер Next.js
-  - `.next/static/` - статические ресурсы
-  - `data/` - JSON файлы для fallback данных
-
-- Создается непривилегированный пользователь:
-  ```dockerfile
-  RUN adduser --system --uid 1001 nextjs
-  USER nextjs
-  ```
-
-- Запускается standalone сервер:
-  ```dockerfile
-  CMD ["node", "server.js"]
-  ```
-
-### 1.2 Build Arguments
-
-При сборке передаются переменные окружения:
-```dockerfile
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
-```
+**Важно:** в CI сейчас триггеры на ветки `main` и `master`. Если основная ветка называется иначе (например `baratex`), либо мержите в `main`/`master`, либо добавьте ветку в `.github/workflows/docker-build-push.yml` в списки `branches:`.
 
 ---
 
-## 🔄 Этап 2: CI/CD Pipeline (GitHub Actions)
+## 2. Требования к серверу
 
-### 2.1 Триггеры
-
-Workflow запускается при:
-- Push в ветки `main` или `master`
-- Push тегов `v*` (версии)
-- Pull Request в `main` или `master`
-
-### 2.2 Job: `build-and-push`
-
-#### Шаг 1: Checkout кода
-```yaml
-- uses: actions/checkout@v4
-```
-
-#### Шаг 2: Настройка Docker Buildx
-```yaml
-- uses: docker/setup-buildx-action@v3
-```
-- Поддержка multi-platform сборки
-- Оптимизация кеша
-
-#### Шаг 3: Авторизация в Docker Hub
-```yaml
-- uses: docker/login-action@v3
-  with:
-    username: ${{ secrets.DOCKERHUB_USERNAME }}
-    password: ${{ secrets.DOCKERHUB_TOKEN }}
-```
-
-#### Шаг 4: Генерация тегов
-```yaml
-- uses: docker/metadata-action@v5
-```
-Создаются теги:
-- `latest` - для основной ветки
-- `sha-<commit-hash>` - для конкретного коммита
-- `v1.2.3` - для версионных тегов
-
-#### Шаг 5: Сборка и push образа
-```yaml
-- uses: docker/build-push-action@v5
-  with:
-    context: .
-    file: ./Dockerfile
-    build-args: |
-      NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-    platforms: linux/amd64
-```
-
-**Результат:** Образ загружается в Docker Hub как `{username}/bartech:latest`
+- Ubuntu/Debian (или другой Linux с Docker).
+- Установлены **Docker** и **Docker Compose v2** (`docker compose` или `docker-compose`).
+- Открыты порты **80**, **443** (и при необходимости 22 для SSH).
+- Каталог **`/opt/bartech`** с файлами проекта для продакшена (см. ниже).
+- Внешние Docker volumes **`technobar_certbot-etc`** и **`technobar_certbot-var`** (создаются скриптом деплоя или вручную: `docker volume create technobar_certbot-etc` и т.д.).
 
 ---
 
-## 🚀 Этап 3: Деплой на сервер
+## 3. Первичная настройка сервера
 
-### 3.1 Job: `deploy`
+### 3.1. Клонирование / копирование файлов
 
-#### Шаг 1: SSH подключение
-```yaml
-- uses: webfactory/ssh-agent@v0.9.0
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+На сервере в `/opt/bartech` должны лежать как минимум:
+
+- `docker-compose.yml`
+- `docker-compose.prod.yml`
+- `nginx/nginx.conf` (и связанные конфиги, если есть)
+- `certbot/cloudflare.ini` (токен Cloudflare для DNS-валидации Let’s Encrypt)
+- `scripts/` (скрипты для certbot, если используются в compose)
+
+**`.env` на сервере** не нужно создавать вручную для CI-деплоя: workflow заливает его по SSH из секретов GitHub перед `docker pull`. Для **первого ручного** запуска без Actions можно один раз положить `.env` локально на сервере или скопировать значения из секретов.
+
+Образ приложения **не обязан** собираться на сервере: подтягивается с Docker Hub.
+
+### 3.2. Файл `certbot/cloudflare.ini`
+
+Формат для Certbot DNS Cloudflare:
+
+```ini
+dns_cloudflare_api_token = ВАШ_API_TOKEN
 ```
 
-#### Шаг 2: Деплой на сервер
+Токен в Cloudflare: разрешения на **DNS:Edit** для зоны домена.
 
-Выполняется SSH команда на сервере `/opt/bartech`:
+### 3.3. Секреты и `.env` на сервере
 
-**3.2.1 Проверка окружения:**
-```bash
-# Проверка .env файла
-if [ ! -f .env ]; then
-  echo "ERROR: .env file not found!"
-  exit 1
-fi
-```
+Продакшен-значения задаются в **GitHub → Settings → Secrets and variables → Actions** (см. раздел 4). При деплое Actions формирует `/opt/bartech/.env` на сервере; в репозитории и вручную на диске сервера хранить пароли не обязательно.
 
-**3.2.2 Создание Docker volumes:**
-```bash
-# Volumes для SSL сертификатов
-docker volume create technobar_certbot-etc
-docker volume create technobar_certbot-var
-```
+Содержимое `.env` по смыслу такое же, как раньше: `DOCKERHUB_USERNAME`, `AUTH_SECRET` (≥ 32 символов), `DATABASE_URL`, `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` (должны согласовываться с `DATABASE_URL`), `MINIO_*` для приложения и контейнера MinIO. Опционально в секретах можно не задавать `MINIO_ENDPOINT`, `MINIO_PORT`, `MINIO_USE_SSL`, `MINIO_BUCKET` — подставятся значения по умолчанию (`minio`, `9000`, `false`, `images`), как в workflow.
 
-**3.2.3 Загрузка переменных из .env:**
-```bash
-set -a
-while IFS= read -r line; do
-  # Парсинг и экспорт переменных
-done < .env
-set +a
-```
+### 3.4. SSL (первый раз)
 
-**3.2.4 Очистка старых образов:**
-```bash
-# Удаление всех старых образов bartech
-docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f
-docker builder prune -f  # Очистка build cache
-```
-
-**3.2.5 Pull нового образа:**
-```bash
-# Принудительный pull без кеша
-docker pull ${DOCKERHUB_USERNAME}/bartech:latest --no-cache
-```
-
-**3.2.6 Остановка старых контейнеров:**
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans
-docker rm -f bartech-nextjs bartech-nginx bartech-certbot
-```
-
-**3.2.7 Запуск новых контейнеров:**
-```bash
-# Запуск Next.js с принудительным пересозданием
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d \
-  --force-recreate --no-deps --remove-orphans nextjs
-
-# Запуск зависимых сервисов
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx certbot
-```
-
-**3.2.8 Health check:**
-```bash
-# Ожидание готовности Next.js (до 30 попыток)
-max_attempts=30
-while [ $attempt -lt $max_attempts ]; do
-  if docker-compose exec -T nextjs wget --spider http://127.0.0.1:3000/api/health; then
-    echo "Next.js is ready!"
-    break
-  fi
-  sleep 2
-done
-```
-
-**3.2.9 Перезагрузка Nginx:**
-```bash
-docker-compose exec -T nginx nginx -s reload
-```
-
----
-
-## 🐳 Этап 4: Запуск контейнеров
-
-### 4.1 Docker Compose структура
-
-#### `docker-compose.yml` (базовая конфигурация)
-- Определяет все сервисы
-- Используется для локальной разработки
-- Содержит секцию `build` для локальной сборки
-
-#### `docker-compose.prod.yml` (production override)
-- Переопределяет сервис `nextjs`:
-  - Использует готовый образ из Docker Hub: `${DOCKERHUB_USERNAME}/bartech:latest`
-  - `pull_policy: always` - всегда тянет последнюю версию
-- Устанавливает `restart: always` для всех сервисов
-
-### 4.2 Сервисы
-
-#### 4.2.1 Next.js (`bartech-nextjs`)
-```yaml
-services:
-  nextjs:
-    image: ${DOCKERHUB_USERNAME}/bartech:latest
-    container_name: bartech-nextjs
-    restart: always
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "http://127.0.0.1:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-```
-
-**Особенности:**
-- Порт: `3000` (внутренний)
-- Health check каждые 30 секунд
-- Автоматический перезапуск при падении
-
-#### 4.2.2 Nginx (`bartech-nginx`)
-```yaml
-services:
-  nginx:
-    image: nginx:stable-alpine
-    container_name: bartech-nginx
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - technobar_certbot-etc:/etc/letsencrypt:ro
-    depends_on:
-      - nextjs
-```
-
-**Функции:**
-- Reverse proxy для Next.js
-- SSL терминация (HTTPS)
-- Статические файлы
-- Автоматическая перезагрузка каждые 6 часов
-
-#### 4.2.3 Certbot (`bartech-certbot`)
-```yaml
-services:
-  certbot:
-    image: certbot/dns-cloudflare:latest
-    container_name: bartech-certbot
-    volumes:
-      - technobar_certbot-etc:/etc/letsencrypt
-      - technobar_certbot-var:/var/lib/letsencrypt
-      - ./certbot/cloudflare.ini:/cloudflare.ini:ro
-    entrypoint: "/bin/sh -c 'while :; do /auto-renew-certs.sh; sleep 12h; done'"
-```
-
-**Функции:**
-- Автоматическое обновление SSL сертификатов каждые 12 часов
-- Использует Cloudflare DNS для wildcard сертификатов
-- Автоматическая перезагрузка Nginx после обновления
-
-### 4.3 Сеть
-
-Все сервисы подключены к одной сети:
-```yaml
-networks:
-  app-network:
-    driver: bridge
-```
-
----
-
-## 📝 Команды Makefile
-
-### Локальная разработка
-```bash
-make build          # Собрать образы локально
-make up             # Запустить все сервисы
-make down           # Остановить все сервисы
-make logs           # Показать логи
-```
-
-### Production деплой
-```bash
-make prod-up        # Запустить в production режиме
-make prod-down      # Остановить production
-make force-update   # Принудительно обновить из Docker Hub
-```
-
-### Очистка и пересборка
-```bash
-make clean-rebuild  # Полная очистка и пересборка без кеша
-make rebuild-local  # Локальная пересборка образа
-make clean          # Очистить неиспользуемые Docker ресурсы
-```
-
-### SSL сертификаты
-```bash
-make init-certs     # Инициализировать SSL сертификаты
-make renew-certs    # Обновить сертификаты вручную
-make cleanup-certs  # Удалить старые сертификаты
-```
-
----
-
-## 🔍 Процесс сборки Next.js
-
-### 1. `npm run build` → `next build`
-
-**Что происходит:**
-1. **Компиляция TypeScript/JavaScript:**
-   - Транспиляция в оптимизированный код
-   - Tree-shaking (удаление неиспользуемого кода)
-
-2. **Оптимизация React:**
-   - Минификация компонентов
-   - Оптимизация импортов
-
-3. **Генерация статических страниц:**
-   - Pre-rendering статических страниц
-   - Генерация HTML для SSG
-
-4. **Создание standalone сборки:**
-   - Благодаря `output: 'standalone'` в next.config.mjs
-   - Создается `.next/standalone/` с минимальными зависимостями
-   - Включает только необходимые node_modules
-
-5. **Оптимизация изображений:**
-   - Генерация разных размеров
-   - WebP конвертация
-
-6. **Создание манифестов:**
-   - Route manifest
-   - Build manifest
-   - Prerender manifest
-
-### 2. Результат сборки
-
-```
-.next/
-├── standalone/          # Минимальный сервер для Docker
-│   ├── server.js        # Точка входа
-│   ├── node_modules/    # Только необходимые зависимости
-│   └── ...
-├── static/              # Статические ресурсы
-│   ├── chunks/          # JS chunks
-│   └── ...
-└── cache/               # Build cache
-```
-
----
-
-## 🔐 Переменные окружения
-
-### Необходимые переменные в `.env`:
+На сервере из корня проекта (после `docker volume create` для certbot):
 
 ```bash
-# Docker Hub
-DOCKERHUB_USERNAME=yourusername
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
-SUPABASE_SERVICE_ROLE_KEY=xxx
+make init-certs
 ```
 
-### GitHub Secrets:
+Или вручную по инструкции в `Makefile` (wildcard для `technobar.by` и `*.technobar.by`). Домены в документации/Makefile завязаны на **technobar.by** — при другом домене поправьте команды и nginx.
 
-```yaml
-DOCKERHUB_USERNAME: username
-DOCKERHUB_TOKEN: token
-NEXT_PUBLIC_SUPABASE_URL: https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY: xxx
-SSH_USER: root
-SSH_PRIVATE_KEY: private_key
-SERVER_HOST: your-server.com
-```
-
----
-
-## 🎯 Полный цикл деплоя
-
-```
-1. Разработчик пушит код в main/master
-   ↓
-2. GitHub Actions запускает workflow
-   ↓
-3. Сборка Docker образа с build args
-   ↓
-4. Push образа в Docker Hub
-   ↓
-5. SSH подключение к серверу
-   ↓
-6. Остановка старых контейнеров
-   ↓
-7. Pull нового образа из Docker Hub
-   ↓
-8. Запуск новых контейнеров
-   ↓
-9. Health check Next.js
-   ↓
-10. Перезагрузка Nginx
-    ↓
-11. Проверка работоспособности
-    ↓
-12. ✅ Деплой завершен
-```
-
----
-
-## 🛠️ Ручной деплой (без CI/CD)
-
-Если нужно задеплоить вручную:
+### 3.5. Запуск стека
 
 ```bash
-# На сервере
 cd /opt/bartech
+docker volume create technobar_certbot-etc 2>/dev/null || true
+docker volume create technobar_certbot-var 2>/dev/null || true
+docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
 
-# Вариант 1: Использовать готовый образ из Docker Hub
-make force-update
+Или через Makefile: `make prod-up` (из каталога с репозиторием).
 
-# Вариант 2: Локальная пересборка
-make rebuild-local
+### 3.6. Миграции Prisma и данные
 
-# Вариант 3: Полная очистка и пересборка
-make clean-rebuild
+После первого подъёма PostgreSQL выполните миграции (с хоста или из контейнера, если установлен CLI):
+
+```bash
+# Пример: с хоста при установленном node/prisma и DATABASE_URL на localhost:5432
+npx prisma migrate deploy
+```
+
+Либо одноразовый запуск из контейнера nextjs, если в образ добавлен prisma — смотрите, как принято в вашем репозитории. Импорт SQL из `data/*_rows.sql` — по необходимости через `psql`.
+
+---
+
+## 4. GitHub Actions — секреты
+
+В репозитории: **Settings → Secrets and variables → Actions**.
+
+| Secret | Назначение |
+|--------|------------|
+| `DOCKERHUB_USERNAME` | Логин Docker Hub; используется в `IMAGE_NAME` и в сгенерированном `.env` на сервере |
+| `DOCKERHUB_TOKEN` | Access Token Docker Hub (read/write для push образа) |
+| `SSH_USER` | Пользователь SSH на сервере |
+| `SSH_PRIVATE_KEY` | Приватный ключ (PEM), пара к публичному ключу в `~/.ssh/authorized_keys` на сервере |
+| `SERVER_HOST` | IP или hostname сервера |
+| `AUTH_SECRET` | Подпись сессий (NextAuth и т.п.), **не короче 32 символов** |
+| `DATABASE_URL` | Строка Prisma к PostgreSQL внутри compose, например `postgresql://USER:PASSWORD@postgres:5432/DBNAME?schema=public` |
+| `POSTGRES_USER` | Пользователь БД для сервиса `postgres` (должен совпадать с `DATABASE_URL`) |
+| `POSTGRES_PASSWORD` | Пароль БД |
+| `POSTGRES_DB` | Имя базы |
+| `MINIO_ACCESS_KEY` | Ключ доступа MinIO (`MINIO_ROOT_USER` в контейнере) |
+| `MINIO_SECRET_KEY` | Секрет MinIO |
+| `MINIO_ENDPOINT` | *(необязательно)* по умолчанию `minio` |
+| `MINIO_PORT` | *(необязательно)* по умолчанию `9000` |
+| `MINIO_USE_SSL` | *(необязательно)* по умолчанию `false` |
+| `MINIO_BUCKET` | *(необязательно)* по умолчанию `images` |
+
+Публичный ключ должен быть у пользователя `SSH_USER` на сервере. Приватный ключ не должен иметь passphrase для безинтерактивного CI (или используйте ssh-agent с другим механизмом).
+
+Токен **Cloudflare** для Certbot по-прежнему задаётся в `certbot/cloudflare.ini` на сервере (в git не коммитить); при желании его тоже можно выносить в отдельный механизм, сейчас workflow его не трогает.
+
+---
+
+## 5. Как работает CI/CD
+
+### 5.1. Workflow `Build and Push Docker Image` (`.github/workflows/docker-build-push.yml`)
+
+**Триггеры:**
+
+- Push в `main` / `master`
+- Теги `v*`
+- Pull request в `main` / `master` (сборка без push в Hub)
+
+**Шаги:**
+
+1. Checkout, Docker Buildx, логин в Docker Hub (не на PR).
+2. Сборка образа `linux/amd64`, теги включая **`latest`** для дефолтной ветки.
+3. Push на `docker.io/<DOCKERHUB_USERNAME>/bartech`.
+4. Job **`deploy`** (в том же файле): запись `/opt/bartech/.env` на сервер из секретов, SSH, `docker pull`, пересоздание только контейнера **`nextjs`** (если уже работает nginx), health check `/api/health`.
+
+### 5.2. Workflow `Deploy to Production` (`.github/workflows/deploy.yml`)
+
+**Триггеры:**
+
+- Успешное завершение workflow **«Build and Push Docker Image»** (`workflow_run`)
+- Ручной запуск **workflow_dispatch**
+
+Делает тот же сценарий деплоя по SSH, что и job `deploy` в первом workflow.
+
+**Замечание:** при push в `main` деплой может выполниться **дважды** (сначала job `deploy` в `docker-build-push.yml`, затем `deploy.yml` после завершения всего workflow). Если это лишнее, отключите один из вариантов: например, удалите job `deploy` из `docker-build-push.yml` и оставьте только `deploy.yml`, или наоборот — уберите `deploy.yml`.
+
+---
+
+## 6. Ручной деплой без GitHub
+
+На сервере должен быть актуальный `.env` (после последнего деплоя из Actions он уже есть, либо создайте вручную с теми же ключами, что в секретах):
+
+```bash
+cd /opt/bartech
+NEXT_IMAGE=$(docker-compose -f docker-compose.yml -f docker-compose.prod.yml config --images 2>/dev/null | grep '/bartech' | head -n1)
+[ -z "$NEXT_IMAGE" ] && NEXT_IMAGE="$(awk -F= '/^DOCKERHUB_USERNAME=/ {gsub(/^"|"$/,"",$2); print $2; exit}' .env)/bartech:latest"
+docker pull "$NEXT_IMAGE"
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate nextjs
+```
+
+Полезные команды из `Makefile`: `make force-update`, `make pull`, `make prod-up`, `make health`.
+
+---
+
+## 7. Проверка после деплоя
+
+- В контейнере: `GET http://127.0.0.1:3000/api/health`
+- Снаружи: ваш домен, например `https://technobar.by/api/health` (в workflow зашита дополнительная проверка через этот URL — при смене домена обновите workflow).
+
+Логи:
+
+```bash
+cd /opt/bartech
+docker compose -f docker-compose.yml -f docker-compose.prod.yml logs -f nextjs
 ```
 
 ---
 
-## 📊 Мониторинг
+## 8. Частые проблемы
 
-### Проверка статуса контейнеров:
-```bash
-make status
-# или
-docker-compose ps
-```
-
-### Просмотр логов:
-```bash
-make logs              # Все сервисы
-make logs-nextjs       # Только Next.js
-make logs-nginx        # Только Nginx
-make logs-certbot      # Только Certbot
-```
-
-### Health check:
-```bash
-make health
-# Проверяет https://technobar.by/api/health
-```
+| Проблема | Что проверить |
+|----------|----------------|
+| CI не запускается | Ветка не `main`/`master`; нет push в удалённый репозиторий |
+| Push в Docker Hub падает | Секреты `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN`, права токена |
+| SSH ошибка | `known_hosts`, ключ, пользователь, firewall, `SERVER_HOST` |
+| `ERROR: .env file not found` | На сервере нет `/opt/bartech/.env` — сначала выполните деплой из GitHub Actions или создайте файл вручную |
+| Сообщение о пустых секретах в логе Actions | Добавьте в GitHub все обязательные секреты из раздела 4 |
+| Образ не обновляется | Тот же digest на Hub; попробовать `docker pull ...:latest` с `--no-cache` или `make force-update` |
+| Volumes certbot | Создать `technobar_certbot-etc` и `technobar_certbot-var` до первого запуска nginx/certbot |
 
 ---
 
-## 🔧 Troubleshooting
+## 9. Локальная разработка с Docker
 
-### Проблема: "no space left on device"
+Сборка и запуск всего стека без prod-override:
+
 ```bash
-make clean-rebuild  # Полная очистка и пересборка
+docker compose build
+docker compose up -d
 ```
 
-### Проблема: Старый код в контейнере
-```bash
-# Удалить образ и пересобрать
-docker rmi ${DOCKERHUB_USERNAME}/bartech:latest
-make force-update
-```
-
-### Проблема: Next.js не запускается
-```bash
-# Проверить логи
-make logs-nextjs
-
-# Проверить переменные окружения
-docker-compose exec nextjs env | grep NEXT_PUBLIC
-```
-
-### Проблема: SSL сертификаты не обновляются
-```bash
-# Обновить вручную
-make renew-certs
-```
+Убедитесь, что локальный `.env` задаёт `MINIO_*`, `POSTGRES_*`, `AUTH_SECRET` (см. `docker-compose.yml`).
 
 ---
 
-## 📚 Дополнительные ресурсы
-
-- [Next.js Standalone Output](https://nextjs.org/docs/pages/api-reference/next-config-js/output)
-- [Docker Multi-stage Builds](https://docs.docker.com/build/building/multi-stage/)
-- [Docker Compose Override](https://docs.docker.com/compose/extends/)
+Этот документ отражает состояние репозитория на момент последнего обновления; при смене домена, веток или registry поправьте workflow и nginx под вашу инфраструктуру.

@@ -1,3 +1,5 @@
+export { formatPrice } from './format-price';
+
 // Инициализация базового скрипта TikTok Pixel (без загрузки конкретного пикселя)
 export const initTikTokPixel = () => {
   if (typeof window !== 'undefined' && !window.ttq) {

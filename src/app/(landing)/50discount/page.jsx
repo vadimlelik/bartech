@@ -1,15 +1,15 @@
 'use client';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
-import Marquee from '@/app/(shop)/components/Marquee/Marquee';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
+import Marquee from '@/shared/ui/marquee/Marquee';
 import styles from './discountPage.module.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 import Loading from '@/app/loading';
-import Button from '@/app/(shop)/components/button/Button';
-import Quiz from '@/components/quiz/Quiz';
+import Button from '@/shared/ui/button/Button';
+import Quiz from '@/features/quiz/ui/Quiz';
 
 const questions = [
   {

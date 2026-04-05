@@ -1,4 +1,4 @@
-import { getCategories } from '../../../lib/categories';
+import { getCategories } from '@/entities/category/model/categories';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

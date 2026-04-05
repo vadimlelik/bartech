@@ -2,12 +2,12 @@
 import Image from 'next/image';
 import styles from './page.module.css';
 import { useEffect, useState } from 'react';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Loading from '@/app/loading';
-import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2, PIXEL_3 } from '@/data/pixel';
+import Quiz from '@/features/quiz/ui/Quiz';
+import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 
 export default function Phone5() {

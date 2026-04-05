@@ -10,7 +10,7 @@ const isPhoneSubdomain = process.env.NEXT_PUBLIC_PHONE === 'true';
 
 // Автоматически генерируем rewrite-правила на основе папок в src/app/(landing)
 function generateSubdomainRewrites() {
-  const landingDir = path.join(__dirname, 'src', 'app', '(landing)', '*');
+  const landingDir = path.join(__dirname, 'src', 'app', '(landing)');
   const rewrites = [];
 
   // Исключаем папки, которые не должны быть поддоменами

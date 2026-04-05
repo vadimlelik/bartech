@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createLanding, getAllLandings } from '@/lib/landings-db';
-import { requireAdmin } from '@/lib/auth-helpers';
+import { createLanding, getAllLandings } from '@/entities/landing/model/landings-db';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 import { revalidateTag } from 'next/cache';
 
 export async function GET() {

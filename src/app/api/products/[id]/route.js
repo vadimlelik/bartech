@@ -1,4 +1,4 @@
-import { getProductById } from '@/lib/products';
+import { getProductById } from '@/entities/product/model/products';
 import { NextResponse } from 'next/server';
 
 export async function GET(request, { params }) {

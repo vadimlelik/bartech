@@ -1,7 +1,7 @@
 {
   "name": "Технобар - Интернет магазин техники",
   "short_name": "Технобар",
-  "description": "Купить телефоны и технику в рассрочку",
+  "description": "Купить в рассрочку телефоны и технику в Минске — Texnobar",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

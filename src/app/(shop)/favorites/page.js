@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useFavoritesStore } from '@/store/favorites';
-import { useCartStore } from '@/store/cart';
+import { useFavoritesStore } from '@/entities/favorites';
+import { useCartStore } from '@/entities/cart';
 import {
   Container,
   Grid,
@@ -39,14 +39,41 @@ export default function FavoritesPage() {
           return;
         }
 
-        const response = await fetch(
-          `/api/products?ids=${favorites.join(',')}`
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
+        const chunkSize = 80;
+        const chunks = [];
+        for (let i = 0; i < favorites.length; i += chunkSize) {
+          chunks.push(favorites.slice(i, i + chunkSize));
         }
-        const data = await response.json();
-        setProducts(data.products || []);
+
+        const responses = await Promise.all(
+          chunks.map((ids) =>
+            fetch(`/api/products?ids=${ids.join(',')}&limit=${chunkSize}`),
+          ),
+        );
+
+        for (const response of responses) {
+          if (!response.ok) {
+            throw new Error('Failed to fetch products');
+          }
+        }
+
+        const payloads = await Promise.all(
+          responses.map((response) => response.json()),
+        );
+
+        const byId = new Map();
+        for (const data of payloads) {
+          for (const p of data.products || []) {
+            if (p?.id !== undefined && p?.id !== null) {
+              byId.set(String(p.id), p);
+            }
+          }
+        }
+
+        const ordered = favorites
+          .map((id) => byId.get(String(id)))
+          .filter(Boolean);
+        setProducts(ordered);
       } catch (error) {
         setSnackbarMessage('Ошибка при загрузке товаров');
         setSnackbarOpen(true);

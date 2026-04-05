@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
-import CountdownTimer from '@/app/(shop)/components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Quiz from '@/components/quiz/Quiz';
-import { PIXEL, PIXEL_2 } from '@/data/pixel';
+import Quiz from '@/features/quiz/ui/Quiz';
+import { PIXEL, PIXEL_2 } from '@/shared/config/pixel';
 
 const advantages = [
   {

@@ -19,9 +19,9 @@ import {
   Paper,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Image from 'next/image';
-import AdminGuard from '@/components/AdminGuard';
-import ImageSelector from '@/components/admin/ImageSelector';
+import AdminGuard from '@/features/admin-guard/ui/AdminGuard';
+import ImageSelector from '@/features/admin-images/ui/ImageSelector';
+import AdminThumbImage from '@/features/admin-images/ui/AdminThumbImage';
 
 function EditProductPageContent() {
   const router = useRouter();
@@ -342,7 +342,7 @@ function EditProductPageContent() {
             </Box>
             {formData.image && (
               <Box sx={{ mt: 2 }}>
-                <Image
+                <AdminThumbImage
                   src={formData.image}
                   alt="Preview"
                   width={200}

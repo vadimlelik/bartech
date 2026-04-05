@@ -12,7 +12,7 @@ import {
   Alert,
   Paper,
 } from '@mui/material';
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore } from '@/features/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

@@ -3,8 +3,8 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-} from '@/lib/products-db';
-import { requireAdmin } from '@/lib/auth-helpers';
+} from '@/entities/product/model/products-db';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 
 export async function GET(request, { params }) {
   try {

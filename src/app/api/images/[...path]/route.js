@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getMinioClient, getMinioBucket } from '@/lib/minio';
+import { getMinioClient, getMinioBucket } from '@/shared/lib/minio';
 
 /**
  * API Route для выдачи изображений из MinIO (или совместимого S3-хранилища) с кешированием

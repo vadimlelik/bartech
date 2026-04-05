@@ -31,13 +31,70 @@ jobs:
         run: |
           ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
 
+      # Единый источник правды для прод-переменных — GitHub Secrets; на сервер пишется только /opt/bartech/.env (не в git).
+      - name: Sync server .env from GitHub Actions secrets
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+          MINIO_PORT: ${{ secrets.MINIO_PORT }}
+          MINIO_USE_SSL: ${{ secrets.MINIO_USE_SSL }}
+          MINIO_BUCKET: ${{ secrets.MINIO_BUCKET }}
+        run: |
+          set -euo pipefail
+          python3 << 'PY'
+          import os, pathlib
+          def v(key, default=None):
+              x = os.environ.get(key)
+              if x is None or x == "":
+                  return default
+              return x
+          def line(k, val):
+              val = "" if val is None else str(val)
+              val = val.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\r", "")
+              return f'{k}="{val}"'
+          m = {
+              "DOCKERHUB_USERNAME": v("DOCKERHUB_USERNAME"),
+              "AUTH_SECRET": v("AUTH_SECRET"),
+              "DATABASE_URL": v("DATABASE_URL"),
+              "POSTGRES_USER": v("POSTGRES_USER"),
+              "POSTGRES_PASSWORD": v("POSTGRES_PASSWORD"),
+              "POSTGRES_DB": v("POSTGRES_DB"),
+              "MINIO_ACCESS_KEY": v("MINIO_ACCESS_KEY"),
+              "MINIO_SECRET_KEY": v("MINIO_SECRET_KEY"),
+              "MINIO_ENDPOINT": v("MINIO_ENDPOINT", "minio"),
+              "MINIO_PORT": v("MINIO_PORT", "9000"),
+              "MINIO_USE_SSL": v("MINIO_USE_SSL", "false"),
+              "MINIO_BUCKET": v("MINIO_BUCKET", "images"),
+          }
+          required = (
+              "DOCKERHUB_USERNAME", "AUTH_SECRET", "DATABASE_URL",
+              "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB",
+              "MINIO_ACCESS_KEY", "MINIO_SECRET_KEY",
+          )
+          miss = [k for k in required if not m.get(k)]
+          if miss:
+              raise SystemExit("Missing required GitHub Actions secrets (empty): " + ", ".join(miss))
+          pathlib.Path("/tmp/bartech-prod.env").write_text(
+              "\n".join(line(k, m[k]) for k in m) + "\n", encoding="utf-8"
+          )
+          PY
+          scp /tmp/bartech-prod.env "${SSH_USER}@${SERVER_HOST}:/opt/bartech/.env"
+          rm -f /tmp/bartech-prod.env
+          ssh "${SSH_USER}@${SERVER_HOST}" "chmod 600 /opt/bartech/.env 2>/dev/null || true"
+
       - name: Deploy to server
         run: |
           ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
             set -e
             cd /opt/bartech
             
-            # Проверка наличия .env файла
             if [ ! -f .env ]; then
               echo "ERROR: .env file not found!"
               exit 1
@@ -55,98 +112,47 @@ jobs:
             fi
             echo "Volumes ready"
             
-            # Загрузка переменных из .env файла (безопасный способ)
-            # Используем цикл для правильной обработки всех строк, включая значения с пробелами
-            echo "Loading environment variables from .env file..."
-            set -a
-            loaded_count=0
-            while IFS= read -r line || [ -n "$line" ]; do
-              # Пропускаем комментарии и пустые строки
-              case "$line" in
-                \#*|'') continue ;;
-              esac
-              
-              # Удаляем пробелы в начале и конце строки
-              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-              # Пропускаем пустые строки после обработки
-              [ -z "$line" ] && continue
-              
-              # Проверяем, что строка содержит знак равенства
-              if echo "$line" | grep -q '='; then
-                # Нормализуем формат: удаляем пробелы вокруг знака равенства
-                # Преобразуем "KEY = VALUE" в "KEY=VALUE"
-                normalized_line=$(echo "$line" | sed 's/[[:space:]]*=[[:space:]]*/=/')
-                
-                # Экспортируем переменную
-                if export "$normalized_line" 2>/dev/null; then
-                  loaded_count=$((loaded_count + 1))
-                else
-                  echo "WARNING: Failed to load line from .env: ${line:0:50}..."
-                fi
-              else
-                echo "WARNING: Skipping invalid line in .env (no '=' found): ${line:0:50}..."
+            NEXT_IMAGE=$(docker-compose -f docker-compose.yml -f docker-compose.prod.yml config --images 2>/dev/null | grep '/bartech' | head -n1 || true)
+            if [ -z "$NEXT_IMAGE" ]; then
+              DU=$(awk -F= '/^DOCKERHUB_USERNAME=/ {gsub(/^"|"$/,"",$2); print $2; exit}' .env)
+              if [ -z "$DU" ]; then
+                echo "ERROR: Could not resolve Next.js image (compose config --images and DOCKERHUB_USERNAME in .env)."
+                exit 1
               fi
-            done < .env
-            set +a
-            echo "Loaded $loaded_count environment variables from .env file"
-            
-            # Проверка переменных окружения
-            echo "Checking environment variables..."
-            if [ -z "$DOCKERHUB_USERNAME" ]; then
-              echo "ERROR: DOCKERHUB_USERNAME not set in .env file!"
-              exit 1
+              NEXT_IMAGE="${DU}/bartech:latest"
             fi
-            if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
-              echo "WARNING: NEXT_PUBLIC_SUPABASE_URL not set in .env file!"
+            echo "Next.js image: $NEXT_IMAGE"
+            
+            AUTH_LEN=$(awk -F= '/^AUTH_SECRET=/ {gsub(/^"|"$/,"",$2); print length($2); exit}' .env)
+            if [ -z "${AUTH_LEN:-}" ] || [ "$AUTH_LEN" -lt 32 ]; then
+              echo "WARNING: AUTH_SECRET in .env should be at least 32 characters for production sessions."
             fi
-            if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
-              echo "WARNING: NEXT_PUBLIC_SUPABASE_ANON_KEY not set in .env file!"
-            fi
-            echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
             
-            # Удаление всех старых образов bartech для принудительного обновления
-            echo "Removing all old bartech images to force update..."
-            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}}" | xargs -r docker rmi -f 2>/dev/null || true
-            docker images | grep bartech | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
+            OLD_IMAGE_ID=$(docker images "$NEXT_IMAGE" --format "{{.ID}}" 2>/dev/null | head -n1 || true)
             
-            # Очистка Docker кеша для гарантии свежего образа
-            echo "Cleaning Docker build cache..."
-            docker builder prune -f || true
-            
-            # Принудительный pull образа напрямую (без кеша)
-            echo "Force pulling latest image (no cache)..."
-            docker pull ${DOCKERHUB_USERNAME}/bartech:latest --no-cache || {
-              echo "WARNING: Failed to pull with --no-cache, trying normal pull..."
-              docker pull ${DOCKERHUB_USERNAME}/bartech:latest || {
-                echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
-                echo "Available images:"
-                docker images | grep bartech || echo "No bartech images found"
-                echo "Trying to build image locally instead..."
-                # Если pull не удался, пробуем собрать локально
-                docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
-                  echo "ERROR: Both pull and local build failed!"
-                  exit 1
-                }
+            echo "Pulling latest Next.js image only..."
+            docker pull "$NEXT_IMAGE" || {
+              echo "ERROR: Failed to pull image $NEXT_IMAGE"
+              echo "Available images:"
+              docker images | grep bartech || echo "No bartech images found"
+              echo "Trying to build image locally instead..."
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
+                echo "ERROR: Both pull and local build failed!"
+                exit 1
               }
             }
             
-            # Обновление образов через docker-compose (для других сервисов)
-            echo "Pulling other images via docker-compose..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --ignore-pull-failures || true
-            
-            # Проверка, что образ был загружен
-            NEW_IMAGE_ID=$(docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "{{.ID}}" 2>/dev/null)
+            NEW_IMAGE_ID=$(docker images "$NEXT_IMAGE" --format "{{.ID}}" 2>/dev/null | head -n1)
             if [ -z "$NEW_IMAGE_ID" ]; then
-              echo "ERROR: Failed to pull image ${DOCKERHUB_USERNAME}/bartech:latest"
+              echo "ERROR: Image not present after pull: $NEXT_IMAGE"
               echo "Available images:"
               docker images | grep bartech || echo "No bartech images found"
               exit 1
             fi
             
-            echo "Image pulled successfully: ${DOCKERHUB_USERNAME}/bartech:latest"
+            echo "Image pulled successfully: $NEXT_IMAGE"
             echo "New image ID: $NEW_IMAGE_ID"
             
-            # Проверка, что образ действительно обновился
             if [ -n "$OLD_IMAGE_ID" ] && [ "$OLD_IMAGE_ID" = "$NEW_IMAGE_ID" ]; then
               echo "⚠️  WARNING: Image ID hasn't changed! The image might not have been updated."
               echo "This could mean the image in Docker Hub is the same as before."
@@ -154,25 +160,18 @@ jobs:
               echo "✅ Image updated successfully (old: ${OLD_IMAGE_ID:-none}, new: $NEW_IMAGE_ID)"
             fi
             
-            # Показываем детальную информацию об образе для отладки
             echo "Image details:"
-            docker images ${DOCKERHUB_USERNAME}/bartech:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
-            docker inspect ${DOCKERHUB_USERNAME}/bartech:latest --format "Created: {{.Created}}, Digest: {{.RepoDigests}}" || true
+            docker images "$NEXT_IMAGE" --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
+            docker inspect "$NEXT_IMAGE" --format "Created: {{.Created}}, Digest: {{.RepoDigests}}" || true
             
-            # Полная остановка и удаление всех контейнеров
-            echo "Stopping and removing all containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
-            
-            # Дополнительное удаление контейнеров по имени (на случай если они остались)
-            echo "Force removing containers by name..."
-            docker rm -f bartech-nextjs bartech-nginx bartech-certbot 2>/dev/null || true
-            
-            # Удаление всех остановленных контейнеров
-            docker container prune -f || true
-            
-            # Запуск всех контейнеров (принудительно пересоздавая)
-            echo "Starting all containers with --force-recreate..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            # Пересоздаём только nextjs, если стек уже запущен; иначе — первый подъём всего compose
+            if docker ps --format '{{.Names}}' | grep -q '^bartech-nginx$'; then
+              echo "Recreating nextjs container only (postgres, minio, nginx, certbot keep running)..."
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate nextjs
+            else
+              echo "Nginx not running — starting full stack (first deploy or after manual down)..."
+              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
+            fi
             
             # Очистка кеша Next.js после запуска контейнера
             echo "Clearing Next.js cache in container..."
@@ -218,7 +217,8 @@ jobs:
             
             # Очистка старых образов (кроме текущего)
             echo "Cleaning up old images (keeping current)..."
-            docker images ${DOCKERHUB_USERNAME}/bartech --format "{{.ID}} {{.Tag}}" | grep -v "latest\|$NEW_IMAGE_ID" | awk '{print $1}' | xargs -r docker rmi -f 2>/dev/null || true
+            REPO="${NEXT_IMAGE%:*}"
+            docker images "$REPO" --format "{{.ID}} {{.Tag}}" | grep -v "latest\|$NEW_IMAGE_ID" | awk '{print $1}' | xargs -r docker rmi -f 2>/dev/null || true
             docker image prune -f
             
             # Проверка, что приложение работает и возвращает данные

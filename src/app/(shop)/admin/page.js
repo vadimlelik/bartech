@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Container,
@@ -33,10 +33,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import Image from 'next/image';
-import AdminGuard from '@/components/AdminGuard';
-import { useAuthStore } from '@/store/auth';
-import ImageSelector from '@/components/admin/ImageSelector';
+import AdminGuard from '@/features/admin-guard/ui/AdminGuard';
+import { useAuthStore } from '@/features/auth';
+import ImageSelector from '@/features/admin-images/ui/ImageSelector';
+import AdminThumbImage from '@/features/admin-images/ui/AdminThumbImage';
 
 function AdminPageContent() {
   const router = useRouter();
@@ -49,6 +49,14 @@ function AdminPageContent() {
   const [productsLoaded, setProductsLoaded] = useState(false);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [landingsLoaded, setLandingsLoaded] = useState(false);
+  const [productsLoadingMore, setProductsLoadingMore] = useState(false);
+  const [productHasMore, setProductHasMore] = useState(false);
+  const nextProductPageRef = useRef(1);
+  const productHasMoreRef = useRef(false);
+  const productsLoadingMoreRef = useRef(false);
+  const adminLoadingRef = useRef(false);
+  const productsScrollRootRef = useRef(null);
+  const productsSentinelRef = useRef(null);
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
   const [openLandingDialog, setOpenLandingDialog] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -139,15 +147,40 @@ function AdminPageContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async (options = { reset: true }) => {
+    const reset = options.reset !== false;
+    const page = reset ? 1 : nextProductPageRef.current;
+
+    if (!reset) {
+      if (!productHasMoreRef.current || productsLoadingMoreRef.current || adminLoadingRef.current) {
+        return;
+      }
+    }
+
     try {
-      setLoading(true);
-      const response = await fetch('/api/admin/products');
+      if (reset) {
+        setLoading(true);
+        adminLoadingRef.current = true;
+      } else {
+        setProductsLoadingMore(true);
+        productsLoadingMoreRef.current = true;
+      }
+
+      const response = await fetch(
+        `/api/admin/products?page=${page}&limit=40`,
+        { credentials: 'include' },
+      );
 
       if (!response.ok) {
         if (response.status === 403) {
-          showSnackbar('Доступ запрещен. Требуются права администратора', 'error');
+          setSnackbar({
+            open: true,
+            message: 'Доступ запрещен. Требуются права администратора',
+            severity: 'error',
+          });
           setProducts([]);
+          setProductHasMore(false);
+          productHasMoreRef.current = false;
           return;
         }
         const errorData = await response.json().catch(() => ({}));
@@ -155,20 +188,78 @@ function AdminPageContent() {
       }
 
       const data = await response.json();
-      if (data.products && Array.isArray(data.products)) {
-        setProducts(data.products);
+      const batch = Array.isArray(data.products) ? data.products : [];
+      const pagination = data.pagination || {};
+
+      if (reset) {
+        setProducts(batch);
+        nextProductPageRef.current = (pagination.page ?? 1) + 1;
       } else {
-        setProducts([]);
+        setProducts((prev) => [...prev, ...batch]);
+        nextProductPageRef.current = (pagination.page ?? page) + 1;
       }
+
+      const pages = pagination.pages ?? 0;
+      const currentPage = pagination.page ?? page;
+      const hasMore = pages > 0 && currentPage < pages;
+      setProductHasMore(hasMore);
+      productHasMoreRef.current = hasMore;
       setProductsLoaded(true);
     } catch (error) {
       console.error('Error fetching products:', error);
-      showSnackbar(error.message || 'Ошибка загрузки товаров', 'error');
-      setProducts([]);
+      setSnackbar({
+        open: true,
+        message: error.message || 'Ошибка загрузки товаров',
+        severity: 'error',
+      });
+      if (reset) {
+        setProducts([]);
+        setProductHasMore(false);
+        productHasMoreRef.current = false;
+      }
     } finally {
       setLoading(false);
+      adminLoadingRef.current = false;
+      setProductsLoadingMore(false);
+      productsLoadingMoreRef.current = false;
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    productHasMoreRef.current = productHasMore;
+  }, [productHasMore]);
+
+  useEffect(() => {
+    if (activeTab !== 0 || !productsLoaded) {
+      return;
+    }
+    const root = productsScrollRootRef.current;
+    const sentinel = productsSentinelRef.current;
+    if (!root || !sentinel) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry?.isIntersecting) {
+          return;
+        }
+        if (
+          !productHasMoreRef.current ||
+          productsLoadingMoreRef.current ||
+          adminLoadingRef.current
+        ) {
+          return;
+        }
+        fetchProducts({ reset: false });
+      },
+      { root, rootMargin: '200px', threshold: 0 },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [activeTab, productsLoaded, fetchProducts]);
 
   const fetchCategories = async () => {
     try {
@@ -615,7 +706,11 @@ function AdminPageContent() {
   };
 
   const handleInitializeDatabase = async () => {
-    if (!confirm('Вы уверены, что хотите инициализировать базу данных? Это добавит все категории и товары из файлов data/categories.json и data/products_new.json. Существующие записи могут быть продублированы.')) {
+    if (
+      !confirm(
+        'Загрузить данные из папки data в БД? Используются только SQL: categories_rows.sql, products_rows.sql, landing_pages_rows.sql, profiles_rows.sql (все четыре обязательны). Профили пишутся в users с паролем из INIT_DB_IMPORTED_USERS_PASSWORD или по умолчанию ChangeAfterInit!1. Продолжить?'
+      )
+    ) {
       return;
     }
 
@@ -623,14 +718,38 @@ function AdminPageContent() {
     try {
       const response = await fetch('/api/admin/init-db', {
         method: 'POST',
+        credentials: 'include',
       });
 
       const data = await response.json();
 
       if (response.ok) {
         const { results } = data;
-        const message = `Инициализация завершена! Категории: ${results.categories.success} успешно, ${results.categories.failed} ошибок. Товары: ${results.products.success} успешно, ${results.products.failed} ошибок.`;
-        showSnackbar(message, 'success');
+        const catSrc = results.categories.source ? ` [${results.categories.source}]` : '';
+        const prSrc = results.products.source ? ` [${results.products.source}]` : '';
+        const ld = results.landings;
+        const us = results.users;
+        const usLine = us?.bulkSql
+          ? `Пользователи: выполнен SQL${us.source ? ` [${us.source}]` : ''}.`
+          : `Пользователи: ${us?.success ?? 0} ок, ${us?.failed ?? 0} ошибок${us?.source ? ` [${us.source}]` : ''}.`;
+        const catLine = results.categories.bulkSql
+          ? `Категории: выполнен SQL${catSrc}.`
+          : `Категории: ${results.categories.success} ок, ${results.categories.failed} ошибок${catSrc}.`;
+        const prErr = results.products.errors?.[0]?.error;
+        const ldErr = results.landings.errors?.[0]?.error;
+        const prLine = results.products.bulkSql
+          ? `Товары: выполнен SQL${prSrc}.`
+          : `Товары: ${results.products.success} ок, ${results.products.failed} ошибок${prSrc}${prErr ? ` — ${prErr}` : ''}.`;
+        const ldLineFinal = ld?.bulkSql
+          ? `Лендинги: выполнен SQL${ld.source ? ` [${ld.source}]` : ''}.`
+          : `Лендинги: ${ld?.success ?? 0} ок, ${ld?.failed ?? 0} ошибок${ld?.source ? ` [${ld.source}]` : ''}${ldErr ? ` — ${ldErr}` : ''}.`;
+        const message = `Готово. ${catLine} ${prLine} ${ldLineFinal} ${usLine}`;
+        const hasFailures =
+          (results.products.failed > 0 && !results.products.bulkSql) ||
+          (results.landings.failed > 0 && !results.landings.bulkSql) ||
+          (results.categories.failed > 0 && !results.categories.bulkSql) ||
+          (results.users?.failed > 0 && !results.users?.bulkSql);
+        showSnackbar(message, hasFailures ? 'warning' : 'success');
 
         // Обновляем списки после инициализации
         await Promise.all([
@@ -704,8 +823,12 @@ function AdminPageContent() {
           <CircularProgress />
         </Box>
       ) : (
-        <TableContainer component={Paper}>
-          <Table>
+        <TableContainer
+          ref={productsScrollRootRef}
+          component={Paper}
+          sx={{ maxHeight: '72vh', overflow: 'auto' }}
+        >
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -723,7 +846,7 @@ function AdminPageContent() {
                   <TableCell>{product.id}</TableCell>
                   <TableCell>
                     {product.image && (
-                      <Image
+                      <AdminThumbImage
                         src={product.image}
                         alt={product.name}
                         width={60}
@@ -754,8 +877,16 @@ function AdminPageContent() {
                   </TableCell>
                 </TableRow>
               ))}
+              {productsLoadingMore && (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 2, border: 0 }}>
+                    <CircularProgress size={28} />
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
+          <Box ref={productsSentinelRef} sx={{ height: 8, width: '100%' }} aria-hidden />
         </TableContainer>
       )}
         </>
@@ -797,7 +928,7 @@ function AdminPageContent() {
                       <TableCell>{category.id}</TableCell>
                       <TableCell>
                         {category.image && (
-                          <Image
+                          <AdminThumbImage
                             src={category.image}
                             alt={category.name}
                             width={60}
@@ -892,7 +1023,7 @@ function AdminPageContent() {
                 {categoryFormData.image && (
                   <Grid item xs={12}>
                     <Box sx={{ mt: 2 }}>
-                      <Image
+                      <AdminThumbImage
                         src={categoryFormData.image}
                         alt="Preview"
                         width={200}

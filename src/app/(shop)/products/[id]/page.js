@@ -1,12 +1,15 @@
 import { Container, Box } from '@mui/material';
 import { unstable_cache } from 'next/cache';
-import ProductDetails from './ProductDetails';
-import { getProductById } from '@/lib/products';
+import ProductDetails from '@/entities/product/ui/product-details/ProductDetails';
+import { getProductById } from '@/entities/product/model/products';
 import { notFound } from 'next/navigation';
-import { getProductSchema, getBreadcrumbSchema } from '@/lib/seo';
-import { getAllProducts } from '@/lib/products';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
+import {
+  getProductSchema,
+  getBreadcrumbSchema,
+  SEO_INSTALLMENT_PHRASES,
+} from '@/shared/lib/seo';
+import { getAllProducts } from '@/entities/product/model/products';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 // Кэшируем запросы к Supabase на 1 час для снижения нагрузки
 const getCachedProductById = unstable_cache(
@@ -64,20 +67,21 @@ export async function generateMetadata({ params }) {
 
     const description =
       product.description ||
-      `Купить ${product.name} в Минске с доставкой. ${product.specifications?.brand ? `Бренд: ${product.specifications.brand}.` : ''} Цена: ${product.price} BYN. Рассрочка без переплат.`;
+      `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат. ${product.specifications?.brand ? `Бренд: ${product.specifications.brand}.` : ''} Цена: ${product.price} BYN.`;
 
     return {
-      title: `${product.name} - Купить в Technobar`,
+      title: `${product.name} — купить в рассрочку в Минске | Texnobar`,
       description,
       keywords: [
         product.name,
         product.specifications?.brand,
         'купить в минске',
+        ...SEO_INSTALLMENT_PHRASES,
         'техника',
         product.category || product.categoryId,
       ].filter(Boolean),
       openGraph: {
-        title: `${product.name} - Купить в Technobar`,
+        title: `${product.name} — купить в рассрочку | Texnobar`,
         description,
         type: 'website',
         url: `${siteUrl}/products/${id}`,
@@ -92,7 +96,7 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${product.name} - Купить в Technobar`,
+        title: `${product.name} — купить в рассрочку | Texnobar`,
         description,
         images: [imageUrl],
       },

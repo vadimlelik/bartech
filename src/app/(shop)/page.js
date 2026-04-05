@@ -1,17 +1,21 @@
 import { Container, Grid, Typography, Box } from '@mui/material';
-import CategoryCard from './components/CategoryCard';
-import { getCategories } from '@/lib/categories';
-import CategoryCarousel from '@/components/CategoryCarousel/CategoryCarousel';
-import Features from '@/components/Features/Features';
-import { getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://technobar.by';
+import CategoryCard from '@/entities/category/ui/category-card/CategoryCard';
+import { getCategories } from '@/entities/category/model/categories';
+import CategoryCarousel from '@/entities/category/ui/category-carousel/CategoryCarousel';
+import Features from '@/widgets/features-showcase/ui/Features';
+import {
+  getOrganizationSchema,
+  getWebSiteSchema,
+  SEO_INSTALLMENT_PHRASES,
+} from '@/shared/lib/seo';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
-  title: 'Technobar - Интернет-магазин техники в Минске',
+  title: 'Купить в рассрочку — Texnobar | Техника и телефоны в Минске',
   description:
-    'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники. Рассрочка без переплат.',
+    'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Интернет-магазин Texnobar: доставка, рассрочка без переплат, большой каталог.',
   keywords: [
+    ...SEO_INSTALLMENT_PHRASES,
     'техника',
     'электроника',
     'купить технику в минске',
@@ -19,12 +23,11 @@ export const metadata = {
     'ноутбуки',
     'телевизоры',
     'интернет-магазин',
-    'рассрочка',
   ],
   openGraph: {
-    title: 'Technobar - Интернет-магазин техники в Минске',
+    title: 'Купить в рассрочку — Texnobar | Техника и телефоны в Минске',
     description:
-      'Купить технику в Минске с доставкой. Широкий ассортимент телефонов, ноутбуков, телевизоров и другой электроники.',
+      'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Доставка, рассрочка без переплат.',
     type: 'website',
     url: siteUrl,
     images: [

@@ -3,8 +3,8 @@ import {
   getCategoryById,
   updateCategory,
   deleteCategory,
-} from '@/lib/categories';
-import { requireAdmin } from '@/lib/auth-helpers';
+} from '@/entities/category/model/categories';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 
 export async function GET(request, { params }) {
   try {

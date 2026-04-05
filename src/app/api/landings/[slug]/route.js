@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getLandingBySlug } from '@/lib/landings-db';
+import { getLandingBySlug } from '@/entities/landing/model/landings-db';
 
 export async function GET(request, { params }) {
   try {

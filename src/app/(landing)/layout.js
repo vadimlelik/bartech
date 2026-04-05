@@ -1,6 +1,6 @@
 'use client';
 
-import Footer from '@/shared/ui/footer/Footer';
+import Footer from '@/widgets/landing-footer/ui/Footer';
 import { Box } from '@mui/material';
 
 export default function LandingLayout({ children }) {

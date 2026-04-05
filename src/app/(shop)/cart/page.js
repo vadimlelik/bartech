@@ -26,7 +26,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCartStore } from '@/store/cart';
+import { useCartStore } from '@/entities/cart';
 
 export default function CartPage() {
   const router = useRouter();

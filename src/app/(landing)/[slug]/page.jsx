@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
-import LandingPageTemplate from '@/components/landing/LandingPageTemplate';
-import { getAllLandings, getLandingBySlug } from '@/lib/landings-db';
+import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
+import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 
 // Кэшируем запросы к Supabase (в проде это напрямую снижает Supabase Cached Egress).
 // Обновление данных делаем через on-demand revalidateTag('landings') из админки.
@@ -47,11 +47,15 @@ export async function generateMetadata({ params }) {
 }
 
 export const generateStaticParams = async () => {
-  const landings = await getAllLandings();
-
-  return landings.map((landing) => ({
-    slug: landing.slug,
-  }));
+  try {
+    const landings = await getAllLandings();
+    return landings.map((landing) => ({
+      slug: landing.slug,
+    }));
+  } catch {
+    // Сборка без доступной БД (Docker и т.д.) — страницы по slug генерируются on-demand
+    return [];
+  }
 };
 
 export default async function LandingPage({ params }) {

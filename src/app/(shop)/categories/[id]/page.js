@@ -2,35 +2,46 @@ import { Container, Typography, Box } from '@mui/material';
 import { unstable_cache } from 'next/cache';
 import BackButton from './BackButton';
 import ProductList from './ProductList';
-import { getCategories, getCategoryById } from '@/lib/categories';
-import { getProductsByCategory } from '@/lib/products';
+import { getCategories, getCategoryById } from '@/entities/category/model/categories';
+import { getProducts } from '@/entities/product/model/products';
 import { notFound } from 'next/navigation';
-import { getCollectionPageSchema, getBreadcrumbSchema } from '@/lib/seo';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bartech.by';
+import {
+  getCollectionPageSchema,
+  getBreadcrumbSchema,
+  SEO_INSTALLMENT_PHRASES,
+} from '@/shared/lib/seo';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 // Кэшируем запросы к Supabase на 1 час для снижения нагрузки
-const getCachedCategoryById = unstable_cache(
-  async (id) => {
-    return await getCategoryById(id);
-  },
-  ['category-by-id'],
-  {
-    revalidate: 3600,
-    tags: ['categories'],
-  }
-);
+function getCachedCategoryByIdCached(id) {
+  return unstable_cache(
+    async () => {
+      return await getCategoryById(id);
+    },
+    ['category-by-id', String(id)],
+    {
+      revalidate: 3600,
+      tags: ['categories'],
+    },
+  )();
+}
 
-const getCachedProductsByCategory = unstable_cache(
-  async (categoryId) => {
-    return await getProductsByCategory(categoryId);
-  },
-  ['products-by-category'],
-  {
-    revalidate: 3600,
-    tags: ['products', 'categories'],
-  }
-);
+function getCachedCategorySeoSample(categoryId) {
+  return unstable_cache(
+    async () => {
+      return await getProducts({
+        categoryId,
+        page: 1,
+        limit: 10,
+      });
+    },
+    ['category-seo-sample', String(categoryId)],
+    {
+      revalidate: 3600,
+      tags: ['products', 'categories'],
+    },
+  )();
+}
 
 // Кэшируем страницу на 1 час
 export const revalidate = 3600;
@@ -53,7 +64,7 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const category = await getCachedCategoryById(id);
+    const category = await getCachedCategoryByIdCached(id);
 
     if (!category) {
       return {
@@ -62,20 +73,21 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const description = `Купить ${category.name.toLowerCase()} в Минске с доставкой. Широкий ассортимент товаров в категории ${category.name}. Рассрочка без переплат.`;
+    const description = `Купить ${category.name.toLowerCase()} в Минске с доставкой. Купить в рассрочку — без переплат. Каталог ${category.name} в Texnobar.`;
 
     return {
-      title: `${category.name} - Купить в Bartech`,
+      title: `${category.name} — купить в рассрочку в Минске | Texnobar`,
       description,
       keywords: [
         category.name,
         `купить ${category.name.toLowerCase()} в минске`,
+        ...SEO_INSTALLMENT_PHRASES,
         'техника',
         'электроника',
         'интернет-магазин',
       ],
       openGraph: {
-        title: `${category.name} - Купить в Bartech`,
+        title: `${category.name} — купить в рассрочку | Texnobar`,
         description,
         type: 'website',
         url: `${siteUrl}/categories/${id}`,
@@ -90,7 +102,7 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${category.name} - Купить в Bartech`,
+        title: `${category.name} — купить в рассрочку | Texnobar`,
         description,
         images: [`${siteUrl}/logo_techno_bar.svg`],
       },
@@ -111,15 +123,18 @@ export default async function CategoryPage({ params }) {
   const { id } = await Promise.resolve(params);
 
   try {
-    const category = await getCachedCategoryById(id);
+    const category = await getCachedCategoryByIdCached(id);
 
     if (!category) {
       notFound();
     }
 
-    // Получаем продукты для структурированных данных
-    const products = await getCachedProductsByCategory(category.id);
-    const collectionSchema = getCollectionPageSchema(category, products);
+    const seoProductsResult = await getCachedCategorySeoSample(category.id);
+    const collectionSchema = getCollectionPageSchema(
+      category,
+      seoProductsResult?.products || [],
+      seoProductsResult?.pagination?.total ?? 0,
+    );
 
     // Breadcrumbs для категории
     const breadcrumbs = [
