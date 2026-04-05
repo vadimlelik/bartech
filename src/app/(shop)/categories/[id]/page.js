@@ -47,11 +47,15 @@ function getCachedCategorySeoSample(categoryId) {
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
-
-  return categories.map((category) => ({
-    id: category.id.toString(),
-  }));
+  try {
+    const categories = await getCategories();
+    return categories.map((category) => ({
+      id: category.id.toString(),
+    }));
+  } catch {
+    // Сборка без доступной БД (Docker/CI) — страницы по id генерируются on-demand
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {

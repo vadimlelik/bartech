@@ -26,11 +26,15 @@ const getCachedProductById = unstable_cache(
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const products = await getAllProducts();
-
-  return products.map((product) => ({
-    id: product.id.toString(),
-  }));
+  try {
+    const products = await getAllProducts();
+    return products.map((product) => ({
+      id: product.id.toString(),
+    }));
+  } catch {
+    // Сборка без доступной БД (Docker/CI) — страницы по id генерируются on-demand
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {
