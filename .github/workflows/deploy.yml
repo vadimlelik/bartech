@@ -112,7 +112,7 @@ jobs:
               git pull --ff-only origin "$DEFAULT_BRANCH"
             fi
             echo "Synced: $(git rev-parse --short HEAD) ($(git branch --show-current))"
-REMOTE
+          REMOTE
 
       - name: Deploy to server
         run: |
