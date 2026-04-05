@@ -41,6 +41,10 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 # Копируем директорию data для fallback JSON файлов (используются в runtime)
 COPY --from=builder /app/data ./data
+# Схема и миграции + CLI Prisma для `npx prisma migrate deploy` на сервере (на хосте Node не нужен)
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Устанавливаем права
 RUN chown -R nextjs:nodejs /app
