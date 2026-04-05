@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import {
   getAllCategories as getAllCategoriesDb,
   getCategoryById as getCategoryByIdDb,
@@ -31,7 +32,7 @@ export async function getCategories() {
     }
     return getAllCategoriesFromJSON();
   } catch (error) {
-    console.error('Error reading categories:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error reading categories:', error);
     return getAllCategoriesFromJSON();
   }
 }

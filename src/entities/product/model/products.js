@@ -1,3 +1,4 @@
+import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import {
   getAllProducts as getAllProductsFromDb,
   getProducts as getProductsFromDb,
@@ -31,7 +32,10 @@ export async function getAllProducts() {
     try {
       return await getAllProductsFromDb();
     } catch (error) {
-      console.error('Error fetching from DB, falling back to JSON:', error);
+      logDbFallbackUnlessBuildWithoutDb(
+        'Error fetching from DB, falling back to JSON:',
+        error,
+      );
       return getAllProductsFromJSON();
     }
   }
@@ -62,7 +66,10 @@ export async function getProducts({
           filters,
         });
       } catch (error) {
-        console.error('Error fetching from DB, falling back to JSON:', error);
+        logDbFallbackUnlessBuildWithoutDb(
+          'Error fetching from DB, falling back to JSON:',
+          error,
+        );
       }
     }
 
@@ -198,7 +205,7 @@ export async function getProducts({
       },
     };
   } catch (error) {
-    console.error('Error in getProducts:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error in getProducts:', error);
     return {
       products: [],
       filters: {},
@@ -222,7 +229,10 @@ export async function getProductById(id) {
       try {
         return await getProductByIdFromDb(id);
       } catch (error) {
-        console.error('Error fetching from DB, falling back to JSON:', error);
+        logDbFallbackUnlessBuildWithoutDb(
+          'Error fetching from DB, falling back to JSON:',
+          error,
+        );
       }
     }
 
@@ -236,7 +246,7 @@ export async function getProductById(id) {
 
     return product || null;
   } catch (error) {
-    console.error('Error in getProductById:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error in getProductById:', error);
     return null;
   }
 }
@@ -248,7 +258,10 @@ export async function getProductsByCategory(categoryId) {
       try {
         return await getProductsByCategoryFromDb(categoryId);
       } catch (error) {
-        console.error('Error fetching from DB, falling back to JSON:', error);
+        logDbFallbackUnlessBuildWithoutDb(
+          'Error fetching from DB, falling back to JSON:',
+          error,
+        );
       }
     }
 
@@ -258,7 +271,7 @@ export async function getProductsByCategory(categoryId) {
       products.filter((product) => product.categoryId === categoryId || product.category_id === categoryId) || []
     );
   } catch (error) {
-    console.error('Error in getProductsByCategory:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error in getProductsByCategory:', error);
     return [];
   }
 }

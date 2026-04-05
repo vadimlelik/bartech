@@ -1,5 +1,6 @@
 import { getAllProducts } from '@/entities/product/model/products';
 import { getCategories } from '@/entities/category/model/categories';
+import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export default async function sitemap() {
@@ -53,7 +54,7 @@ export default async function sitemap() {
       priority: 0.9,
     }));
   } catch (error) {
-    console.error('Error fetching categories for sitemap:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error fetching categories for sitemap:', error);
   }
 
   // Получаем продукты
@@ -67,7 +68,7 @@ export default async function sitemap() {
       priority: 0.8,
     }));
   } catch (error) {
-    console.error('Error fetching products for sitemap:', error);
+    logDbFallbackUnlessBuildWithoutDb('Error fetching products for sitemap:', error);
   }
 
   return [...baseRoutes, ...categoryRoutes, ...productRoutes];
