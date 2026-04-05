@@ -164,7 +164,7 @@ jobs:
           rm -f /tmp/bartech-prod.env
           ssh "${SSH_USER}@${SERVER_HOST}" "chmod 600 /opt/bartech/.env 2>/dev/null || true"
 
-      # Deploy uses compose files on the server. Without pull, an old docker-compose.yml (e.g. with top-level `name:`) breaks legacy `docker-compose` (v1).
+      # Deploy on server uses `docker compose` (v2 plugin); legacy `docker-compose` v1 hits KeyError: ContainerConfig on newer Docker Engine.
       - name: Sync repo on server (compose files)
         env:
           SYNC_REF: ${{ github.ref_name }}
@@ -175,7 +175,7 @@ jobs:
             set -e
             cd /opt/bartech || { echo "ERROR: /opt/bartech missing"; exit 1; }
             if ! git rev-parse --git-dir >/dev/null 2>&1; then
-              echo "SKIP: not a git clone — update docker-compose on the server manually if compose errors persist."
+              echo "SKIP: not a git clone — update compose files on the server manually if deploy errors persist."
               exit 0
             fi
             git fetch origin
@@ -213,7 +213,7 @@ REMOTE
             fi
             echo "Volumes ready"
             
-            NEXT_IMAGE=$(docker-compose -f docker-compose.yml -f docker-compose.prod.yml config --images 2>/dev/null | grep '/bartech' | head -n1 || true)
+            NEXT_IMAGE=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml config --images 2>/dev/null | grep '/bartech' | head -n1 || true)
             if [ -z "$NEXT_IMAGE" ]; then
               DU=$(awk -F= '/^DOCKERHUB_USERNAME=/ {gsub(/^"|"$/,"",$2); print $2; exit}' .env)
               if [ -z "$DU" ]; then
@@ -235,7 +235,7 @@ REMOTE
               echo "Available images:"
               docker images | grep bartech || echo "No bartech images found"
               echo "Trying to build image locally instead..."
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nextjs || {
                 echo "ERROR: Both pull and local build failed!"
                 exit 1
               }
@@ -255,16 +255,16 @@ REMOTE
             
             if docker ps --format '{{.Names}}' | grep -q '^bartech-nginx$'; then
               echo "Recreating nextjs container only (postgres, minio, nginx, certbot keep running)..."
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate nextjs
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate nextjs
             else
               echo "Nginx not running — starting full stack (first deploy or after manual down)..."
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
             fi
             
             # Очистка кеша Next.js после запуска контейнера
             echo "Clearing Next.js cache in container..."
             sleep 3
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -c "rm -rf /app/.next/cache 2>/dev/null || true" || true
             
             # Ожидание запуска контейнеров
             echo "Waiting for containers to start..."
@@ -272,14 +272,14 @@ REMOTE
             
             # Проверка статуса контейнеров
             echo "Checking container status..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
             
             # Ожидание готовности Next.js (проверка health check)
             echo "Waiting for Next.js to be ready..."
             max_attempts=30
             attempt=0
             while [ $attempt -lt $max_attempts ]; do
-              if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
+              if docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
                 echo "Next.js is ready!"
                 break
               fi
@@ -291,13 +291,13 @@ REMOTE
             if [ $attempt -eq $max_attempts ]; then
               echo "ERROR: Next.js failed to start after $max_attempts attempts"
               echo "Next.js logs:"
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs nextjs --tail=50
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs
               exit 1
             fi
             
             # Перезагрузка Nginx после готовности Next.js
             echo "Reloading Nginx..."
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
             
             # Очистка старых образов
             echo "Cleaning up old images..."
@@ -306,7 +306,7 @@ REMOTE
             # Проверка, что приложение работает и возвращает данные
             echo "Verifying application is serving fresh data..."
             sleep 3
-            if docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
+            if docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null; then
               echo "✅ Application is running and health check passed"
             else
               echo "⚠️  Warning: Health check failed after deployment"
@@ -327,7 +327,7 @@ REMOTE
           server_ready=false
           
           while [ $attempt -lt $max_attempts ]; do
-            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null'; then
+            if ssh -o ConnectTimeout=5 "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health 2>/dev/null'; then
               echo "✅ Server health check passed!"
               server_ready=true
               break
@@ -339,7 +339,7 @@ REMOTE
           
           if [ "$server_ready" = false ]; then
             echo "ERROR: Server health check failed after $max_attempts attempts"
-            ssh "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && echo "=== Container Status ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps && echo "=== Next.js Logs (last 50 lines) ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs && echo "=== Nginx Logs (last 50 lines) ===" && docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx'
+            ssh "$SSH_USER@$SERVER_HOST" 'cd /opt/bartech && echo "=== Container Status ===" && docker compose -f docker-compose.yml -f docker-compose.prod.yml ps && echo "=== Next.js Logs (last 50 lines) ===" && docker compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nextjs && echo "=== Nginx Logs (last 50 lines) ===" && docker compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 nginx'
             exit 1
           fi
           
