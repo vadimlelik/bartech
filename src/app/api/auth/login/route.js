@@ -6,9 +6,15 @@ import {
   toPublicUser,
   toPublicProfile,
 } from '@/shared/lib/auth-helpers';
+import { getProductionAuthSecretConfigError } from '@/shared/lib/auth-session';
 
 export async function POST(request) {
   try {
+    const authSecretErr = getProductionAuthSecretConfigError();
+    if (authSecretErr) {
+      return NextResponse.json({ error: authSecretErr }, { status: 503 });
+    }
+
     if (!process.env.DATABASE_URL) {
       return NextResponse.json(
         { error: 'База данных не настроена (DATABASE_URL)' },

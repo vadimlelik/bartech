@@ -25,6 +25,10 @@ import {
   Snackbar,
   CircularProgress,
   Chip,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 
   Tabs,
   Tab,
@@ -45,10 +49,17 @@ function AdminPageContent() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [landings, setLandings] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [productsLoaded, setProductsLoaded] = useState(false);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [landingsLoaded, setLandingsLoaded] = useState(false);
+  const [usersLoaded, setUsersLoaded] = useState(false);
+  const [openRoleDialog, setOpenRoleDialog] = useState(false);
+  const [roleDialogUser, setRoleDialogUser] = useState(null);
+  const [roleDialogValue, setRoleDialogValue] = useState('user');
+  const [openDeleteUserDialog, setOpenDeleteUserDialog] = useState(false);
+  const [deletingUser, setDeletingUser] = useState(null);
   const [productsLoadingMore, setProductsLoadingMore] = useState(false);
   const [productHasMore, setProductHasMore] = useState(false);
   const nextProductPageRef = useRef(1);
@@ -100,6 +111,8 @@ function AdminPageContent() {
         await fetchCategories();
       } else if (tabIndex === 2 && !landingsLoaded) {
         await fetchLandings();
+      } else if (tabIndex === 3 && !usersLoaded) {
+        await fetchUsers();
       }
     } catch (error) {
       console.error('Error loading tab data:', error);
@@ -321,6 +334,87 @@ function AdminPageContent() {
     }
   };
 
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/users', { credentials: 'include' });
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          setSnackbar({ open: true, message: 'Доступ запрещен', severity: 'error' });
+          return;
+        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUsers(Array.isArray(data.users) ? data.users : []);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setUsers([]);
+      setSnackbar({ open: true, message: 'Ошибка загрузки пользователей', severity: 'error' });
+    } finally {
+      setUsersLoaded(true);
+      setLoading(false);
+    }
+  };
+
+  const handleOpenRoleDialog = (user) => {
+    setRoleDialogUser(user);
+    setRoleDialogValue(user.role);
+    setOpenRoleDialog(true);
+  };
+
+  const handleSaveRole = async () => {
+    if (!roleDialogUser) return;
+    try {
+      const response = await fetch(`/api/admin/users/${roleDialogUser.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ role: roleDialogValue }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        showSnackbar(data.error || 'Ошибка изменения роли', 'error');
+        return;
+      }
+      setUsers((prev) => prev.map((u) => (u.id === data.user.id ? data.user : u)));
+      showSnackbar('Роль обновлена', 'success');
+      setOpenRoleDialog(false);
+      setRoleDialogUser(null);
+    } catch {
+      showSnackbar('Ошибка изменения роли', 'error');
+    }
+  };
+
+  const handleDeleteUserConfirm = (user) => {
+    setDeletingUser(user);
+    setOpenDeleteUserDialog(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (!deletingUser) return;
+    try {
+      const response = await fetch(`/api/admin/users/${deletingUser.id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        showSnackbar(data.error || 'Ошибка удаления', 'error');
+        return;
+      }
+      setUsers((prev) => prev.filter((u) => u.id !== deletingUser.id));
+      showSnackbar('Пользователь удален', 'success');
+      setOpenDeleteUserDialog(false);
+      setDeletingUser(null);
+    } catch {
+      showSnackbar('Ошибка удаления пользователя', 'error');
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) {
@@ -800,6 +894,7 @@ function AdminPageContent() {
           <Tab label="Товары" />
           <Tab label="Категории" />
           <Tab label="Лендинги" />
+          <Tab label="Пользователи" />
         </Tabs>
       </Box>
 
@@ -1859,6 +1954,118 @@ function AdminPageContent() {
               <Button onClick={handleLandingSubmit} variant="contained">
                 {editingLanding ? 'Сохранить' : 'Создать'}
               </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
+
+      {activeTab === 3 && (
+        <>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+            <Typography variant="h5" component="h2">
+              Управление пользователями
+            </Typography>
+          </Box>
+
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Имя</TableCell>
+                    <TableCell>Роль</TableCell>
+                    <TableCell>Дата регистрации</TableCell>
+                    <TableCell align="right">Действия</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        Пользователи не найдены
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    users.map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.fullName || '—'}</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={user.role === 'admin' ? 'Администратор' : 'Пользователь'}
+                            color={user.role === 'admin' ? 'primary' : 'default'}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {new Date(user.createdAt).toLocaleDateString('ru-RU')}
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            size="small"
+                            title="Изменить роль"
+                            onClick={() => handleOpenRoleDialog(user)}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            title="Удалить пользователя"
+                            onClick={() => handleDeleteUserConfirm(user)}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          {/* Role Change Dialog */}
+          <Dialog open={openRoleDialog} onClose={() => setOpenRoleDialog(false)} maxWidth="xs" fullWidth>
+            <DialogTitle>Изменить роль пользователя</DialogTitle>
+            <DialogContent>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                {roleDialogUser?.email}
+              </Typography>
+              <FormControl fullWidth size="small">
+                <InputLabel>Роль</InputLabel>
+                <Select
+                  value={roleDialogValue}
+                  label="Роль"
+                  onChange={(e) => setRoleDialogValue(e.target.value)}
+                >
+                  <MenuItem value="user">Пользователь</MenuItem>
+                  <MenuItem value="admin">Администратор</MenuItem>
+                </Select>
+              </FormControl>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenRoleDialog(false)}>Отмена</Button>
+              <Button onClick={handleSaveRole} variant="contained">Сохранить</Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Delete User Confirmation Dialog */}
+          <Dialog open={openDeleteUserDialog} onClose={() => setOpenDeleteUserDialog(false)} maxWidth="xs" fullWidth>
+            <DialogTitle>Удалить пользователя</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Вы уверены, что хотите удалить пользователя <strong>{deletingUser?.email}</strong>? Это действие нельзя отменить.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDeleteUserDialog(false)}>Отмена</Button>
+              <Button onClick={handleDeleteUser} variant="contained" color="error">Удалить</Button>
             </DialogActions>
           </Dialog>
         </>

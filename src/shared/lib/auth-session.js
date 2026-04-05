@@ -17,6 +17,16 @@ export function getAuthSecretKey() {
   );
 }
 
+/** Для API: в production без валидного секрета сессию выдать нельзя */
+export function getProductionAuthSecretConfigError() {
+  if (process.env.NODE_ENV !== 'production') return null;
+  const secret = process.env.AUTH_SECRET;
+  if (!secret || secret.length < 32) {
+    return 'Сессия не настроена: в .env на сервере нужен AUTH_SECRET не короче 32 символов, затем перезапуск контейнера nextjs.';
+  }
+  return null;
+}
+
 /**
  * @param {{ sub: string, email: string, role: string }} payload
  */
