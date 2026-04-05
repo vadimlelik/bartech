@@ -164,6 +164,32 @@ jobs:
           rm -f /tmp/bartech-prod.env
           ssh "${SSH_USER}@${SERVER_HOST}" "chmod 600 /opt/bartech/.env 2>/dev/null || true"
 
+      # Deploy uses compose files on the server. Without pull, an old docker-compose.yml (e.g. with top-level `name:`) breaks legacy `docker-compose` (v1).
+      - name: Sync repo on server (compose files)
+        env:
+          SYNC_REF: ${{ github.ref_name }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          ssh "$SSH_USER@$SERVER_HOST" \
+            "export SYNC_REF=$(printf '%q' "$SYNC_REF"); export DEFAULT_BRANCH=$(printf '%q' "$DEFAULT_BRANCH"); bash -s" <<'REMOTE'
+            set -e
+            cd /opt/bartech || { echo "ERROR: /opt/bartech missing"; exit 1; }
+            if ! git rev-parse --git-dir >/dev/null 2>&1; then
+              echo "SKIP: not a git clone — update docker-compose on the server manually if compose errors persist."
+              exit 0
+            fi
+            git fetch origin
+            if git rev-parse --verify "origin/${SYNC_REF}" >/dev/null 2>&1; then
+              git checkout -B "$SYNC_REF" "origin/${SYNC_REF}"
+              git pull --ff-only origin "$SYNC_REF"
+            else
+              echo "Ref ${SYNC_REF} not on origin; using ${DEFAULT_BRANCH}"
+              git checkout "$DEFAULT_BRANCH"
+              git pull --ff-only origin "$DEFAULT_BRANCH"
+            fi
+            echo "Synced: $(git rev-parse --short HEAD) ($(git branch --show-current))"
+REMOTE
+
       - name: Deploy to server
         run: |
           ssh "$SSH_USER@$SERVER_HOST" << 'EOF'
