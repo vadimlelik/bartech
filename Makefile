@@ -1,4 +1,4 @@
-.PHONY: help build up down restart logs clean init-certs init-certs-baratex renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local clean-logs
+.PHONY: help build up down restart logs clean clean-disk migrate-deploy init-certs init-certs-baratex renew-certs health force-update rebuild-local clean-rebuild diagnose-build build-push-local clean-logs
 
 help: ## Показать справку
 	@echo "Доступные команды:"
@@ -35,6 +35,25 @@ logs-certbot: ## Показать логи CertBot
 clean: ## Очистить неиспользуемые Docker ресурсы
 	docker system prune -f
 	docker image prune -f
+
+clean-disk: ## Жёсткая очистка Docker на сервере: build cache, неиспользуемые образы/контейнеры/сети (volumes не трогает, запущенные контейнеры не останавливает)
+	@echo "📊 Использование диска Docker (до):"
+	@docker system df || true
+	docker builder prune -f || true
+	docker image prune -af || true
+	docker container prune -f || true
+	docker network prune -f || true
+	@echo ""
+	@echo "📊 Использование диска Docker (после):"
+	@docker system df || true
+	@echo "✅ Готово. При необходимости освободить json-логи контейнеров: sudo make clean-logs"
+
+migrate-deploy: ## Применить миграции Prisma (только внутри контейнера nextjs; на хосте npx не нужен)
+	@if [ -f docker-compose.prod.yml ]; then \
+		docker compose -f docker-compose.yml -f docker-compose.prod.yml exec nextjs npx prisma migrate deploy; \
+	else \
+		docker compose exec nextjs npx prisma migrate deploy; \
+	fi
 
 clean-logs: ## Очистить старые логи контейнеров (освобождает место на диске)
 	@echo "🧹 Очистка старых логов контейнеров..."
