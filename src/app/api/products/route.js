@@ -37,7 +37,7 @@ export async function GET(request) {
       if (value) params.filters[field] = value;
     });
 
-    // Кэшируем результаты запросов на 5 минут для снижения нагрузки на Supabase
+    // Кэш списка товаров (~5 мин), снижает нагрузку на БД
     // Создаем уникальный ключ кэша на основе параметров запроса
     const cacheKey = `products-${JSON.stringify(params)}`;
     
@@ -73,7 +73,7 @@ export async function GET(request) {
     });
 
     // Кэшируем ответ на клиенте на 1 минуту (данные уже кэшированы на сервере)
-    // Это снижает количество запросов к Supabase при частых обращениях
+    // Снижает число запросов к БД при частых обращениях
     response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 
     return response;

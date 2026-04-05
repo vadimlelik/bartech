@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
-// Кэшируем запросы к Supabase на 1 час для снижения нагрузки
+// Кэш категорий и выборки товаров (~1 ч), снижает нагрузку на БД
 function getCachedCategoryByIdCached(id) {
   return unstable_cache(
     async () => {

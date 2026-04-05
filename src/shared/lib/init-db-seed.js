@@ -17,7 +17,7 @@ function fileExists(relPath) {
   return fs.existsSync(p) ? p : null;
 }
 
-/** Цена в дампе Supabase часто как '46.00' перед URL картинки — приводим к INTEGER. */
+/** В старых SQL-дампах цена часто как '46.00' перед URL картинки — приводим к INTEGER. */
 export function fixProductPricesInInsertSql(sql) {
   let s = sql.replace(
     /,\s*'([0-9]+(?:\.[0-9]+)?)'\s*,\s*'(https?:\/\/|\/images\/|\/uploads\/)/g,
@@ -28,10 +28,10 @@ export function fixProductPricesInInsertSql(sql) {
 }
 
 /**
- * В дампах Supabase внутри JSON-литералов в SQL часто пишут `\\"`; при standard_conforming_strings
+ * В SQL-дампах внутри JSON-литералов часто пишут `\\"`; при standard_conforming_strings
  * в строке остаётся два `\` перед `"`, и json/jsonb становится невалидным (например «Саундбар» в benefits).
  */
-export function fixSupabaseJsonQuotesInSqlText(sql) {
+export function fixLegacySqlDumpJsonEscaping(sql) {
   return sql.replace(/\\\\"/g, '\\"');
 }
 
@@ -172,10 +172,10 @@ export function splitSqlRowValues(rowInner) {
   return parts;
 }
 
-/** Дамп Supabase: 21 колонка; в приложении нет theme, content, images — выкидываем и переупорядочиваем. */
-const LANDING_SUPABASE_FIELD_COUNT = 21;
+/** Старый формат дампа landing_pages: 21 колонка; лишние поля отбрасываем и переупорядочиваем. */
+const LANDING_LEGACY_DUMP_FIELD_COUNT = 21;
 
-export function transformSupabaseLandingPagesInsertSql(sql) {
+export function transformLegacyLandingPagesInsertSql(sql) {
   const valuesSql = extractInsertValuesSection(sql);
   const tupleStrings = splitSqlTuples(valuesSql);
   const cols =
@@ -183,9 +183,9 @@ export function transformSupabaseLandingPagesInsertSql(sql) {
   const newTuples = [];
   for (const tuple of tupleStrings) {
     const vals = splitSqlRowValues(tuple);
-    if (vals.length !== LANDING_SUPABASE_FIELD_COUNT) {
+    if (vals.length !== LANDING_LEGACY_DUMP_FIELD_COUNT) {
       throw new Error(
-        `landing_pages: ожидалось ${LANDING_SUPABASE_FIELD_COUNT} полей в строке, получено ${vals.length}`
+        `landing_pages: ожидалось ${LANDING_LEGACY_DUMP_FIELD_COUNT} полей в строке, получено ${vals.length}`
       );
     }
     const out = [
@@ -210,7 +210,7 @@ export function transformSupabaseLandingPagesInsertSql(sql) {
     ];
     newTuples.push(`(${out.join(', ')})`);
   }
-  return fixSupabaseJsonQuotesInSqlText(
+  return fixLegacySqlDumpJsonEscaping(
     `INSERT INTO "public"."landing_pages" ${cols} VALUES ${newTuples.join(', ')}`
   );
 }
@@ -362,7 +362,7 @@ export async function seedDatabaseFromDataFolder() {
   try {
     const productsRaw = fs.readFileSync(fileExists('products_rows.sql'), 'utf8');
     await ensureCategoriesReferencedByProducts(productsRaw);
-    let sql = fixSupabaseJsonQuotesInSqlText(productsRaw);
+    let sql = fixLegacySqlDumpJsonEscaping(productsRaw);
     sql = fixProductPricesInInsertSql(sql);
     sql = appendProductsOnConflictUpsert(sql);
     await runRawSql(sql);
@@ -377,7 +377,7 @@ export async function seedDatabaseFromDataFolder() {
   results.landings.source = 'landing_pages_rows.sql';
   try {
     const raw = fs.readFileSync(fileExists('landing_pages_rows.sql'), 'utf8');
-    let sql = transformSupabaseLandingPagesInsertSql(raw);
+    let sql = transformLegacyLandingPagesInsertSql(raw);
     sql = appendLandingsOnConflictUpsert(sql);
     await runRawSql(sql);
     await resetLandingIdSequence();

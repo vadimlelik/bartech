@@ -12,7 +12,7 @@ export function toPublicUser(user) {
   return { id: user.id, email: user.email };
 }
 
-/** Совместимость с прежним форматом профиля Supabase (full_name) */
+/** Совместимость с прежним форматом профиля (поле full_name) */
 export function toPublicProfile(user) {
   if (!user) return null;
   return {

@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 
-// Кэшируем запросы к Supabase (в проде это напрямую снижает Supabase Cached Egress).
+// Кэш данных лендингов (снижает нагрузку на БД).
 // Обновление данных делаем через on-demand revalidateTag('landings') из админки.
 const getCachedLandingBySlug = unstable_cache(
   async (slug) => {

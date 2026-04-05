@@ -11,7 +11,7 @@ import {
 import { getAllProducts } from '@/entities/product/model/products';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
-// Кэшируем запросы к Supabase на 1 час для снижения нагрузки
+// Кэш карточки товара (~1 ч), снижает нагрузку на БД
 const getCachedProductById = unstable_cache(
   async (id) => {
     return await getProductById(id);

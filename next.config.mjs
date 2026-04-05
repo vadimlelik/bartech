@@ -53,7 +53,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    // Разрешаем изображения из Supabase Storage и других внешних источников
+    // Внешние источники изображений (CDN, object storage, legacy URL в данных)
     remotePatterns: [
       {
         protocol: 'https',

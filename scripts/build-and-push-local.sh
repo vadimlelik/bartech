@@ -123,8 +123,6 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 echo -e "${YELLOW}Сборка образа: ${IMAGE_NAME}:${IMAGE_TAG}${NC}"
 docker build \
     --tag "${IMAGE_NAME}:${IMAGE_TAG}" \
-    --build-arg NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-}" \
-    --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}" \
     --progress=plain \
     .
 

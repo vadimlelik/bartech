@@ -1,8 +1,19 @@
 /**
+ * Внешнее object storage в URL картинок (старые публичные bucket-URL, пути с /storage/)
+ * @param {string} url
+ * @returns {boolean}
+ */
+export function isRemoteStorageImageUrl(url) {
+  return Boolean(
+    url && (url.includes('.supabase.co') || url.includes('storage')),
+  );
+}
+
+/**
  * Утилита для проксирования изображений через API route
  * Это уменьшает исходящий трафик, так как изображения кешируются на сервере
- * 
- * @param {string} imageUrl - URL изображения из Supabase Storage
+ *
+ * @param {string} imageUrl - внешний URL (в т.ч. legacy object storage в старых данных)
  * @returns {string} - Проксированный URL через /api/images/
  */
 export function getProxiedImageUrl(imageUrl) {
@@ -15,8 +26,8 @@ export function getProxiedImageUrl(imageUrl) {
     return imageUrl;
   }
 
-  // Если это URL из Supabase Storage, проксируем через API
-  if (imageUrl.includes('.supabase.co') || imageUrl.includes('storage')) {
+  // Известные внешние хосты хранения — проксируем через API (старые URL в дампах БД)
+  if (isRemoteStorageImageUrl(imageUrl)) {
     // Кодируем URL для безопасной передачи через путь
     const encodedUrl = encodeURIComponent(imageUrl);
     return `/api/images/${encodedUrl}`;
@@ -25,13 +36,3 @@ export function getProxiedImageUrl(imageUrl) {
   // Для других внешних URL возвращаем как есть (Next.js Image оптимизирует их)
   return imageUrl;
 }
-
-/**
- * Проверяет, является ли URL изображением из Supabase Storage
- * @param {string} url - URL для проверки
- * @returns {boolean}
- */
-export function isSupabaseImageUrl(url) {
-  return url && (url.includes('.supabase.co') || url.includes('storage'));
-}
-
