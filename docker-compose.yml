@@ -1,6 +1,3 @@
-# Стабильное имя проекта (иначе compose берёт имя каталога и появляются контейнеры вида abc123_bartech-nextjs)
-name: bartech
-
 services:
   nextjs:
     build:
