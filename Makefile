@@ -48,11 +48,11 @@ clean-disk: ## Жёсткая очистка Docker на сервере: build c
 	@docker system df || true
 	@echo "✅ Готово. При необходимости освободить json-логи контейнеров: sudo make clean-logs"
 
-migrate-deploy: ## Применить миграции Prisma (только внутри контейнера nextjs; на хосте npx не нужен)
+migrate-deploy: ## Применить миграции Prisma (внутри контейнера nextjs; без npx/.bin — прямой вызов CLI)
 	@if [ -f docker-compose.prod.yml ]; then \
-		docker compose -f docker-compose.yml -f docker-compose.prod.yml exec nextjs npx prisma migrate deploy; \
+		docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nextjs sh -lc 'node node_modules/prisma/build/index.js migrate deploy'; \
 	else \
-		docker compose exec nextjs npx prisma migrate deploy; \
+		docker compose exec -T nextjs sh -lc 'node node_modules/prisma/build/index.js migrate deploy'; \
 	fi
 
 clean-logs: ## Очистить старые логи контейнеров (освобождает место на диске)

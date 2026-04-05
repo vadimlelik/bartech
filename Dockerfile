@@ -48,6 +48,11 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
+# npx prisma в standalone-образе не видит .bin — Makefile вызывает node …/prisma/build/index.js
+RUN mkdir -p node_modules/.bin \
+	&& ln -sf ../prisma/build/index.js node_modules/.bin/prisma \
+	&& chmod +x node_modules/prisma/build/index.js 2>/dev/null || true
+
 # Устанавливаем права
 RUN chown -R nextjs:nodejs /app
 
