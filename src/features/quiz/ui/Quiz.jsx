@@ -148,6 +148,10 @@ const Quiz = ({
 
             return `${question.question}: ${answer}`;
           })
+          .filter(
+            (comment) =>
+              !comment.includes('рассрочки') && !comment.includes('Срок')
+          )
           .join('\n');
 
         const phoneQuestion = questions.find((q) => q.type === 'text');
