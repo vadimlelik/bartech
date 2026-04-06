@@ -18,30 +18,70 @@ export default async function sitemap() {
       priority: 0.95,
     },
     {
+      url: `${siteUrl}/reviews`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${siteUrl}/payment_delivery`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.75,
     },
     {
       url: `${siteUrl}/contacts`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.65,
+      priority: 0.75,
     },
     {
-      url: `${siteUrl}/privacy`,
+      url: `${siteUrl}/return`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/reviews`,
+      url: `${siteUrl}/privacy`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
+      changeFrequency: 'monthly',
+      priority: 0.4,
     },
   ];
+
+  // Статические лендинги по категориям товаров
+  const landingRoutes = [
+    // Телефоны и смартфоны
+    { slug: 'phone', priority: 0.85 },
+    { slug: 'phone2', priority: 0.75 },
+    { slug: 'phone3', priority: 0.75 },
+    { slug: 'phone4', priority: 0.75 },
+    { slug: 'phone5', priority: 0.75 },
+    { slug: 'phone6', priority: 0.75 },
+    { slug: 'shockproof-phone', priority: 0.7 },
+    // Ноутбуки и компьютеры
+    { slug: 'laptop', priority: 0.85 },
+    { slug: 'laptop2', priority: 0.75 },
+    { slug: 'pc', priority: 0.75 },
+    // Телевизоры
+    { slug: 'tv1', priority: 0.85 },
+    { slug: 'tv2', priority: 0.75 },
+    { slug: 'tv3', priority: 0.75 },
+    // Электротранспорт
+    { slug: 'scooter', priority: 0.75 },
+    { slug: 'bicycles', priority: 0.75 },
+    { slug: 'motoblok', priority: 0.7 },
+    { slug: 'motoblok1', priority: 0.65 },
+    { slug: 'motoblok2', priority: 0.65 },
+    // Мобильный интернет
+    { slug: 'mobile_1', priority: 0.65 },
+    { slug: 'mobile_2', priority: 0.65 },
+  ].map(({ slug, priority }) => ({
+    url: `${siteUrl}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority,
+  }));
 
   // Получаем категории
   let categoryRoutes = [];
@@ -71,6 +111,5 @@ export default async function sitemap() {
     logDbFallbackUnlessBuildWithoutDb('Error fetching products for sitemap:', error);
   }
 
-  return [...baseRoutes, ...categoryRoutes, ...productRoutes];
+  return [...baseRoutes, ...landingRoutes, ...categoryRoutes, ...productRoutes];
 }
-

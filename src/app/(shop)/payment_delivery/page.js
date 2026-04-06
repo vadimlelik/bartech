@@ -3,6 +3,23 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SecurityIcon from '@mui/icons-material/Security';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Оплата и доставка — Texnobar | Доставка техники по Минску и Беларуси',
+  description:
+    'Условия доставки и оплаты в Texnobar. Доставка по Минску — в день заказа. Доставка по Беларуси — 1–3 дня. Оплата картой, наличными или в рассрочку. Бесплатно от 1000 BYN.',
+  alternates: {
+    canonical: `${siteUrl}/payment_delivery`,
+  },
+  openGraph: {
+    title: 'Оплата и доставка — Texnobar',
+    description:
+      'Доставка по Минску в день заказа. Оплата картой, наличными или в рассрочку.',
+    url: `${siteUrl}/payment_delivery`,
+    type: 'website',
+  },
+};
 
 export default function PaymentDelivery() {
 	return (

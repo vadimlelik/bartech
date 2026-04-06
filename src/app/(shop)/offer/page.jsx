@@ -1,3 +1,15 @@
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Публичная оферта — Texnobar',
+  description:
+    'Публичная оферта интернет-магазина Texnobar. Условия договора купли-продажи товаров в рассрочку.',
+  alternates: {
+    canonical: `${siteUrl}/offer`,
+  },
+  robots: { index: false, follow: false },
+};
+
 export default function Offer() {
   return (
     <div className="container mx-auto px-4 py-8">

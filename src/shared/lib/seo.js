@@ -10,7 +10,23 @@ export const SEO_INSTALLMENT_PHRASES = [
   'покупка в рассрочку',
   'рассрочка без переплат',
   'техника в рассрочку минск',
+  'рассрочка минск',
+  'купить телефон в рассрочку минск',
+  'купить ноутбук в рассрочку минск',
+  'рассрочка онлайн минск',
+  'интернет-магазин рассрочка беларусь',
+  'купить технику в рассрочку беларусь',
 ];
+
+const BUSINESS_ADDRESS = {
+  streetAddress: 'ул. Сурганова, д. 43, пом. 804',
+  addressLocality: 'Минск',
+  postalCode: '220013',
+  addressCountry: 'BY',
+};
+
+const BUSINESS_PHONE = '+375257766462';
+const BUSINESS_EMAIL = 'baratexby@gmail.com';
 
 /**
  * Generate Organization structured data
@@ -19,19 +35,83 @@ export function getOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Technobar',
+    name: 'Texnobar',
+    legalName: 'ООО «Баратех»',
     url: siteUrl,
-    logo: `${siteUrl}/logo_techno_bar.svg`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/logo_techno_bar.svg`,
+    },
     description:
-      'Интернет-магазин техники в Минске. Купить в рассрочку телефоны, ноутбуки и бытовую технику без переплат.',
+      'Интернет-магазин техники в Минске. Купить в рассрочку телефоны, ноутбуки и бытовую технику без переплат с доставкой по Беларуси.',
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'BY',
-      addressLocality: 'Минск',
+      ...BUSINESS_ADDRESS,
     },
-    sameAs: [
-      // Добавьте ссылки на социальные сети при наличии
+    telephone: BUSINESS_PHONE,
+    email: BUSINESS_EMAIL,
+    sameAs: [],
+  };
+}
+
+/**
+ * Generate LocalBusiness structured data — ключевой элемент для локального SEO по Минску.
+ */
+export function getLocalBusinessSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'ElectronicsStore'],
+    name: 'Texnobar',
+    legalName: 'ООО «Баратех»',
+    url: siteUrl,
+    logo: `${siteUrl}/logo_techno_bar.svg`,
+    image: `${siteUrl}/logo_techno_bar.svg`,
+    description:
+      'Интернет-магазин техники в Минске. Купить в рассрочку телефоны, ноутбуки, телевизоры и бытовую технику без переплат. Доставка по Минску и всей Беларуси.',
+    address: {
+      '@type': 'PostalAddress',
+      ...BUSINESS_ADDRESS,
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 53.9085,
+      longitude: 27.5685,
+    },
+    telephone: BUSINESS_PHONE,
+    email: BUSINESS_EMAIL,
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '21:00',
+      },
     ],
+    priceRange: '$$',
+    currenciesAccepted: 'BYN',
+    paymentAccepted: 'Наличные, Банковская карта, Рассрочка',
+    areaServed: [
+      { '@type': 'City', name: 'Минск' },
+      { '@type': 'Country', name: 'Беларусь' },
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Каталог техники в рассрочку',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Смартфоны в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Ноутбуки в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Телевизоры в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Бытовая техника в рассрочку' } },
+      ],
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '10',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    sameAs: [],
   };
 }
 
@@ -194,7 +274,7 @@ export function getInstallmentFaqSchema() {
         name: 'Как купить в рассрочку в Texnobar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Выберите товар на сайте и оформите заказ с оплатой в рассрочку. Условия: срок до 12 месяцев, первоначальный взнос от 10%, без переплат и скрытых комиссий. Подробности — на странице «Рассрочка» или у менеджера.',
+          text: 'Выберите товар на сайте и оформите заказ с оплатой в рассрочку. Условия: срок до 12 месяцев, первоначальный взнос от 10%, без переплат и скрытых комиссий. Подробности — на странице «Рассрочка» или у менеджера по телефону +375 (25) 776-64-62.',
         },
       },
       {
@@ -213,6 +293,65 @@ export function getInstallmentFaqSchema() {
           text: 'Мы предлагаем программы рассрочки без переплат и скрытых комиссий в рамках действующих акций и партнёрских программ.',
         },
       },
+      {
+        '@type': 'Question',
+        name: 'Какой минимальный первоначальный взнос при рассрочке?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Минимальный первоначальный взнос составляет от 10% от стоимости товара. В рамках специальных акций возможна рассрочка без первоначального взноса.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Можно ли купить в рассрочку онлайн с доставкой по Минску?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Да, вы можете оформить рассрочку онлайн на сайте technobar.by. Доставка по Минску осуществляется в день заказа или на следующий день. Все документы оформляются курьером на месте.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Какие товары можно купить в рассрочку?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'В Texnobar в рассрочку можно купить смартфоны, ноутбуки, планшеты, телевизоры, бытовую технику, самокаты, велосипеды и другую электронику. Весь каталог доступен на сайте.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Нужна ли справка о доходах для оформления рассрочки?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Условия оформления рассрочки зависят от партнёрского банка. В большинстве случаев достаточно паспорта гражданина Республики Беларусь. Уточните детали у наших менеджеров.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Осуществляется ли доставка по всей Беларуси?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Да, мы осуществляем доставку по всей территории Беларуси. Доставка по Минску — 10 BYN (бесплатно при заказе от 1000 BYN), по Беларуси — 15 BYN, срок 1-3 рабочих дня.',
+        },
+      },
     ],
+  };
+}
+
+/**
+ * Generate AggregateRating structured data for reviews page.
+ */
+export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10') {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'Texnobar',
+    url: siteUrl,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue,
+      reviewCount,
+      bestRating: '5',
+      worstRating: '1',
+    },
   };
 }

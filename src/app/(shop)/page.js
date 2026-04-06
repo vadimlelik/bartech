@@ -7,6 +7,7 @@ import Features from '@/widgets/features-showcase/ui/Features';
 import {
   getOrganizationSchema,
   getWebSiteSchema,
+  getLocalBusinessSchema,
   SEO_INSTALLMENT_PHRASES,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
@@ -64,6 +65,7 @@ export default async function Home() {
 
   const organizationSchema = getOrganizationSchema();
   const websiteSchema = getWebSiteSchema();
+  const localBusinessSchema = getLocalBusinessSchema();
 
   return (
     <>
@@ -74,6 +76,10 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
       <Box component="main" sx={{ flex: 1 }}>
         <CategoryCarousel />

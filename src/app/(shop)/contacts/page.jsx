@@ -5,10 +5,33 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import BusinessIcon from '@mui/icons-material/Business';
+import { getLocalBusinessSchema } from '@/shared/lib/seo';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Контакты — Texnobar | Интернет-магазин техники в Минске',
+  description:
+    'Контакты интернет-магазина Texnobar в Минске. Адрес: ул. Сурганова, 43. Телефон: +375 (25) 776-64-62. Режим работы: Пн–Пт 9:00–21:00. ООО «Баратех», УНП 193796252.',
+  alternates: {
+    canonical: `${siteUrl}/contacts`,
+  },
+  openGraph: {
+    title: 'Контакты — Texnobar | Интернет-магазин техники в Минске',
+    description:
+      'Адрес: г. Минск, ул. Сурганова, 43. Телефон: +375 (25) 776-64-62. Работаем Пн–Пт 9:00–21:00.',
+    url: `${siteUrl}/contacts`,
+    type: 'website',
+  },
+};
 
 export default function Contacts() {
+  const localBusinessSchema = getLocalBusinessSchema();
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       <Container maxWidth="lg" sx={{ py: 6 }}>
         <Paper elevation={0} sx={{ p: { xs: 2, md: 4 } }}>
           <Typography
