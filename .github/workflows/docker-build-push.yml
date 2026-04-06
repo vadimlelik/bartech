@@ -180,6 +180,7 @@ jobs:
               echo "SKIP: not a git clone — update compose files on the server manually if deploy errors persist."
               exit 0
             fi
+            git stash --include-untracked || true
             git fetch origin
             if git rev-parse --verify "origin/${SYNC_REF}" >/dev/null 2>&1; then
               git checkout -B "$SYNC_REF" "origin/${SYNC_REF}"
