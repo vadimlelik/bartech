@@ -24,6 +24,7 @@ services:
       - MINIO_BUCKET=images
       # Prisma: явный DATABASE_URL из .env или дефолтный для локального postgres (без вложенных ${} — совместимо с docker-compose v1)
       - DATABASE_URL=${DATABASE_URL:-postgresql://bartech:bartech_password@postgres:5432/bartech?schema=public}
+      - BITRIX24_WEBHOOK_URL=${BITRIX24_WEBHOOK_URL}
     networks:
       - app-network
     healthcheck:
