@@ -25,7 +25,7 @@ model Product {
   category    String?
   categoryId  String?   @map("category_id")
   categoryRel Category? @relation(fields: [categoryId], references: [id])
-  price       Float     @default(0)
+  price       Int       @default(0)
   image       String?
   images      String[]  @default([])
   description String?
