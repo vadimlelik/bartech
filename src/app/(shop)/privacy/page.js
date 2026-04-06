@@ -1,4 +1,15 @@
 import { Container, Typography, Box, Paper } from '@mui/material';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Политика конфиденциальности — Texnobar',
+  description:
+    'Политика конфиденциальности интернет-магазина Texnobar. Условия обработки персональных данных покупателей.',
+  alternates: {
+    canonical: `${siteUrl}/privacy`,
+  },
+  robots: { index: false, follow: false },
+};
 
 export default function Privacy() {
 	return (

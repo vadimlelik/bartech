@@ -1,5 +1,15 @@
 import React from 'react';
 import styles from './guaranteePage.module.css';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Возврат товара — Texnobar | Условия возврата и обмена',
+  description:
+    'Условия возврата и обмена товара в интернет-магазине Texnobar. Возврат в течение 14 дней, обмен и гарантийное обслуживание.',
+  alternates: {
+    canonical: `${siteUrl}/guarantee`,
+  },
+};
 
 const ReturnOfGoods = () => {
   return (

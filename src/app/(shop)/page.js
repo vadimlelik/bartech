@@ -86,7 +86,33 @@ export default async function Home() {
         <Features />
         <Container sx={{ py: 4 }}>
           <Typography
-            variant="h4"
+            variant="h1"
+            component="h1"
+            gutterBottom
+            sx={{
+              textAlign: 'center',
+              mb: 1,
+              fontWeight: 'bold',
+              fontSize: { xs: '1.75rem', md: '2.25rem' },
+            }}
+          >
+            Техника в рассрочку в Минске — без переплат
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            component="p"
+            sx={{
+              textAlign: 'center',
+              mb: 4,
+              color: 'text.secondary',
+              maxWidth: 600,
+              mx: 'auto',
+            }}
+          >
+            Смартфоны, ноутбуки, телевизоры и электроника с доставкой по Минску и Беларуси
+          </Typography>
+          <Typography
+            variant="h5"
             component="h2"
             gutterBottom
             sx={{
