@@ -36,7 +36,12 @@ export async function POST(req) {
 
   const fields = sanitizeFields(body.FIELDS);
 
-  await axios.post(webhookUrl, { FIELDS: fields });
+  try {
+    await axios.post(webhookUrl, { FIELDS: fields });
+  } catch (err) {
+    console.error('Bitrix24 webhook error:', err?.response?.data ?? err.message);
+    return NextResponse.json({ success: false, reason: 'bitrix_error' }, { status: 502 });
+  }
 
   return NextResponse.json({ success: true });
 }
