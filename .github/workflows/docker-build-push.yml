@@ -121,6 +121,7 @@ jobs:
           MINIO_PORT: ${{ secrets.MINIO_PORT }}
           MINIO_USE_SSL: ${{ secrets.MINIO_USE_SSL }}
           MINIO_BUCKET: ${{ secrets.MINIO_BUCKET }}
+          BITRIX24_WEBHOOK_URL: ${{ secrets.BITRIX24_WEBHOOK_URL }}
         run: |
           set -euo pipefail
           python3 << 'PY'
@@ -147,11 +148,12 @@ jobs:
               "MINIO_PORT": v("MINIO_PORT", "9000"),
               "MINIO_USE_SSL": v("MINIO_USE_SSL", "false"),
               "MINIO_BUCKET": v("MINIO_BUCKET", "images"),
+              "BITRIX24_WEBHOOK_URL": v("BITRIX24_WEBHOOK_URL"),
           }
           required = (
               "DOCKERHUB_USERNAME", "AUTH_SECRET", "DATABASE_URL",
               "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_DB",
-              "MINIO_ACCESS_KEY", "MINIO_SECRET_KEY",
+              "MINIO_ACCESS_KEY", "MINIO_SECRET_KEY", "BITRIX24_WEBHOOK_URL",
           )
           miss = [k for k in required if not m.get(k)]
           if miss:

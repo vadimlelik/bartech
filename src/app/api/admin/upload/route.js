@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import { uploadImage } from '@/shared/lib/storage';
+import { requireAdmin } from '@/shared/lib/auth-helpers';
 
 export async function POST(request) {
   try {
+    await requireAdmin();
+
     const formData = await request.formData();
     const file = formData.get('file');
 
@@ -39,21 +42,21 @@ export async function POST(request) {
       fileName: uploadResult.fileName,
     });
   } catch (error) {
+    if (error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    if (error.message?.startsWith('Forbidden')) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     console.error('Error uploading file:', {
       message: error.message,
       stack: error.stack,
       name: error.name,
     });
-    
-    let errorMessage = 'Failed to upload file';
-    if (error.message) {
-      errorMessage = error.message;
-    } else if (error.error) {
-      errorMessage = error.error;
-    }
-    
+
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to upload file' },
       { status: 500 }
     );
   }

@@ -82,7 +82,7 @@ export async function GET(request) {
       if (folder) {
         allFiles = await getAllFilesFromPrefix(folder);
       } else {
-        const prefixes = ['', 'products', 'categories'];
+        const prefixes = ['', 'products', 'categories', 'landings'];
         for (const prefix of prefixes) {
           const files = await getAllFilesFromPrefix(prefix);
           allFiles = [...allFiles, ...files];

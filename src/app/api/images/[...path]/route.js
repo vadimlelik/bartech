@@ -23,6 +23,10 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Invalid image path' }, { status: 400 });
     }
 
+    if (objectKey.includes('..') || objectKey.startsWith('/') || objectKey.includes('\0')) {
+      return NextResponse.json({ error: 'Invalid image path' }, { status: 400 });
+    }
+
     const client = getMinioClient();
     const bucket = getMinioBucket();
 

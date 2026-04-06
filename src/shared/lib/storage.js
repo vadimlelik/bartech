@@ -3,13 +3,22 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import { getMinioClient, getMinioBucket } from './minio';
 
+const ALLOWED_FOLDERS = ['products', 'categories', 'landings', 'uploads'];
+
+function sanitizeFolder(folder) {
+  if (!folder || typeof folder !== 'string') return 'products';
+  const clean = folder.replace(/[^a-z0-9_-]/gi, '').toLowerCase();
+  return ALLOWED_FOLDERS.includes(clean) ? clean : 'products';
+}
+
 function generateFileName(originalName) {
-  const fileExt = originalName.split('.').pop();
+  const fileExt = originalName.split('.').pop()?.replace(/[^a-z0-9]/gi, '') || 'bin';
   const uuid = randomUUID();
   return `${uuid}.${fileExt}`;
 }
 
 export async function uploadToMinioStorage(file, folder = 'products') {
+  folder = sanitizeFolder(folder);
   const client = getMinioClient();
   const bucket = getMinioBucket();
 
@@ -49,6 +58,7 @@ export async function uploadToMinioStorage(file, folder = 'products') {
 }
 
 export async function uploadToLocalStorage(file, folder = 'products') {
+  folder = sanitizeFolder(folder);
   try {
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder);
     if (!fs.existsSync(uploadDir)) {

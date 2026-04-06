@@ -1099,10 +1099,10 @@ function AdminPageContent() {
                       </Button>
                       <Button
                         variant="outlined"
-                        onClick={() => setImageSelectorOpen(true)}
+                        onClick={() => { setImageSelectorField(null); setImageSelectorOpen(true); }}
                         sx={{ flex: 1, minWidth: '200px' }}
                       >
-                        Выбрать из базы данных
+                        Выбрать из MinIO
                       </Button>
                     </Box>
                     <TextField
@@ -1283,7 +1283,7 @@ function AdminPageContent() {
                           setImageSelectorOpen(true);
                         }}
                       >
-                        Выбрать
+                        Выбрать из MinIO
                       </Button>
                     </Box>
                     <TextField
@@ -1361,7 +1361,7 @@ function AdminPageContent() {
                           setImageSelectorOpen(true);
                         }}
                       >
-                        Выбрать
+                        Выбрать из MinIO
                       </Button>
                     </Box>
                     <TextField
@@ -1599,7 +1599,7 @@ function AdminPageContent() {
                                 setImageSelectorOpen(true);
                               }}
                             >
-                              Выбрать из базы
+                              Выбрать из MinIO
                             </Button>
                           </Box>
                           <TextField
