@@ -17,8 +17,12 @@ import {
   Select,
   MenuItem,
   Paper,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import AdminGuard from '@/features/admin-guard/ui/AdminGuard';
 import ImageSelector from '@/features/admin-images/ui/ImageSelector';
 import AdminThumbImage from '@/features/admin-images/ui/AdminThumbImage';
@@ -32,13 +36,14 @@ function EditProductPageContent() {
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [imageSelectorOpen, setImageSelectorOpen] = useState(false);
+  const [imageSelectorFor, setImageSelectorFor] = useState('main'); // 'main' | 'gallery'
   const [formData, setFormData] = useState({
     name: '',
     category: '',
     categoryId: '',
     price: '',
     image: '',
-    images: '',
+    images: [],
     description: '',
     specifications: {
       brand: '',
@@ -82,7 +87,7 @@ function EditProductPageContent() {
             categoryId: product.category_id || product.categoryId || '',
             price: product.price || '',
             image: product.image || '',
-            images: Array.isArray(product.images) ? product.images.join(', ') : '',
+            images: Array.isArray(product.images) ? product.images : [],
             description: product.description || '',
             specifications: {
               brand: product.specifications?.brand || '',
@@ -180,9 +185,7 @@ function EditProductPageContent() {
         category_id: formData.categoryId,
         price: parseFloat(formData.price) || 0,
         image: formData.image,
-        images: formData.images
-          ? formData.images.split(',').map((img) => img.trim()).filter(Boolean)
-          : [],
+        images: Array.isArray(formData.images) ? formData.images : [],
         description: formData.description,
         specifications: formData.specifications || {},
       };
@@ -312,20 +315,23 @@ function EditProductPageContent() {
               rows={3}
             />
           </Grid>
+          {/* Main image */}
           <Grid item xs={12}>
+            <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
+              Основное изображение
+            </Typography>
             <TextField
               fullWidth
-              label="Основное изображение (путь)"
+              label="URL основного изображения"
               name="image"
               value={formData.image || ''}
               onChange={handleInputChange}
-              helperText="Или загрузите файл ниже, или выберите из базы данных"
+              helperText="Введите URL вручную, загрузите файл или выберите из MinIO"
+              sx={{ mb: 1.5 }}
             />
-          </Grid>
-          <Grid item xs={12}>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <Button variant="outlined" component="label">
-                Загрузить изображение
+                Загрузить файл
                 <input
                   type="file"
                   hidden
@@ -335,10 +341,21 @@ function EditProductPageContent() {
               </Button>
               <Button
                 variant="outlined"
-                onClick={() => setImageSelectorOpen(true)}
+                startIcon={<AddPhotoAlternateIcon />}
+                onClick={() => { setImageSelectorFor('main'); setImageSelectorOpen(true); }}
               >
-                Выбрать из базы данных
+                Выбрать из MinIO
               </Button>
+              {formData.image && (
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={() => setFormData((prev) => ({ ...prev, image: '' }))}
+                >
+                  Удалить
+                </Button>
+              )}
             </Box>
             {formData.image && (
               <Box sx={{ mt: 2 }}>
@@ -352,15 +369,94 @@ function EditProductPageContent() {
               </Box>
             )}
           </Grid>
+
+          {/* Gallery images */}
           <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Дополнительные изображения (через запятую)"
-              name="images"
-              value={formData.images || ''}
-              onChange={handleInputChange}
-              helperText="Разделяйте пути запятыми"
-            />
+            <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
+              Галерея изображений
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<AddPhotoAlternateIcon />}
+              >
+                Загрузить в галерею
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                      const fd = new FormData();
+                      fd.append('file', file);
+                      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+                      const data = await res.json();
+                      if (!res.ok) { showSnackbar(data.error || 'Ошибка загрузки', 'error'); return; }
+                      if (data.path) {
+                        setFormData((prev) => ({ ...prev, images: [...(prev.images || []), data.path] }));
+                        showSnackbar('Изображение добавлено в галерею', 'success');
+                      }
+                    } catch (err) {
+                      showSnackbar(`Ошибка: ${err.message}`, 'error');
+                    }
+                  }}
+                />
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<AddPhotoAlternateIcon />}
+                onClick={() => { setImageSelectorFor('gallery'); setImageSelectorOpen(true); }}
+              >
+                Добавить из MinIO
+              </Button>
+            </Box>
+
+            {Array.isArray(formData.images) && formData.images.length > 0 ? (
+              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+                {formData.images.map((imgUrl, idx) => (
+                  <Box key={idx} sx={{ position: 'relative', display: 'inline-block' }}>
+                    <AdminThumbImage
+                      src={imgUrl}
+                      alt={`Gallery ${idx + 1}`}
+                      width={100}
+                      height={100}
+                      style={{ objectFit: 'cover', borderRadius: 4, display: 'block' }}
+                    />
+                    <Tooltip title="Удалить из галереи">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            images: prev.images.filter((_, i) => i !== idx),
+                          }))
+                        }
+                        sx={{
+                          position: 'absolute',
+                          top: -8,
+                          right: -8,
+                          bgcolor: 'background.paper',
+                          border: '1px solid',
+                          borderColor: 'divider',
+                          p: 0.25,
+                          '&:hover': { bgcolor: 'error.light', color: 'white' },
+                        }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                ))}
+              </Box>
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                Нет изображений в галерее
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
@@ -505,9 +601,17 @@ function EditProductPageContent() {
         open={imageSelectorOpen}
         onClose={() => setImageSelectorOpen(false)}
         onSelect={(imageUrl) => {
-          setFormData((prev) => ({ ...prev, image: imageUrl }));
+          if (imageSelectorFor === 'gallery') {
+            setFormData((prev) => ({
+              ...prev,
+              images: [...(prev.images || []), imageUrl],
+            }));
+            setImageSelectorOpen(false);
+          } else {
+            setFormData((prev) => ({ ...prev, image: imageUrl }));
+          }
         }}
-        currentImage={formData.image}
+        currentImage={imageSelectorFor === 'main' ? formData.image : ''}
       />
 
       <Snackbar
