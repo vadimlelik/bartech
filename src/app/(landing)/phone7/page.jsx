@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
-import Loading from '@/app/loading';
 import Quiz from '@/features/quiz/ui/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -49,10 +48,40 @@ const advantages = [
   },
 ];
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Technobar',
+  url: 'https://technobar.by',
+  logo: 'https://technobar.by/favicon.ico',
+};
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'Смартфоны в рассрочку до 5 лет',
+  image: ['https://technobar.by/images/mobile/mobile_1.jpeg'],
+  description:
+    'Новый смартфон в рассрочку до 5 лет без справок о доходах и первого взноса. Более 1000 моделей в наличии, второй телефон в подарок.',
+  brand: {
+    '@type': 'Brand',
+    name: 'Technobar',
+  },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'BYN',
+    availability: 'https://schema.org/InStock',
+    url: 'https://technobar.by/phone7',
+    seller: {
+      '@type': 'Organization',
+      name: 'Technobar',
+    },
+  },
+};
+
 export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -62,10 +91,6 @@ export default function Phone4() {
   const utm_campaign = params.get('utm_campaign');
   const ad = params.get('ad');
   const ttclid = params.get('ttclid');
-
-  useEffect(() => {
-    setNow(Date.now());
-  }, []);
 
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
@@ -164,16 +189,23 @@ export default function Phone4() {
   useEffect(() => {
     loadTikTokPixels([PIXEL.mobile_1]);
   }, []);
-  if (!now) return <Loading />;
 
   return (
     <div className={styles.container}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <h2 className={styles.heroTitle}>
+          <h1 className={styles.heroTitle}>
             Новый смартфон в Рассрочку до 5 лет <br />
             Второй телефон в подарок
-          </h2>
+          </h1>
 
           <ul className={styles.benefits}>
             <li> Рассрочка от 6 месяцев</li>
