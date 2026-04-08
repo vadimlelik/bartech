@@ -80,9 +80,6 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/manifest.json',
-  alternates: {
-    canonical: siteUrl,
-  },
   other: {
     'geo.region': 'BY-HM',
     'geo.placename': 'Минск',

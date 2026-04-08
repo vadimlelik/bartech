@@ -1,5 +1,15 @@
 import React from 'react';
 import styles from './poPage.module.css';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Публичная оферта | Texnobar',
+  description:
+    'Договор публичной оферты интернет-магазина Texnobar: условия покупки, оплаты, доставки и обработки персональных данных.',
+  alternates: {
+    canonical: `${siteUrl}/po`,
+  },
+};
 
 const PO = () => {
   return (

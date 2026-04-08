@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
-import Loading from '@/app/loading';
 import Quiz from '@/features/quiz/ui/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -55,7 +54,6 @@ const advantages = [
 export default function Phone4() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -67,7 +65,6 @@ export default function Phone4() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
 
   const handleQuizSubmit = async (data) => {
@@ -168,8 +165,6 @@ export default function Phone4() {
   useEffect(() => {
     loadTikTokPixels([PIXEL.motoblok1, PIXEL_2.motoblok1, PIXEL_3.motoblock1]);
   }, []);
-  if (!now) return <Loading />;
-
   return (
     <div className={styles.container}>
       <div className={styles.heroSection}>

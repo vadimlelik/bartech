@@ -47,6 +47,48 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.4,
     },
+    {
+      url: `${siteUrl}/offer`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/sales`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/service`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${siteUrl}/guarantee`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${siteUrl}/pk`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/po`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/pass`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.1,
+    },
   ];
 
   // Статические лендинги по категориям товаров
@@ -73,9 +115,12 @@ export default async function sitemap() {
     { slug: 'motoblok', priority: 0.7 },
     { slug: 'motoblok1', priority: 0.65 },
     { slug: 'motoblok2', priority: 0.65 },
-    // Мобильный интернет
-    { slug: 'mobile_1', priority: 0.65 },
-    { slug: 'mobile_2', priority: 0.65 },
+    // Дополнительные лендинги
+    { slug: 'phone7', priority: 0.75 },
+    { slug: '50discount', priority: 0.65 },
+    { slug: '1phonefree', priority: 0.65 },
+    { slug: 'thank-you', priority: 0.3 },
+    { slug: 'test', priority: 0.2 },
   ].map(({ slug, priority }) => ({
     url: `${siteUrl}/${slug}`,
     lastModified: new Date(),

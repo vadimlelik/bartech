@@ -1,9 +1,32 @@
 import style from './sales.module.css';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Акции и специальные предложения | Texnobar',
+  description:
+    'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам. Выгодные предложения и рассрочка без переплат.',
+  alternates: {
+    canonical: `${siteUrl}/sales`,
+  },
+  openGraph: {
+    title: 'Акции и специальные предложения | Texnobar',
+    description:
+      'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам.',
+    url: `${siteUrl}/sales`,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Акции и специальные предложения | Texnobar',
+    description:
+      'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам.',
+  },
+};
 
 const Sales = () => {
   return (
     <div className={style.promo}>
-      <h2 className={style.title}>АКЦИЯ сс 15.02.2026 по 15.05.2026</h2>
+      <h1 className={style.title}>АКЦИЯ сс 15.02.2026 по 15.05.2026</h1>
 
       <div className={style.block}>
         <h3>1. При покупке смартфона</h3>

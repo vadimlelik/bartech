@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
-import Loading from '@/app/loading';
 import Quiz from '@/features/quiz/ui/Quiz';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -69,7 +68,6 @@ const gifts = [
 export default function MotoblocksLandingPage() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -86,7 +84,6 @@ export default function MotoblocksLandingPage() {
   );
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
 
   useEffect(() => {
@@ -180,8 +177,6 @@ export default function MotoblocksLandingPage() {
       type: 'text',
     },
   ];
-
-  if (!now) return <Loading />;
 
   return (
     <div className={styles.page}>

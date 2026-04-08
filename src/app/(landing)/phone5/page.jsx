@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
-import Loading from '@/app/loading';
 import Quiz from '@/features/quiz/ui/Quiz';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
@@ -23,7 +22,6 @@ export default function Phone5() {
   const ad = params.get('ad');
   const ttclid = params.get('ttclid');
 
-  const [now, setNow] = useState(null);
 
   useEffect(() => {
     loadTikTokPixels([PIXEL.phone5, PIXEL_2.phone5, PIXEL_3.phone5]);
@@ -71,10 +69,7 @@ export default function Phone5() {
     },
   ];
   useEffect(() => {
-    setNow(Date.now());
   }, []);
-
-  if (!now) return <Loading />;
 
   return (
     <div className={styles.container}>

@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import { PIXEL, PIXEL_2, PIXEL_3, PIXEL_4 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
 import axios from 'axios';
@@ -55,7 +54,6 @@ const reviews = [
 export default function MotoBlok() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -67,7 +65,6 @@ export default function MotoBlok() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
 
   useEffect(() => {
@@ -158,8 +155,6 @@ export default function MotoBlok() {
       type: 'text',
     },
   ];
-
-  if (!now) return <Loading />;
 
   return (
     <div className={styles.container}>

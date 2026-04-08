@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
 import { loadTikTokPixels } from '@/shared/utils';
-import Loading from '@/app/loading';
 import Button from '@/shared/ui/button/Button';
 import Quiz from '@/features/quiz/ui/Quiz';
 
@@ -47,7 +46,6 @@ const questions = [
 
 export default function DiscountPage() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [now, setNow] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const params = useSearchParams();
   const utm_source = params.get('utm_source');
@@ -94,10 +92,7 @@ export default function DiscountPage() {
   );
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
-  if (!now) return <Loading />;
-
   return (
     <div className={styles.page}>
       <Marquee />

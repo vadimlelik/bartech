@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/features/quiz/ui/Quiz';
@@ -19,7 +18,6 @@ import Script from 'next/script';
 export default function Laptop() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -31,7 +29,6 @@ export default function Laptop() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
 
   const handleQuizSubmit = async (data) => {
@@ -134,8 +131,6 @@ export default function Laptop() {
       type: 'text',
     },
   ];
-
-  if (!now) return <Loading />;
 
   return (
     <div>

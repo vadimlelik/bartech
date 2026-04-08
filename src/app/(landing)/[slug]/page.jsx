@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 // Кэш данных лендингов (снижает нагрузку на БД).
 // Обновление данных делаем через on-demand revalidateTag('landings') из админки.
@@ -27,21 +28,71 @@ export async function generateMetadata({ params }) {
     const landing = await getCachedLandingBySlug(slug);
 
     if (!landing) {
+      const notFoundTitle = 'Лендинг не найден';
+      const notFoundDescription = 'Запрошенная страница не найдена';
       return {
-        title: 'Лендинг не найден',
-        description: 'Лендинг не найден',
+        title: notFoundTitle,
+        description: notFoundDescription,
+        alternates: {
+          canonical: `${siteUrl}/${slug}`,
+        },
+        openGraph: {
+          title: notFoundTitle,
+          description: notFoundDescription,
+          url: `${siteUrl}/${slug}`,
+          type: 'website',
+        },
+        twitter: {
+          card: 'summary',
+          title: notFoundTitle,
+          description: notFoundDescription,
+        },
       };
     }
 
+    const title = landing.title || 'Лендинг';
+    const description = landing.description || landing.title || 'Лендинг';
+    const url = `${siteUrl}/${slug}`;
+
     return {
-      title: landing.title || 'Лендинг',
-      description: landing.description || landing.title || 'Лендинг',
+      title,
+      description,
+      alternates: {
+        canonical: url,
+      },
+      openGraph: {
+        title,
+        description,
+        url,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+      },
     };
   } catch (error) {
     console.error('Error generating metadata:', error);
+    const fallbackTitle = 'Лендинг';
+    const fallbackDescription = 'Лендинг';
     return {
-      title: 'Лендинг',
-      description: 'Лендинг',
+      title: fallbackTitle,
+      description: fallbackDescription,
+      alternates: {
+        canonical: `${siteUrl}/${slug}`,
+      },
+      openGraph: {
+        title: fallbackTitle,
+        description: fallbackDescription,
+        url: `${siteUrl}/${slug}`,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary',
+        title: fallbackTitle,
+        description: fallbackDescription,
+      },
     };
   }
 }

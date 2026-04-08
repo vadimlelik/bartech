@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import {
   PIXEL,
   PIXEL_2,
@@ -64,7 +63,6 @@ const reviews = [
 export default function Phone6() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -76,7 +74,6 @@ export default function Phone6() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    setNow(Date.now());
   }, []);
 
   useEffect(() => {
@@ -177,8 +174,6 @@ export default function Phone6() {
       type: 'text',
     },
   ];
-
-  if (!now) return <Loading />;
 
   return (
     <div className={styles.container}>
