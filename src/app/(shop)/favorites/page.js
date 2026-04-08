@@ -104,7 +104,7 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <Container sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4 }}>
           Избранное
         </Typography>
         <Grid container spacing={3}>
@@ -150,7 +150,7 @@ export default function FavoritesPage() {
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom>
         Избранное ({productsCount})
       </Typography>
       <Grid container spacing={3}>

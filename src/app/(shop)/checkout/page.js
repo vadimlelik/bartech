@@ -362,7 +362,7 @@ export default function CheckoutPage() {
   return (
     <>
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
           Оформление заказа
         </Typography>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>

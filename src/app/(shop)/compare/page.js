@@ -23,7 +23,7 @@ export default function ComparePage() {
   if (compareItems.length === 0) {
     return (
       <Container sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" component="h1" gutterBottom>
           Сравнение товаров
         </Typography>
         <Typography>
@@ -51,7 +51,7 @@ export default function ComparePage() {
   return (
     <>
       <Container sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" component="h1" gutterBottom>
           Сравнение товаров
         </Typography>
 
