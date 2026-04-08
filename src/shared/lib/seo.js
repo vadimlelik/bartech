@@ -98,10 +98,10 @@ export function getLocalBusinessSchema() {
       '@type': 'OfferCatalog',
       name: 'Каталог техники в рассрочку',
       itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Смартфоны в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Ноутбуки в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Телевизоры в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Бытовая техника в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Смартфоны в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ноутбуки в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Телевизоры в рассрочку' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Бытовая техника в рассрочку' } },
       ],
     },
     aggregateRating: {
