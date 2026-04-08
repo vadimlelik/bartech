@@ -255,6 +255,15 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
             image: product.image?.startsWith('http')
               ? product.image
               : `${siteUrl}${product.image}`,
+            offers: {
+              '@type': 'Offer',
+              url: `${siteUrl}/products/${product.id}`,
+              priceCurrency: 'BYN',
+              price: product.price ?? 0,
+              availability: product.stock > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+            },
           },
         })) || [],
     },
