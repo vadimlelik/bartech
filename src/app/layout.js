@@ -88,7 +88,7 @@ export const metadata = {
   },
   verification: {
     // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
+    yandex: '93234b36ea40cbc7',
   },
 };
 
