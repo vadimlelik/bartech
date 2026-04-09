@@ -69,20 +69,23 @@ export async function generateMetadata({ params }) {
       imageUrl = `${siteUrl}/${productImage}`;
     }
 
+    const catLabel = (product.category || product.categoryId || '').toString();
     const description =
       product.description ||
-      `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат. ${product.specifications?.brand ? `Бренд: ${product.specifications.brand}.` : ''} Цена: ${product.price} BYN.`;
+      `Купить ${product.name} в рассрочку в Минске — доставка по Беларуси. ${product.specifications?.brand ? `Бренд ${product.specifications.brand}. ` : ''}Цена ${product.price} BYN. Интернет-магазин Texnobar: рассрочка без переплат.${catLabel ? ` Категория: ${catLabel}.` : ''}`;
 
     return {
       title: `${product.name} — купить в рассрочку в Минске | Texnobar`,
       description,
       keywords: [
         product.name,
+        `купить ${product.name.toLowerCase()} в рассрочку`,
         product.specifications?.brand,
+        catLabel ? `купить ${catLabel.toLowerCase()} в рассрочку минск` : null,
         'купить в минске',
         ...SEO_INSTALLMENT_PHRASES,
         'техника',
-        product.category || product.categoryId,
+        catLabel,
       ].filter(Boolean),
       openGraph: {
         title: `${product.name} — купить в рассрочку | Texnobar`,

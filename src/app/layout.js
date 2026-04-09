@@ -4,7 +4,7 @@ import StyledComponentsRegistry from './registry';
 import ClientLayout from '@/widgets/client-shell/ui/ClientLayout';
 import Providers from '@/widgets/app-providers/ui/Providers';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
-import { SEO_INSTALLMENT_PHRASES } from '@/shared/lib/seo';
+import { COMMERCIAL_SEO_KEYWORDS } from '@/shared/lib/seo';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -16,24 +16,17 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default:
-      'Купить в рассрочку в Минске — Texnobar | Телефоны и техника без переплат',
+      'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     template: '%s | Texnobar',
   },
   description:
-    'Купить в рассрочку телефоны, ноутбуки, телевизоры и технику в Минске с доставкой. Интернет-магазин Texnobar: рассрочка без переплат, широкий выбор электроники, доставка по Беларуси.',
+    'Купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — Texnobar (technobar.by). Рассрочка без переплат, доставка по Беларуси, каталог с ценами.',
   keywords: [
-    ...SEO_INSTALLMENT_PHRASES,
-    'купить технику в минске',
-    'купить электронику в минске',
-    'интернет-магазин техники минск',
-    'телефоны в рассрочку',
-    'ноутбуки в рассрочку',
-    'телевизоры в рассрочку',
-    'смартфоны минск',
-    'доставка техники минск',
+    ...COMMERCIAL_SEO_KEYWORDS,
     'texnobar',
     'technobar',
     'баратех',
+    'technobar.by',
   ],
   authors: [{ name: 'Texnobar' }],
   creator: 'Texnobar',
@@ -55,9 +48,9 @@ export const metadata = {
     url: siteUrl,
     siteName: 'Texnobar',
     title:
-      'Купить в рассрочку в Минске — Texnobar | Телефоны и техника без переплат',
+      'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
-      'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Доставка по Беларуси, рассрочка без переплат.',
+      'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
     images: [
       {
         url: `${siteUrl}/logo_techno_bar.svg`,
@@ -70,9 +63,9 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title:
-      'Купить в рассрочку в Минске — Texnobar | Телефоны и техника без переплат',
+      'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
-      'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Доставка по Беларуси, рассрочка без переплат.',
+      'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
     images: [`${siteUrl}/logo_techno_bar.svg`],
   },
   icons: {

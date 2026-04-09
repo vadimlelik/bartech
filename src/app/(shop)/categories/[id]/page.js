@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import {
   getCollectionPageSchema,
   getBreadcrumbSchema,
-  SEO_INSTALLMENT_PHRASES,
+  getCategorySeoCopy,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
@@ -77,22 +77,15 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const description = `Купить ${category.name.toLowerCase()} в Минске с доставкой. Купить в рассрочку — без переплат. Каталог ${category.name} в Texnobar.`;
+    const seo = getCategorySeoCopy(category);
 
     return {
-      title: `${category.name} — купить в рассрочку в Минске | Texnobar`,
-      description,
-      keywords: [
-        category.name,
-        `купить ${category.name.toLowerCase()} в минске`,
-        ...SEO_INSTALLMENT_PHRASES,
-        'техника',
-        'электроника',
-        'интернет-магазин',
-      ],
+      title: seo.title,
+      description: seo.description,
+      keywords: seo.keywords,
       openGraph: {
-        title: `${category.name} — купить в рассрочку | Texnobar`,
-        description,
+        title: seo.title.replace(' | Texnobar', ''),
+        description: seo.description,
         type: 'website',
         url: `${siteUrl}/categories/${id}`,
         images: [
@@ -106,8 +99,8 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${category.name} — купить в рассрочку | Texnobar`,
-        description,
+        title: seo.title.replace(' | Texnobar', ''),
+        description: seo.description,
         images: [`${siteUrl}/logo_techno_bar.svg`],
       },
       alternates: {
@@ -139,6 +132,8 @@ export default async function CategoryPage({ params }) {
       seoProductsResult?.products || [],
       seoProductsResult?.pagination?.total ?? 0,
     );
+
+    const categorySeo = getCategorySeoCopy(category);
 
     // Breadcrumbs для категории
     const breadcrumbs = [
@@ -175,7 +170,15 @@ export default async function CategoryPage({ params }) {
           <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
             <BackButton />
             <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 2 }}>
-              {category.name}
+              {category.name} — купить в рассрочку в Минске
+            </Typography>
+            <Typography
+              variant="body1"
+              component="p"
+              color="text.secondary"
+              sx={{ mb: 3, maxWidth: 900 }}
+            >
+              {categorySeo.introParagraph}
             </Typography>
             <ProductList categoryId={category.id} />
           </Container>

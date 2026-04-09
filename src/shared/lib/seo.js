@@ -18,6 +18,54 @@ export const SEO_INSTALLMENT_PHRASES = [
   'купить технику в рассрочку беларусь',
 ];
 
+/** Доп. фразы для главной и общих метаданных (коммерческий интент, не только бренд). */
+export const COMMERCIAL_SEO_KEYWORDS = [
+  ...SEO_INSTALLMENT_PHRASES,
+  'купить телефон в рассрочку',
+  'купить смартфон в рассрочку минск',
+  'купить телевизор в минске',
+  'купить телевизор в рассрочку',
+  'купить ноутбук в минске',
+  'купить ноутбук в рассрочку',
+  'купить технику в минске',
+  'магазин техники минск рассрочка',
+];
+
+/**
+ * SEO для страницы категории: заголовок и описание под запросы вида «купить X в рассрочку».
+ * Если в категории заполнено description в БД — оно идёт в приоритете в текст.
+ */
+export function getCategorySeoCopy(category) {
+  const name = (category?.name && String(category.name).trim()) || 'товары';
+  const lower = name.toLowerCase();
+  const extra =
+    category?.description && String(category.description).trim()
+      ? String(category.description).trim()
+      : '';
+
+  const title = `Купить ${lower} в рассрочку в Минске — каталог и цены | Texnobar`;
+
+  const description = extra
+    ? `${extra} Рассрочка без переплат, доставка по Минску и Беларуси — Texnobar (technobar.by).`
+    : `Купить ${lower} в рассрочку в Минске в интернет-магазине Texnobar: рассрочка без переплат, доставка по Беларуси, большой каталог и цены онлайн. Оформление заказа на сайте technobar.by.`;
+
+  const introParagraph = extra
+    ? `${extra} Ниже — актуальные модели и цены; рассрочка и доставка по Минску и Беларуси.`
+    : `В интернет-магазине Texnobar можно купить ${lower} в рассрочку в Минске: выгодные условия, доставка по Беларуси, актуальные цены в каталоге. Подберите модель по характеристикам ниже — рассрочка без переплат в рамках акций.`;
+
+  const keywords = [
+    `купить ${lower} в рассрочку`,
+    `купить ${lower} в минске`,
+    `купить ${lower}`,
+    `${lower} в рассрочку минск`,
+    name,
+    ...SEO_INSTALLMENT_PHRASES.slice(0, 8),
+    'интернет-магазин техники минск',
+  ];
+
+  return { title, description, introParagraph, keywords };
+}
+
 const BUSINESS_ADDRESS = {
   streetAddress: 'ул. Сурганова, д. 43, пом. 804',
   addressLocality: 'Минск',
@@ -257,7 +305,7 @@ export function getWebSiteSchema() {
     '@type': 'WebSite',
     name: 'Texnobar',
     description:
-      'Интернет-магазин техники в Минске — купить в рассрочку телефоны, ноутбуки и электронику.',
+      'Интернет-магазин Texnobar (technobar.by): купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — доставка по Беларуси, каталог с ценами, рассрочка без переплат.',
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',
@@ -278,12 +326,17 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
 
   const count =
     typeof numberOfItems === 'number' ? numberOfItems : products?.length || 0;
+  const seo = getCategorySeoCopy(category);
+  const desc =
+    seo.description.length > 320
+      ? `${seo.description.slice(0, 317)}...`
+      : seo.description;
 
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: category.name,
-    description: `Купить ${category.name.toLowerCase()} в Минске с доставкой. Купить в рассрочку — выгодные условия.`,
+    description: desc,
     url: `${siteUrl}/categories/${category.id}`,
     mainEntity: {
       '@type': 'ItemList',

@@ -8,28 +8,19 @@ import {
   getOrganizationSchema,
   getWebSiteSchema,
   getLocalBusinessSchema,
-  SEO_INSTALLMENT_PHRASES,
+  COMMERCIAL_SEO_KEYWORDS,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
-  title: 'Купить в рассрочку — Texnobar | Техника и телефоны в Минске',
+  title: 'Купить в рассрочку телефон, телевизор, ноутбук — Минск | Texnobar',
   description:
-    'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Интернет-магазин Texnobar: доставка, рассрочка без переплат, большой каталог.',
-  keywords: [
-    ...SEO_INSTALLMENT_PHRASES,
-    'техника',
-    'электроника',
-    'купить технику в минске',
-    'телефоны',
-    'ноутбуки',
-    'телевизоры',
-    'интернет-магазин',
-  ],
+    'Купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — интернет-магазин Texnobar (technobar.by). Рассрочка без переплат, доставка по Беларуси, каталог товаров с ценами.',
+  keywords: COMMERCIAL_SEO_KEYWORDS,
   openGraph: {
-    title: 'Купить в рассрочку — Texnobar | Техника и телефоны в Минске',
+    title: 'Купить в рассрочку телефон, телевизор, ноутбук — Минск | Texnobar',
     description:
-      'Купить в рассрочку телефоны, ноутбуки и технику в Минске. Доставка, рассрочка без переплат.',
+      'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка, рассрочка без переплат, каталог.',
     type: 'website',
     url: siteUrl,
     images: [
@@ -109,7 +100,7 @@ export default async function Home() {
               mx: 'auto',
             }}
           >
-            Смартфоны, ноутбуки, телевизоры и электроника с доставкой по Минску и Беларуси
+            Купить телефон, телевизор или ноутбук в рассрочку — доставка по Минску и Беларуси, каталог товаров с ценами
           </Typography>
           <Typography
             variant="h5"
