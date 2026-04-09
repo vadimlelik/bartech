@@ -220,6 +220,7 @@ export default function Phone4() {
             width={500}
             height={1000}
             priority
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{
               width: '100%',
               height: '100%',
@@ -237,7 +238,7 @@ export default function Phone4() {
             alt="Мотоблоки"
             width={500}
             height={1000}
-            priority
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{
               width: '100%',
               height: '100%',

@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import {
+  memo,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Grid,
@@ -60,6 +67,293 @@ const FILTER_URL_KEYS = [
   'year',
 ];
 
+const hasSpecsToShow = (specifications) => {
+  if (
+    !specifications ||
+    typeof specifications !== 'object' ||
+    Array.isArray(specifications)
+  ) {
+    return false;
+  }
+
+  const fields = [
+    specifications.display,
+    specifications.processor,
+    specifications.ram,
+    specifications.memory,
+    specifications.camera,
+    specifications.battery,
+  ];
+
+  return fields.some((value) => value && String(value).trim() !== '');
+};
+
+const ProductGridCard = memo(function ProductGridCard({
+  product,
+  index,
+  isFavorite,
+  isCompared,
+  onCompare,
+  onFavorite,
+}) {
+  const showSpecs = hasSpecsToShow(product.specifications);
+
+  return (
+    <Grid item xs={12} sm={6} md={4}>
+      <Card
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            zIndex: 2,
+            display: 'flex',
+            gap: 1,
+          }}
+        >
+          <Tooltip title="Добавить в сравнение">
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onCompare(product);
+              }}
+              sx={{
+                bgcolor: 'background.paper',
+                '&:hover': { bgcolor: 'action.hover' },
+              }}
+            >
+              <CompareArrowsIcon color={isCompared ? 'primary' : 'action'} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Добавить в избранное">
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onFavorite(product.id);
+              }}
+              sx={{
+                bgcolor: 'background.paper',
+                '&:hover': { bgcolor: 'action.hover' },
+                zIndex: 2,
+              }}
+            >
+              {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        <Link
+          href={`/products/${product.id}`}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              pt: '100%',
+              bgcolor: 'background.paper',
+            }}
+          >
+            {product.image && (
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                style={{
+                  objectFit: 'contain',
+                  padding: '20px',
+                }}
+                sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                priority={index < 6}
+              />
+            )}
+          </Box>
+
+          <CardContent sx={{ flexGrow: 1, pt: 2 }}>
+            <Box sx={{ mb: 1 }}>
+              {product.isNew && (
+                <Chip
+                  label="Новинка"
+                  color="primary"
+                  size="small"
+                  sx={{ mr: 1, mb: 1 }}
+                />
+              )}
+              {product.discount > 0 && (
+                <Chip
+                  label={`-${product.discount}%`}
+                  color="error"
+                  size="small"
+                  sx={{ mb: 1 }}
+                />
+              )}
+            </Box>
+
+            <Typography
+              variant="h6"
+              component="h3"
+              gutterBottom
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 500,
+                minHeight: '3rem',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {product.name}
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Rating
+                value={product.rating || 0}
+                readOnly
+                size="small"
+                precision={0.5}
+              />
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                {product.description}
+              </Typography>
+
+              {showSpecs && (
+                <List dense sx={{ mt: 1, '& .MuiListItem-root': { px: 0 } }}>
+                  {product.specifications.display &&
+                    String(product.specifications.display).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Дисплей:</strong> {product.specifications.display}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  {product.specifications.processor &&
+                    String(product.specifications.processor).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Процессор:</strong>{' '}
+                              {product.specifications.processor}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  {product.specifications.ram &&
+                    String(product.specifications.ram).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Память:</strong> {product.specifications.ram}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  {product.specifications.memory &&
+                    String(product.specifications.memory).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Накопитель:</strong> {product.specifications.memory}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  {product.specifications.camera &&
+                    String(product.specifications.camera).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Камера:</strong> {product.specifications.camera}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  {product.specifications.battery &&
+                    String(product.specifications.battery).trim() !== '' && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2" component="span">
+                              <strong>Аккумулятор:</strong>{' '}
+                              {product.specifications.battery}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                </List>
+              )}
+            </Box>
+
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Tooltip title="Бесплатная доставка">
+                <LocalShippingIcon color="primary" fontSize="small" />
+              </Tooltip>
+              <Tooltip title="Официальная гарантия">
+                <VerifiedIcon color="primary" fontSize="small" />
+              </Tooltip>
+              <Tooltip title="Рассрочка">
+                <PaymentIcon color="primary" fontSize="small" />
+              </Tooltip>
+            </Stack>
+
+            <Box sx={{ mt: 'auto' }}>
+              {product.oldPrice && (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    textDecoration: 'line-through',
+                  }}
+                >
+                  от {product.oldPrice.toLocaleString()} BYN/мес. <br />
+                </Typography>
+              )}
+              <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+                от {product.price.toLocaleString()} BYN/мес. <br />
+              </Typography>
+            </Box>
+          </CardContent>
+        </Link>
+      </Card>
+    </Grid>
+  );
+});
+
 export default function ProductList({ categoryId }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -77,10 +371,18 @@ export default function ProductList({ categoryId }) {
   const hasMoreRef = useRef(false);
   const loadingMoreRef = useRef(false);
   const initialLoadingRef = useRef(false);
-  const { compareItems, addToCompare, removeFromCompare, isInCompare } =
-    useCompareStore();
-  const { favorites, addToFavorites, removeFromFavorites, isInFavorites } =
-    useFavoritesStore();
+  const { compareItems, addToCompare, removeFromCompare } = useCompareStore();
+  const { favorites, addToFavorites, removeFromFavorites } = useFavoritesStore();
+
+  const compareIds = useMemo(
+    () => new Set(compareItems.map((item) => String(item.id))),
+    [compareItems],
+  );
+  const favoriteIds = useMemo(
+    () => new Set(favorites.map((id) => String(id))),
+    [favorites],
+  );
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -291,7 +593,7 @@ export default function ProductList({ categoryId }) {
 
   // Debounce для handleFilterChange - предотвращает частые запросы при изменении фильтров
   const filterChangeTimeoutRef = useRef(null);
-  
+
   const handleFilterChange = useCallback(async (field, value) => {
     const newFilters = { ...previewFilters };
     if (newFilters[field] === value) {
@@ -344,7 +646,8 @@ export default function ProductList({ categoryId }) {
   };
 
   const handleCompareToggle = useCallback((product) => {
-    if (isInCompare(product.id)) {
+    const productId = String(product.id);
+    if (compareIds.has(productId)) {
       removeFromCompare(product.id);
       setSnackbarMessage('Товар удален из сравнения');
     } else {
@@ -356,10 +659,10 @@ export default function ProductList({ categoryId }) {
       }
     }
     setSnackbarOpen(true);
-  }, [isInCompare, removeFromCompare, addToCompare, compareItems.length]);
+  }, [removeFromCompare, addToCompare, compareItems.length, compareIds]);
 
   const handleFavoriteClick = useCallback((productId) => {
-    if (isInFavorites(productId)) {
+    if (favoriteIds.has(String(productId))) {
       removeFromFavorites(productId);
       setSnackbarMessage('Товар удален из избранного');
     } else {
@@ -367,7 +670,7 @@ export default function ProductList({ categoryId }) {
       setSnackbarMessage('Товар добавлен в избранное');
     }
     setSnackbarOpen(true);
-  }, [isInFavorites, removeFromFavorites, addToFavorites]);
+  }, [favoriteIds, removeFromFavorites, addToFavorites]);
 
   const filterSections = [
     { key: 'memory', label: 'Память' },
@@ -568,288 +871,17 @@ export default function ProductList({ categoryId }) {
             if (!product.id || !product.image) {
               return null;
             }
+            const productId = String(product.id);
             return (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    zIndex: 2,
-                    display: 'flex',
-                    gap: 1,
-                  }}
-                >
-                  <Tooltip title="Добавить в сравнение">
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleCompareToggle(product);
-                      }}
-                      sx={{
-                        bgcolor: 'background.paper',
-                        '&:hover': { bgcolor: 'action.hover' },
-                      }}
-                    >
-                      <CompareArrowsIcon
-                        color={isInCompare(product.id) ? 'primary' : 'action'}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Добавить в избранное">
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleFavoriteClick(product.id);
-                      }}
-                      sx={{
-                        bgcolor: 'background.paper',
-                        '&:hover': { bgcolor: 'action.hover' },
-                        zIndex: 2,
-                      }}
-                    >
-                      {isInFavorites(product.id) ? (
-                        <FavoriteIcon color="error" />
-                      ) : (
-                        <FavoriteBorderIcon />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-
-                <Link
-                  href={`/products/${product.id}`}
-                  style={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: 'relative',
-                      width: '100%',
-                      pt: '100%',
-                      bgcolor: 'background.paper',
-                    }}
-                  >
-                    {product.image && (
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        style={{
-                          objectFit: 'contain',
-                          padding: '20px',
-                        }}
-                        sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                        priority={index < 6}
-                      />
-                    )}
-                  </Box>
-
-                  <CardContent sx={{ flexGrow: 1, pt: 2 }}>
-                    <Box sx={{ mb: 1 }}>
-                      {product.isNew && (
-                        <Chip
-                          label="Новинка"
-                          color="primary"
-                          size="small"
-                          sx={{ mr: 1, mb: 1 }}
-                        />
-                      )}
-                      {product.discount > 0 && (
-                        <Chip
-                          label={`-${product.discount}%`}
-                          color="error"
-                          size="small"
-                          sx={{ mb: 1 }}
-                        />
-                      )}
-                    </Box>
-
-                    <Typography
-                      variant="h6"
-                      component="h3"
-                      gutterBottom
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 500,
-                        minHeight: '3rem',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {product.name}
-                    </Typography>
-
-                    <Box sx={{ mb: 2 }}>
-                      <Rating
-                        value={product.rating || 0}
-                        readOnly
-                        size="small"
-                        precision={0.5}
-                      />
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        {product.description}
-                      </Typography>
-
-                      {(() => {
-                        if (!product.specifications || 
-                            typeof product.specifications !== 'object' || 
-                            Array.isArray(product.specifications)) {
-                          return false;
-                        }
-                        const specs = product.specifications;
-                        const hasDisplay = specs.display && String(specs.display).trim() !== '';
-                        const hasProcessor = specs.processor && String(specs.processor).trim() !== '';
-                        const hasRam = specs.ram && String(specs.ram).trim() !== '';
-                        const hasMemory = specs.memory && String(specs.memory).trim() !== '';
-                        const hasCamera = specs.camera && String(specs.camera).trim() !== '';
-                        const hasBattery = specs.battery && String(specs.battery).trim() !== '';
-                        return hasDisplay || hasProcessor || hasRam || hasMemory || hasCamera || hasBattery;
-                      })() && (
-                        <List
-                          dense
-                          sx={{ mt: 1, '& .MuiListItem-root': { px: 0 } }}
-                        >
-                          {product.specifications.display && String(product.specifications.display).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Дисплей:</strong>{' '}
-                                    {product.specifications.display}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                          {product.specifications.processor && String(product.specifications.processor).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Процессор:</strong>{' '}
-                                    {product.specifications.processor}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                          {product.specifications.ram && String(product.specifications.ram).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Память:</strong>{' '}
-                                    {product.specifications.ram}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                          {product.specifications.memory && String(product.specifications.memory).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Накопитель:</strong>{' '}
-                                    {product.specifications.memory}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                          {product.specifications.camera && String(product.specifications.camera).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Камера:</strong>{' '}
-                                    {product.specifications.camera}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                          {product.specifications.battery && String(product.specifications.battery).trim() !== '' && (
-                            <ListItem>
-                              <ListItemText
-                                primary={
-                                  <Typography variant="body2" component="span">
-                                    <strong>Аккумулятор:</strong>{' '}
-                                    {product.specifications.battery}
-                                  </Typography>
-                                }
-                              />
-                            </ListItem>
-                          )}
-                        </List>
-                      )}
-                    </Box>
-
-                    <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                      <Tooltip title="Бесплатная доставка">
-                        <LocalShippingIcon color="primary" fontSize="small" />
-                      </Tooltip>
-                      <Tooltip title="Официальная гарантия">
-                        <VerifiedIcon color="primary" fontSize="small" />
-                      </Tooltip>
-                      <Tooltip title="Рассрочка">
-                        <PaymentIcon color="primary" fontSize="small" />
-                      </Tooltip>
-                    </Stack>
-
-                    <Box sx={{ mt: 'auto' }}>
-                      {product.oldPrice && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            textDecoration: 'line-through',
-                          }}
-                        >
-                         от {product.oldPrice.toLocaleString()} BYN/мес. <br />
-                        </Typography>
-                      )}
-                      <Typography
-                        variant="h6"
-                        color="primary"
-                        sx={{ fontWeight: 'bold' }}
-                      >
-                        от {product.price.toLocaleString()} BYN/мес. <br />
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Link>
-              </Card>
-            </Grid>
+              <ProductGridCard
+                key={product.id}
+                product={product}
+                index={index}
+                isFavorite={favoriteIds.has(productId)}
+                isCompared={compareIds.has(productId)}
+                onCompare={handleCompareToggle}
+                onFavorite={handleFavoriteClick}
+              />
             );
           })}
         </Grid>

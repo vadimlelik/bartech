@@ -4,19 +4,19 @@ import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
-// Кэш данных лендингов (снижает нагрузку на БД).
-// Обновление данных делаем через on-demand revalidateTag('landings') из админки.
-const getCachedLandingBySlug = unstable_cache(
-  async (slug) => {
-    return await getLandingBySlug(slug);
-  },
-  ['landing-by-slug'],
-  {
-    revalidate: 86400, // 24 часа
-    tags: ['landings'],
-  }
-);
-
+// Кэш по каждому slug отдельно (ключ БЕЗ slug ломал все URL: возвращался первый закэшированный результат).
+// Обновление: revalidateTag('landings') из админки.
+async function getCachedLandingBySlug(slug) {
+  if (!slug) return null;
+  return unstable_cache(
+    async () => getLandingBySlug(slug),
+    ['landing-by-slug', slug],
+    {
+      revalidate: 86400,
+      tags: ['landings'],
+    }
+  )();
+}
 
 export const revalidate = 86400;
 

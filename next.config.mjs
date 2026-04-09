@@ -69,6 +69,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    // Разрешённые значения quality для next/image (обязательно с Next.js 16)
+    qualities: [75, 100],
     // Внешние источники изображений (CDN, object storage, legacy URL в данных)
     remotePatterns: [
       {

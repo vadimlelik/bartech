@@ -242,6 +242,7 @@ export default function MotoblocksLandingPage() {
             width={900}
             height={900}
             priority
+            sizes="(max-width: 767px) 100vw, min(900px, 50vw)"
             className={styles.heroImg}
           />
         </div>

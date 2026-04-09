@@ -1,5 +1,12 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  startTransition,
+} from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import {
@@ -20,6 +27,9 @@ import {
 } from './QuizStyles';
 import Link from 'next/link';
 
+const PHONE_REGEX = /^\+375\d{9}$/;
+const NON_DIGIT_PLUS = /[^\d+]/g;
+
 const Quiz = ({
   isOpen,
   onClose,
@@ -32,6 +42,26 @@ const Quiz = ({
     shouldUnregister: false,
     mode: 'onTouched',
   });
+
+  const phoneFieldRules = useMemo(
+    () => ({
+      required: 'Пожалуйста, ответьте на вопрос.',
+      pattern: {
+        value: PHONE_REGEX,
+        message: 'Телефон должен быть в формате +375XXXXXXXXX',
+      },
+      validate: (value) => {
+        if (!value || value === '+375') {
+          return 'Пожалуйста, ответьте на вопрос.';
+        }
+        if (!PHONE_REGEX.test(value)) {
+          return 'Телефон должен быть в формате +375XXXXXXXXX';
+        }
+        return true;
+      },
+    }),
+    [],
+  );
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [validationError, setValidationError] = useState('');
@@ -67,41 +97,37 @@ const Quiz = ({
     }
   }, [currentQuestion, isOpen, questions]);
 
-  // Обработчик изменения телефона
-  const handlePhoneChange = (onChange, value) => {
-    // Удаляем все символы кроме цифр и +
-    const digits = value.replace(/[^\d+]/g, '');
+  const handlePhoneChange = useCallback((onChange, value) => {
+    const digits = value.replace(NON_DIGIT_PLUS, '');
 
-    // Если начинается не с +375, устанавливаем +375
     if (!digits.startsWith('+375')) {
       onChange('+375');
       return;
     }
 
-    // Ограничиваем длину до +375 + 9 цифр (всего 13 символов)
     if (digits.length <= 13) {
       onChange(digits);
     }
-  };
+  }, []);
 
-  // Обработчик нажатия клавиш для защиты префикса +375
-  const handlePhoneKeyDown = (e) => {
-    // Запрещаем удаление префикса +375
+  const handlePhoneKeyDown = useCallback((e) => {
     const cursorPosition = e.target.selectionStart;
     if (e.key === 'Backspace' && cursorPosition <= 4) {
       e.preventDefault();
     }
-    // Запрещаем удаление в начале
     if (e.key === 'Delete' && cursorPosition < 4) {
       e.preventDefault();
     }
-  };
+  }, []);
 
-  const goToQuestion = (index) => {
-    setValidationError('');
-    clearErrors();
-    setCurrentQuestion(index);
-  };
+  const goToQuestion = useCallback(
+    (index) => {
+      setValidationError('');
+      clearErrors();
+      setCurrentQuestion(index);
+    },
+    [clearErrors],
+  );
 
   const nextQuestion = async () => {
     const currentFieldName = `question${questions[currentQuestion].id}`;
@@ -160,7 +186,7 @@ const Quiz = ({
           : null;
 
         const formattedPhone = phoneNumber
-          ? phoneNumber.replace(/[^\d+]/g, '')
+          ? phoneNumber.replace(NON_DIGIT_PLUS, '')
           : '';
 
         const formData = {
@@ -220,8 +246,10 @@ const Quiz = ({
                             $isChecked={field.value === option.value}
                             onClick={() => {
                               field.onChange(option.value);
-                              clearErrors(fieldName);
-                              setValidationError('');
+                              startTransition(() => {
+                                clearErrors(fieldName);
+                                setValidationError('');
+                              });
                               if (currentQuestion < questions.length - 1) {
                                 goToQuestion(currentQuestion + 1);
                               }
@@ -260,8 +288,10 @@ const Quiz = ({
                                   ? valueArray.filter((v) => v !== option.value)
                                   : [...valueArray, option.value];
                                 field.onChange(newValue);
-                                clearErrors(fieldName);
-                                setValidationError('');
+                                startTransition(() => {
+                                  clearErrors(fieldName);
+                                  setValidationError('');
+                                });
                               }}
                             >
                               {option.label}
@@ -280,22 +310,11 @@ const Quiz = ({
                   name={fieldName}
                   control={control}
                   defaultValue={getValues(fieldName) || '+375'}
-                  rules={{
-                    required: 'Пожалуйста, ответьте на вопрос.',
-                    pattern: {
-                      value: /^\+375\d{9}$/,
-                      message: 'Телефон должен быть в формате +375XXXXXXXXX',
-                    },
-                    validate: (value) => {
-                      if (!value || value === '+375')
-                        return 'Пожалуйста, ответьте на вопрос.';
-                      if (!/^\+375\d{9}$/.test(value)) {
-                        return 'Телефон должен быть в формате +375XXXXXXXXX';
-                      }
-                      return true;
-                    },
-                  }}
-                  render={({ field, fieldState }) => (
+                  rules={phoneFieldRules}
+                  render={({ field, fieldState }) => {
+                    const phoneInvalid =
+                      !!field.value && !PHONE_REGEX.test(field.value);
+                    return (
                     <TextField
                       {...field}
                       inputRef={phoneInputRef}
@@ -311,27 +330,29 @@ const Quiz = ({
                       value={field.value || '+375'}
                       onChange={(e) => {
                         handlePhoneChange(field.onChange, e.target.value);
-                        clearErrors(fieldName);
-                        setValidationError('');
+                        startTransition(() => {
+                          clearErrors(fieldName);
+                          setValidationError('');
+                        });
                       }}
                       onKeyDown={handlePhoneKeyDown}
                       error={
                         !!(
                           validationError ||
-                          (fieldState.error?.message &&
-                            !/^\+375\d{9}$/.test(field.value))
+                          (fieldState.error?.message && phoneInvalid)
                         )
                       }
                       helperText={
                         validationError ||
                         (fieldState.error?.message &&
-                          !/^\+375\d{9}$/.test(field.value) &&
+                          phoneInvalid &&
                           fieldState.error.message)
                       }
                       disabled={isLoading}
                       sx={{ width: '100%' }}
                     />
-                  )}
+                    );
+                  }}
                 />
               )}
             </InputContainer>

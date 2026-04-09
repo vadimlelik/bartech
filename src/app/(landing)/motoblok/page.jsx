@@ -67,6 +67,8 @@ export default function MotoBlok() {
   useEffect(() => {
   }, []);
 
+  console.log(utm_source, utm_medium, utm_content, utm_campaign, ad, ttclid);
+
   useEffect(() => {
     loadTikTokPixels([
       PIXEL.motoblock,
@@ -179,14 +181,15 @@ export default function MotoBlok() {
         <div className={styles.imageContainer}>
           <Image
             src="/images/moto/motoblock_1.jpeg"
-            alt="Телефоны"
+            alt="Мотоблок МТЗ — рассрочка без переплат"
             width={500}
             height={400}
             priority
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'fill',
+              objectFit: 'contain',
               borderRadius: '20px',
             }}
           />
@@ -221,14 +224,14 @@ export default function MotoBlok() {
         <div className={styles.advantagesImage}>
           <Image
             src="/images/moto/motoblok_mtz_2.jpg"
-            alt="Телефоны"
+            alt="Мотоблок МТЗ в работе"
             width={600}
             height={600}
-            priority
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{
               width: '100%',
               height: 'auto',
-              objectFit: 'fill',
+              objectFit: 'contain',
               borderRadius: '20px',
             }}
           />

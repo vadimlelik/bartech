@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   AppBar,
@@ -39,13 +39,24 @@ import { useFavoritesStore } from '@/entities/favorites';
 import { useAuthStore } from '@/features/auth';
 import CreditCardsModal from '@/features/credit-cards/ui/CreditCardsModal';
 
+const MENU_ITEMS = [
+  { text: 'Каталог', href: '/', icon: StorefrontIcon },
+  {
+    text: 'Оплата и доставка',
+    href: '/payment_delivery',
+    icon: LocalShippingIcon,
+  },
+  { text: 'Отзывы', href: '/reviews', icon: RateReviewIcon },
+  { text: 'Контакты', href: '/contacts', icon: ContactsIcon },
+];
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [creditModalOpen, setCreditModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const { cartItems } = useCartStore();
-  const { favorites } = useFavoritesStore();
+  const cartCount = useCartStore((state) => state.cartItems.length);
+  const favoritesCount = useFavoritesStore((state) => state.favorites.length);
   const {
     user,
     profile,
@@ -59,26 +70,19 @@ export default function Header() {
     setMounted(true);
   }, []);
 
-  const menuItems = [
-    { text: 'Каталог', href: '/', icon: <StorefrontIcon /> },
-    {
-      text: 'Оплата и доставка',
-      href: '/payment_delivery',
-      icon: <LocalShippingIcon />,
-    },
-    { text: 'Отзывы', href: '/reviews', icon: <RateReviewIcon /> },
-    { text: 'Контакты', href: '/contacts', icon: <ContactsIcon /> },
-  ];
-
-  const handleCreditClick = (e) => {
+  const handleCreditClick = useCallback((e) => {
     e.preventDefault();
     setCreditModalOpen(true);
     setMobileMenuOpen(false);
-  };
+  }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen((prev) => !prev);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
 
   return (
     <AppBar position="sticky" color="default" elevation={1}>
@@ -125,7 +129,7 @@ export default function Header() {
               justifyContent: 'center',
             }}
           >
-            {menuItems.map((item) => (
+            {MENU_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -136,7 +140,7 @@ export default function Header() {
                   cursor: 'pointer',
                 }}
               >
-                <Button color="inherit" startIcon={item.icon}>
+                <Button color="inherit" startIcon={<item.icon />}>
                   {item.text}
                 </Button>
               </Link>
@@ -189,7 +193,7 @@ export default function Header() {
                 <Tooltip title="Закладки">
                   <IconButton color="inherit">
                     {mounted ? (
-                      <Badge badgeContent={favorites.length} color="primary">
+                      <Badge badgeContent={favoritesCount} color="primary">
                         <FavoriteIcon />
                       </Badge>
                     ) : (
@@ -206,7 +210,7 @@ export default function Header() {
                 <Tooltip title="Корзина">
                   <IconButton color="inherit">
                     {mounted ? (
-                      <Badge badgeContent={cartItems.length} color="primary">
+                      <Badge badgeContent={cartCount} color="primary">
                         <ShoppingCartIcon />
                       </Badge>
                     ) : (
@@ -252,15 +256,15 @@ export default function Header() {
         </Toolbar>
       </Container>
 
-      <Drawer anchor="left" open={mobileMenuOpen} onClose={toggleMobileMenu}>
+      <Drawer anchor="left" open={mobileMenuOpen} onClose={closeMobileMenu}>
         <Box
           sx={{ width: 250 }}
           role="presentation"
-          onClick={toggleMobileMenu}
-          onKeyDown={toggleMobileMenu}
+          onClick={closeMobileMenu}
+          onKeyDown={closeMobileMenu}
         >
           <List>
-            {menuItems.map((item) => (
+            {MENU_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -268,7 +272,9 @@ export default function Header() {
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <ListItem button>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemIcon>
+                    <item.icon />
+                  </ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItem>
               </Link>
