@@ -28,6 +28,56 @@ const BUSINESS_ADDRESS = {
 const BUSINESS_PHONE = '+375257766462';
 const BUSINESS_EMAIL = 'baratexby@gmail.com';
 
+/** Дата priceValidUntil (YYYY-MM-DD) — рекомендуется Google для Offer. */
+function priceValidUntilIso(daysFromNow = 365) {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().split('T')[0];
+}
+
+/**
+ * Абсолютный URL картинки товара (fallback — логотип, чтобы Product не был без image).
+ */
+function absoluteProductImageUrl(product) {
+  const img = product?.image;
+  if (!img || typeof img !== 'string') {
+    return `${siteUrl}/logo_techno_bar.svg`;
+  }
+  if (img.startsWith('http://') || img.startsWith('https://')) {
+    return img;
+  }
+  return img.startsWith('/') ? `${siteUrl}${img}` : `${siteUrl}/${img}`;
+}
+
+/**
+ * Offer для schema.org Product — поля, которые ожидает Google (иначе «нет offers» в Search Console).
+ * @see https://developers.google.com/search/docs/appearance/structured-data/product
+ */
+function buildProductOffer(product, productId) {
+  const id = productId ?? product?.id;
+  const productUrl = `${siteUrl}/products/${id}`;
+  const raw = product?.price;
+  const priceNum =
+    raw !== undefined && raw !== null && Number.isFinite(Number(raw))
+      ? Number(raw)
+      : 0;
+
+  return {
+    '@type': 'Offer',
+    url: productUrl,
+    priceCurrency: 'BYN',
+    price: priceNum,
+    priceValidUntil: priceValidUntilIso(365),
+    availability: 'https://schema.org/InStock',
+    itemCondition: 'https://schema.org/NewCondition',
+    seller: {
+      '@type': 'Organization',
+      name: 'Texnobar',
+      url: siteUrl,
+    },
+  };
+}
+
 /**
  * Generate Organization structured data
  */
@@ -125,18 +175,22 @@ export function getProductSchema(product) {
     product.images && product.images.length > 0
       ? product.images.map((img) => ({
           '@type': 'ImageObject',
-          url: img.startsWith('http') ? img : `${siteUrl}${img}`,
+          url:
+            img.startsWith('http') ? img : `${siteUrl}${img.startsWith('/') ? img : `/${img}`}`,
         }))
       : product.image
         ? [
             {
               '@type': 'ImageObject',
-              url: product.image.startsWith('http')
-                ? product.image
-                : `${siteUrl}${product.image}`,
+              url: absoluteProductImageUrl(product),
             },
           ]
         : [];
+
+  const imageUrls =
+    images.length > 0
+      ? images.map((img) => img.url)
+      : [absoluteProductImageUrl(product)];
 
   const schema = {
     '@context': 'https://schema.org',
@@ -145,23 +199,13 @@ export function getProductSchema(product) {
     description:
       product.description ||
       `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат.`,
-    image: images.map((img) => img.url),
+    image: imageUrls,
     sku: String(product.id),
     brand: {
       '@type': 'Brand',
-      name: product.specifications?.brand || 'Technobar',
+      name: product.specifications?.brand || 'Texnobar',
     },
-    offers: {
-      '@type': 'Offer',
-      url: `${siteUrl}/products/${product.id}`,
-      priceCurrency: 'BYN',
-      price: product.price,
-      availability: 'https://schema.org/InStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'Technobar',
-      },
-    },
+    offers: buildProductOffer(product, product.id),
   };
 
   // Добавляем спецификации если они есть
@@ -252,18 +296,8 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
             '@type': 'Product',
             name: product.name,
             url: `${siteUrl}/products/${product.id}`,
-            image: product.image?.startsWith('http')
-              ? product.image
-              : `${siteUrl}${product.image}`,
-            offers: {
-              '@type': 'Offer',
-              url: `${siteUrl}/products/${product.id}`,
-              priceCurrency: 'BYN',
-              price: product.price ?? 0,
-              availability: product.stock > 0
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/OutOfStock',
-            },
+            image: absoluteProductImageUrl(product),
+            offers: buildProductOffer(product, product.id),
           },
         })) || [],
     },
