@@ -12,6 +12,9 @@ const roboto = Roboto({
   display: 'swap',
 });
 
+const SITE_DESCRIPTION =
+  'Купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — Texnobar (technobar.by). Рассрочка без переплат, доставка по Беларуси, каталог с ценами.';
+
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -19,8 +22,7 @@ export const metadata = {
       'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     template: '%s | Texnobar',
   },
-  description:
-    'Купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — Texnobar (technobar.by). Рассрочка без переплат, доставка по Беларуси, каталог с ценами.',
+  description: SITE_DESCRIPTION,
   keywords: [
     ...COMMERCIAL_SEO_KEYWORDS,
     'texnobar',
@@ -91,6 +93,7 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#000000" />
+        <meta name="description" content={SITE_DESCRIPTION} />
       </head>
       <body>
         <StyledComponentsRegistry>
