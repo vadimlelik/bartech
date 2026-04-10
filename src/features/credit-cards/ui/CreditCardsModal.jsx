@@ -12,7 +12,7 @@ const creditOffers = [
     terms: [13, 18, 24, 36, 48, 60],
     minAmount: 100,
     maxAmount: 20000,
-    rate: '19,10',
+    rate: 'Импорт: 18,26% | Товары РБ: 17,90%',
     headerGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     buttonGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     borderColor: '#6BA3D8',
@@ -22,10 +22,10 @@ const creditOffers = [
     id: 'dabrabyt',
     bank: 'Банк Дабрабыт',
     title: 'Кредит \'Комбо товары РБ\'',
-    terms: [13, 18, 24, 36],
+    terms: [12, 18, 24, 36, 48, 60],
     minAmount: 50,
     maxAmount: 15000,
-    rate: '16,25',
+    rate: 'Импорт: 18,26% | Товары РБ: 12/18/24 мес. - 16%, 36/48/60 мес. - 16,50%',
     headerGradient: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)',
     buttonGradient: 'linear-gradient(135deg, #FF6B35 0%, #D84315 100%)',
     borderColor: '#FF6B35',
@@ -38,7 +38,7 @@ const creditOffers = [
     terms: [12, 18, 24, 30, 36, 48, 60],
     minAmount: 100,
     maxAmount: 17000,
-    rate: '19,10',
+    rate: 'Импорт: 18,26% | Товары РБ: 15,90%',
     headerGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     buttonGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     borderColor: '#6BA3D8',
@@ -51,7 +51,7 @@ const creditOffers = [
     terms: [12, 18, 24],
     minAmount: 50,
     maxAmount: 7000,
-    rate: '19,10',
+    rate: 'Импорт: 18,26%',
     headerGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     buttonGradient: 'linear-gradient(135deg, #6BA3D8 0%, #9B7EDE 100%)',
     borderColor: '#6BA3D8',
@@ -112,7 +112,7 @@ export default function CreditCardsModal({ isOpen, onClose }) {
                       </div>
                     </div>
                     <div className={styles.rate} style={{ color: offer.rateColor }}>
-                      {offer.rate} % годовых
+                      {offer.rate}
                     </div>
                     <button
                       className={styles.detailsButton}

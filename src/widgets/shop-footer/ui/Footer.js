@@ -207,19 +207,6 @@ export default function Footer() {
               </Box>
             </Box>
           </Grid>
-
-          <Grid item xs={12}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              align="center"
-              sx={{ mt: 2 }}
-            >
-              Интернет-сайт носит исключительно информационный характер и ни при
-              каких условиях не является публичной офертой, определяемой
-              положениями ст. 405 Гражданского кодекса Республики Беларусь.
-            </Typography>
-          </Grid>
         </Grid>
       </Container>
     </Box>
