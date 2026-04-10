@@ -4,6 +4,7 @@ import axios from 'axios';
 const ALLOWED_STRING_FIELDS = [
   'TITLE', 'COMMENTS', 'SOURCE_ID', 'SOURCE_DESCRIPTION',
   'STATUS_ID', 'OPENED', 'TYPE_ID', 'NAME', 'UF_CRM_1705470523',
+  'UTM_SOURCE', 'UTM_MEDIUM', 'UTM_CAMPAIGN', 'UTM_CONTENT', 'UTM_TERM',
 ];
 
 function sanitizeFields(fields) {
@@ -53,7 +54,6 @@ export async function POST(req) {
   globalThis._quiz[ip] = Date.now();
 
   const fields = sanitizeFields(body.FIELDS);
-
   try {
     await axios.post(webhookUrl, { FIELDS: fields });
   } catch (err) {
