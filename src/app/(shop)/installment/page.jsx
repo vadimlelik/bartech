@@ -1,5 +1,6 @@
 import { getInstallmentFaqSchema, SEO_INSTALLMENT_PHRASES } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import styles from './page.module.css';
 
 const title = 'Купить в рассрочку в Минске — условия Texnobar';
 const description =
@@ -70,19 +71,19 @@ export default function Installment() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-4">
+      <div className={styles.container}>
+        <h1 className={styles.h1}>
           Купить в рассрочку — телефоны и техника в Минске
         </h1>
-        <p className="text-gray-700 mb-8 max-w-3xl text-lg">
+        <p className={styles.lead}>
           В Texnobar можно купить в рассрочку смартфоны, ноутбуки, телевизоры и
           другую электронику на выгодных условиях: без переплат в рамках акций и
           партнёрских программ. Доставка по Минску и всей Беларуси.
         </p>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Условия рассрочки</h2>
-          <ul className="list-disc ml-6 space-y-2 text-gray-700">
+        <section className={styles.section}>
+          <h2 className={styles.h2}>Условия рассрочки</h2>
+          <ul className={styles.bulletList}>
             <li>Срок рассрочки: до 12 месяцев</li>
             <li>Первоначальный взнос: от 10% (в акциях — без взноса)</li>
             <li>Без переплат и скрытых комиссий</li>
@@ -91,12 +92,12 @@ export default function Installment() {
           </ul>
         </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Что можно купить в рассрочку</h2>
-          <p className="text-gray-700 mb-4">
+        <section className={styles.section}>
+          <h2 className={styles.h2}>Что можно купить в рассрочку</h2>
+          <p className={styles.text}>
             В нашем каталоге доступны в рассрочку:
           </p>
-          <ul className="grid grid-cols-2 gap-2 list-disc ml-6 text-gray-700">
+          <ul className={styles.gridList}>
             <li>Смартфоны и телефоны</li>
             <li>Ноутбуки и планшеты</li>
             <li>Телевизоры Smart TV</li>
@@ -108,92 +109,92 @@ export default function Installment() {
           </ul>
         </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-6">Как оформить рассрочку</h2>
-          <ol className="space-y-4">
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</span>
+        <section className={styles.section}>
+          <h2 className={styles.h2}>Как оформить рассрочку</h2>
+          <ol className={styles.steps}>
+            <li className={styles.step}>
+              <span className={styles.stepBadge}>1</span>
               <div>
-                <strong className="block mb-1">Выберите товар</strong>
-                <span className="text-gray-600">Найдите нужный товар в каталоге и добавьте его в корзину.</span>
+                <strong className={styles.stepTitle}>Выберите товар</strong>
+                <span className={styles.stepText}>Найдите нужный товар в каталоге и добавьте его в корзину.</span>
               </div>
             </li>
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
+            <li className={styles.step}>
+              <span className={styles.stepBadge}>2</span>
               <div>
-                <strong className="block mb-1">Оформите заявку онлайн</strong>
-                <span className="text-gray-600">Заполните форму на сайте или позвоните нам: +375 (25) 776-64-62.</span>
+                <strong className={styles.stepTitle}>Оформите заявку онлайн</strong>
+                <span className={styles.stepText}>Заполните форму на сайте или позвоните нам: +375 (25) 776-64-62.</span>
               </div>
             </li>
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</span>
+            <li className={styles.step}>
+              <span className={styles.stepBadge}>3</span>
               <div>
-                <strong className="block mb-1">Получите одобрение</strong>
-                <span className="text-gray-600">Менеджер свяжется с вами в течение 15–30 минут и подтвердит условия.</span>
+                <strong className={styles.stepTitle}>Получите одобрение</strong>
+                <span className={styles.stepText}>Менеджер свяжется с вами в течение 15–30 минут и подтвердит условия.</span>
               </div>
             </li>
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</span>
+            <li className={styles.step}>
+              <span className={styles.stepBadge}>4</span>
               <div>
-                <strong className="block mb-1">Получите товар с доставкой</strong>
-                <span className="text-gray-600">Курьер привезёт товар по Минску в день заказа, оформит все документы на месте.</span>
+                <strong className={styles.stepTitle}>Получите товар с доставкой</strong>
+                <span className={styles.stepText}>Курьер привезёт товар по Минску в день заказа, оформит все документы на месте.</span>
               </div>
             </li>
           </ol>
         </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Преимущества рассрочки в Texnobar</h2>
-          <ul className="space-y-3 text-gray-700">
-            <li className="flex gap-3">
-              <span className="text-green-600 font-bold">✓</span>
+        <section className={styles.section}>
+          <h2 className={styles.h2}>Преимущества рассрочки в Texnobar</h2>
+          <ul className={styles.advantages}>
+            <li className={styles.advantageItem}>
+              <span className={styles.check}>✓</span>
               <span><strong>Без переплат</strong> — платите ровно столько, сколько стоит товар</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-green-600 font-bold">✓</span>
+            <li className={styles.advantageItem}>
+              <span className={styles.check}>✓</span>
               <span><strong>Быстрое одобрение</strong> — решение за 15–30 минут</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-green-600 font-bold">✓</span>
+            <li className={styles.advantageItem}>
+              <span className={styles.check}>✓</span>
               <span><strong>Доставка по Минску</strong> в день заказа, по Беларуси за 1–3 дня</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-green-600 font-bold">✓</span>
+            <li className={styles.advantageItem}>
+              <span className={styles.check}>✓</span>
               <span><strong>Минимум документов</strong> — только паспорт гражданина РБ</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-green-600 font-bold">✓</span>
+            <li className={styles.advantageItem}>
+              <span className={styles.check}>✓</span>
               <span><strong>Оригинальные товары</strong> с гарантией производителя</span>
             </li>
           </ul>
         </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-6">Часто задаваемые вопросы</h2>
-          <div className="space-y-6">
+        <section className={styles.section}>
+          <h2 className={styles.h2}>Часто задаваемые вопросы</h2>
+          <div className={styles.faqList}>
             {faqItems.map((item, i) => (
-              <div key={i} className="border-b border-gray-200 pb-5">
-                <h3 className="font-semibold text-lg mb-2">{item.q}</h3>
-                <p className="text-gray-600">{item.a}</p>
+              <div key={i} className={styles.faqItem}>
+                <h3 className={styles.h3}>{item.q}</h3>
+                <p className={styles.text}>{item.a}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="bg-blue-50 rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-2">Остались вопросы?</h2>
-          <p className="text-gray-700 mb-3">
+        <section className={styles.contactCard}>
+          <h2 className={styles.h3}>Остались вопросы?</h2>
+          <p className={styles.text}>
             Позвоните нам или напишите на email — ответим на любые вопросы о рассрочке.
           </p>
-          <p className="font-semibold">
+          <p className={styles.contactRow}>
             Телефон:{' '}
-            <a href="tel:+375257766462" className="text-blue-600 hover:underline">
+            <a href="tel:+375257766462" className={styles.link}>
               +375 (25) 776-64-62
             </a>
           </p>
-          <p className="font-semibold">
+          <p className={styles.contactRow}>
             Email:{' '}
-            <a href="mailto:baratexby@gmail.com" className="text-blue-600 hover:underline">
+            <a href="mailto:baratexby@gmail.com" className={styles.link}>
               baratexby@gmail.com
             </a>
           </p>
