@@ -1,5 +1,15 @@
 import { Container, Typography, Button, Box } from '@mui/material';
 import Link from 'next/link';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Страница не найдена | Texnobar',
+  description:
+    'Запрошенная страница не найдена. Перейдите в каталог Texnobar: телефоны, ноутбуки, телевизоры и техника в рассрочку в Минске.',
+  alternates: {
+    canonical: siteUrl,
+  },
+};
 
 export default function NotFound() {
   return (
