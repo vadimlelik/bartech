@@ -127,6 +127,41 @@ function buildMerchantReturnPolicy() {
 }
 
 /**
+ * Доставка для Offer — требование Google Merchant listings (shippingDetails в offers).
+ * Сверяйте shippingRate и сроки с фактическими условиями на сайте / в оформлении заказа.
+ * @see https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#offer-shipping-details-properties
+ */
+function buildOfferShippingDetails() {
+  return {
+    '@type': 'OfferShippingDetails',
+    shippingRate: {
+      '@type': 'MonetaryAmount',
+      value: 0,
+      currency: 'BYN',
+    },
+    shippingDestination: {
+      '@type': 'DefinedRegion',
+      addressCountry: 'BY',
+    },
+    deliveryTime: {
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: 1,
+        unitCode: 'DAY',
+      },
+      transitTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 1,
+        maxValue: 7,
+        unitCode: 'DAY',
+      },
+    },
+  };
+}
+
+/**
  * Абсолютный URL картинки товара (fallback — логотип, чтобы Product не был без image).
  */
 function absoluteProductImageUrl(product) {
@@ -167,6 +202,7 @@ function buildProductOffer(product, productId) {
       url: siteUrl,
     },
     hasMerchantReturnPolicy: buildMerchantReturnPolicy(),
+    shippingDetails: buildOfferShippingDetails(),
   };
 }
 
