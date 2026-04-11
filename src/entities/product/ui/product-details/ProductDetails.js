@@ -48,6 +48,7 @@ import MaskedPhoneInput from '@/shared/ui/input-mask/InputMask';
 import ProductImageGallery from '@/entities/product/ui/product-image-gallery/ProductImageGallery';
 import ProductDelivery from '@/entities/product/ui/product-delivery/ProductDelivery';
 import ProductReviews from '@/entities/product/ui/product-reviews/ProductReviews';
+import ProductEducationalCopy from '@/entities/product/ui/product-educational-copy/ProductEducationalCopy';
 import { EXTERNAL_SERVICES, VALIDATION, CURRENCY } from '@/shared/config/constants';
 
 function TabPanel({ children, value, index, ...other }) {
@@ -315,9 +316,13 @@ export default function ProductDetails({ product }) {
             </Box>
           )}
 
-          <Typography variant="body1" color="text.secondary" paragraph>
-            {product.description}
-          </Typography>
+          {product.description ? (
+            <Typography variant="body1" color="text.secondary" paragraph>
+              {product.description}
+            </Typography>
+          ) : null}
+
+          <ProductEducationalCopy product={product} />
 
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={2}>

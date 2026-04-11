@@ -3,6 +3,7 @@
  */
 
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { getStaticCategorySeo } from '@/shared/config/category-static-seo';
 
 /** Primary commercial phrase for titles and copy (natural language + common variants). */
 export const SEO_INSTALLMENT_PHRASES = [
@@ -33,11 +34,35 @@ export const COMMERCIAL_SEO_KEYWORDS = [
 
 /**
  * SEO для страницы категории: заголовок и описание под запросы вида «купить X в рассрочку».
- * Если в категории заполнено description в БД — оно идёт в приоритете в текст.
+ * Приоритет: 1) готовый текст в `category-static-seo.js` по id категории; 2) description из БД; 3) шаблон.
  */
 export function getCategorySeoCopy(category) {
   const name = (category?.name && String(category.name).trim()) || 'товары';
   const lower = name.toLowerCase();
+  const staticSeo = getStaticCategorySeo(category?.id);
+
+  if (staticSeo) {
+    const title =
+      staticSeo.title ||
+      `Купить ${lower} в рассрочку в Минске — каталог и цены | Texnobar`;
+    const description =
+      staticSeo.description ||
+      `Купить ${lower} в рассрочку в Минске в интернет-магазине Texnobar: рассрочка без переплат, доставка по Беларуси. technobar.by.`;
+    const introParagraph = staticSeo.introParagraph;
+    const extraKw = staticSeo.extraKeywords?.length ? staticSeo.extraKeywords : [];
+    const keywords = [
+      ...extraKw,
+      `купить ${lower} в рассрочку`,
+      `купить ${lower} в минске`,
+      `купить ${lower}`,
+      `${lower} в рассрочку минск`,
+      name,
+      ...SEO_INSTALLMENT_PHRASES.slice(0, 8),
+      'интернет-магазин техники минск',
+    ];
+    return { title, description, introParagraph, keywords };
+  }
+
   const extra =
     category?.description && String(category.description).trim()
       ? String(category.description).trim()
