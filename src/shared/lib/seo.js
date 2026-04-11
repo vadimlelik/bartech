@@ -84,6 +84,24 @@ function priceValidUntilIso(daysFromNow = 365) {
 }
 
 /**
+ * Политика возврата для Offer — требование Google (hasMerchantReturnPolicy в offers).
+ * Согласовано с публичной страницей /return (14 дней).
+ * @see https://schema.org/MerchantReturnPolicy
+ */
+function buildMerchantReturnPolicy() {
+  return {
+    '@type': 'MerchantReturnPolicy',
+    '@id': `${siteUrl}/return#merchant-return-policy`,
+    url: `${siteUrl}/return`,
+    applicableCountry: 'BY',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: 14,
+    returnMethod: 'https://schema.org/ReturnByMail',
+    returnFees: 'https://schema.org/FreeReturn',
+  };
+}
+
+/**
  * Абсолютный URL картинки товара (fallback — логотип, чтобы Product не был без image).
  */
 function absoluteProductImageUrl(product) {
@@ -123,6 +141,7 @@ function buildProductOffer(product, productId) {
       name: 'Texnobar',
       url: siteUrl,
     },
+    hasMerchantReturnPolicy: buildMerchantReturnPolicy(),
   };
 }
 
