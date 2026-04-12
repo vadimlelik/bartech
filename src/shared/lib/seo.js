@@ -549,8 +549,9 @@ export function getInstallmentFaqSchema() {
 }
 
 /**
- * Generate AggregateRating + individual Reviews structured data.
- * Enables star ratings in Google search results for the reviews page.
+ * AggregateRating + отзывы для страницы /reviews.
+ * У вложенных в LocalBusiness.review объектов Review не указываем itemReviewed —
+ * иначе валидатор Google (Rich Results) ругается: родитель и так задаёт объект отзыва.
  */
 export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10') {
   return {
@@ -572,7 +573,6 @@ export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10'
         datePublished: '2024-01-15',
         reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
         reviewBody: 'Отличный магазин! Купил iPhone 15 Pro в рассрочку, процесс оформления занял всего 15 минут. Телефон доставили уже на следующий день. Очень доволен сервисом!',
-        itemReviewed: { '@type': 'LocalBusiness', name: 'Texnobar' },
       },
       {
         '@type': 'Review',
@@ -580,7 +580,6 @@ export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10'
         datePublished: '2024-01-10',
         reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
         reviewBody: 'Оформила рассрочку на Samsung Galaxy S23, одобрили практически моментально. Ежемесячный платеж очень комфортный. Спасибо за отличный сервис!',
-        itemReviewed: { '@type': 'LocalBusiness', name: 'Texnobar' },
       },
       {
         '@type': 'Review',
@@ -588,7 +587,6 @@ export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10'
         datePublished: '2024-01-05',
         reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
         reviewBody: 'Второй раз покупаю телефон в этом магазине. Радует отсутствие первого взноса и быстрое оформление рассрочки. Рекомендую всем!',
-        itemReviewed: { '@type': 'LocalBusiness', name: 'Texnobar' },
       },
       {
         '@type': 'Review',
@@ -596,7 +594,6 @@ export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10'
         datePublished: '2023-12-15',
         reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
         reviewBody: 'Рассрочку одобрили быстро, условия выгодные. Телефон оригинальный, полная комплектация. Очень довольна!',
-        itemReviewed: { '@type': 'LocalBusiness', name: 'Texnobar' },
       },
       {
         '@type': 'Review',
@@ -604,7 +601,6 @@ export function getAggregateRatingSchema(ratingValue = '4.8', reviewCount = '10'
         datePublished: '2023-12-20',
         reviewRating: { '@type': 'Rating', ratingValue: '4', bestRating: '5' },
         reviewBody: 'Хороший магазин с адекватными ценами. Купил iPhone 13 в рассрочку. Процесс оформления простой и понятный. В целом, доволен покупкой.',
-        itemReviewed: { '@type': 'LocalBusiness', name: 'Texnobar' },
       },
     ],
   };
