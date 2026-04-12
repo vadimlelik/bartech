@@ -175,6 +175,22 @@ function absoluteProductImageUrl(product) {
   return img.startsWith('/') ? `${siteUrl}${img}` : `${siteUrl}/${img}`;
 }
 
+/** Текст description для Product в JSON-LD (страница товара и списки на категориях). */
+function productDescriptionForSchema(product) {
+  return (
+    product?.description ||
+    `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат.`
+  );
+}
+
+/** Brand для Product — нужен в списках категорий, иначе GSC: «нет GTIN / бренда». */
+function productBrandForSchema(product) {
+  return {
+    '@type': 'Brand',
+    name: product?.specifications?.brand || 'Texnobar',
+  };
+}
+
 /**
  * Offer для schema.org Product — поля, которые ожидает Google (иначе «нет offers» в Search Console).
  * @see https://developers.google.com/search/docs/appearance/structured-data/product
@@ -343,15 +359,10 @@ export function getProductSchema(product) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description:
-      product.description ||
-      `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат.`,
+    description: productDescriptionForSchema(product),
     image: imageUrls,
     sku: String(product.id),
-    brand: {
-      '@type': 'Brand',
-      name: product.specifications?.brand || 'Texnobar',
-    },
+    brand: productBrandForSchema(product),
     offers: buildProductOffer(product, product.id),
     aggregateRating: buildProductAggregateRating(product),
   };
@@ -448,6 +459,9 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
           item: {
             '@type': 'Product',
             name: product.name,
+            description: productDescriptionForSchema(product),
+            sku: String(product.id),
+            brand: productBrandForSchema(product),
             url: `${siteUrl}/products/${product.id}`,
             image: absoluteProductImageUrl(product),
             offers: buildProductOffer(product, product.id),
