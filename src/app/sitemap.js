@@ -42,18 +42,6 @@ export default async function sitemap() {
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.4,
-    },
-    {
-      url: `${siteUrl}/offer`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
       url: `${siteUrl}/sales`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
@@ -119,8 +107,7 @@ export default async function sitemap() {
     { slug: 'phone7', priority: 0.75 },
     { slug: '50discount', priority: 0.65 },
     { slug: '1phonefree', priority: 0.65 },
-    { slug: 'thank-you', priority: 0.3 },
-    { slug: 'test', priority: 0.2 },
+    // Служебные страницы /thank-you и /test не включаем в sitemap
   ].map(({ slug, priority }) => ({
     url: `${siteUrl}/${slug}`,
     lastModified: new Date(),
