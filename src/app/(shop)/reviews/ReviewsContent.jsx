@@ -108,6 +108,54 @@ const reviews = [
     }
 ];
 
+const yandexReviews = [
+    {
+        id: 101,
+        name: 'Евгений Черепок',
+        rating: 5,
+        date: '2025-11-06',
+        text: 'Покупал телефон себе, все понравилось. Менеджер помог получить одобрение в банке, брал в рассрочку на 36 месяцев. В подарок за опоздание дали повербанк.',
+    },
+    {
+        id: 102,
+        name: 'Вероника Когаль',
+        rating: 5,
+        date: '2025-10-31',
+        text: 'Очень быстро доставили телевизор к дню рождения мамы, хотя стандартный срок был дольше. Спасибо за то, что пошли навстречу.',
+    },
+    {
+        id: 103,
+        name: 'Uladzislau S.',
+        rating: 5,
+        date: '2026-02-18',
+        text: 'Заказал игровой компьютер. Консультант помог подобрать сборку под задачи, оформили быстро, доставка приехала через пару дней.',
+    },
+    {
+        id: 104,
+        name: 'Оксана Б.',
+        rating: 5,
+        date: '2025-10-02',
+        text: 'Срочно нужен был телефон, подсказали модель и варианты рассрочки без первого взноса. Доставили без проблем, дали гарантию и подарок.',
+    },
+    {
+        id: 105,
+        name: 'Вероха С.',
+        rating: 5,
+        date: '2026-03-12',
+        text: 'Купил PlayStation Pro. Доставили быстро и в удобное время, подробно рассказали про использование и пополнение.',
+    },
+    {
+        id: 106,
+        name: 'Мария Евсеенко',
+        rating: 5,
+        date: '2026-03-14',
+        text: 'Покупала макбук через этот магазин. Быстро доставили и цена приятная, вышло дешевле, чем в других местах.',
+    },
+];
+
+const yandexReviewsUrl =
+    'https://yandex.by/maps/org/baratekh/34158043108/reviews/?ll=27.589392%2C53.926870&z=16';
+
 export default function ReviewsContent() {
     return (
         <Box sx={{ py: 6, backgroundColor: 'background.default' }}>
@@ -190,6 +238,71 @@ export default function ReviewsContent() {
                         </Grid>
                     ))}
                 </Grid>
+
+                <Box sx={{ mt: 8 }}>
+                    <Typography
+                        variant="h4"
+                        component="h2"
+                        sx={{
+                            mb: 2,
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            fontSize: { xs: '1.6rem', md: '2rem' },
+                        }}
+                    >
+                        Отзывы с Яндекс Карт
+                    </Typography>
+
+                    <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{ textAlign: 'center', mb: 4 }}
+                    >
+                        Рейтинг на Яндекс Картах: 5.0 на основе 50+ оценок.
+                        {' '}
+                        <Box
+                            component="a"
+                            href={yandexReviewsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{ color: 'primary.main', textDecoration: 'none', fontWeight: 600 }}
+                        >
+                            Смотреть все отзывы
+                        </Box>
+                    </Typography>
+
+                    <Grid container spacing={3}>
+                        {yandexReviews.map((review) => (
+                            <Grid item xs={12} md={6} key={review.id}>
+                                <Card
+                                    sx={{
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        border: '1px solid',
+                                        borderColor: 'divider',
+                                    }}
+                                    elevation={0}
+                                >
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                            <Typography variant="h6" component="div">
+                                                {review.name}
+                                            </Typography>
+                                            <Typography variant="subtitle2" color="text.secondary">
+                                                {format(new Date(review.date), 'd MMMM yyyy', { locale: ru })}
+                                            </Typography>
+                                        </Box>
+                                        <Rating value={review.rating} readOnly sx={{ mb: 2 }} />
+                                        <Typography variant="body1" color="text.secondary">
+                                            {review.text}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
             </Container>
         </Box>
     );
