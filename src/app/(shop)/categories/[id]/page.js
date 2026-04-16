@@ -1,4 +1,5 @@
 import { Container, Typography, Box } from '@mui/material';
+import Link from 'next/link';
 import { unstable_cache } from 'next/cache';
 import BackButton from './BackButton';
 import ProductList from './ProductList';
@@ -11,6 +12,8 @@ import {
   getCategorySeoCopy,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+const PAGE_SIZE = 24;
 
 // Кэш категорий и выборки товаров (~1 ч), снижает нагрузку на БД
 function getCachedCategoryByIdCached(id) {
@@ -36,6 +39,25 @@ function getCachedCategorySeoSample(categoryId) {
       });
     },
     ['category-seo-sample', String(categoryId)],
+    {
+      revalidate: 3600,
+      tags: ['products', 'categories'],
+    },
+  )();
+}
+
+function getCachedCategoryProductsFirstPage(categoryId) {
+  return unstable_cache(
+    async () => {
+      return await getProducts({
+        categoryId,
+        page: 1,
+        limit: PAGE_SIZE,
+        sort: 'asc',
+        sortBy: 'name',
+      });
+    },
+    ['category-products-first-page', String(categoryId)],
     {
       revalidate: 3600,
       tags: ['products', 'categories'],
@@ -134,6 +156,8 @@ export default async function CategoryPage({ params }) {
     );
 
     const categorySeo = getCategorySeoCopy(category);
+    const firstPageProductsResult = await getCachedCategoryProductsFirstPage(category.id);
+    const featuredProducts = (firstPageProductsResult?.products || []).slice(0, 12);
 
     // Breadcrumbs для категории
     const breadcrumbs = [
@@ -180,7 +204,56 @@ export default async function CategoryPage({ params }) {
             >
               {categorySeo.introParagraph}
             </Typography>
-            <ProductList categoryId={category.id} />
+            <ProductList
+              categoryId={category.id}
+              initialProducts={firstPageProductsResult?.products || []}
+              initialFilters={firstPageProductsResult?.filters || {}}
+              initialHasMore={
+                (firstPageProductsResult?.pagination?.pages ?? 0) > 1
+              }
+            />
+            {featuredProducts.length > 0 && (
+              <Box
+                component="section"
+                aria-label={`Популярные товары категории ${category.name}`}
+                sx={{ mt: 5, mb: 2 }}
+              >
+                <Typography variant="h2" sx={{ fontSize: '1.25rem', mb: 1.5 }}>
+                  Популярные товары в категории {category.name}
+                </Typography>
+                <Box
+                  component="details"
+                  sx={{
+                    p: 1.5,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 1.5,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  <Typography
+                    component="summary"
+                    variant="body1"
+                    sx={{ cursor: 'pointer', fontWeight: 500 }}
+                  >
+                    Показать подборку популярных моделей с ценами и рассрочкой
+                  </Typography>
+                  <Box component="ul" sx={{ mt: 1.5, mb: 0, pl: 2.5 }}>
+                    {featuredProducts.map((product) => (
+                      <li key={product.id}>
+                        <Link
+                          href={`/products/${product.id}`}
+                          title={`Купить ${product.name} в рассрочку в Минске`}
+                          aria-label={`Купить ${product.name} в рассрочку в Минске`}
+                        >
+                          {product.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </Box>
+                </Box>
+              </Box>
+            )}
           </Container>
         </Box>
       </>

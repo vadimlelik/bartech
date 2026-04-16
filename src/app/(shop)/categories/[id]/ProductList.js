@@ -354,11 +354,20 @@ const ProductGridCard = memo(function ProductGridCard({
   );
 });
 
-export default function ProductList({ categoryId }) {
+export default function ProductList({
+  categoryId,
+  initialProducts = [],
+  initialFilters = {},
+  initialHasMore = false,
+}) {
+  const hasInitialData =
+    (Array.isArray(initialProducts) && initialProducts.length > 0) ||
+    Boolean(initialHasMore) ||
+    (initialFilters && Object.keys(initialFilters).length > 0);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(initialProducts);
+  const [loading, setLoading] = useState(!hasInitialData);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('name');
   const [sort, setSort] = useState('asc');
@@ -366,7 +375,7 @@ export default function ProductList({ categoryId }) {
   const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(initialHasMore);
   const loadMoreSentinelRef = useRef(null);
   const hasMoreRef = useRef(false);
   const loadingMoreRef = useRef(false);
@@ -386,11 +395,12 @@ export default function ProductList({ categoryId }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [availableFilters, setAvailableFilters] = useState({});
+  const [availableFilters, setAvailableFilters] = useState(initialFilters);
   const [activeFilters, setActiveFilters] = useState({});
   const [previewFilters, setPreviewFilters] = useState({});
   const [previewCount, setPreviewCount] = useState(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const didUseInitialDataRef = useRef(hasInitialData);
 
   // Удален console.log для production
 
@@ -454,6 +464,17 @@ export default function ProductList({ categoryId }) {
 
     const fetchProducts = async () => {
       if (!categoryId) {
+        return;
+      }
+      const isDefaultInitialRequest =
+        didUseInitialDataRef.current &&
+        page === 1 &&
+        sort === 'asc' &&
+        sortBy === 'name' &&
+        !searchTerm &&
+        activeFiltersKey === '{}';
+      if (isDefaultInitialRequest) {
+        didUseInitialDataRef.current = false;
         return;
       }
       const isFirstPage = page === 1;
