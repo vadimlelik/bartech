@@ -19,7 +19,7 @@ const Footer = () => {
         <div className={styles.container}>
           <div className={styles.text}>
             ООО «Баратех» УНП: 193796252 <br /> Юридический и почтовый адрес:
-            220068, г. Минск, ул. Червякова, д. 60, пом. 179
+            220013, г. Минск, ул. Сурганова, д. 43
             <br /> +375 44 741-84-23
           </div>
           <div className={styles.content}>

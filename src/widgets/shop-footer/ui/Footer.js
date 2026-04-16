@@ -59,7 +59,7 @@ export default function Footer() {
               paragraph
               sx={{ fontSize: { xs: '0.875rem', md: '1rem' } }}
             >
-              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д. 43, пом. 804
+              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д. 43
             </Typography>
             <Typography
               variant="body2"

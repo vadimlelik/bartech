@@ -92,7 +92,7 @@ export function getCategorySeoCopy(category) {
 }
 
 const BUSINESS_ADDRESS = {
-  streetAddress: 'ул. Сурганова, д. 43, пом. 804',
+  streetAddress: 'ул. Сурганова, д. 43',
   addressLocality: 'Минск',
   postalCode: '220013',
   addressCountry: 'BY',

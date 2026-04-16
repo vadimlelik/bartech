@@ -179,6 +179,10 @@ const Quiz = ({
               !comment.includes('рассрочки') && !comment.includes('Срок')
           )
           .join('\n');
+        const consentStatus = data.consent
+          ? 'Да'
+          : 'Нет';
+        const commentsWithConsent = `${formattedComments}\nСогласие на обработку персональных данных: ${consentStatus}`;
 
         const phoneQuestion = questions.find((q) => q.type === 'text');
         const phoneNumber = phoneQuestion
@@ -192,7 +196,7 @@ const Quiz = ({
         const formData = {
           FIELDS: {
             TITLE: `Заявка на ПРОДАЖУ $$$ ${title}`,
-            COMMENTS: formattedComments,
+            COMMENTS: commentsWithConsent,
             PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
             SOURCE_ID: 'WEB',
             SOURCE_DESCRIPTION: `Quiz Form - ${title}`,
