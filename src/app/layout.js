@@ -49,8 +49,7 @@ export const metadata = {
     locale: 'ru_BY',
     url: siteUrl,
     siteName: 'Texnobar',
-    title:
-      'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
+    title: 'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
       'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
     images: [
@@ -64,8 +63,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title:
-      'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
+    title: 'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
       'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
     images: [`${siteUrl}/logo_techno_bar.svg`],
@@ -91,11 +89,32 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={roboto.className}>
       <head>
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KLF56CZ4');`,
+          }}
+        />
+        {/* End Google Tag Manager */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#000000" />
         <meta name="description" content={SITE_DESCRIPTION} />
       </head>
       <body>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KLF56CZ4"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         <StyledComponentsRegistry>
           <Providers>
             <ClientLayout>{children}</ClientLayout>
