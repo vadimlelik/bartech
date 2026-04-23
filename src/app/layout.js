@@ -1,4 +1,5 @@
 import { Roboto } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import StyledComponentsRegistry from './registry';
 import ClientLayout from '@/widgets/client-shell/ui/ClientLayout';
@@ -90,7 +91,9 @@ export default function RootLayout({ children }) {
     <html lang="ru" className={roboto.className}>
       <head>
         {/* Google Tag Manager */}
-        <script
+        <Script
+          id="gtm-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
