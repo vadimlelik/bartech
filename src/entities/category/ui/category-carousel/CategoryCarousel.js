@@ -102,8 +102,9 @@ export default function CategoryCarousel() {
           src={currentSlide.image}
           alt={currentSlide.title}
           fill
+          sizes="100vw"
           style={{ objectFit: 'cover' }}
-          priority
+          priority={activeStep === 0}
         />
         <Box
           sx={{

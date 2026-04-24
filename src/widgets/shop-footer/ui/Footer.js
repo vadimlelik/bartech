@@ -181,27 +181,21 @@ export default function Footer() {
                     alt="Visa"
                     width={50}
                     height={100}
-                    priority
-                    quality={100}
-                    unoptimized
+                    loading="lazy"
                   />
                   <Image
                     src="/images/payment-mastercard.png"
                     alt="Mastercard"
                     width={50}
                     height={100}
-                    priority
-                    quality={100}
-                    unoptimized
+                    loading="lazy"
                   />
                   <Image
                     src="/images/payment-belcard.png"
                     alt="BelCard"
                     width={50}
                     height={100}
-                    priority
-                    quality={100}
-                    unoptimized
+                    loading="lazy"
                   />
                 </Box>
               </Box>
