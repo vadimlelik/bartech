@@ -3,10 +3,12 @@ import {
   verifySessionToken,
   SESSION_COOKIE_NAME,
 } from '@/shared/lib/auth-session';
+import { LEGIT_SUBDOMAINS_SET } from '@/shared/config/subdomains';
 
 export async function middleware(request) {
   const url = request.nextUrl;
   const hostname = request.headers.get('host');
+  const normalizedHostname = hostname?.split(':')[0].toLowerCase();
 
   if (url.pathname.startsWith('/admin')) {
     const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
@@ -22,10 +24,14 @@ export async function middleware(request) {
   }
 
   const domainPattern = /^([^.]+)\.technobar\.by$/;
-  const subdomainMatch = hostname?.match(domainPattern);
+  const subdomainMatch = normalizedHostname?.match(domainPattern);
 
   if (subdomainMatch) {
     const subdomain = subdomainMatch[1];
+    if (!LEGIT_SUBDOMAINS_SET.has(subdomain)) {
+      return NextResponse.next();
+    }
+
     const newUrl = new URL(request.url);
     newUrl.pathname = `/${subdomain}${url.pathname}`;
 

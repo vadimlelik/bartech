@@ -2,6 +2,7 @@ import { getAllProducts } from '@/entities/product/model/products';
 import { getCategories } from '@/entities/category/model/categories';
 import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
 
 export default async function sitemap() {
   const baseRoutes = [
@@ -80,35 +81,7 @@ export default async function sitemap() {
   ];
 
   // Статические лендинги по категориям товаров
-  const landingRoutes = [
-    // Телефоны и смартфоны
-    { slug: 'phone', priority: 0.85 },
-    { slug: 'phone2', priority: 0.75 },
-    { slug: 'phone3', priority: 0.75 },
-    { slug: 'phone4', priority: 0.75 },
-    { slug: 'phone5', priority: 0.75 },
-    { slug: 'phone6', priority: 0.75 },
-    { slug: 'shockproof-phone', priority: 0.7 },
-    // Ноутбуки и компьютеры
-    { slug: 'laptop', priority: 0.85 },
-    { slug: 'laptop2', priority: 0.75 },
-    { slug: 'pc', priority: 0.75 },
-    // Телевизоры
-    { slug: 'tv1', priority: 0.85 },
-    { slug: 'tv2', priority: 0.75 },
-    { slug: 'tv3', priority: 0.75 },
-    // Электротранспорт
-    { slug: 'scooter', priority: 0.75 },
-    { slug: 'bicycles', priority: 0.75 },
-    { slug: 'motoblok', priority: 0.7 },
-    { slug: 'motoblok1', priority: 0.65 },
-    { slug: 'motoblok2', priority: 0.65 },
-    // Дополнительные лендинги
-    { slug: 'phone7', priority: 0.75 },
-    { slug: '50discount', priority: 0.65 },
-    { slug: '1phonefree', priority: 0.65 },
-    // Служебные страницы /thank-you и /test не включаем в sitemap
-  ].map(({ slug, priority }) => ({
+  const landingRoutes = Object.entries(LANDING_SITEMAP_PRIORITIES).map(([slug, priority]) => ({
     url: `${siteUrl}/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',

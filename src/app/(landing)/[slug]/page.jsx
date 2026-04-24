@@ -33,13 +33,14 @@ export async function generateMetadata({ params }) {
       return {
         title: notFoundTitle,
         description: notFoundDescription,
-        alternates: {
-          canonical: `${siteUrl}/${slug}`,
+        robots: {
+          index: false,
+          follow: false,
         },
         openGraph: {
           title: notFoundTitle,
           description: notFoundDescription,
-          url: `${siteUrl}/${slug}`,
+          url: siteUrl,
           type: 'website',
         },
         twitter: {
@@ -79,13 +80,14 @@ export async function generateMetadata({ params }) {
     return {
       title: fallbackTitle,
       description: fallbackDescription,
-      alternates: {
-        canonical: `${siteUrl}/${slug}`,
+      robots: {
+        index: false,
+        follow: false,
       },
       openGraph: {
         title: fallbackTitle,
         description: fallbackDescription,
-        url: `${siteUrl}/${slug}`,
+        url: siteUrl,
         type: 'website',
       },
       twitter: {

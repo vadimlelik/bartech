@@ -8,8 +8,7 @@ import CreditCardsModal from '@/features/credit-cards/ui/CreditCardsModal';
 const Footer = () => {
   const [creditModalOpen, setCreditModalOpen] = useState(false);
 
-  const handleCreditClick = (e) => {
-    e.preventDefault();
+  const handleCreditClick = () => {
     setCreditModalOpen(true);
   };
 
@@ -53,14 +52,14 @@ const Footer = () => {
                   месяцев, 18 месяцев.{' '}
                 </li>
                 <li className={styles['footer__offer__item']}>
-                  <a
-                    href="#"
+                  <button
+                    type="button"
                     onClick={handleCreditClick}
                     className={styles['footer__offer__link']}
                     style={{ cursor: 'pointer' }}
                   >
                     Кредитные предложения
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
