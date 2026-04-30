@@ -3,7 +3,12 @@ import {
   verifySessionToken,
   SESSION_COOKIE_NAME,
 } from '@/shared/lib/auth-session';
-import { LEGIT_SUBDOMAINS_SET } from '@/shared/config/subdomains';
+
+const BLOCKED_SUBDOMAINS_SET = new Set(['www']);
+
+function isValidLandingSubdomain(subdomain) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(subdomain || ''));
+}
 
 export async function middleware(request) {
   const url = request.nextUrl;
@@ -42,7 +47,7 @@ export async function middleware(request) {
 
   if (subdomainMatch) {
     const subdomain = subdomainMatch[1];
-    if (!LEGIT_SUBDOMAINS_SET.has(subdomain)) {
+    if (BLOCKED_SUBDOMAINS_SET.has(subdomain) || !isValidLandingSubdomain(subdomain)) {
       const canonicalUrl = new URL(request.url);
       canonicalUrl.protocol = 'https:';
       canonicalUrl.host = 'technobar.by';
