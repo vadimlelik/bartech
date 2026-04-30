@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, Paper, Typography, Button, MobileStepper } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import Image from 'next/image';
@@ -55,7 +55,6 @@ const slides = [
 export default function CategoryCarousel() {
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = slides.length;
-  const [autoPlay, setAutoPlay] = useState(true);
 
   const handleNext = () => {
     setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
@@ -76,8 +75,6 @@ export default function CategoryCarousel() {
         overflow: 'hidden',
         mb: 4,
       }}
-      onMouseEnter={() => setAutoPlay(false)}
-      onMouseLeave={() => setAutoPlay(true)}
     >
       <Box
         sx={{

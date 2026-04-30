@@ -114,6 +114,62 @@ export default async function Home() {
           >
             Категории товаров
           </Typography>
+          <Box sx={{ mb: 5 }}>
+            <Typography
+              variant="h5"
+              component="h2"
+              gutterBottom
+              sx={{ textAlign: 'center', fontWeight: 'bold', mb: 2 }}
+            >
+              Частые вопросы о рассрочке в Texnobar
+            </Typography>
+            <Box sx={{ maxWidth: 900, mx: 'auto' }}>
+              <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
+                Как оформить рассрочку на телефон, ноутбук или телевизор?
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+                Выберите товар в каталоге, оставьте заявку и дождитесь решения. В
+                большинстве случаев предварительный ответ приходит в течение 24
+                часов.
+              </Typography>
+              <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
+                Какие базовые условия по платежам и доставке?
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                На главной странице указаны ориентиры: доставка по Беларуси от 15
+                руб., ежемесячный платеж от 29,99 руб., а также оформление без
+                первого платежа по доступным программам.
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              maxWidth: 950,
+              mx: 'auto',
+              mb: 5,
+              p: { xs: 2, md: 3 },
+              borderRadius: 2,
+              backgroundColor: 'background.paper',
+            }}
+          >
+            <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 2 }}>
+              Факты и условия покупки в рассрочку
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Texnobar работает как интернет-магазин техники для покупателей из
+              Минска и других городов Беларуси: на сайте доступен каталог с
+              актуальными карточками телефонов, телевизоров, ноутбуков и другой
+              электроники. Для заявки на рассрочку клиент выбирает товар, оставляет
+              контакты и получает предварительное решение, как правило, в течение
+              суток. В блоке преимуществ на этой странице зафиксированы конкретные
+              ориентиры по условиям: доставка по РБ от 15 руб., ежемесячный платеж
+              от 29,99 руб., а также программы без первого платежа. Формулировка
+              «97% одобренных рассрочек» относится к внутренней статистике заявок
+              магазина, поэтому итоговое решение по каждому клиенту зависит от
+              параметров выбранной программы финансирования и проверки данных при
+              оформлении.
+            </Typography>
+          </Box>
           {validCategories.length > 0 ? (
             <Grid container spacing={3}>
               {validCategories.map((category) => (

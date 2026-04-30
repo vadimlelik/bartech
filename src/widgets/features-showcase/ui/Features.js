@@ -1,6 +1,3 @@
-'use client';
-
-import React from 'react';
 import { Box, Container, Grid, Typography, Paper } from '@mui/material';
 import { LocalShipping, CheckCircle, Payment, Timeline } from '@mui/icons-material';
 
