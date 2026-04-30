@@ -4,6 +4,7 @@ import CategoryCard from '@/entities/category/ui/category-card/CategoryCard';
 import { getCategories } from '@/entities/category/model/categories';
 import CategoryCarousel from '@/entities/category/ui/category-carousel/CategoryCarousel';
 import Features from '@/widgets/features-showcase/ui/Features';
+import InstallmentFactsToggle from './ui/InstallmentFactsToggle';
 import {
   getOrganizationSchema,
   getWebSiteSchema,
@@ -142,34 +143,6 @@ export default async function Home() {
               </Typography>
             </Box>
           </Box>
-          <Box
-            sx={{
-              maxWidth: 950,
-              mx: 'auto',
-              mb: 5,
-              p: { xs: 2, md: 3 },
-              borderRadius: 2,
-              backgroundColor: 'background.paper',
-            }}
-          >
-            <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 2 }}>
-              Факты и условия покупки в рассрочку
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Texnobar работает как интернет-магазин техники для покупателей из
-              Минска и других городов Беларуси: на сайте доступен каталог с
-              актуальными карточками телефонов, телевизоров, ноутбуков и другой
-              электроники. Для заявки на рассрочку клиент выбирает товар, оставляет
-              контакты и получает предварительное решение, как правило, в течение
-              суток. В блоке преимуществ на этой странице зафиксированы конкретные
-              ориентиры по условиям: доставка по РБ от 15 руб., ежемесячный платеж
-              от 29,99 руб., а также программы без первого платежа. Формулировка
-              «97% одобренных рассрочек» относится к внутренней статистике заявок
-              магазина, поэтому итоговое решение по каждому клиенту зависит от
-              параметров выбранной программы финансирования и проверки данных при
-              оформлении.
-            </Typography>
-          </Box>
           {validCategories.length > 0 ? (
             <Grid container spacing={3}>
               {validCategories.map((category) => (
@@ -186,6 +159,7 @@ export default async function Home() {
               Категории пока не добавлены
             </Typography>
           )}
+          <InstallmentFactsToggle />
         </Container>
       </Box>
     </>
