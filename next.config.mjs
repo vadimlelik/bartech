@@ -124,6 +124,16 @@ const nextConfig = {
 
     return [...subdomainRewrites, phoneRewrite];
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/category/:id',
+        destination: '/categories/:id',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

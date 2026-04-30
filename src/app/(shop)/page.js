@@ -115,7 +115,23 @@ export default async function Home() {
           >
             Категории товаров
           </Typography>
-          <Box sx={{ mb: 5 }}>
+          {validCategories.length > 0 ? (
+            <Grid container spacing={3}>
+              {validCategories.map((category) => (
+                <Grid item xs={12} sm={6} md={4} key={category.id}>
+                  <CategoryCard category={category} />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
+              Категории пока не добавлены
+            </Typography>
+          )}
+          <Box sx={{ mt: 5, mb: 5 }}>
             <Typography
               variant="h5"
               component="h2"
@@ -143,22 +159,6 @@ export default async function Home() {
               </Typography>
             </Box>
           </Box>
-          {validCategories.length > 0 ? (
-            <Grid container spacing={3}>
-              {validCategories.map((category) => (
-                <Grid item xs={12} sm={6} md={4} key={category.id}>
-                  <CategoryCard category={category} />
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Typography
-              variant="body1"
-              sx={{ textAlign: 'center', color: 'text.secondary' }}
-            >
-              Категории пока не добавлены
-            </Typography>
-          )}
           <InstallmentFactsToggle />
         </Container>
       </Box>

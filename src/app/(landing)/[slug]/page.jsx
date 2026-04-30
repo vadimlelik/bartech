@@ -4,6 +4,10 @@ import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
+function isValidLandingSlug(slug) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''));
+}
+
 // Кэш по каждому slug отдельно (ключ БЕЗ slug ломал все URL: возвращался первый закэшированный результат).
 // Обновление: revalidateTag('landings') из админки.
 async function getCachedLandingBySlug(slug) {
@@ -23,6 +27,16 @@ export const revalidate = 86400;
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
+  if (!isValidLandingSlug(slug)) {
+    return {
+      title: 'Лендинг не найден',
+      description: 'Запрошенная страница не найдена',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
 
   try {
     const landing = await getCachedLandingBySlug(slug);
@@ -102,9 +116,9 @@ export async function generateMetadata({ params }) {
 export const generateStaticParams = async () => {
   try {
     const landings = await getAllLandings();
-    return landings.map((landing) => ({
-      slug: landing.slug,
-    }));
+    return landings
+      .map((landing) => ({ slug: landing.slug }))
+      .filter(({ slug }) => isValidLandingSlug(slug));
   } catch {
     // Сборка без доступной БД (Docker и т.д.) — страницы по slug генерируются on-demand
     return [];
@@ -114,6 +128,9 @@ export const generateStaticParams = async () => {
 export default async function LandingPage({ params }) {
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams;
+  if (!isValidLandingSlug(slug)) {
+    notFound();
+  }
 
   try {
     // Используем кэшированную версию - данные уже будут в кэше после generateMetadata
