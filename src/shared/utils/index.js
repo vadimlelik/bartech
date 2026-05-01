@@ -1,5 +1,17 @@
 export { formatPrice } from './format-price';
 
+export const scheduleNonCriticalTask = (task, timeout = 1500) => {
+  if (typeof window === 'undefined') return () => {};
+
+  if ('requestIdleCallback' in window) {
+    const id = window.requestIdleCallback(task, { timeout });
+    return () => window.cancelIdleCallback(id);
+  }
+
+  const id = setTimeout(task, Math.min(timeout, 300));
+  return () => clearTimeout(id);
+};
+
 // Инициализация базового скрипта TikTok Pixel (без загрузки конкретного пикселя)
 export const initTikTokPixel = () => {
   if (typeof window !== 'undefined' && !window.ttq) {

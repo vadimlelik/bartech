@@ -231,7 +231,7 @@ export default function Phone6() {
             alt="Телефоны"
             width={600}
             height={600}
-            priority
+            loading="lazy"
             style={{
               width: '100%',
               height: 'auto',

@@ -2,6 +2,7 @@
 import { useCartStore } from '@/entities/cart';
 import styles from './page.module.css';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 
 const products = [
   {
@@ -87,7 +88,15 @@ export default function ProductPage() {
   return (
     <main className={styles.container}>
       <div className={styles.wrapper}>
-        <img src={product.image} alt={product.title} className={styles.image} />
+        <Image
+          src={product.image}
+          alt={product.title}
+          width={520}
+          height={520}
+          className={styles.image}
+          sizes="(max-width: 900px) 100vw, 520px"
+          priority
+        />
         <div className={styles.content}>
           <h1 className={styles.title}>{product.title}</h1>
           <span className={styles.price}>{product.price} руб.</span>

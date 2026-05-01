@@ -261,7 +261,7 @@ export default function Phone4() {
             alt="Смартфоны"
             width={500}
             height={1000}
-            priority
+            loading="lazy"
             style={{
               width: '100%',
               height: '100%',

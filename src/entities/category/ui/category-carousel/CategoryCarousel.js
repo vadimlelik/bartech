@@ -23,7 +23,7 @@ const slides = [
     subtitle: 'Рассрочка без переплат',
     description:
       'Новый iPhone 15 Pro в рассрочку до 24 месяцев без первого взноса! Титановый корпус, процессор A17 Pro и профессиональная система камер. Ежемесячный платеж всего от 149,99 руб.',
-    image: '/images/products/apple/iphone_15-pro_max1.jpg',
+    image: '/images/Samsung-S24-Blog.webp',
     link: '/categories/apple',
     color: '#1976d2',
     buttonText: 'Купить в рассрочку',

@@ -32,6 +32,14 @@
   flex-shrink: 0;
 }
 
+.cardImage {
+  max-width: 300px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+}
+
 .cardContent {
   flex: 1;
 }
@@ -152,6 +160,10 @@
   }
 
   .card img {
+    max-width: 100%;
+  }
+
+  .cardImage {
     max-width: 100%;
   }
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import {
   AppBar,
   Toolbar,
@@ -37,7 +38,11 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useCartStore } from '@/entities/cart';
 import { useFavoritesStore } from '@/entities/favorites';
 import { useAuthStore } from '@/features/auth';
-import CreditCardsModal from '@/features/credit-cards/ui/CreditCardsModal';
+
+const CreditCardsModal = dynamic(
+  () => import('@/features/credit-cards/ui/CreditCardsModal'),
+  { ssr: false }
+);
 
 const MENU_ITEMS = [
   { text: 'Каталог', href: '/', icon: StorefrontIcon },

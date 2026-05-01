@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import styles from './landing-page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
-import Loading from '@/app/loading';
-import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Quiz from '@/features/quiz/ui/Quiz';
-import { loadTikTokPixels } from '@/shared/utils';
+import { loadTikTokPixels, scheduleNonCriticalTask } from '@/shared/utils';
+
+const Quiz = dynamic(() => import('@/features/quiz/ui/Quiz'), { ssr: false });
 
 // Фиксированные вопросы для квиза
 const quizQuestions = [
@@ -61,7 +61,6 @@ const quizQuestions = [
 export default function LandingPageTemplate({ landing }) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [now, setNow] = useState(null);
   const [isVisible, setIsVisible] = useState({});
   const router = useRouter();
   const params = useSearchParams();
@@ -74,8 +73,6 @@ export default function LandingPageTemplate({ landing }) {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    setNow(Date.now());
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -101,8 +98,12 @@ export default function LandingPageTemplate({ landing }) {
       Array.isArray(landing.pixels) &&
       landing.pixels.length > 0
     ) {
-      loadTikTokPixels(landing.pixels);
+      const cancel = scheduleNonCriticalTask(() => {
+        loadTikTokPixels(landing.pixels);
+      });
+      return cancel;
     }
+    return undefined;
   }, [landing]);
 
   // Применение кастомных цветов через CSS variables
@@ -129,37 +130,42 @@ export default function LandingPageTemplate({ landing }) {
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/quiz', {
-        FIELDS: {
-          ...data.FIELDS,
-          UTM_SOURCE: utm_source || '',
-          UTM_MEDIUM: utm_medium || '',
-          UTM_CAMPAIGN: utm_campaign || '',
-          UTM_CONTENT: utm_content || '',
-          UTM_TERM: (ad || '') + (ttclid || ''),
-        },
+      const response = await fetch('/api/quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: (ad || '') + (ttclid || ''),
+          },
+        }),
       });
 
-      if (response.data?.success) {
+      if (response.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+        return;
+      }
+
+      const result = await response.json();
+
+      if (result?.success) {
         router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
       } else {
         alert('Форма отправлена слишком часто. Попробуйте через минуту.');
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
-      if (error.response?.status === 429) {
-        alert('Форма уже отправлена. Попробуйте через минуту.');
-      } else {
-        alert(
-          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-        );
-      }
+      alert(
+        'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+      );
     } finally {
       setIsLoading(false);
     }
   };
-
-  if (!now) return <Loading />;
 
   const benefits = Array.isArray(landing.benefits) ? landing.benefits : [];
   const advantages = Array.isArray(landing.advantages)

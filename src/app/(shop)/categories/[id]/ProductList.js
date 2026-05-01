@@ -40,6 +40,7 @@ import {
   Skeleton,
   Rating,
   Tooltip,
+  useMediaQuery,
 } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -53,7 +54,8 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import PaymentIcon from '@mui/icons-material/Payment';
 
-const PAGE_SIZE = 24;
+const DESKTOP_PAGE_SIZE = 24;
+const MOBILE_PAGE_SIZE = 12;
 
 const FILTER_URL_KEYS = [
   'memory',
@@ -90,13 +92,13 @@ const hasSpecsToShow = (specifications) => {
 
 const ProductGridCard = memo(function ProductGridCard({
   product,
-  index,
+  isMobile,
   isFavorite,
   isCompared,
   onCompare,
   onFavorite,
 }) {
-  const showSpecs = hasSpecsToShow(product.specifications);
+  const showSpecs = !isMobile && hasSpecsToShow(product.specifications);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -186,7 +188,7 @@ const ProductGridCard = memo(function ProductGridCard({
                   padding: '20px',
                 }}
                 sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                priority={index < 6}
+                loading="lazy"
               />
             )}
           </Box>
@@ -401,6 +403,8 @@ export default function ProductList({
   const [previewCount, setPreviewCount] = useState(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const didUseInitialDataRef = useRef(hasInitialData);
+  const isMobile = useMediaQuery('(max-width:900px)', { noSsr: true });
+  const pageSize = isMobile ? MOBILE_PAGE_SIZE : DESKTOP_PAGE_SIZE;
 
   // Удален console.log для production
 
@@ -490,7 +494,7 @@ export default function ProductList({
           sort,
           sortBy,
           page: String(page),
-          limit: String(PAGE_SIZE),
+          limit: String(pageSize),
           search: searchTerm,
           ...activeFilters,
         });
@@ -543,7 +547,7 @@ export default function ProductList({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryId, sort, sortBy, page, searchTerm, activeFiltersKey]);
+  }, [categoryId, sort, sortBy, page, searchTerm, activeFiltersKey, pageSize]);
 
   useEffect(() => {
     const el = loadMoreSentinelRef.current;
@@ -866,7 +870,7 @@ export default function ProductList({
 
       {loading ? (
         <Grid container spacing={3}>
-          {[...Array(6)].map((_, index) => (
+          {[...Array(isMobile ? 4 : 6)].map((_, index) => (
             <Grid item xs={12} sm={6} md={4} key={`skeleton-${index}`}>
               <Skeleton
                 variant="rectangular"
@@ -897,7 +901,7 @@ export default function ProductList({
               <ProductGridCard
                 key={product.id}
                 product={product}
-                index={index}
+                isMobile={isMobile}
                 isFavorite={favoriteIds.has(productId)}
                 isCompared={compareIds.has(productId)}
                 onCompare={handleCompareToggle}

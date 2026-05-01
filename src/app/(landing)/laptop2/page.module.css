@@ -124,6 +124,10 @@
     font-size: 1.6rem;
   }
 
+  .hero {
+    background-attachment: scroll;
+  }
+
   .list {
     font-size: 0.9rem;
   }

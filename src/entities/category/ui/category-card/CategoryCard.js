@@ -41,6 +41,10 @@ export default function CategoryCard({ category }) {
                             component="img"
                             image={image}
                             alt={name}
+                            onError={(event) => {
+                                event.currentTarget.onerror = null;
+                                event.currentTarget.src = '/logo_techno_bar.svg';
+                            }}
                             sx={{
                                 position: 'absolute',
                                 top: 0,

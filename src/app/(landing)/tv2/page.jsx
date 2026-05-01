@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import styles from './tvPage.module.css';
 import Button from '@/shared/ui/button/Button';
-import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { PIXEL, PIXEL_2, PIXEL_3 } from '@/shared/config/pixel';
-import { loadTikTokPixels } from '@/shared/utils';
-import Quiz from '@/features/quiz/ui/Quiz';
+import { loadTikTokPixels, scheduleNonCriticalTask } from '@/shared/utils';
 import Script from 'next/script';
+
+const Quiz = dynamic(() => import('@/features/quiz/ui/Quiz'), { ssr: false });
 
 export default function CatalogPage() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -78,37 +80,48 @@ export default function CatalogPage() {
   const ttclid = params.get('ttclid');
 
   useEffect(() => {
-    loadTikTokPixels([PIXEL.tv2, PIXEL_2.tv2, PIXEL_3.tv2]);
+    const cancel = scheduleNonCriticalTask(() => {
+      loadTikTokPixels([PIXEL.tv2, PIXEL_2.tv2, PIXEL_3.tv2]);
+    });
+
+    return cancel;
   }, []);
 
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/quiz', {
-        FIELDS: {
-          ...data.FIELDS,
-          UTM_SOURCE: utm_source || '',
-          UTM_MEDIUM: utm_medium || '',
-          UTM_CAMPAIGN: utm_campaign || '',
-          UTM_CONTENT: utm_content || '',
-          UTM_TERM: (ad || '') + (ttclid || ''),
-        },
+      const response = await fetch('/api/quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          FIELDS: {
+            ...data.FIELDS,
+            UTM_SOURCE: utm_source || '',
+            UTM_MEDIUM: utm_medium || '',
+            UTM_CAMPAIGN: utm_campaign || '',
+            UTM_CONTENT: utm_content || '',
+            UTM_TERM: (ad || '') + (ttclid || ''),
+          },
+        }),
       });
 
-      if (response.data?.success) {
+      if (response.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+        return;
+      }
+
+      const result = await response.json();
+
+      if (result?.success) {
         router.push('https://technobar.by/thank-you?source=tv2');
       } else {
         alert('Форма отправлена слишком часто. Попробуйте через минуту.');
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
-      if (error.response?.status === 429) {
-        alert('Форма уже отправлена. Попробуйте через минуту.');
-      } else {
-        alert(
-          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-        );
-      }
+      alert(
+        'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -141,7 +154,14 @@ export default function CatalogPage() {
       <main className={styles.main}>
         {/* Первая карточка */}
         <div className={`${styles.card} ${styles.hidden}`}>
-          <img src="images/tv/tv3_2.png" alt="Техника" />
+          <Image
+            src="/images/tv/tv3_2.png"
+            alt="Техника"
+            width={300}
+            height={200}
+            className={styles.cardImage}
+            sizes="(max-width: 900px) 100vw, 300px"
+          />
           <div className={styles.cardContent}>
             <span className={styles.discount}>
               <h2>
@@ -171,7 +191,7 @@ export default function CatalogPage() {
             type="video/mp4"
             className={styles.video}
             playsInline
-            preload="auto"
+            preload="metadata"
             controls
             controlsList="nodownload"
             disablePictureInPicture
@@ -193,7 +213,15 @@ export default function CatalogPage() {
 
         {/* Третья карточка */}
         <div className={`${styles.card} ${styles.hidden}`}>
-          <img src="images/tv/tv3.png" alt="Техника" />
+          <Image
+            src="/images/tv/tv3.png"
+            alt="Техника"
+            width={300}
+            height={200}
+            className={styles.cardImage}
+            sizes="(max-width: 900px) 100vw, 300px"
+            loading="lazy"
+          />
           <div className={styles.cardContent}>
             <h2>Характеристики</h2>
             <ul>
