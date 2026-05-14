@@ -60,7 +60,7 @@ const Quiz = ({
         return true;
       },
     }),
-    [],
+    []
   );
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -126,7 +126,7 @@ const Quiz = ({
       clearErrors();
       setCurrentQuestion(index);
     },
-    [clearErrors],
+    [clearErrors]
   );
 
   const nextQuestion = async () => {
@@ -179,9 +179,7 @@ const Quiz = ({
               !comment.includes('рассрочки') && !comment.includes('Срок')
           )
           .join('\n');
-        const consentStatus = data.consent
-          ? 'Да'
-          : 'Нет';
+        const consentStatus = data.consent ? 'Да' : 'Нет';
         const commentsWithConsent = `${formattedComments}\nСогласие на обработку персональных данных: ${consentStatus}`;
 
         const phoneQuestion = questions.find((q) => q.type === 'text');
@@ -319,42 +317,42 @@ const Quiz = ({
                     const phoneInvalid =
                       !!field.value && !PHONE_REGEX.test(field.value);
                     return (
-                    <TextField
-                      {...field}
-                      inputRef={phoneInputRef}
-                      variant="outlined"
-                      type="tel"
-                      slotProps={{
-                        input: {
-                          inputMode: 'numeric',
-                          pattern: '[0-9+]*',
-                        },
-                      }}
-                      placeholder="+375XXXXXXXXX"
-                      value={field.value || '+375'}
-                      onChange={(e) => {
-                        handlePhoneChange(field.onChange, e.target.value);
-                        startTransition(() => {
-                          clearErrors(fieldName);
-                          setValidationError('');
-                        });
-                      }}
-                      onKeyDown={handlePhoneKeyDown}
-                      error={
-                        !!(
+                      <TextField
+                        {...field}
+                        inputRef={phoneInputRef}
+                        variant="outlined"
+                        type="tel"
+                        slotProps={{
+                          input: {
+                            inputMode: 'numeric',
+                            pattern: '[0-9+]*',
+                          },
+                        }}
+                        placeholder="+375XXXXXXXXX"
+                        value={field.value || '+375'}
+                        onChange={(e) => {
+                          handlePhoneChange(field.onChange, e.target.value);
+                          startTransition(() => {
+                            clearErrors(fieldName);
+                            setValidationError('');
+                          });
+                        }}
+                        onKeyDown={handlePhoneKeyDown}
+                        error={
+                          !!(
+                            validationError ||
+                            (fieldState.error?.message && phoneInvalid)
+                          )
+                        }
+                        helperText={
                           validationError ||
-                          (fieldState.error?.message && phoneInvalid)
-                        )
-                      }
-                      helperText={
-                        validationError ||
-                        (fieldState.error?.message &&
-                          phoneInvalid &&
-                          fieldState.error.message)
-                      }
-                      disabled={isLoading}
-                      sx={{ width: '100%' }}
-                    />
+                          (fieldState.error?.message &&
+                            phoneInvalid &&
+                            fieldState.error.message)
+                        }
+                        disabled={isLoading}
+                        sx={{ width: '100%' }}
+                      />
                     );
                   }}
                 />
@@ -393,10 +391,11 @@ const Quiz = ({
                           lineHeight: '1.4',
                         }}
                       >
-                        Даю согласие на обработку {''}
+                        Я даю согласие на обработку{' '}
                         <Link href="https://technobar.by/pk">
                           персональных данных
-                        </Link>
+                        </Link>{' '}
+                        и согласие на рекламную рассылку каталога Вайбер {''}
                       </span>
                     </>
                   )}

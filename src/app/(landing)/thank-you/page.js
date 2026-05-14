@@ -107,6 +107,14 @@ const ThankYouPage = () => {
         Мы получили ваши данные и скоро свяжемся с вами.
       </motion.p>
 
+      <motion.button
+        className={styles.button}
+        onClick={() =>
+          (window.location.href = 'https://viber.com/technobar_bot')
+        }
+      >
+        Открыть каталог Вайбер
+      </motion.button>
       {/* Анимация благодарности */}
       <motion.div
         className={styles.animationContainer}
