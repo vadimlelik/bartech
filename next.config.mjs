@@ -96,7 +96,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/((?!pdf-viewer).*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
@@ -107,6 +107,18 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains',
           },
+        ],
+      },
+      // PDF-превью: iframe → /pdf-viewer → embed (сам PDF не во фрейме)
+      {
+        source: '/pdf-viewer',
+        headers: [{ key: 'X-Frame-Options', value: 'SAMEORIGIN' }],
+      },
+      {
+        source: '/:folder(videowathcing|politic)/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Content-Disposition', value: 'inline' },
         ],
       },
     ];

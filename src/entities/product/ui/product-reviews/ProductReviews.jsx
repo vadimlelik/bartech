@@ -11,36 +11,12 @@ import {
   Rating,
   Divider,
 } from '@mui/material';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
+import { YANDEX_REVIEWS } from '@/shared/config/yandex-reviews';
 
-/**
- * Компонент отзывов о товаре
- * TODO: Заменить хардкод на данные из API/базы данных
- */
 export default function ProductReviews() {
-  // Временные данные - должны быть из API
-  const reviews = [
-    {
-      id: 1,
-      author: 'Александр',
-      rating: 5,
-      date: '15.12.2023',
-      text: 'Отличный телефон, всем рекомендую!',
-    },
-    {
-      id: 2,
-      author: 'Мария',
-      rating: 4,
-      date: '10.12.2023',
-      text: 'Хороший телефон, но дороговато',
-    },
-    {
-      id: 3,
-      author: 'Дмитрий',
-      rating: 5,
-      date: '05.12.2023',
-      text: 'Камера супер, батарея держит долго',
-    },
-  ];
+  const reviews = YANDEX_REVIEWS;
 
   return (
     <List>
@@ -55,7 +31,7 @@ export default function ProductReviews() {
           <div key={review.id}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar>{review.author[0]}</Avatar>
+                <Avatar>{review.name[0]}</Avatar>
               </ListItemAvatar>
               <ListItemText
                 primary={
@@ -67,14 +43,16 @@ export default function ProductReviews() {
                     }}
                   >
                     <Typography component="span" variant="subtitle1">
-                      {review.author}
+                      {review.name}
                     </Typography>
                     <Typography
                       component="span"
                       variant="body2"
                       color="text.secondary"
                     >
-                      {review.date}
+                      {format(new Date(review.date), 'd MMMM yyyy', {
+                        locale: ru,
+                      })}
                     </Typography>
                   </Box>
                 }

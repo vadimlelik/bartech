@@ -10,11 +10,20 @@ function isValidLandingSubdomain(subdomain) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(subdomain || ''));
 }
 
+function withSameOriginFrame(response) {
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  return response;
+}
+
 export async function middleware(request) {
   const url = request.nextUrl;
   const hostname = request.headers.get('host');
   const normalizedHostname = hostname?.split(':')[0].toLowerCase();
   const protocol = request.headers.get('x-forwarded-proto') || url.protocol.replace(':', '');
+
+  if (url.pathname === '/pdf-viewer') {
+    return withSameOriginFrame(NextResponse.next());
+  }
 
   if (url.pathname.startsWith('/admin')) {
     const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
