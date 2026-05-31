@@ -20,7 +20,10 @@ import {
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
-  title: 'Купить в рассрочку телефон, телевизор, ноутбук — Минск | Texnobar',
+  title: {
+    absolute:
+      'Купить в рассрочку телефон, телевизор, ноутбук — Минск | Texnobar',
+  },
   description:
     'Купить в рассрочку телефон, смартфон, телевизор, ноутбук и технику в Минске — интернет-магазин Texnobar (technobar.by). Рассрочка без переплат, доставка по Беларуси, каталог товаров с ценами.',
   keywords: COMMERCIAL_SEO_KEYWORDS,

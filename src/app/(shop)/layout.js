@@ -4,7 +4,7 @@ import Footer from '@/widgets/shop-footer/ui/Footer';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
-  title: 'Каталог техники и электроники | Texnobar',
+  title: 'Каталог техники и электроники',
   description:
     'Каталог техники Texnobar: смартфоны, ноутбуки, телевизоры и другая электроника с доставкой по Беларуси.',
   openGraph: {

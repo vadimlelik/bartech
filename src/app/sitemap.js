@@ -1,10 +1,15 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import { getAllProducts } from '@/entities/product/model/products';
 import { getCategories } from '@/entities/category/model/categories';
 import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
 
+// Не кешировать при сборке Docker (без DATABASE_URL) — категории и товары только из runtime БД
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap() {
+  noStore();
   const baseRoutes = [
     {
       url: siteUrl,

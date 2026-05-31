@@ -78,7 +78,7 @@ export async function generateMetadata({ params }) {
       `Купить ${product.name} в рассрочку в Минске — доставка по Беларуси. ${product.specifications?.brand ? `Бренд ${product.specifications.brand}. ` : ''}Цена ${product.price} BYN. Интернет-магазин Texnobar: рассрочка без переплат.${catLabel ? ` Категория: ${catLabel}.` : ''}`;
 
     return {
-      title: `${product.name} — купить в рассрочку в Минске | Texnobar`,
+      title: `${product.name} — купить в рассрочку в Минске`,
       description,
       keywords: [
         product.name,

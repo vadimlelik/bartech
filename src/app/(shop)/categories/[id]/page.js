@@ -107,7 +107,7 @@ export async function generateMetadata({ params }) {
     const seo = getCategorySeoCopy(category);
 
     return {
-      title: seo.title,
+      title: seo.title.replace(' | Texnobar', ''),
       description: seo.description,
       keywords: seo.keywords,
       openGraph: {
