@@ -16,6 +16,7 @@ import {
   buildDefaultOpenGraphImages,
   DEFAULT_OG_IMAGE_PATH,
 } from '@/shared/lib/seo';
+import { SeoCitabilityPanel } from '@/shared/ui/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 const PAGE_SIZE = 24;
@@ -217,24 +218,12 @@ export default async function CategoryPage({ params }) {
             >
               {categorySeo.introParagraph}
             </Typography>
-            <Box
-              component="section"
-              sx={{
-                mb: 4,
-                p: { xs: 2, md: 2.5 },
-                borderRadius: 2,
-                bgcolor: 'grey.50',
-                border: '1px solid',
-                borderColor: 'divider',
-                maxWidth: 900,
-              }}
-            >
-              <Typography variant="h2" component="h2" sx={{ fontSize: '1.2rem', mb: 1.5 }}>
-                {citabilityQuestion}
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                {citabilityAnswer}
-              </Typography>
+            <Box sx={{ mb: 4, maxWidth: 900 }}>
+              <SeoCitabilityPanel
+                question={citabilityQuestion}
+                answer={citabilityAnswer}
+                label={`О рассрочке — ${category.name}`}
+              />
             </Box>
             <ProductList
               categoryId={category.id}

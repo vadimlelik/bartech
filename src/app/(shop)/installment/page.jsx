@@ -6,6 +6,7 @@ import {
   INSTALLMENT_CITABILITY_ANSWER,
   buildDefaultOpenGraphImages,
 } from '@/shared/lib/seo';
+import { SeoCitabilityPanel, SeoFaqSection } from '@/shared/ui/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import styles from './page.module.css';
 
@@ -62,10 +63,12 @@ export default function Installment() {
           партнёрских программ. Доставка по Минску и всей Беларуси.
         </p>
 
-        <section className={styles.citabilityBlock}>
-          <h2 className={styles.h2}>{INSTALLMENT_CITABILITY_QUESTION}</h2>
-          <p className={styles.text}>{INSTALLMENT_CITABILITY_ANSWER}</p>
-        </section>
+        <SeoCitabilityPanel
+          question={INSTALLMENT_CITABILITY_QUESTION}
+          answer={INSTALLMENT_CITABILITY_ANSWER}
+          defaultExpanded
+          label="Как это работает"
+        />
 
         <section className={styles.section}>
           <h2 className={styles.h2}>Условия рассрочки</h2>
@@ -155,17 +158,12 @@ export default function Installment() {
           </ul>
         </section>
 
-        <section className={styles.section}>
-          <h2 className={styles.h2}>Часто задаваемые вопросы</h2>
-          <div className={styles.faqList}>
-            {INSTALLMENT_FAQ_ITEMS.map((item, i) => (
-              <div key={i} className={styles.faqItem}>
-                <h3 className={styles.h3}>{item.q}</h3>
-                <p className={styles.text}>{item.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <div className={styles.faqWrapper}>
+          <SeoFaqSection
+            title="Часто задаваемые вопросы"
+            items={INSTALLMENT_FAQ_ITEMS}
+          />
+        </div>
 
         <section className={styles.contactCard}>
           <h2 className={styles.h3}>Остались вопросы?</h2>

@@ -1,11 +1,15 @@
 import { unstable_noStore as noStore } from 'next/cache';
-import Link from 'next/link';
-import { Container, Grid, Typography, Box } from '@mui/material';
+import { Container, Grid, Typography, Box, Stack } from '@mui/material';
 import CategoryCard from '@/entities/category/ui/category-card/CategoryCard';
 import { getCategories } from '@/entities/category/model/categories';
 import CategoryCarousel from '@/entities/category/ui/category-carousel/CategoryCarousel';
 import Features from '@/widgets/features-showcase/ui/Features';
 import InstallmentFactsToggle from './ui/InstallmentFactsToggle';
+import {
+  SeoCitabilityPanel,
+  SeoFaqSection,
+  SeoTrustBar,
+} from '@/shared/ui/seo';
 import {
   getOrganizationSchema,
   getWebSiteSchema,
@@ -112,26 +116,6 @@ export default async function Home() {
           >
             Купить телефон, телевизор или ноутбук в рассрочку — доставка по Минску и Беларуси, каталог товаров с ценами
           </Typography>
-          <Box
-            component="section"
-            sx={{
-              maxWidth: 900,
-              mx: 'auto',
-              mb: 5,
-              p: { xs: 2, md: 3 },
-              borderRadius: 2,
-              bgcolor: 'grey.50',
-              border: '1px solid',
-              borderColor: 'divider',
-            }}
-          >
-            <Typography variant="h2" component="h2" sx={{ fontSize: '1.35rem', mb: 1.5 }}>
-              {HOME_CITABILITY_QUESTION}
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              {HOME_CITABILITY_ANSWER}
-            </Typography>
-          </Box>
           <Typography
             variant="h5"
             component="h2"
@@ -160,54 +144,17 @@ export default async function Home() {
               Категории пока не добавлены
             </Typography>
           )}
-          <Box sx={{ mt: 5, mb: 3 }}>
-            <Typography
-              variant="h5"
-              component="h2"
-              gutterBottom
-              sx={{ textAlign: 'center', fontWeight: 'bold', mb: 2 }}
-            >
-              Частые вопросы о рассрочке в Texnobar
-            </Typography>
-            <Box sx={{ maxWidth: 900, mx: 'auto' }}>
-              {HOME_FAQ_ITEMS.map((item) => (
-                <Box key={item.q} sx={{ mb: 3 }}>
-                  <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
-                    {item.q}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {item.a}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-          <Box
-            component="section"
-            sx={{
-              maxWidth: 900,
-              mx: 'auto',
-              mb: 4,
-              p: 2,
-              borderRadius: 2,
-              border: '1px solid',
-              borderColor: 'divider',
-            }}
-          >
-            <Typography variant="subtitle1" component="p" sx={{ mb: 1 }}>
-              <strong>Texnobar</strong> — ООО «Баратех», г. Минск, ул. Сурганова, 43
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              Телефон:{' '}
-              <Link href="tel:+375257766462">+375 (25) 776-64-62</Link>
-              {' · '}
-              <Link href="/contacts">Контакты</Link>
-              {' · '}
-              <Link href="/guarantee">Гарантия</Link>
-              {' · '}
-              <Link href="/installment">Рассрочка</Link>
-            </Typography>
-          </Box>
+          <Stack spacing={3} sx={{ maxWidth: 900, mx: 'auto', mt: 6, mb: 2 }}>
+            <SeoCitabilityPanel
+              question={HOME_CITABILITY_QUESTION}
+              answer={HOME_CITABILITY_ANSWER}
+            />
+            <SeoFaqSection
+              title="Частые вопросы о рассрочке в Texnobar"
+              items={HOME_FAQ_ITEMS}
+            />
+            <SeoTrustBar />
+          </Stack>
           <InstallmentFactsToggle />
         </Container>
       </Box>

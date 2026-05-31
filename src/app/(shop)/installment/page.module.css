@@ -124,15 +124,8 @@
   font-weight: 700;
 }
 
-.faqList {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.faqItem {
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 16px;
+.faqWrapper {
+  margin-bottom: 40px;
 }
 
 .contactCard {
