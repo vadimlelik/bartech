@@ -90,6 +90,15 @@ const hasSpecsToShow = (specifications) => {
   return fields.some((value) => value && String(value).trim() !== '');
 };
 
+const SPEC_FIELDS = [
+  ['Дисплей', 'display'],
+  ['Процессор', 'processor'],
+  ['Память', 'ram'],
+  ['Накопитель', 'memory'],
+  ['Камера', 'camera'],
+  ['Аккумулятор', 'battery'],
+];
+
 const ProductGridCard = memo(function ProductGridCard({
   product,
   isMobile,
@@ -98,7 +107,12 @@ const ProductGridCard = memo(function ProductGridCard({
   onCompare,
   onFavorite,
 }) {
+  const [mounted, setMounted] = useState(false);
   const showSpecs = !isMobile && hasSpecsToShow(product.specifications);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -126,37 +140,47 @@ const ProductGridCard = memo(function ProductGridCard({
           }}
         >
           <Tooltip title="Добавить в сравнение">
-            <IconButton
-              size="small"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onCompare(product);
-              }}
-              sx={{
-                bgcolor: 'background.paper',
-                '&:hover': { bgcolor: 'action.hover' },
-              }}
-            >
-              <CompareArrowsIcon color={isCompared ? 'primary' : 'action'} />
-            </IconButton>
+            <span style={{ display: 'inline-flex' }}>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onCompare(product);
+                }}
+                sx={{
+                  bgcolor: 'background.paper',
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                <CompareArrowsIcon
+                  color={mounted && isCompared ? 'primary' : 'action'}
+                />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Добавить в избранное">
-            <IconButton
-              size="small"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onFavorite(product.id);
-              }}
-              sx={{
-                bgcolor: 'background.paper',
-                '&:hover': { bgcolor: 'action.hover' },
-                zIndex: 2,
-              }}
-            >
-              {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-            </IconButton>
+            <span style={{ display: 'inline-flex' }}>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onFavorite(product.id);
+                }}
+                sx={{
+                  bgcolor: 'background.paper',
+                  '&:hover': { bgcolor: 'action.hover' },
+                  zIndex: 2,
+                }}
+              >
+                {mounted && isFavorite ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
+            </span>
           </Tooltip>
         </Box>
 
@@ -242,82 +266,25 @@ const ProductGridCard = memo(function ProductGridCard({
               </Typography>
 
               {showSpecs && (
-                <List dense sx={{ mt: 1, '& .MuiListItem-root': { px: 0 } }}>
-                  {product.specifications.display &&
-                    String(product.specifications.display).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Дисплей:</strong> {product.specifications.display}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                  {product.specifications.processor &&
-                    String(product.specifications.processor).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Процессор:</strong>{' '}
-                              {product.specifications.processor}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                  {product.specifications.ram &&
-                    String(product.specifications.ram).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Память:</strong> {product.specifications.ram}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                  {product.specifications.memory &&
-                    String(product.specifications.memory).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Накопитель:</strong> {product.specifications.memory}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                  {product.specifications.camera &&
-                    String(product.specifications.camera).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Камера:</strong> {product.specifications.camera}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                  {product.specifications.battery &&
-                    String(product.specifications.battery).trim() !== '' && (
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Typography variant="body2" component="span">
-                              <strong>Аккумулятор:</strong>{' '}
-                              {product.specifications.battery}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    )}
-                </List>
+                <Box sx={{ mt: 1 }}>
+                  {SPEC_FIELDS.map(([label, key]) => {
+                    const value = product.specifications?.[key];
+                    if (!value || String(value).trim() === '') {
+                      return null;
+                    }
+
+                    return (
+                      <Typography
+                        key={key}
+                        variant="body2"
+                        component="p"
+                        sx={{ mb: 0.25 }}
+                      >
+                        <strong>{label}:</strong> {value}
+                      </Typography>
+                    );
+                  })}
+                </Box>
               )}
             </Box>
 

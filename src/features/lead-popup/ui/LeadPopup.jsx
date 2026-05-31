@@ -37,7 +37,7 @@ const phoneFieldRules = {
 };
 
 export default function LeadPopup() {
-  const { isOpen, dismiss, markSubmitted } = useLeadPopupTrigger();
+  const { isOpen, dismiss } = useLeadPopupTrigger();
   const params = useSearchParams();
   const phoneInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,7 +108,7 @@ export default function LeadPopup() {
           TITLE: 'Заявка — не нашли модель (всплывающее окно)',
           COMMENTS: `Пользователь оставил номер через всплывающее окно на странице: ${pagePath}`,
           PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
-          SOURCE_ID: 'WEB',
+          SOURCE_ID: 'WEB_LEAD_POPUP',
           SOURCE_DESCRIPTION: 'Lead Popup — callback request',
           STATUS_ID: 'NEW',
           OPENED: 'Y',
@@ -122,7 +122,6 @@ export default function LeadPopup() {
       });
 
       if (response.data?.success) {
-        markSubmitted();
         setIsSuccess(true);
         window.setTimeout(() => dismiss(), 3000);
       } else {

@@ -67,32 +67,73 @@ export const initTikTokPixel = () => {
 };
 
 // Универсальная функция для загрузки пикселей на landing страницах
-export const loadTikTokPixels = (pixelIds) => {
-  if (typeof window === 'undefined') return;
-  
-  // Инициализируем базовый скрипт
+export const loadTikTokPixels = (pixelIds, options = {}) => {
+  if (typeof window === 'undefined') return () => {};
+
+  const { batchSize = 0, batchDelayMs = 150 } = options;
   initTikTokPixel();
-  
-  // Функция для загрузки пикселей
+
+  const ids = (Array.isArray(pixelIds) ? pixelIds : [pixelIds]).filter(Boolean);
+  if (ids.length === 0) return () => {};
+
+  let cancelled = false;
+  const timeouts = [];
+
+  const loadPixel = (pixelId) => {
+    window.__tbLoadedPixels = window.__tbLoadedPixels || new Set();
+    if (window.__tbLoadedPixels.has(pixelId) || window.ttq._i?.[pixelId]) {
+      return;
+    }
+    window.ttq.load(pixelId);
+    window.__tbLoadedPixels.add(pixelId);
+  };
+
+  const loadAll = () => {
+    ids.forEach(loadPixel);
+    window.ttq.page();
+  };
+
+  const loadInBatches = () => {
+    const chunkSize = batchSize > 0 ? batchSize : ids.length;
+    let index = 0;
+
+    const loadBatch = () => {
+      if (cancelled || !window.ttq) return;
+
+      ids.slice(index, index + chunkSize).forEach(loadPixel);
+      index += chunkSize;
+
+      if (index < ids.length) {
+        timeouts.push(setTimeout(loadBatch, batchDelayMs));
+      } else {
+        window.ttq.page();
+      }
+    };
+
+    loadBatch();
+  };
+
   const loadPixels = () => {
-    if (window.ttq && Array.isArray(pixelIds)) {
-      pixelIds.forEach((pixelId) => {
-        if (pixelId) {
-          window.ttq.load(pixelId);
-        }
-      });
-      window.ttq.page();
-    } else if (window.ttq) {
-      // Если передан не массив, а один пиксель
-      window.ttq.load(pixelIds);
-      window.ttq.page();
+    if (cancelled) return;
+
+    if (!window.ttq) {
+      timeouts.push(setTimeout(loadPixels, 100));
+      return;
+    }
+
+    if (batchSize > 0 && batchSize < ids.length) {
+      loadInBatches();
     } else {
-      // Повторяем попытку через небольшую задержку
-      setTimeout(loadPixels, 100);
+      loadAll();
     }
   };
-  
+
   loadPixels();
+
+  return () => {
+    cancelled = true;
+    timeouts.forEach(clearTimeout);
+  };
 };
 
 export const loadTikTokPixel = (pixelId) => {

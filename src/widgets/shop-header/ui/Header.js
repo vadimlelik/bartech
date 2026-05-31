@@ -108,22 +108,29 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
 
-          <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Image
-                src="/logo_techno_bar.svg"
-                alt="Techno Bar"
-                width={200}
-                height={50}
-                priority
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                  maxHeight: { xs: '30px', md: '40px' },
-                }}
-              />
-            </Box>
-          </Link>
+          <Box
+            component={Link}
+            href="/"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'inherit',
+              '& img': {
+                width: 'auto',
+                height: 'auto',
+                maxHeight: { xs: 30, md: 40 },
+              },
+            }}
+          >
+            <Image
+              src="/logo_techno_bar.svg"
+              alt="Techno Bar"
+              width={200}
+              height={50}
+              priority
+            />
+          </Box>
 
           <Box
             sx={{
@@ -135,20 +142,15 @@ export default function Header() {
             }}
           >
             {MENU_ITEMS.map((item) => (
-              <Link
+              <Button
                 key={item.href}
+                component={Link}
                 href={item.href}
-                passHref
-                style={{
-                  all: 'unset',
-                  display: 'inline-block',
-                  cursor: 'pointer',
-                }}
+                color="inherit"
+                startIcon={<item.icon />}
               >
-                <Button color="inherit" startIcon={<item.icon />}>
-                  {item.text}
-                </Button>
-              </Link>
+                {item.text}
+              </Button>
             ))}
             <Button
               color="inherit"
@@ -191,12 +193,14 @@ export default function Header() {
             </Box>
 
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Link
-                href="/favorites"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <Tooltip title="Закладки">
-                  <IconButton color="inherit">
+              <Tooltip title="Закладки">
+                <span style={{ display: 'inline-flex' }}>
+                  <IconButton
+                    component={Link}
+                    href="/favorites"
+                    color="inherit"
+                    aria-label="Закладки"
+                  >
                     {mounted ? (
                       <Badge badgeContent={favoritesCount} color="primary">
                         <FavoriteIcon />
@@ -205,15 +209,17 @@ export default function Header() {
                       <FavoriteIcon />
                     )}
                   </IconButton>
-                </Tooltip>
-              </Link>
+                </span>
+              </Tooltip>
 
-              <Link
-                href="/cart"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <Tooltip title="Корзина">
-                  <IconButton color="inherit">
+              <Tooltip title="Корзина">
+                <span style={{ display: 'inline-flex' }}>
+                  <IconButton
+                    component={Link}
+                    href="/cart"
+                    color="inherit"
+                    aria-label="Корзина"
+                  >
                     {mounted ? (
                       <Badge badgeContent={cartCount} color="primary">
                         <ShoppingCartIcon />
@@ -222,8 +228,8 @@ export default function Header() {
                       <ShoppingCartIcon />
                     )}
                   </IconButton>
-                </Tooltip>
-              </Link>
+                </span>
+              </Tooltip>
 
               {mounted && !authLoading && isAdmin() && (
                 <Tooltip title="Админ-панель">
@@ -270,19 +276,17 @@ export default function Header() {
         >
           <List>
             {MENU_ITEMS.map((item) => (
-              <Link
+              <ListItem
                 key={item.href}
+                button
+                component={Link}
                 href={item.href}
-                passHref
-                style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <ListItem button>
-                  <ListItemIcon>
-                    <item.icon />
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              </Link>
+                <ListItemIcon>
+                  <item.icon />
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
             ))}
             <ListItem button onClick={handleCreditClick}>
               <ListItemIcon>
@@ -331,17 +335,12 @@ export default function Header() {
             )}
             {mounted && !authLoading && !user && (
               <>
-                <Link
-                  href="/auth/login"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <LoginIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Войти" />
-                  </ListItem>
-                </Link>
+                <ListItem button component={Link} href="/auth/login">
+                  <ListItemIcon>
+                    <LoginIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Войти" />
+                </ListItem>
                 <Divider />
               </>
             )}

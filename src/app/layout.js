@@ -1,5 +1,6 @@
 import { Roboto } from 'next/font/google';
 import Script from 'next/script';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import './globals.css';
 import StyledComponentsRegistry from './registry';
 import ClientLayout from '@/widgets/client-shell/ui/ClientLayout';
@@ -118,11 +119,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <StyledComponentsRegistry>
-          <Providers>
-            <ClientLayout>{children}</ClientLayout>
-          </Providers>
-        </StyledComponentsRegistry>
+        <AppRouterCacheProvider>
+          <StyledComponentsRegistry>
+            <Providers>
+              <ClientLayout>{children}</ClientLayout>
+            </Providers>
+          </StyledComponentsRegistry>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

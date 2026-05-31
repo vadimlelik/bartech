@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import {
-  LEAD_POPUP_DELAY_MS,
-  LEAD_POPUP_STORAGE,
-  LEAD_POPUP_SUBMIT_COOLDOWN_MS,
-  isLeadPopupAllowedPath,
-} from './constants';
+import { LEAD_POPUP_DELAY_MS, isLeadPopupAllowedPath } from './constants';
 
 function isSubdomain() {
   if (typeof window === 'undefined') return false;
@@ -15,21 +10,7 @@ function isSubdomain() {
 }
 
 function shouldSkipPopup() {
-  if (isSubdomain()) return true;
-
-  if (sessionStorage.getItem(LEAD_POPUP_STORAGE.DISMISSED)) {
-    return true;
-  }
-
-  const submittedAt = localStorage.getItem(LEAD_POPUP_STORAGE.SUBMITTED);
-  if (submittedAt) {
-    const elapsed = Date.now() - Number.parseInt(submittedAt, 10);
-    if (elapsed < LEAD_POPUP_SUBMIT_COOLDOWN_MS) {
-      return true;
-    }
-  }
-
-  return false;
+  return isSubdomain();
 }
 
 export function useLeadPopupTrigger() {
@@ -52,14 +33,8 @@ export function useLeadPopupTrigger() {
   }, [pathname]);
 
   const dismiss = () => {
-    sessionStorage.setItem(LEAD_POPUP_STORAGE.DISMISSED, '1');
     setIsOpen(false);
   };
 
-  const markSubmitted = () => {
-    localStorage.setItem(LEAD_POPUP_STORAGE.SUBMITTED, String(Date.now()));
-    sessionStorage.setItem(LEAD_POPUP_STORAGE.DISMISSED, '1');
-  };
-
-  return { isOpen, dismiss, markSubmitted, setIsOpen };
+  return { isOpen, dismiss, setIsOpen };
 }
