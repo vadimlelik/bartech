@@ -25,6 +25,7 @@ export const PIXEL = {
 
 export const PIXEL_2 = {
   mobile_2: 'D65JF4BC77U1M7M29CBG',
+  mobile_1: 'D8BJBHBC77UDFA3HMEDG',
   tv: 'CV127C3C77U2T2VFO7T0',
   tv2: ' D2SJ1SRC77U68RC9SM30',
   tv3: 'D2SJ2B3C77UBEOV047HG',
@@ -160,4 +161,8 @@ export const PIXEL_19 = {
 
 export const PIXEL_20 = {
   phone3: 'D75QU5RC77UCP36TBMEG',
+};
+
+export const PIXEL_21 = {
+  phone3: 'D8BJDSJC77U8POE00KK0',
 };

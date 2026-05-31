@@ -20,6 +20,7 @@ import {
   PIXEL_19,
   PIXEL_2,
   PIXEL_20,
+  PIXEL_21,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
@@ -201,6 +202,7 @@ export default function Phone4() {
       PIXEL_18.phone3,
       PIXEL_19.phone3,
       PIXEL_20.phone3,
+      PIXEL_21.phone3,
     ]);
   }, []);
   return (
