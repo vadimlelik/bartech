@@ -1,0 +1,42 @@
+# Texnobar (technobar.by)
+
+> Интернет-магазин техники в Минске. Покупка телефонов, ноутбуков, телевизоров и бытовой техники в рассрочку без переплат. Доставка по Беларуси.
+
+ООО «Баратех», Texnobar — официальный сайт technobar.by.
+
+## Основные разделы
+
+- [Главная — каталог](https://technobar.by/): категории товаров, условия рассрочки
+- [Рассрочка](https://technobar.by/installment): как оформить рассрочку, условия
+- [Оплата и доставка](https://technobar.by/payment_delivery): способы оплаты, сроки доставки по РБ
+- [Отзывы](https://technobar.by/reviews): отзывы покупателей
+- [Контакты](https://technobar.by/contacts): адрес в Минске, телефон, email
+- [Акции](https://technobar.by/sales): текущие акции
+- [Гарантия](https://technobar.by/guarantee): условия гарантии
+- [Возврат](https://technobar.by/return): политика возврата (14 дней)
+
+## Категории (примеры)
+
+- Смартфоны и телефоны — `/categories/{id}`
+- Ноутбуки — `/categories/{id}`
+- Телевизоры — `/categories/{id}`
+- Бытовая техника — `/categories/{id}`
+
+Полный список URL: https://technobar.by/sitemap.xml
+
+## Карточки товаров
+
+- Формат: `https://technobar.by/products/{id}`
+- Цены в BYN, рассрочка, доставка по Беларуси
+
+## Контакты
+
+- Телефон: +375 25 776-64-62
+- Email: baratexby@gmail.com
+- Адрес: ул. Сурганова, 43, Минск, Беларусь
+- Часы работы: пн–пт 9:00–21:00
+
+## Optional
+
+- [Sitemap](https://technobar.by/sitemap.xml)
+- [Robots](https://technobar.by/robots.txt)

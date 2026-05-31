@@ -8,8 +8,13 @@ import { getProducts } from '@/entities/product/model/products';
 import { notFound } from 'next/navigation';
 import {
   getCollectionPageSchema,
+  getCategoryItemListSchema,
   getBreadcrumbSchema,
   getCategorySeoCopy,
+  getCategoryCitabilityBlock,
+  getCategoryCitabilityQuestion,
+  buildDefaultOpenGraphImages,
+  DEFAULT_OG_IMAGE_PATH,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
@@ -110,20 +115,13 @@ export async function generateMetadata({ params }) {
         description: seo.description,
         type: 'website',
         url: `${siteUrl}/categories/${id}`,
-        images: [
-          {
-            url: `${siteUrl}/logo_techno_bar.svg`,
-            width: 1200,
-            height: 630,
-            alt: category.name,
-          },
-        ],
+        images: buildDefaultOpenGraphImages(category.name),
       },
       twitter: {
         card: 'summary_large_image',
         title: seo.title.replace(' | Texnobar', ''),
         description: seo.description,
-        images: [`${siteUrl}/logo_techno_bar.svg`],
+        images: [DEFAULT_OG_IMAGE_PATH],
       },
       alternates: {
         canonical: `${siteUrl}/categories/${id}`,
@@ -154,8 +152,15 @@ export default async function CategoryPage({ params }) {
       seoProductsResult?.products || [],
       seoProductsResult?.pagination?.total ?? 0,
     );
+    const itemListSchema = getCategoryItemListSchema(
+      category,
+      seoProductsResult?.products || [],
+      seoProductsResult?.pagination?.total ?? 0,
+    );
 
     const categorySeo = getCategorySeoCopy(category);
+    const citabilityQuestion = getCategoryCitabilityQuestion(category);
+    const citabilityAnswer = getCategoryCitabilityBlock(category);
     const firstPageProductsResult = await getCachedCategoryProductsFirstPage(category.id);
     const featuredProducts = (firstPageProductsResult?.products || []).slice(0, 12);
 
@@ -173,6 +178,14 @@ export default async function CategoryPage({ params }) {
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify(collectionSchema),
+            }}
+          />
+        )}
+        {itemListSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(itemListSchema),
             }}
           />
         )}
@@ -204,6 +217,25 @@ export default async function CategoryPage({ params }) {
             >
               {categorySeo.introParagraph}
             </Typography>
+            <Box
+              component="section"
+              sx={{
+                mb: 4,
+                p: { xs: 2, md: 2.5 },
+                borderRadius: 2,
+                bgcolor: 'grey.50',
+                border: '1px solid',
+                borderColor: 'divider',
+                maxWidth: 900,
+              }}
+            >
+              <Typography variant="h2" component="h2" sx={{ fontSize: '1.2rem', mb: 1.5 }}>
+                {citabilityQuestion}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {citabilityAnswer}
+              </Typography>
+            </Box>
             <ProductList
               categoryId={category.id}
               initialProducts={firstPageProductsResult?.products || []}

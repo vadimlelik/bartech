@@ -1,26 +1,46 @@
-export const LANDING_SITEMAP_PRIORITIES = {
-  phone: 0.85,
-  phone2: 0.75,
-  phone3: 0.75,
-  phone4: 0.75,
-  phone5: 0.75,
-  phone6: 0.75,
-  'shockproof-phone': 0.7,
-  laptop: 0.85,
-  laptop2: 0.75,
-  pc: 0.75,
-  tv1: 0.85,
-  tv2: 0.75,
-  tv3: 0.75,
-  scooter: 0.75,
-  bicycles: 0.75,
-  motoblok: 0.7,
-  motoblok1: 0.65,
-  motoblok2: 0.65,
-  phone7: 0.75,
-  '50discount': 0.65,
-  '1phonefree': 0.65,
+/**
+ * Landing indexation strategy — reduce keyword cannibalization between A/B variants.
+ * Primary landings stay in sitemap; variants get noindex + canonical to primary.
+ */
+
+/** Money landings indexed in Google/Yandex */
+export const INDEXED_LANDING_SLUGS = new Set(['phone', 'laptop', 'tv1', 'motoblok']);
+
+/**
+ * Variant / promo landings → canonical URL path on primary landing.
+ * Used with noindex,follow so paid traffic works without competing in organic.
+ */
+export const LANDING_CANONICAL_TARGETS = {
+  phone2: '/phone',
+  phone3: '/phone',
+  phone4: '/phone',
+  phone5: '/phone',
+  phone6: '/phone',
+  phone7: '/phone',
+  phone8: '/phone',
+  '1phonefree': '/phone',
+  '50discount': '/phone',
+  'shockproof-phone': '/phone',
+  laptop2: '/laptop',
+  pc: '/laptop',
+  tv2: '/tv1',
+  tv3: '/tv1',
+  motoblok1: '/motoblok',
+  motoblok2: '/motoblok',
+  scooter: '/',
+  bicycles: '/',
 };
 
-export const LEGIT_SUBDOMAINS = Object.keys(LANDING_SITEMAP_PRIORITIES);
+/** Only indexed landings appear in sitemap.xml */
+export const LANDING_SITEMAP_PRIORITIES = {
+  phone: 0.85,
+  laptop: 0.85,
+  tv1: 0.85,
+  motoblok: 0.7,
+};
+
+export const LEGIT_SUBDOMAINS = [
+  ...Object.keys(LANDING_SITEMAP_PRIORITIES),
+  ...Object.keys(LANDING_CANONICAL_TARGETS),
+];
 export const LEGIT_SUBDOMAINS_SET = new Set(LEGIT_SUBDOMAINS);

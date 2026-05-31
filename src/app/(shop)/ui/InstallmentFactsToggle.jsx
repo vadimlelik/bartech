@@ -5,7 +5,7 @@ import { Box, Button, Collapse, Typography } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 export default function InstallmentFactsToggle() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <Box sx={{ maxWidth: 950, mx: 'auto', mb: 5 }}>

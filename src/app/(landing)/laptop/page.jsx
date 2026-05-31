@@ -1,7 +1,8 @@
 import LaptopPageClient from './LaptopPageClient';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
 
-export const metadata = {
+export const metadata = mergeLandingMetadata('laptop', {
   title: 'Купить ноутбук в рассрочку в Минске — Texnobar',
   description:
     'Купить ноутбук в рассрочку в Минске без переплат. Широкий выбор: игровые, офисные, для учёбы. Рассрочка до 12 месяцев, доставка по Минску в день заказа. Оформление онлайн.',
@@ -23,7 +24,7 @@ export const metadata = {
   alternates: {
     canonical: `${siteUrl}/laptop`,
   },
-};
+});
 
 export default function LaptopPage() {
   return <LaptopPageClient />;

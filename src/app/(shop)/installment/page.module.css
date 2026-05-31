@@ -39,6 +39,14 @@
   margin-bottom: 40px;
 }
 
+.citabilityBlock {
+  margin-bottom: 40px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
 .bulletList,
 .gridList {
   padding-left: 22px;

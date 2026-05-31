@@ -1,7 +1,8 @@
 import PhonePageClient from './PhonePageClient';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
 
-export const metadata = {
+export const metadata = mergeLandingMetadata('phone', {
   title: 'Купить телефон в рассрочку в Минске — Texnobar',
   description:
     'Купить смартфон в рассрочку в Минске без переплат. Samsung, Apple, Xiaomi, Huawei — широкий выбор. Оформление онлайн, доставка по Минску в день заказа. Рассрочка до 12 месяцев.',
@@ -24,7 +25,7 @@ export const metadata = {
   alternates: {
     canonical: `${siteUrl}/phone`,
   },
-};
+});
 
 export default function PhonePage() {
   return <PhonePageClient />;

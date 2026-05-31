@@ -6,7 +6,11 @@ import StyledComponentsRegistry from './registry';
 import ClientLayout from '@/widgets/client-shell/ui/ClientLayout';
 import Providers from '@/widgets/app-providers/ui/Providers';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
-import { COMMERCIAL_SEO_KEYWORDS } from '@/shared/lib/seo';
+import {
+  COMMERCIAL_SEO_KEYWORDS,
+  buildDefaultOpenGraphImages,
+  DEFAULT_OG_IMAGE_PATH,
+} from '@/shared/lib/seo';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -54,21 +58,14 @@ export const metadata = {
     title: 'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
       'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
-    images: [
-      {
-        url: `${siteUrl}/logo_techno_bar.svg`,
-        width: 1200,
-        height: 630,
-        alt: 'Texnobar - Интернет-магазин техники в Минске',
-      },
-    ],
+    images: buildDefaultOpenGraphImages(),
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Купить телефон, телевизор, ноутбук в рассрочку — Минск | Texnobar',
     description:
       'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка по Беларуси, каталог, рассрочка без переплат.',
-    images: [`${siteUrl}/logo_techno_bar.svg`],
+    images: [DEFAULT_OG_IMAGE_PATH],
   },
   icons: {
     icon: '/favicon.ico',
@@ -82,7 +79,9 @@ export const metadata = {
     ICBM: '53.9085, 27.5685',
   },
   verification: {
-    // google: 'your-google-verification-code',
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
     yandex: '93234b36ea40cbc7',
   },
 };

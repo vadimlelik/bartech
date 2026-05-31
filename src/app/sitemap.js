@@ -72,12 +72,6 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.3,
     },
-    {
-      url: `${siteUrl}/pass`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.1,
-    },
   ];
 
   // Статические лендинги по категориям товаров

@@ -1,4 +1,11 @@
-import { getInstallmentFaqSchema, SEO_INSTALLMENT_PHRASES } from '@/shared/lib/seo';
+import {
+  getInstallmentFaqSchema,
+  SEO_INSTALLMENT_PHRASES,
+  INSTALLMENT_FAQ_ITEMS,
+  INSTALLMENT_CITABILITY_QUESTION,
+  INSTALLMENT_CITABILITY_ANSWER,
+  buildDefaultOpenGraphImages,
+} from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import styles from './page.module.css';
 
@@ -24,6 +31,7 @@ export const metadata = {
     type: 'article',
     url: `${siteUrl}/installment`,
     siteName: 'Texnobar',
+    images: buildDefaultOpenGraphImages(),
   },
   twitter: {
     card: 'summary_large_image',
@@ -34,33 +42,6 @@ export const metadata = {
     canonical: `${siteUrl}/installment`,
   },
 };
-
-const faqItems = [
-  {
-    q: 'Как купить в рассрочку в Texnobar?',
-    a: 'Выберите товар на сайте, нажмите «Купить», выберите способ оплаты «Рассрочка» и заполните онлайн-заявку. Менеджер свяжется с вами для подтверждения. Курьер привезёт товар и оформит все документы на месте.',
-  },
-  {
-    q: 'На какой срок доступна рассрочка?',
-    a: 'Рассрочка предоставляется на срок до 12 месяцев в зависимости от условий банка-партнёра и выбранного товара.',
-  },
-  {
-    q: 'Есть ли переплаты при покупке в рассрочку?',
-    a: 'В рамках действующих акций и партнёрских программ рассрочка предоставляется без переплат и скрытых комиссий.',
-  },
-  {
-    q: 'Какой минимальный первоначальный взнос?',
-    a: 'Минимальный первоначальный взнос составляет от 10% от стоимости товара. В рамках специальных акций возможна рассрочка без первоначального взноса.',
-  },
-  {
-    q: 'Можно ли оформить рассрочку онлайн с доставкой по Минску?',
-    a: 'Да. Заявку оформляете онлайн, курьер доставляет товар по Минску в день заказа или на следующий день и оформляет все документы на месте.',
-  },
-  {
-    q: 'Нужна ли справка о доходах?',
-    a: 'В большинстве случаев достаточно паспорта гражданина Республики Беларусь. Точные требования уточняйте у менеджера по телефону +375 (25) 776-64-62.',
-  },
-];
 
 export default function Installment() {
   const faqSchema = getInstallmentFaqSchema();
@@ -80,6 +61,11 @@ export default function Installment() {
           другую электронику на выгодных условиях: без переплат в рамках акций и
           партнёрских программ. Доставка по Минску и всей Беларуси.
         </p>
+
+        <section className={styles.citabilityBlock}>
+          <h2 className={styles.h2}>{INSTALLMENT_CITABILITY_QUESTION}</h2>
+          <p className={styles.text}>{INSTALLMENT_CITABILITY_ANSWER}</p>
+        </section>
 
         <section className={styles.section}>
           <h2 className={styles.h2}>Условия рассрочки</h2>
@@ -172,7 +158,7 @@ export default function Installment() {
         <section className={styles.section}>
           <h2 className={styles.h2}>Часто задаваемые вопросы</h2>
           <div className={styles.faqList}>
-            {faqItems.map((item, i) => (
+            {INSTALLMENT_FAQ_ITEMS.map((item, i) => (
               <div key={i} className={styles.faqItem}>
                 <h3 className={styles.h3}>{item.q}</h3>
                 <p className={styles.text}>{item.a}</p>

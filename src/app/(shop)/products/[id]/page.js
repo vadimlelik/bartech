@@ -7,8 +7,11 @@ import {
   getProductSchema,
   getBreadcrumbSchema,
   SEO_INSTALLMENT_PHRASES,
+  buildProductBreadcrumbs,
+  DEFAULT_OG_IMAGE_PATH,
 } from '@/shared/lib/seo';
 import { getAllProducts } from '@/entities/product/model/products';
+import { getCategoryById } from '@/entities/category/model/categories';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 // Кэш карточки товара (~1 ч), снижает нагрузку на БД
@@ -57,7 +60,7 @@ export async function generateMetadata({ params }) {
     // Обработка URL изображения
     let imageUrl;
     if (!productImage) {
-      imageUrl = `${siteUrl}/logo_techno_bar.svg`;
+      imageUrl = `${siteUrl}${DEFAULT_OG_IMAGE_PATH}`;
     } else if (
       productImage.startsWith('http://') ||
       productImage.startsWith('https://')
@@ -128,16 +131,13 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  const productSchema = getProductSchema(product);
+  const category =
+    product.categoryId != null
+      ? await getCategoryById(product.categoryId).catch(() => null)
+      : null;
 
-  // Breadcrumbs для продукта
-  const breadcrumbs = [
-    { name: 'Главная', url: '/' },
-    ...(product.categoryId
-      ? [{ name: product.categoryId, url: `/categories/${product.categoryId}` }]
-      : []),
-    { name: product.name, url: `/products/${id}` },
-  ];
+  const productSchema = getProductSchema(product);
+  const breadcrumbs = buildProductBreadcrumbs(product, category, id);
   const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);
 
   return (

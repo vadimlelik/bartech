@@ -4,6 +4,59 @@
 
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { getStaticCategorySeo } from '@/shared/config/category-static-seo';
+import { getBusinessSameAs } from '@/shared/config/business-profiles';
+import {
+  INSTALLMENT_FAQ_ITEMS,
+  INSTALLMENT_CITABILITY_QUESTION,
+  INSTALLMENT_CITABILITY_ANSWER,
+  HOME_FAQ_ITEMS,
+  HOME_CITABILITY_QUESTION,
+  HOME_CITABILITY_ANSWER,
+} from '@/shared/content/seo-faq';
+
+/** Next.js file-based OG image (PNG 1200×630). Prefer over SVG for social previews. */
+export const DEFAULT_OG_IMAGE_PATH = '/opengraph-image';
+export const DEFAULT_OG_IMAGE_ALT =
+  'Texnobar — интернет-магазин техники в рассрочку, Минск';
+export const DEFAULT_OG_IMAGE = `${siteUrl}${DEFAULT_OG_IMAGE_PATH}`;
+
+export function buildDefaultOpenGraphImages(alt = DEFAULT_OG_IMAGE_ALT) {
+  return [
+    {
+      url: DEFAULT_OG_IMAGE_PATH,
+      width: 1200,
+      height: 630,
+      alt,
+    },
+  ];
+}
+
+/** Display name for category in breadcrumbs and metadata. */
+export function resolveProductCategoryLabel(product, category) {
+  if (category?.name && String(category.name).trim()) {
+    return String(category.name).trim();
+  }
+  if (product?.category && String(product.category).trim()) {
+    return String(product.category).trim();
+  }
+  if (product?.categoryId) {
+    return String(product.categoryId);
+  }
+  return null;
+}
+
+export function buildProductBreadcrumbs(product, category, productId) {
+  const categoryLabel = resolveProductCategoryLabel(product, category);
+  const categoryId = product?.categoryId || product?.category_id;
+
+  return [
+    { name: 'Главная', url: '/' },
+    ...(categoryId && categoryLabel
+      ? [{ name: categoryLabel, url: `/categories/${categoryId}` }]
+      : []),
+    { name: product.name, url: `/products/${productId}` },
+  ];
+}
 
 /** Primary commercial phrase for titles and copy (natural language + common variants). */
 export const SEO_INSTALLMENT_PHRASES = [
@@ -90,6 +143,52 @@ export function getCategorySeoCopy(category) {
 
   return { title, description, introParagraph, keywords };
 }
+
+/**
+ * Self-contained answer block (~134–167 words) for category pages (GEO citability).
+ */
+export function getCategoryCitabilityBlock(category) {
+  const staticSeo = getStaticCategorySeo(category?.id);
+  if (staticSeo?.citabilityParagraph) {
+    return staticSeo.citabilityParagraph;
+  }
+
+  const name = (category?.name && String(category.name).trim()) || 'технику';
+  const lower = name.toLowerCase();
+
+  return `Купить ${lower} в рассрочку в Минске можно в интернет-магазине Texnobar (technobar.by) — каталог с актуальными ценами в BYN и оформлением онлайн. Вы выбираете модель на странице категории «${name}», оставляете заявку на рассрочку и получаете ответ менеджера обычно за 15–30 минут в рабочее время. Условия: срок до 12 месяцев, первоначальный взнос от 10%, в акциях — без первого платежа и без переплат в рамках партнёрских программ. Доставка по Минску — в день заказа, по Беларуси — за 1–3 рабочих дня. Texnobar (ООО «Баратех») продаёт оригинальную технику с гарантией; адрес: г. Минск, ул. Сурганова, 43, телефон +375 (25) 776-64-62.`;
+}
+
+export function getCategoryCitabilityQuestion(category) {
+  const name = (category?.name && String(category.name).trim()) || 'технику';
+  return `Как купить ${name.toLowerCase()} в рассрочку в Минске?`;
+}
+
+/** Build FAQPage JSON-LD from { q, a } items. */
+export function getFaqPageSchema(items) {
+  if (!items?.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+}
+
+export {
+  INSTALLMENT_FAQ_ITEMS,
+  INSTALLMENT_CITABILITY_QUESTION,
+  INSTALLMENT_CITABILITY_ANSWER,
+  HOME_FAQ_ITEMS,
+  HOME_CITABILITY_QUESTION,
+  HOME_CITABILITY_ANSWER,
+};
 
 const BUSINESS_ADDRESS = {
   streetAddress: 'ул. Сурганова, д. 43',
@@ -263,7 +362,7 @@ export function getOrganizationSchema() {
     },
     telephone: BUSINESS_PHONE,
     email: BUSINESS_EMAIL,
-    sameAs: [],
+    sameAs: getBusinessSameAs(),
   };
 }
 
@@ -324,7 +423,7 @@ export function getLocalBusinessSchema() {
       bestRating: '5',
       worstRating: '1',
     },
-    sameAs: [],
+    sameAs: getBusinessSameAs(),
   };
 }
 
@@ -476,75 +575,35 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
  * FAQ structured data for the installment / рассрочка landing (targets «купить в рассрочку»).
  */
 export function getInstallmentFaqSchema() {
+  return getFaqPageSchema(INSTALLMENT_FAQ_ITEMS);
+}
+
+export function getHomeFaqSchema() {
+  return getFaqPageSchema(HOME_FAQ_ITEMS);
+}
+
+/**
+ * Standalone ItemList for category pages (complements CollectionPage schema).
+ */
+export function getCategoryItemListSchema(category, products, numberOfItems) {
+  if (!category) return null;
+
+  const count =
+    typeof numberOfItems === 'number' ? numberOfItems : products?.length || 0;
+  const list = products?.slice(0, 12) || [];
+
   return {
     '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Как купить в рассрочку в Texnobar?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Выберите товар на сайте и оформите заказ с оплатой в рассрочку. Условия: срок до 12 месяцев, первоначальный взнос от 10%, без переплат и скрытых комиссий. Подробности — на странице «Рассрочка» или у менеджера по телефону +375 (25) 776-64-62.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'На какой срок доступна рассрочка?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Рассрочка предоставляется на срок до 12 месяцев в зависимости от условий банка или партнёра и выбранного товара.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Есть ли переплаты при покупке в рассрочку?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Мы предлагаем программы рассрочки без переплат и скрытых комиссий в рамках действующих акций и партнёрских программ.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Какой минимальный первоначальный взнос при рассрочке?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Минимальный первоначальный взнос составляет от 10% от стоимости товара. В рамках специальных акций возможна рассрочка без первоначального взноса.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Можно ли купить в рассрочку онлайн с доставкой по Минску?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Да, вы можете оформить рассрочку онлайн на сайте technobar.by. Доставка по Минску осуществляется в день заказа или на следующий день. Все документы оформляются курьером на месте.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Какие товары можно купить в рассрочку?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'В Texnobar в рассрочку можно купить смартфоны, ноутбуки, планшеты, телевизоры, бытовую технику, самокаты, велосипеды и другую электронику. Весь каталог доступен на сайте.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Нужна ли справка о доходах для оформления рассрочки?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Условия оформления рассрочки зависят от партнёрского банка. В большинстве случаев достаточно паспорта гражданина Республики Беларусь. Уточните детали у наших менеджеров.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Осуществляется ли доставка по всей Беларуси?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Да, мы осуществляем доставку по всей территории Беларуси. Доставка по Минску — 10 BYN (бесплатно при заказе от 1000 BYN), по Беларуси — 15 BYN, срок 1-3 рабочих дня.',
-        },
-      },
-    ],
+    '@type': 'ItemList',
+    name: `${category.name} — каталог Texnobar`,
+    description: getCategorySeoCopy(category).description,
+    numberOfItems: count,
+    itemListElement: list.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: product.name,
+      url: `${siteUrl}/products/${product.id}`,
+    })),
   };
 }
 

@@ -1,5 +1,5 @@
 import ReviewsContent from './ReviewsContent';
-import { getAggregateRatingSchema } from '@/shared/lib/seo';
+import { getAggregateRatingSchema, buildDefaultOpenGraphImages } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
@@ -15,6 +15,7 @@ export const metadata = {
       'Реальные отзывы покупателей о покупке техники в рассрочку в Texnobar. Рейтинг 4.8/5.',
     url: `${siteUrl}/reviews`,
     type: 'website',
+    images: buildDefaultOpenGraphImages('Отзывы Texnobar'),
   },
 };
 

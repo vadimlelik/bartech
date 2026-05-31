@@ -1,4 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache';
+import Link from 'next/link';
 import { Container, Grid, Typography, Box } from '@mui/material';
 import CategoryCard from '@/entities/category/ui/category-card/CategoryCard';
 import { getCategories } from '@/entities/category/model/categories';
@@ -10,6 +11,11 @@ import {
   getWebSiteSchema,
   getLocalBusinessSchema,
   COMMERCIAL_SEO_KEYWORDS,
+  buildDefaultOpenGraphImages,
+  getHomeFaqSchema,
+  HOME_FAQ_ITEMS,
+  HOME_CITABILITY_QUESTION,
+  HOME_CITABILITY_ANSWER,
 } from '@/shared/lib/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
@@ -24,14 +30,7 @@ export const metadata = {
       'Купить в рассрочку телефон, телевизор, ноутбук в Минске. Texnobar — доставка, рассрочка без переплат, каталог.',
     type: 'website',
     url: siteUrl,
-    images: [
-      {
-        url: `${siteUrl}/logo_techno_bar.svg`,
-        width: 1200,
-        height: 630,
-        alt: 'Technobar - Интернет-магазин техники',
-      },
-    ],
+    images: buildDefaultOpenGraphImages('Technobar - Интернет-магазин техники'),
   },
   alternates: {
     canonical: siteUrl,
@@ -58,6 +57,7 @@ export default async function Home() {
   const organizationSchema = getOrganizationSchema();
   const websiteSchema = getWebSiteSchema();
   const localBusinessSchema = getLocalBusinessSchema();
+  const homeFaqSchema = getHomeFaqSchema();
 
   return (
     <>
@@ -73,6 +73,12 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
+      {homeFaqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}
+        />
+      )}
       <Box component="main" sx={{ flex: 1 }}>
         <CategoryCarousel />
         <Features />
@@ -97,12 +103,32 @@ export default async function Home() {
               textAlign: 'center',
               mb: 4,
               color: 'text.secondary',
-              maxWidth: 600,
+              maxWidth: 720,
               mx: 'auto',
             }}
           >
             Купить телефон, телевизор или ноутбук в рассрочку — доставка по Минску и Беларуси, каталог товаров с ценами
           </Typography>
+          <Box
+            component="section"
+            sx={{
+              maxWidth: 900,
+              mx: 'auto',
+              mb: 5,
+              p: { xs: 2, md: 3 },
+              borderRadius: 2,
+              bgcolor: 'grey.50',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography variant="h2" component="h2" sx={{ fontSize: '1.35rem', mb: 1.5 }}>
+              {HOME_CITABILITY_QUESTION}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {HOME_CITABILITY_ANSWER}
+            </Typography>
+          </Box>
           <Typography
             variant="h5"
             component="h2"
@@ -131,7 +157,7 @@ export default async function Home() {
               Категории пока не добавлены
             </Typography>
           )}
-          <Box sx={{ mt: 5, mb: 5 }}>
+          <Box sx={{ mt: 5, mb: 3 }}>
             <Typography
               variant="h5"
               component="h2"
@@ -141,23 +167,43 @@ export default async function Home() {
               Частые вопросы о рассрочке в Texnobar
             </Typography>
             <Box sx={{ maxWidth: 900, mx: 'auto' }}>
-              <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
-                Как оформить рассрочку на телефон, ноутбук или телевизор?
-              </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-                Выберите товар в каталоге, оставьте заявку и дождитесь решения. В
-                большинстве случаев предварительный ответ приходит в течение 24
-                часов.
-              </Typography>
-              <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
-                Какие базовые условия по платежам и доставке?
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                На главной странице указаны ориентиры: доставка по Беларуси от 15
-                руб., ежемесячный платеж от 29,99 руб., а также оформление без
-                первого платежа по доступным программам.
-              </Typography>
+              {HOME_FAQ_ITEMS.map((item) => (
+                <Box key={item.q} sx={{ mb: 3 }}>
+                  <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
+                    {item.q}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    {item.a}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
+          </Box>
+          <Box
+            component="section"
+            sx={{
+              maxWidth: 900,
+              mx: 'auto',
+              mb: 4,
+              p: 2,
+              borderRadius: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography variant="subtitle1" component="p" sx={{ mb: 1 }}>
+              <strong>Texnobar</strong> — ООО «Баратех», г. Минск, ул. Сурганова, 43
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              Телефон:{' '}
+              <Link href="tel:+375257766462">+375 (25) 776-64-62</Link>
+              {' · '}
+              <Link href="/contacts">Контакты</Link>
+              {' · '}
+              <Link href="/guarantee">Гарантия</Link>
+              {' · '}
+              <Link href="/installment">Рассрочка</Link>
+            </Typography>
           </Box>
           <InstallmentFactsToggle />
         </Container>

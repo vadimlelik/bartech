@@ -1,16 +1,15 @@
-export const metadata = {
-  metadataBase: new URL('https://technobar.by'),
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
+
+export const metadata = mergeLandingMetadata('phone7', {
   title: 'Смартфоны в рассрочку до 5 лет | Technobar',
   description:
     'Новый смартфон в рассрочку до 5 лет без справок о доходах и первого взноса. Более 1000 моделей в наличии, второй телефон в подарок и бесплатная доставка по Беларуси.',
-  alternates: {
-    canonical: '/phone7',
-  },
   openGraph: {
     title: 'Смартфоны в рассрочку до 5 лет | Technobar',
     description:
       'Новый смартфон в рассрочку до 5 лет без справок о доходах и первого взноса. Более 1000 моделей в наличии, второй телефон в подарок и бесплатная доставка по Беларуси.',
-    url: '/phone7',
+    url: `${siteUrl}/phone7`,
     siteName: 'Technobar',
     images: [
       {
@@ -30,7 +29,7 @@ export const metadata = {
       'Новый смартфон в рассрочку до 5 лет без справок о доходах и первого взноса. Более 1000 моделей в наличии, второй телефон в подарок и бесплатная доставка по Беларуси.',
     images: ['/images/mobile/mobile_1.jpeg'],
   },
-};
+});
 
 export default function Phone7Layout({ children }) {
   return children;
