@@ -57,6 +57,19 @@ const creditOffers = [
     borderColor: '#6BA3D8',
     rateColor: '#6BA3D8',
   },
+  {
+    id: 'belarusbank',
+    bank: 'Беларусбанк',
+    title: 'Кредит \'Комбо товары РБ\'',
+    terms: [12, 18, 24, 36, 48, 60],
+    minAmount: 100,
+    maxAmount: 13500,
+    rate: 'Товары РБ: 4%',
+    headerGradient: 'linear-gradient(135deg, #1E6EEB 0%, #2B93F5 100%)',
+    buttonGradient: 'linear-gradient(135deg, #1E6EEB 0%, #2B93F5 100%)',
+    borderColor: '#1E6EEB',
+    rateColor: '#1E6EEB',
+  },
 ];
 
 export default function CreditCardsModal({ isOpen, onClose }) {

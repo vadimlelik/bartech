@@ -17,9 +17,15 @@ const Footer = () => {
       <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.text}>
-            ООО «Баратех» УНП: 193796252 <br /> Юридический и почтовый адрес:
-            220013, г. Минск, ул. Сурганова, д. 43
-            <br /> +375 44 741-84-23
+            <p className={styles.companyTitle}>ООО «Баратех»</p>
+            <p className={styles.companyDetail}>УНП: 193796252</p>
+            <p className={styles.companyDetail}>
+              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д.
+              43
+            </p>
+            <a className={styles.companyPhone} href="tel:+375447418423">
+              +375 44 741-84-23
+            </a>
           </div>
           <div className={styles.content}>
             <div className={styles.offer}>
@@ -43,9 +49,12 @@ const Footer = () => {
                 <li className={styles['footer__offer__item']}>
                   <span className={styles.bold}>Условия рассрочки</span> - Банки
                   партнеры:
-                  <br /> ОАО &quot;Банк Дабрабыт&quot;
-                  <br /> ЗАО &quot;Сбербанк&quot;, <br />
-                  ОАО &quot;Паритетбанк&quot;
+                  <ul className={styles.bankList}>
+                    <li>ОАО &quot;Банк Дабрабыт&quot;</li>
+                    <li>ЗАО &quot;Сбер Банк&quot;</li>
+                    <li>ОАО &quot;Паритетбанк&quot;</li>
+                    <li>ОАО &quot;АСБ Беларусбанк&quot;</li>
+                  </ul>
                 </li>
                 <li className={styles['footer__offer__item']}>
                   Рассрочка предоставляеться на сроки 3 месяца, 6 месяцев, 12
@@ -55,8 +64,7 @@ const Footer = () => {
                   <button
                     type="button"
                     onClick={handleCreditClick}
-                    className={styles['footer__offer__link']}
-                    style={{ cursor: 'pointer' }}
+                    className={`${styles['footer__offer__link']} ${styles.creditButton}`}
                   >
                     Кредитные предложения
                   </button>

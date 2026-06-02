@@ -6,7 +6,13 @@ import { LEAD_POPUP_DELAY_MS, isLeadPopupAllowedPath } from './constants';
 
 function isSubdomain() {
   if (typeof window === 'undefined') return false;
-  return /^([^.]+)\.technobar\.ru$/.test(window.location.hostname);
+  const host = window.location.hostname;
+
+  if (host === 'localhost' || /^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
+    return false;
+  }
+
+  return host.split('.').length > 2;
 }
 
 function shouldSkipPopup() {
