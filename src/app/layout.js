@@ -11,6 +11,7 @@ import {
   buildDefaultOpenGraphImages,
   DEFAULT_OG_IMAGE_PATH,
 } from '@/shared/lib/seo';
+import YandexMetrika from '@/shared/ui/analytics/YandexMetrika';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -118,6 +119,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+        <YandexMetrika />
         <AppRouterCacheProvider>
           <StyledComponentsRegistry>
             <Providers>

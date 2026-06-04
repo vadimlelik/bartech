@@ -392,10 +392,15 @@ const Quiz = ({
                         }}
                       >
                         Я даю согласие на обработку{' '}
-                        <Link href="https://technobar.by/pk">
+                        <Link href="https://drive.google.com/file/d/1CnVnLe4imoDvch2mYWhJe4Mf7YhlcWbN/view">
                           персональных данных
                         </Link>{' '}
-                        и согласие на рекламную рассылку каталога Вайбер {''}
+                        <Link
+                          href="https://docs.google.com/document/d/1OoYWjNIqx8ACmgL5YKGZflAA0gD_CEZl/edit"
+                          target="_blank"
+                        >
+                          и согласие на рекламную рассылку каталога Вайбер
+                        </Link>
                       </span>
                     </>
                   )}
