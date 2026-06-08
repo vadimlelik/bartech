@@ -179,8 +179,9 @@ const Quiz = ({
               !comment.includes('рассрочки') && !comment.includes('Срок')
           )
           .join('\n');
-        const consentStatus = data.consent ? 'Да' : 'Нет';
-        const commentsWithConsent = `${formattedComments}\nСогласие на обработку персональных данных: ${consentStatus}`;
+        const personalDataConsent = 'Да';
+        const viberMailingConsent = 'Да';
+        const commentsWithConsent = `${formattedComments}\nСогласие на обработку персональных данных: ${personalDataConsent}\nСогласие на рекламную рассылку каталога Вайбер: ${viberMailingConsent}`;
 
         const phoneQuestion = questions.find((q) => q.type === 'text');
         const phoneNumber = phoneQuestion
@@ -368,16 +369,22 @@ const Quiz = ({
                 style={{
                   marginTop: '15px',
                   display: 'flex',
-                  alignItems: 'flex-start',
+                  flexDirection: 'column',
                   gap: '10px',
                 }}
               >
                 <Controller
-                  name="consent"
+                  name="consentPersonalData"
                   control={control}
                   defaultValue={true}
                   render={() => (
-                    <>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '10px',
+                      }}
+                    >
                       <input
                         type="checkbox"
                         checked={true}
@@ -395,14 +402,44 @@ const Quiz = ({
                         <Link href="https://drive.google.com/file/d/1CnVnLe4imoDvch2mYWhJe4Mf7YhlcWbN/view">
                           персональных данных
                         </Link>{' '}
+                        и согласие
+                      </span>
+                    </div>
+                  )}
+                />
+                <Controller
+                  name="consentViberMailing"
+                  control={control}
+                  defaultValue={true}
+                  render={() => (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '10px',
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={true}
+                        readOnly
+                        style={{ marginTop: '4px', cursor: 'default' }}
+                      />
+                      <span
+                        style={{
+                          fontSize: '14px',
+                          color: '#666',
+                          lineHeight: '1.4',
+                        }}
+                      >
                         <Link
                           href="https://docs.google.com/document/d/1OoYWjNIqx8ACmgL5YKGZflAA0gD_CEZl/edit"
                           target="_blank"
                         >
-                          и согласие на рекламную рассылку каталога Вайбер
+                          рекламную рассылку каталога Вайбер
                         </Link>
                       </span>
-                    </>
+                    </div>
                   )}
                 />
               </div>

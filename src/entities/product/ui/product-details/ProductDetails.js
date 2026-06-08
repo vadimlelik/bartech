@@ -32,6 +32,7 @@ import {
   TextField,
 } from '@mui/material';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCartStore } from '@/entities/cart';
 import { useFavoritesStore } from '@/entities/favorites';
 import { useCompareStore } from '@/entities/compare';
@@ -208,7 +209,7 @@ export default function ProductDetails({ product }) {
         FIELDS: {
           TITLE: `Заявка на рассрочку - ${product.name}`,
           NAME: name.trim(),
-          COMMENTS: `Заявка на оформление рассрочки\n\n${productInfo}`,
+          COMMENTS: `Заявка на оформление рассрочки\n\n${productInfo}\n\nСогласие на обработку персональных данных: Да\nСогласие на рекламную рассылку каталога Вайбер: Да`,
           PHONE: [{ VALUE: formattedPhone, VALUE_TYPE: 'WORK' }],
           SOURCE_ID: 'WEB',
           SOURCE_DESCRIPTION: 'Оформление в рассрочку со страницы товара',
@@ -539,6 +540,40 @@ export default function ProductDetails({ product }) {
                 error={phoneError}
                 disabled={isSubmitting}
               />
+            </Box>
+
+            <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                <input
+                  type="checkbox"
+                  checked
+                  readOnly
+                  style={{ marginTop: '4px', cursor: 'default' }}
+                />
+                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.4 }}>
+                  Я даю согласие на обработку{' '}
+                  <Link href="https://drive.google.com/file/d/1CnVnLe4imoDvch2mYWhJe4Mf7YhlcWbN/view">
+                    персональных данных
+                  </Link>{' '}
+                  и согласие
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                <input
+                  type="checkbox"
+                  checked
+                  readOnly
+                  style={{ marginTop: '4px', cursor: 'default' }}
+                />
+                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.4 }}>
+                  <Link
+                    href="https://docs.google.com/document/d/1OoYWjNIqx8ACmgL5YKGZflAA0gD_CEZl/edit"
+                    target="_blank"
+                  >
+                    рекламную рассылку каталога Вайбер
+                  </Link>
+                </Typography>
+              </Box>
             </Box>
 
             {/* Сообщения об успехе/ошибке */}
