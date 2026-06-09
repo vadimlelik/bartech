@@ -8,10 +8,9 @@ import {
     Typography,
     Box,
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function CategoryCard({ category }) {
-    const router = useRouter();
     const { id, name, image, description } = category;
 
     if (!id || id === '') {
@@ -32,7 +31,8 @@ export default function CategoryCard({ category }) {
             }}
         >
             <CardActionArea
-                onClick={() => router.push(`/categories/${id}`)}
+                component={Link}
+                href={`/categories/${id}`}
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
             >
                 <Box sx={{ position: 'relative', paddingTop: '60%' }}>

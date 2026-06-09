@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import Link from 'next/link';
 import { unstable_cache } from 'next/cache';
@@ -225,14 +226,16 @@ export default async function CategoryPage({ params }) {
                 label={`О рассрочке — ${category.name}`}
               />
             </Box>
-            <ProductList
-              categoryId={category.id}
-              initialProducts={firstPageProductsResult?.products || []}
-              initialFilters={firstPageProductsResult?.filters || {}}
-              initialHasMore={
-                (firstPageProductsResult?.pagination?.pages ?? 0) > 1
-              }
-            />
+            <Suspense fallback={null}>
+              <ProductList
+                categoryId={category.id}
+                initialProducts={firstPageProductsResult?.products || []}
+                initialFilters={firstPageProductsResult?.filters || {}}
+                initialHasMore={
+                  (firstPageProductsResult?.pagination?.pages ?? 0) > 1
+                }
+              />
+            </Suspense>
             {featuredProducts.length > 0 && (
               <Box
                 component="section"

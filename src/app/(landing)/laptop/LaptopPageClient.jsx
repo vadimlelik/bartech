@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
-import Loading from '@/app/loading';
+import PageLoader from '@/shared/ui/loading/PageLoader';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Quiz from '@/features/quiz/ui/Quiz';
@@ -196,7 +196,7 @@ export default function Laptop() {
     },
   ];
 
-  if (!now) return <Loading />;
+  if (!now) return <PageLoader />;
 
   return (
     <>

@@ -1,12 +1,7 @@
-import styles from './page.module.css';
-
-const Loading = () => {
-  return (
-    <div className={styles.loadingContainer}>
-      <div className={styles.loader}></div>
-      <p className={styles.loadingText}>Loading...</p>
-    </div>
-  );
-};
-
-export default Loading;
+/**
+ * Глобальный fallback для Suspense (Next.js App Router).
+ * Не перекрываем экран — иначе при CSR bailout страницы магазина «залипают» на Loading.
+ */
+export default function Loading() {
+  return null;
+}
