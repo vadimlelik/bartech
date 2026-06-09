@@ -1,4 +1,5 @@
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { LANDING_SEO_COPY } from '@/shared/config/landing-seo-copy';
 import {
   INDEXED_LANDING_SLUGS,
   LANDING_CANONICAL_TARGETS,
@@ -44,10 +45,12 @@ export function mergeLandingMetadata(slug, metadata = {}) {
 
 /** Minimal metadata for client-only landing routes (via layout.jsx). */
 export function buildLandingLayoutMetadata(slug, overrides = {}) {
+  const seoCopy = LANDING_SEO_COPY[slug];
   return mergeLandingMetadata(slug, {
-    title: overrides.title ?? `Texnobar — ${slug}`,
+    title: overrides.title ?? seoCopy?.title ?? `Texnobar — ${slug}`,
     description:
       overrides.description ??
+      seoCopy?.description ??
       'Акции и рассрочка на технику в Минске — интернет-магазин Texnobar.',
     ...overrides,
   });
