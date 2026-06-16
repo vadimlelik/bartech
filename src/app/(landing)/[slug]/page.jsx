@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache';
 import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
-import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
+import { getLandingSubdomainUrl, mergeLandingMetadata } from '@/shared/lib/landing-seo';
 
 function isValidLandingSlug(slug) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''));
@@ -68,11 +68,14 @@ export async function generateMetadata({ params }) {
 
     const title = landing.title || 'Лендинг';
     const description = landing.description || landing.title || 'Лендинг';
-    const url = `${siteUrl}/${slug}`;
+    const url = getLandingSubdomainUrl(slug);
 
     return mergeLandingMetadata(slug, {
       title,
       description,
+      alternates: {
+        canonical: url,
+      },
       openGraph: {
         title,
         description,

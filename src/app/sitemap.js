@@ -5,7 +5,7 @@ import { getAllLandings } from '@/entities/landing/model/landings-db';
 import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
-import { isIndexedLanding } from '@/shared/lib/landing-seo';
+import { getLandingSubdomainUrl, isIndexedLanding } from '@/shared/lib/landing-seo';
 
 // Не кешировать при сборке Docker (без DATABASE_URL) — категории и товары только из runtime БД
 export const dynamic = 'force-dynamic';
@@ -78,11 +78,12 @@ export default async function sitemap() {
       .forEach((landing) => {
         landingSlugs.add(landing.slug);
         landingRoutes.push(
-          createSitemapEntry(`/${safePathSegment(landing.slug)}`, {
-            lastModified: landing.updated_at || landing.updatedAt,
+          {
+            url: getLandingSubdomainUrl(landing.slug),
+            lastModified: safeLastModified(landing.updated_at || landing.updatedAt),
             changeFrequency: 'weekly',
             priority: 0.6,
-          }),
+          },
         );
       });
   } catch (error) {

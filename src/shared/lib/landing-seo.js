@@ -5,6 +5,11 @@ import { LANDING_CANONICAL_TARGETS } from '@/shared/config/subdomains';
 export const ROBOTS_NOINDEX_FOLLOW = { index: false, follow: true };
 export const ROBOTS_NOINDEX_NOFOLLOW = { index: false, follow: false };
 
+export function getLandingSubdomainUrl(slug) {
+  const { protocol, hostname } = new URL(siteUrl);
+  return `${protocol}//${slug}.${hostname}/`;
+}
+
 export function isIndexedLanding(slug) {
   if (LANDING_CANONICAL_TARGETS[slug]) {
     return false;
