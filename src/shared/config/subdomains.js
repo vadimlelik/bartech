@@ -4,7 +4,12 @@
  */
 
 /** Money landings indexed in Google/Yandex */
-export const INDEXED_LANDING_SLUGS = new Set(['phone', 'laptop', 'tv1', 'motoblok']);
+export const INDEXED_LANDING_SLUGS = new Set([
+  'phone',
+  'laptop',
+  'tv1',
+  'motoblok',
+]);
 
 /**
  * Variant / promo landings → canonical URL path on primary landing.

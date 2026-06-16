@@ -132,7 +132,7 @@ export default async function ProductPage({ params }) {
   }
 
   const category =
-    product.categoryId != null
+    product.categoryId !== null && product.categoryId !== undefined
       ? await getCategoryById(product.categoryId).catch(() => null)
       : null;
 

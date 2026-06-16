@@ -1,16 +1,9 @@
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
-/** Paths blocked for all crawlers (including AI bots). */
+/** Paths that should not be crawled as standalone content. */
 export const DISALLOWED_PATHS = [
   '/api/',
   '/admin/',
-  '/checkout/',
-  '/cart',
-  '/favorites',
-  '/compare',
-  '/_next/',
-  '/manifest.json',
-  '/apple-touch-icon.png',
 ];
 
 /**

@@ -8,95 +8,72 @@ import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
 // Не кешировать при сборке Docker (без DATABASE_URL) — категории и товары только из runtime БД
 export const dynamic = 'force-dynamic';
 
+const now = () => new Date();
+
+function safeLastModified(value) {
+  if (!value) {
+    return now();
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? now() : date;
+}
+
+function safePathSegment(value) {
+  return encodeURIComponent(String(value));
+}
+
+function createSitemapEntry(path, options = {}) {
+  return {
+    url: `${siteUrl}${path}`,
+    lastModified: safeLastModified(options.lastModified),
+    changeFrequency: options.changeFrequency,
+    priority: options.priority,
+  };
+}
+
 export default async function sitemap() {
   noStore();
   const baseRoutes = [
     {
       url: siteUrl,
-      lastModified: new Date(),
+      lastModified: now(),
       changeFrequency: 'daily',
       priority: 1,
     },
-    {
-      url: `${siteUrl}/installment`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.95,
-    },
-    {
-      url: `${siteUrl}/reviews`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/payment_delivery`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.75,
-    },
-    {
-      url: `${siteUrl}/contacts`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.75,
-    },
-    {
-      url: `${siteUrl}/return`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${siteUrl}/sales`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/service`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${siteUrl}/guarantee`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${siteUrl}/pk`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-    {
-      url: `${siteUrl}/po`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
+    createSitemapEntry('/installment', { changeFrequency: 'weekly', priority: 0.95 }),
+    createSitemapEntry('/reviews', { changeFrequency: 'weekly', priority: 0.8 }),
+    createSitemapEntry('/payment_delivery', { changeFrequency: 'monthly', priority: 0.75 }),
+    createSitemapEntry('/contacts', { changeFrequency: 'monthly', priority: 0.75 }),
+    createSitemapEntry('/return', { changeFrequency: 'monthly', priority: 0.5 }),
+    createSitemapEntry('/sales', { changeFrequency: 'weekly', priority: 0.7 }),
+    createSitemapEntry('/service', { changeFrequency: 'monthly', priority: 0.5 }),
+    createSitemapEntry('/guarantee', { changeFrequency: 'monthly', priority: 0.5 }),
+    createSitemapEntry('/pk', { changeFrequency: 'monthly', priority: 0.3 }),
+    createSitemapEntry('/po', { changeFrequency: 'monthly', priority: 0.3 }),
   ];
 
   // Статические лендинги по категориям товаров
-  const landingRoutes = Object.entries(LANDING_SITEMAP_PRIORITIES).map(([slug, priority]) => ({
-    url: `${siteUrl}/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority,
-  }));
+  const landingRoutes = Object.entries(LANDING_SITEMAP_PRIORITIES).map(([slug, priority]) =>
+    createSitemapEntry(`/${safePathSegment(slug)}`, {
+      changeFrequency: 'weekly',
+      priority,
+    }),
+  );
 
   // Получаем категории
   let categoryRoutes = [];
   try {
     const categories = await getCategories();
-    categoryRoutes = categories.map((category) => ({
-      url: `${siteUrl}/categories/${category.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    }));
+    categoryRoutes = categories
+      .filter((category) => category?.id !== null && category?.id !== undefined)
+      .map((category) =>
+        createSitemapEntry(`/categories/${safePathSegment(category.id)}`, {
+          lastModified: category.updated_at || category.updatedAt,
+          changeFrequency: 'daily',
+          priority: 0.9,
+        }),
+      );
   } catch (error) {
     logDbFallbackUnlessBuildWithoutDb('Error fetching categories for sitemap:', error);
   }
@@ -105,12 +82,15 @@ export default async function sitemap() {
   let productRoutes = [];
   try {
     const products = await getAllProducts();
-    productRoutes = products.map((product) => ({
-      url: `${siteUrl}/products/${product.id}`,
-      lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }));
+    productRoutes = products
+      .filter((product) => product?.id !== null && product?.id !== undefined)
+      .map((product) =>
+        createSitemapEntry(`/products/${safePathSegment(product.id)}`, {
+          lastModified: product.updated_at || product.updatedAt,
+          changeFrequency: 'weekly',
+          priority: 0.8,
+        }),
+      );
   } catch (error) {
     logDbFallbackUnlessBuildWithoutDb('Error fetching products for sitemap:', error);
   }

@@ -144,6 +144,61 @@ const nextConfig = {
         destination: '/categories/:id',
         permanent: true,
       },
+      {
+        source: '/payment-delivery',
+        destination: '/payment_delivery',
+        permanent: true,
+      },
+      {
+        source: '/delivery',
+        destination: '/payment_delivery',
+        permanent: true,
+      },
+      {
+        source: '/payment',
+        destination: '/payment_delivery',
+        permanent: true,
+      },
+      {
+        source: '/returns',
+        destination: '/return',
+        permanent: true,
+      },
+      {
+        source: '/warranty',
+        destination: '/guarantee',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy',
+        destination: '/privacy',
+        permanent: true,
+      },
+      {
+        source: '/politic',
+        destination: '/pk',
+        permanent: true,
+      },
+      {
+        source: '/public-offer',
+        destination: '/po',
+        permanent: true,
+      },
+      {
+        source: '/offer',
+        destination: '/po',
+        permanent: true,
+      },
+      {
+        source: '/review',
+        destination: '/reviews',
+        permanent: true,
+      },
+      {
+        source: '/videowathcing',
+        destination: '/videowatching',
+        permanent: true,
+      },
     ];
   },
 };
