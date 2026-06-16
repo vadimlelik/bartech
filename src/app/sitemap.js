@@ -1,9 +1,11 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { getAllProducts } from '@/entities/product/model/products';
 import { getCategories } from '@/entities/category/model/categories';
+import { getAllLandings } from '@/entities/landing/model/landings-db';
 import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
+import { isIndexedLanding } from '@/shared/lib/landing-seo';
 
 // Не кешировать при сборке Docker (без DATABASE_URL) — категории и товары только из runtime БД
 export const dynamic = 'force-dynamic';
@@ -21,6 +23,10 @@ function safeLastModified(value) {
 
 function safePathSegment(value) {
   return encodeURIComponent(String(value));
+}
+
+function isValidLandingSlug(slug) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''));
 }
 
 function createSitemapEntry(path, options = {}) {
@@ -60,6 +66,28 @@ export default async function sitemap() {
       priority,
     }),
   );
+
+  const landingSlugs = new Set(Object.keys(LANDING_SITEMAP_PRIORITIES));
+  try {
+    const adminLandings = await getAllLandings();
+    adminLandings
+      .filter((landing) => landing?.is_active)
+      .filter((landing) => isValidLandingSlug(landing.slug))
+      .filter((landing) => isIndexedLanding(landing.slug))
+      .filter((landing) => !landingSlugs.has(landing.slug))
+      .forEach((landing) => {
+        landingSlugs.add(landing.slug);
+        landingRoutes.push(
+          createSitemapEntry(`/${safePathSegment(landing.slug)}`, {
+            lastModified: landing.updated_at || landing.updatedAt,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          }),
+        );
+      });
+  } catch (error) {
+    logDbFallbackUnlessBuildWithoutDb('Error fetching admin landings for sitemap:', error);
+  }
 
   // Получаем категории
   let categoryRoutes = [];

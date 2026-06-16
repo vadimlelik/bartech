@@ -1,15 +1,16 @@
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { LANDING_SEO_COPY } from '@/shared/config/landing-seo-copy';
-import {
-  INDEXED_LANDING_SLUGS,
-  LANDING_CANONICAL_TARGETS,
-} from '@/shared/config/subdomains';
+import { LANDING_CANONICAL_TARGETS } from '@/shared/config/subdomains';
 
 export const ROBOTS_NOINDEX_FOLLOW = { index: false, follow: true };
 export const ROBOTS_NOINDEX_NOFOLLOW = { index: false, follow: false };
 
 export function isIndexedLanding(slug) {
-  return INDEXED_LANDING_SLUGS.has(slug);
+  if (LANDING_CANONICAL_TARGETS[slug]) {
+    return false;
+  }
+
+  return true;
 }
 
 function resolveCanonicalUrl(slug, overrides = {}) {
@@ -27,7 +28,8 @@ function resolveCanonicalUrl(slug, overrides = {}) {
 }
 
 /**
- * Apply indexation rules to landing metadata (static pages & layouts).
+ * Apply indexation rules to landing metadata.
+ * Explicit A/B variants stay noindex; admin-created slugs are indexable by default.
  */
 export function mergeLandingMetadata(slug, metadata = {}) {
   const indexed = isIndexedLanding(slug);

@@ -3,7 +3,6 @@ import {
   verifySessionToken,
   SESSION_COOKIE_NAME,
 } from '@/shared/lib/auth-session';
-import { LEGIT_SUBDOMAINS_SET } from '@/shared/config/subdomains';
 
 const BLOCKED_SUBDOMAINS_SET = new Set(['www']);
 
@@ -59,8 +58,7 @@ export async function middleware(request) {
     const subdomain = subdomainMatch[1];
     if (
       BLOCKED_SUBDOMAINS_SET.has(subdomain) ||
-      !isValidLandingSubdomain(subdomain) ||
-      !LEGIT_SUBDOMAINS_SET.has(subdomain)
+      !isValidLandingSubdomain(subdomain)
     ) {
       const canonicalUrl = new URL(request.url);
       canonicalUrl.protocol = 'https:';
