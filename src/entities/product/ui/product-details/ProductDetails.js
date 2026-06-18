@@ -96,10 +96,9 @@ export default function ProductDetails({ product }) {
     ? 'В наличии'
     : 'Нет в наличии, под заказ';
   const totalPrice = product.totalPrice ?? product.total_price;
-  const totalPriceLabel =
-    totalPrice !== null && totalPrice !== undefined && Number(totalPrice) > 0
-      ? `${Math.round(Number(totalPrice)).toLocaleString('ru-RU')} BYN`
-      : '';
+  const inStockPrice = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product.price) || 0;
+  const inStockPriceLabel = `${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN`;
+  const orderPriceLabel = `от ${Number(product.price || 0).toFixed(2)} BYN/мес.`;
 
   // Получаем изображения товара
   const productImages = (() => {
@@ -276,10 +275,10 @@ export default function ProductDetails({ product }) {
             />
           </Box>
 
-          {isProductInStock && (
+          {isProductInStock ? (
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h5" color="primary" component="span">
-                от {product.price.toFixed(2)} BYN/мес. <br />
+              <Typography variant="h5" color="primary">
+                Цена: {inStockPriceLabel}
               </Typography>
               {product.oldPrice && (
                 <Typography
@@ -294,11 +293,12 @@ export default function ProductDetails({ product }) {
                   {product.oldPrice.toFixed(2)} BYN
                 </Typography>
               )}
-              {totalPriceLabel && (
-                <Typography variant="body1" color="text.primary" sx={{ mt: 1 }}>
-                  Цена общая: {totalPriceLabel}
-                </Typography>
-              )}
+            </Box>
+          ) : (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h5" color="primary">
+                {orderPriceLabel}
+              </Typography>
             </Box>
           )}
 

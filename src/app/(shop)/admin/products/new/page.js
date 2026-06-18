@@ -260,11 +260,12 @@ function NewProductPageContent() {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Цена"
+              label="Цена от"
               name="price"
               type="number"
               value={formData.price || ''}
               onChange={handleInputChange}
+              helperText="Для статуса под заказ показывается как 'от ... BYN/мес.'"
               required
             />
           </Grid>
@@ -286,12 +287,12 @@ function NewProductPageContent() {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Цена общая"
+                label="Цена"
                 name="totalPrice"
                 type="number"
                 value={formData.totalPrice || ''}
                 onChange={handleInputChange}
-                helperText="Общая стоимость товара, например 2500 BYN"
+                helperText="Цена товара в наличии, показывается без 'от'"
               />
             </Grid>
           )}

@@ -63,6 +63,12 @@ export default function ComparePage() {
                 {compareItems.map((item) => {
                   const isProductInStock =
                     (item.availabilityStatus || item.availability_status || 'in_stock') !== 'on_order';
+                  const totalPrice = item.totalPrice ?? item.total_price;
+                  const displayPrice = isProductInStock
+                    ? Number(totalPrice) > 0
+                      ? `${Math.round(Number(totalPrice)).toLocaleString('ru-RU')} BYN`
+                      : `${(item.price * 3.35).toFixed(2)} BYN`
+                    : `от ${Number(item.price || 0).toFixed(2)} BYN/мес.`;
 
                   return (
                     <TableCell key={item.id} align="center">
@@ -98,11 +104,9 @@ export default function ComparePage() {
                             }}
                           />
                           <Typography variant="subtitle1">{item.name}</Typography>
-                          {isProductInStock && (
-                            <Typography variant="h6" color="primary">
-                              {(item.price * 3.35).toFixed(2)} BYN
-                            </Typography>
-                          )}
+                          <Typography variant="h6" color="primary">
+                            {displayPrice}
+                          </Typography>
                         </Box>
                       </Box>
                     </TableCell>

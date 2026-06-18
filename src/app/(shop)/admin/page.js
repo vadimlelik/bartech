@@ -937,57 +937,62 @@ function AdminPageContent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell>{product.id}</TableCell>
-                  <TableCell>
-                    {product.image && (
-                      <AdminThumbImage
-                        src={product.image}
-                        alt={product.name}
-                        width={60}
-                        height={60}
-                        style={{ objectFit: 'cover', borderRadius: 4 }}
+              {products.map((product) => {
+                const isProductOnOrder =
+                  (product.availabilityStatus || product.availability_status) === 'on_order';
+                const totalPrice = product.totalPrice ?? product.total_price;
+                const displayPrice = isProductOnOrder
+                  ? `от ${product.price} BYN/мес.`
+                  : `${Number(totalPrice) > 0 ? totalPrice : product.price} BYN`;
+
+                return (
+                  <TableRow key={product.id}>
+                    <TableCell>{product.id}</TableCell>
+                    <TableCell>
+                      {product.image && (
+                        <AdminThumbImage
+                          src={product.image}
+                          alt={product.name}
+                          width={60}
+                          height={60}
+                          style={{ objectFit: 'cover', borderRadius: 4 }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>
+                      <Chip label={product.category || product.category_id || '-'} size="small" />
+                    </TableCell>
+                    <TableCell>{displayPrice}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={
+                          isProductOnOrder
+                            ? 'Нет в наличии, под заказ'
+                            : 'В наличии'
+                        }
+                        color={isProductOnOrder ? 'warning' : 'success'}
+                        size="small"
                       />
-                    )}
-                  </TableCell>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>
-                    <Chip label={product.category || product.category_id || '-'} size="small" />
-                  </TableCell>
-                  <TableCell> от {product.price} руб/мес.</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={
-                        (product.availabilityStatus || product.availability_status) === 'on_order'
-                          ? 'Нет в наличии, под заказ'
-                          : 'В наличии'
-                      }
-                      color={
-                        (product.availabilityStatus || product.availability_status) === 'on_order'
-                          ? 'warning'
-                          : 'success'
-                      }
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>{product.specifications?.brand || '-'}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      color="primary"
-                      onClick={() => router.push(`/admin/products/${product.id}/edit`)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(product.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell>{product.specifications?.brand || '-'}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        color="primary"
+                        onClick={() => router.push(`/admin/products/${product.id}/edit`)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
               {productsLoadingMore && (
                 <TableRow>
                   <TableCell colSpan={8} align="center" sx={{ py: 2, border: 0 }}>

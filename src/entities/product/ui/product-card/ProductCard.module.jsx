@@ -16,9 +16,14 @@ function ProductCard({ product }) {
 
   // Мемоизируем форматированную цену
   const formattedPrice = useMemo(() => {
-    if (!isProductInStock || !product?.price) return '';
-    return `${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
-  }, [isProductInStock, product?.price]);
+    const totalPrice = product?.totalPrice ?? product?.total_price;
+    if (isProductInStock) {
+      const price = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product?.price) || 0;
+      return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
+    }
+    if (!product?.price) return '';
+    return `от ${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`;
+  }, [isProductInStock, product?.price, product?.totalPrice, product?.total_price]);
 
   // Мемоизируем URL товара
   const productUrl = useMemo(() => `/mt/${product.id}`, [product.id]);
@@ -46,7 +51,7 @@ function ProductCard({ product }) {
       )}
       <div className={styles.content}>
         <h2 className={styles.title}>{product.title || 'Без названия'}</h2>
-        {isProductInStock && <span className={styles.price}>{formattedPrice}</span>}
+        {formattedPrice && <span className={styles.price}>{formattedPrice}</span>}
         {product.description && (
           <pre className={styles.description}>{product.description}</pre>
         )}
@@ -61,6 +66,8 @@ export default React.memo(ProductCard, (prevProps, nextProps) => {
   return (
     prevProps.product?.id === nextProps.product?.id &&
     prevProps.product?.price === nextProps.product?.price &&
+    prevProps.product?.totalPrice === nextProps.product?.totalPrice &&
+    prevProps.product?.total_price === nextProps.product?.total_price &&
     prevProps.product?.availabilityStatus === nextProps.product?.availabilityStatus &&
     prevProps.product?.availability_status === nextProps.product?.availability_status &&
     prevProps.product?.title === nextProps.product?.title &&
