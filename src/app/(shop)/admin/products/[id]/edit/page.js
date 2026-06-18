@@ -42,6 +42,7 @@ function EditProductPageContent() {
     category: '',
     categoryId: '',
     price: '',
+    availabilityStatus: 'in_stock',
     image: '',
     images: [],
     description: '',
@@ -86,6 +87,7 @@ function EditProductPageContent() {
             category: product.category || '',
             categoryId: product.category_id || product.categoryId || '',
             price: product.price || '',
+            availabilityStatus: product.availabilityStatus || product.availability_status || 'in_stock',
             image: product.image || '',
             images: Array.isArray(product.images) ? product.images : [],
             description: product.description || '',
@@ -154,7 +156,7 @@ function EditProductPageContent() {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         const errorMessage = data.error || 'Ошибка загрузки изображения';
         showSnackbar(errorMessage, 'error');
@@ -184,6 +186,7 @@ function EditProductPageContent() {
         category: formData.category,
         category_id: formData.categoryId,
         price: parseFloat(formData.price) || 0,
+        availabilityStatus: formData.availabilityStatus || 'in_stock',
         image: formData.image,
         images: Array.isArray(formData.images) ? formData.images : [],
         description: formData.description,
@@ -303,6 +306,20 @@ function EditProductPageContent() {
               onChange={handleInputChange}
               required
             />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Статус</InputLabel>
+              <Select
+                name="availabilityStatus"
+                value={formData.availabilityStatus || 'in_stock'}
+                label="Статус"
+                onChange={handleInputChange}
+              >
+                <MenuItem value="in_stock">В наличии</MenuItem>
+                <MenuItem value="on_order">Нет в наличии, под заказ</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12}>
             <TextField

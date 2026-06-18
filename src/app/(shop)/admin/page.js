@@ -931,6 +931,7 @@ function AdminPageContent() {
                 <TableCell>Название</TableCell>
                 <TableCell>Категория</TableCell>
                 <TableCell>Цена</TableCell>
+                <TableCell>Статус</TableCell>
                 <TableCell>Бренд</TableCell>
                 <TableCell align="right">Действия</TableCell>
               </TableRow>
@@ -955,6 +956,21 @@ function AdminPageContent() {
                     <Chip label={product.category || product.category_id || '-'} size="small" />
                   </TableCell>
                   <TableCell> от {product.price} руб/мес.</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={
+                        (product.availabilityStatus || product.availability_status) === 'on_order'
+                          ? 'Нет в наличии, под заказ'
+                          : 'В наличии'
+                      }
+                      color={
+                        (product.availabilityStatus || product.availability_status) === 'on_order'
+                          ? 'warning'
+                          : 'success'
+                      }
+                      size="small"
+                    />
+                  </TableCell>
                   <TableCell>{product.specifications?.brand || '-'}</TableCell>
                   <TableCell align="right">
                     <IconButton
@@ -974,7 +990,7 @@ function AdminPageContent() {
               ))}
               {productsLoadingMore && (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" sx={{ py: 2, border: 0 }}>
+                  <TableCell colSpan={8} align="center" sx={{ py: 2, border: 0 }}>
                     <CircularProgress size={28} />
                   </TableCell>
                 </TableRow>

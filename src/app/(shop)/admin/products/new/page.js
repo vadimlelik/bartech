@@ -35,6 +35,7 @@ function NewProductPageContent() {
     category: '',
     categoryId: '',
     price: '',
+    availabilityStatus: 'in_stock',
     image: '',
     images: '',
     description: '',
@@ -109,7 +110,7 @@ function NewProductPageContent() {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         const errorMessage = data.error || 'Ошибка загрузки изображения';
         showSnackbar(errorMessage, 'error');
@@ -139,6 +140,7 @@ function NewProductPageContent() {
         category: formData.category,
         category_id: formData.categoryId,
         price: parseFloat(formData.price) || 0,
+        availabilityStatus: formData.availabilityStatus || 'in_stock',
         image: formData.image,
         images: formData.images
           ? formData.images.split(',').map((img) => img.trim()).filter(Boolean)
@@ -260,6 +262,20 @@ function NewProductPageContent() {
               onChange={handleInputChange}
               required
             />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Статус</InputLabel>
+              <Select
+                name="availabilityStatus"
+                value={formData.availabilityStatus || 'in_stock'}
+                label="Статус"
+                onChange={handleInputChange}
+              >
+                <MenuItem value="in_stock">В наличии</MenuItem>
+                <MenuItem value="on_order">Нет в наличии, под заказ</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12}>
             <TextField

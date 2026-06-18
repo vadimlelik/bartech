@@ -10,6 +10,22 @@ import fs from 'fs';
 import path from 'path';
 
 const productsPath = path.join(process.cwd(), 'data', 'products_new.json');
+const DEFAULT_AVAILABILITY_STATUS = 'in_stock';
+const AVAILABILITY_STATUSES = new Set(['in_stock', 'on_order']);
+
+function normalizeProduct(product) {
+  if (!product) return null;
+  const availabilityStatus = AVAILABILITY_STATUSES.has(
+    product.availabilityStatus ?? product.availability_status
+  )
+    ? product.availabilityStatus ?? product.availability_status
+    : DEFAULT_AVAILABILITY_STATUS;
+  return {
+    ...product,
+    availabilityStatus,
+    availability_status: availabilityStatus,
+  };
+}
 
 function getAllProductsFromJSON() {
   try {
@@ -18,7 +34,7 @@ function getAllProductsFromJSON() {
     }
     const rawData = fs.readFileSync(productsPath, 'utf8');
     const data = JSON.parse(rawData);
-    return data;
+    return Array.isArray(data) ? data.map(normalizeProduct).filter(Boolean) : [];
   } catch (error) {
     console.error('Error reading products:', error);
     return [];

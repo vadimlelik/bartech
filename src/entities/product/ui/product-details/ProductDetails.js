@@ -89,6 +89,13 @@ export default function ProductDetails({ product }) {
   const utm_campaign = params.get('utm_campaign');
   const ad = params.get('ad');
   const ttclid = params.get('ttclid');
+  const availabilityStatus =
+    product.availabilityStatus || product.availability_status || 'in_stock';
+  const isProductInStock = availabilityStatus !== 'on_order';
+  const availabilityLabel = isProductInStock
+    ? 'В наличии'
+    : 'Нет в наличии, под заказ';
+  const totalPriceLabel = `${Math.round(Number(product.price) || 0).toLocaleString('ru-RU')} BYN`;
 
   // Получаем изображения товара
   const productImages = (() => {
@@ -98,7 +105,7 @@ export default function ProductDetails({ product }) {
     if (product.image && product.image.trim() !== '') {
       return [product.image];
     }
-    return ['/logo_techno_bar.svg']; 
+    return ['/logo_techno_bar.svg'];
   })();
 
   const specificationTranslations = {
@@ -126,6 +133,7 @@ export default function ProductDetails({ product }) {
   };
 
   const handleOpenInstallmentModal = () => {
+    if (!isProductInStock) return;
     setIsInstallmentModalOpen(true);
     setName('');
     setNameError('');
@@ -180,7 +188,7 @@ export default function ProductDetails({ product }) {
   const handleSubmitInstallment = async () => {
     const nameError = validateName(name);
     const phoneError = validatePhone(phone);
-    
+
     if (nameError) {
       setNameError(nameError);
     }
@@ -196,7 +204,7 @@ export default function ProductDetails({ product }) {
 
     try {
       const formattedPhone = phone.replace(/[^\d+]/g, '');
-      
+
       const productInfo = [
         `Товар: ${product.name}`,
         `Цена: ${product.price} BYN`,
@@ -245,7 +253,7 @@ export default function ProductDetails({ product }) {
     <Box>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <ProductImageGallery 
+          <ProductImageGallery
             images={productImages}
             productName={product.name}
           />
@@ -257,11 +265,16 @@ export default function ProductDetails({ product }) {
 
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <Chip
-              label="В наличии"
-              color="success"
+              label={availabilityLabel}
+              color={isProductInStock ? 'success' : 'warning'}
               size="small"
               sx={{ ml: 2 }}
             />
+            {isProductInStock && (
+              <Typography variant="body1" sx={{ ml: 2, fontWeight: 600 }}>
+                {totalPriceLabel}
+              </Typography>
+            )}
           </Box>
 
           <Box sx={{ mb: 3 }}>
@@ -355,18 +368,20 @@ export default function ProductDetails({ product }) {
           </Box>
 
           <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleOpenInstallmentModal}
-              fullWidth
-              sx={{
-                height: 48,
-                fontSize: '1.1rem',
-              }}
-            >
-              Оформить в рассрочку
-            </Button>
+            {isProductInStock && (
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleOpenInstallmentModal}
+                fullWidth
+                sx={{
+                  height: 48,
+                  fontSize: '1.1rem',
+                }}
+              >
+                Оформить в рассрочку
+              </Button>
+            )}
             <IconButton
               onClick={() => {
                 isFavorite
@@ -411,14 +426,14 @@ export default function ProductDetails({ product }) {
             {product.specifications &&
              typeof product.specifications === 'object' &&
              !Array.isArray(product.specifications) &&
-             Object.entries(product.specifications).filter(([key, value]) => 
+             Object.entries(product.specifications).filter(([key, value]) =>
                value && value !== '' && value !== null && value !== undefined && String(value).trim() !== ''
              ).length > 0 ? (
               <TableContainer>
                 <Table>
                   <TableBody>
                     {Object.entries(product.specifications)
-                      .filter(([key, value]) => 
+                      .filter(([key, value]) =>
                         value && value !== '' && value !== null && value !== undefined && String(value).trim() !== ''
                       )
                       .map(([key, value]) => (
@@ -459,7 +474,7 @@ export default function ProductDetails({ product }) {
 
       {/* Модалка оформления в рассрочку */}
       <Dialog
-        open={isInstallmentModalOpen}
+        open={isProductInStock && isInstallmentModalOpen}
         onClose={handleCloseInstallmentModal}
         maxWidth="sm"
         fullWidth
@@ -530,7 +545,7 @@ export default function ProductDetails({ product }) {
                 disabled={isSubmitting}
                 sx={{ mb: 3 }}
               />
-              
+
               <Typography variant="body1" gutterBottom sx={{ mb: 2 }}>
                 Введите ваш номер телефона для связи:
               </Typography>

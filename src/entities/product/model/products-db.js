@@ -26,12 +26,24 @@ const SPEC_COALESCE_SQL = {
   year: 'COALESCE(specifications->>\'year\',\'\')',
 };
 
+const DEFAULT_AVAILABILITY_STATUS = 'in_stock';
+const AVAILABILITY_STATUSES = new Set(['in_stock', 'on_order']);
+
+function normalizeAvailabilityStatus(status) {
+  return AVAILABILITY_STATUSES.has(status) ? status : DEFAULT_AVAILABILITY_STATUS;
+}
+
 function normalizeProduct(product) {
   if (!product) return null;
+  const availabilityStatus = normalizeAvailabilityStatus(
+    product.availabilityStatus ?? product.availability_status,
+  );
   return {
     ...product,
     categoryId: product.categoryId ?? product.category_id ?? null,
     category_id: product.categoryId ?? product.category_id ?? null,
+    availabilityStatus,
+    availability_status: availabilityStatus,
   };
 }
 
@@ -69,6 +81,9 @@ function prepareProductData(productData) {
         ? [productData.images]
         : [],
     description: productData?.description || null,
+    availabilityStatus: normalizeAvailabilityStatus(
+      productData?.availabilityStatus ?? productData?.availability_status,
+    ),
     specifications: (() => {
       const sp = productData?.specifications;
       if (sp !== null && typeof sp === 'object' && !Array.isArray(sp)) return sp;
@@ -147,6 +162,13 @@ export async function updateProduct(id, productData) {
           ? [productData.images]
           : undefined,
       description: productData?.description ?? undefined,
+      availabilityStatus:
+        productData?.availabilityStatus !== undefined ||
+        productData?.availability_status !== undefined
+          ? normalizeAvailabilityStatus(
+              productData?.availabilityStatus ?? productData?.availability_status,
+            )
+          : undefined,
       specifications: productData?.specifications ?? undefined,
     };
 
@@ -204,6 +226,7 @@ function mapRawProductRow(row) {
     image: row.image,
     images: Array.isArray(row.images) ? row.images : [],
     description: row.description,
+    availabilityStatus: row.availability_status,
     specifications: specObj,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -331,7 +354,7 @@ export async function getProducts({
       SELECT specifications FROM products WHERE ${whereSql}
     `,
     prisma.$queryRaw`
-      SELECT id, name, category, category_id, price, image, images, description, specifications, created_at, updated_at
+      SELECT id, name, category, category_id, price, image, images, description, availability_status, specifications, created_at, updated_at
       FROM products
       WHERE ${whereSql}
       ${orderFrag}
