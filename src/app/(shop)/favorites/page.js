@@ -158,6 +158,8 @@ export default function FavoritesPage() {
           if (!product.id) {
             return null;
           }
+          const isProductInStock =
+            (product.availabilityStatus || product.availability_status || 'in_stock') !== 'on_order';
           return (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card
@@ -182,9 +184,11 @@ export default function FavoritesPage() {
                 <Typography gutterBottom variant="h6" component="h2">
                   {product.name}
                 </Typography>
-                <Typography variant="h6" color="primary" gutterBottom>
-                  {product.price?.toLocaleString()} BYN
-                </Typography>
+                {isProductInStock && (
+                  <Typography variant="h6" color="primary" gutterBottom>
+                    {product.price?.toLocaleString()} BYN
+                  </Typography>
+                )}
                 <Box
                   sx={{
                     mt: 2,

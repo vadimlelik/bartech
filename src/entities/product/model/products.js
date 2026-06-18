@@ -22,6 +22,8 @@ function normalizeProduct(product) {
     : DEFAULT_AVAILABILITY_STATUS;
   return {
     ...product,
+    totalPrice: product.totalPrice ?? product.total_price ?? null,
+    total_price: product.totalPrice ?? product.total_price ?? null,
     availabilityStatus,
     availability_status: availabilityStatus,
   };

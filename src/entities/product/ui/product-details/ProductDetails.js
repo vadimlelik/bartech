@@ -95,7 +95,11 @@ export default function ProductDetails({ product }) {
   const availabilityLabel = isProductInStock
     ? 'В наличии'
     : 'Нет в наличии, под заказ';
-  const totalPriceLabel = `${Math.round(Number(product.price) || 0).toLocaleString('ru-RU')} BYN`;
+  const totalPrice = product.totalPrice ?? product.total_price;
+  const totalPriceLabel =
+    totalPrice !== null && totalPrice !== undefined && Number(totalPrice) > 0
+      ? `${Math.round(Number(totalPrice)).toLocaleString('ru-RU')} BYN`
+      : '';
 
   // Получаем изображения товара
   const productImages = (() => {
@@ -270,31 +274,33 @@ export default function ProductDetails({ product }) {
               size="small"
               sx={{ ml: 2 }}
             />
-            {isProductInStock && (
-              <Typography variant="body1" sx={{ ml: 2, fontWeight: 600 }}>
-                {totalPriceLabel}
-              </Typography>
-            )}
           </Box>
 
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h5" color="primary" component="span">
-              от {product.price.toFixed(2)} BYN/мес. <br />
-            </Typography>
-            {product.oldPrice && (
-              <Typography
-                variant="h6"
-                color="text.secondary"
-                sx={{
-                  textDecoration: 'line-through',
-                  ml: 2,
-                }}
-                component="span"
-              >
-                {product.oldPrice.toFixed(2)} BYN
+          {isProductInStock && (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h5" color="primary" component="span">
+                от {product.price.toFixed(2)} BYN/мес. <br />
               </Typography>
-            )}
-          </Box>
+              {product.oldPrice && (
+                <Typography
+                  variant="h6"
+                  color="text.secondary"
+                  sx={{
+                    textDecoration: 'line-through',
+                    ml: 2,
+                  }}
+                  component="span"
+                >
+                  {product.oldPrice.toFixed(2)} BYN
+                </Typography>
+              )}
+              {totalPriceLabel && (
+                <Typography variant="body1" color="text.primary" sx={{ mt: 1 }}>
+                  Цена общая: {totalPriceLabel}
+                </Typography>
+              )}
+            </Box>
+          )}
 
           {product.specifications &&
            typeof product.specifications === 'object' &&

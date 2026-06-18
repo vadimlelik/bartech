@@ -11,11 +11,14 @@ import { CURRENCY } from '@/shared/config/constants';
  * Использует React.memo для предотвращения лишних ререндеров
  */
 function ProductCard({ product }) {
+  const isProductInStock =
+    (product?.availabilityStatus || product?.availability_status || 'in_stock') !== 'on_order';
+
   // Мемоизируем форматированную цену
   const formattedPrice = useMemo(() => {
-    if (!product?.price) return '0';
+    if (!isProductInStock || !product?.price) return '';
     return `${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
-  }, [product?.price]);
+  }, [isProductInStock, product?.price]);
 
   // Мемоизируем URL товара
   const productUrl = useMemo(() => `/mt/${product.id}`, [product.id]);
@@ -43,7 +46,7 @@ function ProductCard({ product }) {
       )}
       <div className={styles.content}>
         <h2 className={styles.title}>{product.title || 'Без названия'}</h2>
-        <span className={styles.price}>{formattedPrice}</span>
+        {isProductInStock && <span className={styles.price}>{formattedPrice}</span>}
         {product.description && (
           <pre className={styles.description}>{product.description}</pre>
         )}
@@ -58,6 +61,8 @@ export default React.memo(ProductCard, (prevProps, nextProps) => {
   return (
     prevProps.product?.id === nextProps.product?.id &&
     prevProps.product?.price === nextProps.product?.price &&
+    prevProps.product?.availabilityStatus === nextProps.product?.availabilityStatus &&
+    prevProps.product?.availability_status === nextProps.product?.availability_status &&
     prevProps.product?.title === nextProps.product?.title &&
     prevProps.product?.image === nextProps.product?.image
   );

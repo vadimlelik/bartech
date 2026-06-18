@@ -42,6 +42,7 @@ function EditProductPageContent() {
     category: '',
     categoryId: '',
     price: '',
+    totalPrice: '',
     availabilityStatus: 'in_stock',
     image: '',
     images: [],
@@ -87,6 +88,7 @@ function EditProductPageContent() {
             category: product.category || '',
             categoryId: product.category_id || product.categoryId || '',
             price: product.price || '',
+            totalPrice: product.totalPrice || product.total_price || '',
             availabilityStatus: product.availabilityStatus || product.availability_status || 'in_stock',
             image: product.image || '',
             images: Array.isArray(product.images) ? product.images : [],
@@ -186,6 +188,10 @@ function EditProductPageContent() {
         category: formData.category,
         category_id: formData.categoryId,
         price: parseFloat(formData.price) || 0,
+        totalPrice:
+          formData.availabilityStatus === 'in_stock'
+            ? parseFloat(formData.totalPrice) || null
+            : null,
         availabilityStatus: formData.availabilityStatus || 'in_stock',
         image: formData.image,
         images: Array.isArray(formData.images) ? formData.images : [],
@@ -321,6 +327,19 @@ function EditProductPageContent() {
               </Select>
             </FormControl>
           </Grid>
+          {formData.availabilityStatus === 'in_stock' && (
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Цена общая"
+                name="totalPrice"
+                type="number"
+                value={formData.totalPrice || ''}
+                onChange={handleInputChange}
+                helperText="Общая стоимость товара, например 2500 BYN"
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               fullWidth

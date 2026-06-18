@@ -38,10 +38,13 @@ function normalizeProduct(product) {
   const availabilityStatus = normalizeAvailabilityStatus(
     product.availabilityStatus ?? product.availability_status,
   );
+  const totalPrice = product.totalPrice ?? product.total_price ?? null;
   return {
     ...product,
     categoryId: product.categoryId ?? product.category_id ?? null,
     category_id: product.categoryId ?? product.category_id ?? null,
+    totalPrice,
+    total_price: totalPrice,
     availabilityStatus,
     availability_status: availabilityStatus,
   };
@@ -68,12 +71,18 @@ function prepareProductData(productData) {
     typeof priceRaw === 'number'
       ? Math.round(priceRaw)
       : Math.round(Number.parseFloat(String(priceRaw ?? 0)) || 0);
+  const totalPriceRaw = productData?.totalPrice ?? productData?.total_price;
+  const totalPriceNum =
+    totalPriceRaw === undefined || totalPriceRaw === null || totalPriceRaw === ''
+      ? null
+      : Math.round(Number.parseFloat(String(totalPriceRaw)) || 0);
 
   return {
     name: productData?.name || null,
     category: productData?.category || null,
     categoryId: productData?.category_id || productData?.categoryId || null,
     price: priceNum,
+    totalPrice: totalPriceNum,
     image: productData?.image || null,
     images: Array.isArray(productData?.images)
       ? productData.images
@@ -149,12 +158,19 @@ export async function addProduct(productData) {
 export async function updateProduct(id, productData) {
   try {
     if (!id) return { success: false, error: 'Product ID is required' };
+    const totalPriceRaw = productData?.totalPrice ?? productData?.total_price;
 
     const processedData = {
       name: productData?.name ?? undefined,
       category: productData?.category ?? undefined,
       categoryId: productData?.category_id ?? productData?.categoryId ?? undefined,
       price: productData?.price ?? undefined,
+      totalPrice:
+        productData?.totalPrice !== undefined || productData?.total_price !== undefined
+          ? totalPriceRaw === null || totalPriceRaw === ''
+            ? null
+            : Math.round(Number.parseFloat(String(totalPriceRaw)) || 0)
+          : undefined,
       image: productData?.image ?? undefined,
       images: Array.isArray(productData?.images)
         ? productData.images
@@ -223,6 +239,7 @@ function mapRawProductRow(row) {
     category: row.category,
     categoryId: row.category_id,
     price: row.price,
+    totalPrice: row.total_price,
     image: row.image,
     images: Array.isArray(row.images) ? row.images : [],
     description: row.description,
@@ -354,7 +371,7 @@ export async function getProducts({
       SELECT specifications FROM products WHERE ${whereSql}
     `,
     prisma.$queryRaw`
-      SELECT id, name, category, category_id, price, image, images, description, availability_status, specifications, created_at, updated_at
+      SELECT id, name, category, category_id, price, total_price, image, images, description, availability_status, specifications, created_at, updated_at
       FROM products
       WHERE ${whereSql}
       ${orderFrag}
