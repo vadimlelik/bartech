@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { addProduct, listProductsForAdmin } from '@/entities/product/model/products-db';
 import { requireAdmin } from '@/shared/lib/auth-helpers';
 
@@ -23,14 +24,14 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error('Error fetching products:', error);
-    
+
     if (error.message === 'Unauthorized' || error.message.includes('Forbidden')) {
       return NextResponse.json(
         { error: error.message },
         { status: 403 }
       );
     }
-    
+
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -41,25 +42,31 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     await requireAdmin();
-    
+
     const body = await request.json();
-    
+
     if (!body.name || !body.price) {
       return NextResponse.json(
         { error: 'Name and price are required' },
         { status: 400 }
       );
     }
-    
+
     const result = await addProduct(body);
-    
+
     if (result.success) {
+      revalidateTag('products');
+      revalidatePath('/admin');
+      if (result.product?.id) {
+        revalidatePath(`/products/${result.product.id}`);
+      }
+
       return NextResponse.json(
         { message: 'Product created successfully', product: result.product },
         { status: 201 }
       );
     }
-    
+
     console.error('Failed to create product:', result.error);
     return NextResponse.json(
       { error: result.error || 'Failed to create product' },

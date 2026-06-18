@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import {
   getProductById,
   updateProduct,
@@ -9,7 +10,7 @@ import { requireAdmin } from '@/shared/lib/auth-helpers';
 export async function GET(request, { params }) {
   try {
     await requireAdmin();
-    
+
     const resolvedParams = await Promise.resolve(params);
     const { id } = resolvedParams;
 
@@ -28,14 +29,14 @@ export async function GET(request, { params }) {
     return NextResponse.json({ product });
   } catch (error) {
     console.error('Error fetching product:', error);
-    
+
     if (error.message === 'Unauthorized' || error.message.includes('Forbidden')) {
       return NextResponse.json(
         { error: error.message },
         { status: 403 }
       );
     }
-    
+
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -46,7 +47,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await requireAdmin();
-    
+
     const resolvedParams = await Promise.resolve(params);
     const { id } = resolvedParams;
     const body = await request.json();
@@ -61,6 +62,10 @@ export async function PUT(request, { params }) {
     const result = await updateProduct(id, body);
 
     if (result.success) {
+      revalidateTag('products');
+      revalidatePath(`/products/${id}`);
+      revalidatePath('/admin');
+
       return NextResponse.json({
         message: 'Product updated successfully',
         product: result.product,
@@ -83,7 +88,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await requireAdmin();
-    
+
     const resolvedParams = await Promise.resolve(params);
     const { id } = resolvedParams;
 
@@ -97,6 +102,10 @@ export async function DELETE(request, { params }) {
     const result = await deleteProduct(id);
 
     if (result.success) {
+      revalidateTag('products');
+      revalidatePath(`/products/${id}`);
+      revalidatePath('/admin');
+
       return NextResponse.json({
         message: 'Product deleted successfully',
       });

@@ -14,7 +14,7 @@ import { getAllProducts } from '@/entities/product/model/products';
 import { getCategoryById } from '@/entities/category/model/categories';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
-// Кэш карточки товара (~1 ч), снижает нагрузку на БД
+// Кэш metadata сбрасывается при изменениях товара в админке через revalidateTag('products').
 const getCachedProductById = unstable_cache(
   async (id) => {
     return await getProductById(id);
@@ -26,7 +26,8 @@ const getCachedProductById = unstable_cache(
   }
 );
 
-export const revalidate = 3600;
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export async function generateStaticParams() {
   try {
