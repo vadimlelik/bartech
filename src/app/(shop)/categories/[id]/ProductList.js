@@ -109,6 +109,18 @@ const ProductGridCard = memo(function ProductGridCard({
 }) {
   const [mounted, setMounted] = useState(false);
   const showSpecs = !isMobile && hasSpecsToShow(product.specifications);
+  const isProductOnOrder =
+    (product.availabilityStatus || product.availability_status || 'in_stock') === 'on_order';
+  const totalPrice = product.totalPrice ?? product.total_price;
+  const numericPrice = Number(product.price) || 0;
+  const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice;
+  const displayPrice = isProductOnOrder
+    ? numericPrice > 0
+      ? `от ${numericPrice.toLocaleString('ru-RU')} BYN/мес.`
+      : ''
+    : numericTotalPrice > 0
+      ? `${numericTotalPrice.toLocaleString('ru-RU')} BYN`
+      : '';
 
   useEffect(() => {
     setMounted(true);
@@ -301,7 +313,13 @@ const ProductGridCard = memo(function ProductGridCard({
             </Stack>
 
             <Box sx={{ mt: 'auto' }}>
-              {product.oldPrice && (
+              <Chip
+                label={isProductOnOrder ? 'Под заказ' : 'В наличии'}
+                color={isProductOnOrder ? 'warning' : 'success'}
+                size="small"
+                sx={{ mb: 1 }}
+              />
+              {isProductOnOrder && product.oldPrice && (
                 <Typography
                   variant="body2"
                   color="text.secondary"
@@ -312,9 +330,11 @@ const ProductGridCard = memo(function ProductGridCard({
                   от {product.oldPrice.toLocaleString()} BYN/мес. <br />
                 </Typography>
               )}
-              <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                от {product.price.toLocaleString()} BYN/мес. <br />
-              </Typography>
+              {displayPrice && (
+                <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+                  {displayPrice} <br />
+                </Typography>
+              )}
             </Box>
           </CardContent>
         </Link>

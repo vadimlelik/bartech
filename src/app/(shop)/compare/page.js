@@ -64,11 +64,15 @@ export default function ComparePage() {
                   const isProductInStock =
                     (item.availabilityStatus || item.availability_status || 'in_stock') !== 'on_order';
                   const totalPrice = item.totalPrice ?? item.total_price;
+                  const numericPrice = Number(item.price) || 0;
+                  const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice * 3.35;
                   const displayPrice = isProductInStock
-                    ? Number(totalPrice) > 0
-                      ? `${Math.round(Number(totalPrice)).toLocaleString('ru-RU')} BYN`
-                      : `${(item.price * 3.35).toFixed(2)} BYN`
-                    : `от ${Number(item.price || 0).toFixed(2)} BYN/мес.`;
+                    ? numericTotalPrice > 0
+                      ? `${Math.round(numericTotalPrice).toLocaleString('ru-RU')} BYN`
+                      : ''
+                    : numericPrice > 0
+                      ? `от ${numericPrice.toFixed(2)} BYN/мес.`
+                      : '';
 
                   return (
                     <TableCell key={item.id} align="center">
@@ -104,9 +108,11 @@ export default function ComparePage() {
                             }}
                           />
                           <Typography variant="subtitle1">{item.name}</Typography>
-                          <Typography variant="h6" color="primary">
-                            {displayPrice}
-                          </Typography>
+                          {displayPrice && (
+                            <Typography variant="h6" color="primary">
+                              {displayPrice}
+                            </Typography>
+                          )}
                         </Box>
                       </Box>
                     </TableCell>

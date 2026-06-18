@@ -97,8 +97,10 @@ export default function ProductDetails({ product }) {
     : 'Нет в наличии, под заказ';
   const totalPrice = product.totalPrice ?? product.total_price;
   const inStockPrice = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product.price) || 0;
-  const inStockPriceLabel = `${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN`;
-  const orderPriceLabel = `от ${Number(product.price || 0).toFixed(2)} BYN/мес.`;
+  const inStockPriceLabel =
+    inStockPrice > 0 ? `${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN` : '';
+  const orderPrice = Number(product.price) || 0;
+  const orderPriceLabel = orderPrice > 0 ? `от ${orderPrice.toFixed(2)} BYN/мес.` : '';
 
   // Получаем изображения товара
   const productImages = (() => {
@@ -275,7 +277,7 @@ export default function ProductDetails({ product }) {
             />
           </Box>
 
-          {isProductInStock ? (
+          {isProductInStock && inStockPriceLabel ? (
             <Box sx={{ mb: 3 }}>
               <Typography variant="h5" color="primary">
                 Цена: {inStockPriceLabel}
@@ -294,13 +296,13 @@ export default function ProductDetails({ product }) {
                 </Typography>
               )}
             </Box>
-          ) : (
+          ) : !isProductInStock && orderPriceLabel ? (
             <Box sx={{ mb: 3 }}>
               <Typography variant="h5" color="primary">
                 {orderPriceLabel}
               </Typography>
             </Box>
-          )}
+          ) : null}
 
           {product.specifications &&
            typeof product.specifications === 'object' &&

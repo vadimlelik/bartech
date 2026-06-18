@@ -161,11 +161,15 @@ export default function FavoritesPage() {
           const isProductInStock =
             (product.availabilityStatus || product.availability_status || 'in_stock') !== 'on_order';
           const totalPrice = product.totalPrice ?? product.total_price;
+          const numericPrice = Number(product.price) || 0;
+          const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice;
           const displayPrice = isProductInStock
-            ? Number(totalPrice) > 0
-              ? `${Math.round(Number(totalPrice)).toLocaleString('ru-RU')} BYN`
-              : `${product.price?.toLocaleString()} BYN`
-            : `от ${Number(product.price || 0).toFixed(2)} BYN/мес.`;
+            ? numericTotalPrice > 0
+              ? `${Math.round(numericTotalPrice).toLocaleString('ru-RU')} BYN`
+              : ''
+            : numericPrice > 0
+              ? `от ${numericPrice.toFixed(2)} BYN/мес.`
+              : '';
           return (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card
@@ -190,9 +194,11 @@ export default function FavoritesPage() {
                 <Typography gutterBottom variant="h6" component="h2">
                   {product.name}
                 </Typography>
-                <Typography variant="h6" color="primary" gutterBottom>
-                  {displayPrice}
-                </Typography>
+                {displayPrice && (
+                  <Typography variant="h6" color="primary" gutterBottom>
+                    {displayPrice}
+                  </Typography>
+                )}
                 <Box
                   sx={{
                     mt: 2,

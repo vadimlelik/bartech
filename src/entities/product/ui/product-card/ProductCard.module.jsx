@@ -19,6 +19,7 @@ function ProductCard({ product }) {
     const totalPrice = product?.totalPrice ?? product?.total_price;
     if (isProductInStock) {
       const price = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product?.price) || 0;
+      if (price <= 0) return '';
       return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
     }
     if (!product?.price) return '';

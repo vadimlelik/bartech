@@ -941,9 +941,15 @@ function AdminPageContent() {
                 const isProductOnOrder =
                   (product.availabilityStatus || product.availability_status) === 'on_order';
                 const totalPrice = product.totalPrice ?? product.total_price;
+                const numericPrice = Number(product.price) || 0;
+                const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice;
                 const displayPrice = isProductOnOrder
-                  ? `от ${product.price} BYN/мес.`
-                  : `${Number(totalPrice) > 0 ? totalPrice : product.price} BYN`;
+                  ? numericPrice > 0
+                    ? `от ${numericPrice} BYN/мес.`
+                    : ''
+                  : numericTotalPrice > 0
+                    ? `${numericTotalPrice} BYN`
+                    : '';
 
                 return (
                   <TableRow key={product.id}>
@@ -963,7 +969,7 @@ function AdminPageContent() {
                     <TableCell>
                       <Chip label={product.category || product.category_id || '-'} size="small" />
                     </TableCell>
-                    <TableCell>{displayPrice}</TableCell>
+                    <TableCell>{displayPrice || '-'}</TableCell>
                     <TableCell>
                       <Chip
                         label={
