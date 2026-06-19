@@ -20,7 +20,7 @@ function ProductCard({ product }) {
     if (isProductInStock) {
       const price = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product?.price) || 0;
       if (price <= 0) return '';
-      return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
+      return `от ${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
     }
     if (!product?.price) return '';
     return `от ${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`;

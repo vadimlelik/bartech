@@ -37,6 +37,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AdminGuard from '@/features/admin-guard/ui/AdminGuard';
 import { useAuthStore } from '@/features/auth';
 import ImageSelector from '@/features/admin-images/ui/ImageSelector';
@@ -62,6 +63,8 @@ function AdminPageContent() {
   const [deletingUser, setDeletingUser] = useState(null);
   const [productsLoadingMore, setProductsLoadingMore] = useState(false);
   const [productHasMore, setProductHasMore] = useState(false);
+  const [productSearchInput, setProductSearchInput] = useState('');
+  const [productSearchTerm, setProductSearchTerm] = useState('');
   const nextProductPageRef = useRef(1);
   const productHasMoreRef = useRef(false);
   const productsLoadingMoreRef = useRef(false);
@@ -163,6 +166,7 @@ function AdminPageContent() {
   const fetchProducts = useCallback(async (options = { reset: true }) => {
     const reset = options.reset !== false;
     const page = reset ? 1 : nextProductPageRef.current;
+    const search = options.search ?? productSearchTerm;
 
     if (!reset) {
       if (!productHasMoreRef.current || productsLoadingMoreRef.current || adminLoadingRef.current) {
@@ -179,8 +183,9 @@ function AdminPageContent() {
         productsLoadingMoreRef.current = true;
       }
 
+      const searchParam = search ? `&search=${encodeURIComponent(search)}` : '';
       const response = await fetch(
-        `/api/admin/products?page=${page}&limit=40`,
+        `/api/admin/products?page=${page}&limit=40${searchParam}`,
         { credentials: 'include' },
       );
 
@@ -236,7 +241,19 @@ function AdminPageContent() {
       setProductsLoadingMore(false);
       productsLoadingMoreRef.current = false;
     }
-  }, []);
+  }, [productSearchTerm]);
+
+  const handleProductSearch = () => {
+    const search = productSearchInput.trim();
+    setProductSearchTerm(search);
+    fetchProducts({ reset: true, search });
+  };
+
+  const handleProductSearchReset = () => {
+    setProductSearchInput('');
+    setProductSearchTerm('');
+    fetchProducts({ reset: true, search: '' });
+  };
 
   useEffect(() => {
     productHasMoreRef.current = productHasMore;
@@ -900,17 +917,56 @@ function AdminPageContent() {
 
       {activeTab === 0 && (
         <>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: { xs: 'stretch', md: 'center' },
+              gap: 2,
+              mb: 3,
+              flexDirection: { xs: 'column', md: 'row' },
+            }}
+          >
             <Typography variant="h5" component="h2">
               Управление товарами
             </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => router.push('/admin/products/new')}
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                flexWrap: 'wrap',
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+              }}
             >
-              Добавить товар
-            </Button>
+              <TextField
+                size="small"
+                label="Поиск товаров"
+                value={productSearchInput}
+                onChange={(event) => setProductSearchInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleProductSearch();
+                  }
+                }}
+                sx={{ minWidth: { xs: '100%', sm: 260 } }}
+              />
+              <Button variant="outlined" onClick={handleProductSearch}>
+                Найти
+              </Button>
+              {productSearchTerm && (
+                <Button variant="text" onClick={handleProductSearchReset}>
+                  Сбросить
+                </Button>
+              )}
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => router.push('/admin/products/new')}
+              >
+                Добавить товар
+              </Button>
+            </Box>
           </Box>
 
       {loading ? (
@@ -948,7 +1004,7 @@ function AdminPageContent() {
                     ? `от ${numericPrice} BYN/мес.`
                     : ''
                   : numericTotalPrice > 0
-                    ? `${numericTotalPrice} BYN`
+                    ? `от ${numericTotalPrice} BYN`
                     : '';
 
                 return (
@@ -983,6 +1039,13 @@ function AdminPageContent() {
                     </TableCell>
                     <TableCell>{product.specifications?.brand || '-'}</TableCell>
                     <TableCell align="right">
+                      <IconButton
+                        color="default"
+                        title="Открыть карточку товара"
+                        onClick={() => router.push(`/products/${product.id}`)}
+                      >
+                        <OpenInNewIcon />
+                      </IconButton>
                       <IconButton
                         color="primary"
                         onClick={() => router.push(`/admin/products/${product.id}/edit`)}

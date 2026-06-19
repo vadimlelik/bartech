@@ -98,7 +98,7 @@ export default function ProductDetails({ product }) {
   const totalPrice = product.totalPrice ?? product.total_price;
   const inStockPrice = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product.price) || 0;
   const inStockPriceLabel =
-    inStockPrice > 0 ? `${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN` : '';
+    inStockPrice > 0 ? `от ${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN` : '';
   const orderPrice = Number(product.price) || 0;
   const orderPriceLabel = orderPrice > 0 ? `от ${orderPrice.toFixed(2)} BYN/мес.` : '';
 

@@ -119,7 +119,7 @@ const ProductGridCard = memo(function ProductGridCard({
       ? `от ${numericPrice.toLocaleString('ru-RU')} BYN/мес.`
       : ''
     : numericTotalPrice > 0
-      ? `${numericTotalPrice.toLocaleString('ru-RU')} BYN`
+      ? `от ${numericTotalPrice.toLocaleString('ru-RU')} BYN`
       : '';
 
   useEffect(() => {
@@ -331,9 +331,26 @@ const ProductGridCard = memo(function ProductGridCard({
                 </Typography>
               )}
               {displayPrice && (
-                <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                  {displayPrice} <br />
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    flexWrap: 'wrap',
+                    gap: 0.75,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    component="span"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    {displayPrice}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" component="span">
+                    в рассрочку, в кредит, в лизинг
+                  </Typography>
+                </Box>
               )}
             </Box>
           </CardContent>
