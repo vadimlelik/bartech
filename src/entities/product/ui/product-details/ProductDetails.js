@@ -304,6 +304,39 @@ export default function ProductDetails({ product }) {
             </Box>
           ) : null}
 
+          {(inStockPriceLabel || orderPriceLabel) && (
+            <Paper
+              variant="outlined"
+              sx={{
+                mb: 3,
+                p: 2,
+                borderRadius: 2,
+                bgcolor: 'rgba(25, 118, 210, 0.04)',
+                borderColor: 'rgba(25, 118, 210, 0.18)',
+              }}
+            >
+              <Stack spacing={1.25}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <PaymentIcon color="primary" fontSize="small" />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    Доступные варианты оплаты
+                  </Typography>
+                </Box>
+                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                  {['в рассрочку', 'в кредит', 'в лизинг'].map((paymentOption) => (
+                    <Chip
+                      key={paymentOption}
+                      label={paymentOption}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ))}
+                </Stack>
+              </Stack>
+            </Paper>
+          )}
+
           {product.specifications &&
            typeof product.specifications === 'object' &&
            !Array.isArray(product.specifications) &&
