@@ -12,23 +12,35 @@ import { CURRENCY } from '@/shared/config/constants';
  */
 function ProductCard({ product }) {
   const isProductInStock =
-    (product?.availabilityStatus || product?.availability_status || 'in_stock') !== 'on_order';
+    (product?.availabilityStatus ||
+      product?.availability_status ||
+      'in_stock') !== 'on_order';
 
   // Мемоизируем форматированную цену
   const formattedPrice = useMemo(() => {
     const totalPrice = product?.totalPrice ?? product?.total_price;
     if (isProductInStock) {
-      const price = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product?.price) || 0;
+      const price =
+        Number(totalPrice) > 0
+          ? Number(totalPrice)
+          : Number(product?.price) || 0;
       if (price <= 0) return '';
-      const monthlyPrice =
-        Number(product?.price) > 0
-          ? ` от ${Number(product.price).toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`
-          : '';
-      return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}${monthlyPrice}`;
+      return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
     }
     if (!product?.price) return '';
     return `от ${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`;
-  }, [isProductInStock, product?.price, product?.totalPrice, product?.total_price]);
+  }, [
+    isProductInStock,
+    product?.price,
+    product?.totalPrice,
+    product?.total_price,
+  ]);
+
+  const formattedMonthlyPayment = useMemo(() => {
+    const monthlyPayment = product?.monthlyPayment ?? product?.monthly_payment;
+    if (!monthlyPayment || Number(monthlyPayment) <= 0) return '';
+    return `от ${Number(monthlyPayment).toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`;
+  }, [product?.monthlyPayment, product?.monthly_payment]);
 
   // Мемоизируем URL товара
   const productUrl = useMemo(() => `/mt/${product.id}`, [product.id]);
@@ -56,7 +68,14 @@ function ProductCard({ product }) {
       )}
       <div className={styles.content}>
         <h2 className={styles.title}>{product.title || 'Без названия'}</h2>
-        {formattedPrice && <span className={styles.price}>{formattedPrice}</span>}
+        {formattedPrice && (
+          <span className={styles.price}>{formattedPrice}</span>
+        )}
+        {formattedMonthlyPayment && (
+          <span className={styles.monthlyPayment}>
+            {formattedMonthlyPayment}
+          </span>
+        )}
         {product.description && (
           <pre className={styles.description}>{product.description}</pre>
         )}
@@ -73,8 +92,12 @@ export default React.memo(ProductCard, (prevProps, nextProps) => {
     prevProps.product?.price === nextProps.product?.price &&
     prevProps.product?.totalPrice === nextProps.product?.totalPrice &&
     prevProps.product?.total_price === nextProps.product?.total_price &&
-    prevProps.product?.availabilityStatus === nextProps.product?.availabilityStatus &&
-    prevProps.product?.availability_status === nextProps.product?.availability_status &&
+    prevProps.product?.monthlyPayment === nextProps.product?.monthlyPayment &&
+    prevProps.product?.monthly_payment === nextProps.product?.monthly_payment &&
+    prevProps.product?.availabilityStatus ===
+      nextProps.product?.availabilityStatus &&
+    prevProps.product?.availability_status ===
+      nextProps.product?.availability_status &&
     prevProps.product?.title === nextProps.product?.title &&
     prevProps.product?.image === nextProps.product?.image
   );

@@ -16,6 +16,65 @@
   grid-template-columns: 1fr;
 }
 
+.paymentOptions {
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #eff6ff;
+}
+
+.paymentHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.paymentIcon {
+  position: relative;
+  width: 18px;
+  height: 14px;
+  border: 2px solid #1d4ed8;
+  border-radius: 2px;
+}
+
+.paymentIcon::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3px;
+  height: 2px;
+  background: #1d4ed8;
+}
+
+.paymentTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.paymentTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.paymentTag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 5px 12px;
+  border: 1px solid #3b82f6;
+  border-radius: 999px;
+  color: #2563eb;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);

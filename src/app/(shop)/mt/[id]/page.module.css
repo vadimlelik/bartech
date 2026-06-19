@@ -49,6 +49,12 @@
   color: #16a34a;
 }
 
+.monthlyPayment {
+  font-size: 18px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
 .description {
   font-size: 14px;
   line-height: 1.6;

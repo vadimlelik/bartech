@@ -9,6 +9,7 @@ const products = [
     id: 1,
     title: 'Мотоблок Беларус 09Н-02 Lifan 9 л.с.',
     price: 6200,
+    monthlyPayment: 150,
     description: `КОМПЛЕКТАЦИЯ: Плуг П-5, Окучник ОД-5, Сцепка СУ-5, Борона Б-5.
 
 Мотоблок предназначен для пахоты, боронования, культивации, междурядной обработки, кошения трав и транспортировки грузов.
@@ -34,6 +35,7 @@ const products = [
     id: 2,
     title: 'Мотоблок Беларус 012 WM Weima 13 л.с.',
     price: 6400,
+    monthlyPayment: 155,
     description: `КОМПЛЕКТАЦИЯ: Плуг П-5, Окучник ОД-5, Сцепка СУ-5, Борона Б-5.
 
 Преимущества:
@@ -59,6 +61,7 @@ const products = [
     id: 3,
     title: 'Мотоблок Беларус 012 WM Rato 420 15 л.с.',
     price: 6600,
+    monthlyPayment: 160,
     description: `КОМПЛЕКТАЦИЯ: Плуг П-5, Окучник ОД-5, Сцепка СУ-5, Борона Б-5. В подарок: утяжелители, сцепка, горловина.
 
 Преимущества:
@@ -100,6 +103,9 @@ export default function ProductPage() {
         <div className={styles.content}>
           <h1 className={styles.title}>{product.title}</h1>
           <span className={styles.price}>{product.price} руб.</span>
+          <span className={styles.monthlyPayment}>
+            от {product.monthlyPayment} руб./мес.
+          </span>
           <pre className={styles.description}>{product.description}</pre>
           <button
             className={styles.button}
