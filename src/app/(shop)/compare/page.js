@@ -68,7 +68,9 @@ export default function ComparePage() {
                   const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice * 3.35;
                   const displayPrice = isProductInStock
                     ? numericTotalPrice > 0
-                      ? `от ${Math.round(numericTotalPrice).toLocaleString('ru-RU')} BYN`
+                      ? `${Math.round(numericTotalPrice).toLocaleString('ru-RU')} BYN${
+                          numericPrice > 0 ? ` · от ${numericPrice.toFixed(2)} BYN/мес.` : ''
+                        }`
                       : ''
                     : numericPrice > 0
                       ? `от ${numericPrice.toFixed(2)} BYN/мес.`

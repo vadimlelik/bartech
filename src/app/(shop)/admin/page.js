@@ -1004,7 +1004,7 @@ function AdminPageContent() {
                     ? `от ${numericPrice} BYN/мес.`
                     : ''
                   : numericTotalPrice > 0
-                    ? `от ${numericTotalPrice} BYN`
+                    ? `${numericTotalPrice} BYN${numericPrice > 0 ? ` · от ${numericPrice} BYN/мес.` : ''}`
                     : '';
 
                 return (

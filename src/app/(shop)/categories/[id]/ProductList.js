@@ -114,13 +114,12 @@ const ProductGridCard = memo(function ProductGridCard({
   const totalPrice = product.totalPrice ?? product.total_price;
   const numericPrice = Number(product.price) || 0;
   const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice;
-  const displayPrice = isProductOnOrder
-    ? numericPrice > 0
-      ? `от ${numericPrice.toLocaleString('ru-RU')} BYN/мес.`
-      : ''
-    : numericTotalPrice > 0
-      ? `от ${numericTotalPrice.toLocaleString('ru-RU')} BYN`
+  const productPriceLabel =
+    !isProductOnOrder && numericTotalPrice > 0
+      ? `${numericTotalPrice.toLocaleString('ru-RU')} BYN`
       : '';
+  const monthlyPriceLabel =
+    numericPrice > 0 ? `от ${numericPrice.toLocaleString('ru-RU')} BYN/мес.` : '';
 
   useEffect(() => {
     setMounted(true);
@@ -330,7 +329,7 @@ const ProductGridCard = memo(function ProductGridCard({
                   от {product.oldPrice.toLocaleString()} BYN/мес. <br />
                 </Typography>
               )}
-              {displayPrice && (
+              {(productPriceLabel || monthlyPriceLabel) && (
                 <Box
                   sx={{
                     display: 'flex',
@@ -339,14 +338,26 @@ const ProductGridCard = memo(function ProductGridCard({
                     gap: 0.75,
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    color="primary"
-                    component="span"
-                    sx={{ fontWeight: 'bold' }}
-                  >
-                    {displayPrice}
-                  </Typography>
+                  {productPriceLabel && (
+                    <Typography
+                      variant="h6"
+                      color="primary"
+                      component="span"
+                      sx={{ fontWeight: 'bold' }}
+                    >
+                      {productPriceLabel}
+                    </Typography>
+                  )}
+                  {monthlyPriceLabel && (
+                    <Typography
+                      variant={productPriceLabel ? 'body2' : 'h6'}
+                      color={productPriceLabel ? 'text.secondary' : 'primary'}
+                      component="span"
+                      sx={{ fontWeight: productPriceLabel ? 400 : 'bold' }}
+                    >
+                      {monthlyPriceLabel}
+                    </Typography>
+                  )}
                   <Typography variant="body2" color="text.secondary" component="span">
                     в рассрочку, в кредит, в лизинг
                   </Typography>

@@ -98,7 +98,7 @@ export default function ProductDetails({ product }) {
   const totalPrice = product.totalPrice ?? product.total_price;
   const inStockPrice = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product.price) || 0;
   const inStockPriceLabel =
-    inStockPrice > 0 ? `от ${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN` : '';
+    inStockPrice > 0 ? `${Math.round(inStockPrice).toLocaleString('ru-RU')} BYN` : '';
   const orderPrice = Number(product.price) || 0;
   const orderPriceLabel = orderPrice > 0 ? `от ${orderPrice.toFixed(2)} BYN/мес.` : '';
 
@@ -279,9 +279,20 @@ export default function ProductDetails({ product }) {
 
           {isProductInStock && inStockPriceLabel ? (
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h5" color="primary">
-                Цена: {inStockPriceLabel}
-              </Typography>
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 0.5, sm: 2 }}
+                alignItems={{ xs: 'flex-start', sm: 'baseline' }}
+              >
+                <Typography variant="h5" color="primary">
+                  Цена: {inStockPriceLabel}
+                </Typography>
+                {orderPriceLabel && (
+                  <Typography variant="h6" color="text.secondary">
+                    {orderPriceLabel}
+                  </Typography>
+                )}
+              </Stack>
               {product.oldPrice && (
                 <Typography
                   variant="h6"

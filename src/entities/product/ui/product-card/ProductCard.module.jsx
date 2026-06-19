@@ -20,7 +20,11 @@ function ProductCard({ product }) {
     if (isProductInStock) {
       const price = Number(totalPrice) > 0 ? Number(totalPrice) : Number(product?.price) || 0;
       if (price <= 0) return '';
-      return `от ${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}`;
+      const monthlyPrice =
+        Number(product?.price) > 0
+          ? ` от ${Number(product.price).toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`
+          : '';
+      return `${price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}${monthlyPrice}`;
     }
     if (!product?.price) return '';
     return `от ${product.price.toFixed(CURRENCY.DECIMAL_PLACES)} ${CURRENCY.SYMBOL}/мес.`;
