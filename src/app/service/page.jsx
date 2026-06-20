@@ -117,6 +117,48 @@ const Service = () => {
             </a>
           </div>
         </section>
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>Головной сервисный центр Орбита</h2>
+          <div className={`${styles.cardText} ${styles.phones}`}>
+            <a className={styles.phoneLink} href="tel:+375293886622">
+            +375 29 388 66 22
+            </a>
+            <a className={styles.phoneLink} href="tel:+375333886622">
+            +375 33 388 66 22
+            </a>
+          </div>
+        </section>
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>Триовист 21 век сервис / СЦ Триовист / СЦ 21 век</h2>
+          <div className={`${styles.cardText} ${styles.phones}`}>
+            <a className={styles.phoneLink} href="tel:+375293021021">
+            +375 29 302 10 21
+            </a>
+            <a className={styles.phoneLink} href="tel:+375333021021">
+            +375 33 302 10 21
+            </a>
+            <a className={styles.phoneLink} href="tel:+375297475038">
+            +375 44 747 50 38
+            </a>
+            <a className={styles.phoneLink} href="tel:+375293970287">
+            +375 29 397 02 87
+            </a>
+            <a className={styles.phoneLink} href="tel:+375297475036">
+            +375 29 747 50 36
+            </a>
+          </div>
+        </section>
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>СЦ ЗАО Атлант</h2>
+          <div className={`${styles.cardText} ${styles.phones}`}>
+            <a className={styles.phoneLink} href="tel:+375172186440">
+            +375 17 218-64-40
+            </a>
+            <a className={styles.phoneLink} href="tel:+375172186440">
+            +375 17 218-64-40
+            </a>
+          </div>
+        </section>
       </div>
     </div>
   );

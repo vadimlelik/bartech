@@ -56,7 +56,7 @@ export default function Footer() {
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1.2 }}>
                 Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д.
-                43
+                43, пом. 804
               </Typography>
               <Typography variant="body2" sx={{ mb: 1.2 }}>
                 <MuiLink
@@ -106,7 +106,7 @@ export default function Footer() {
               </Typography>
               <Link href="/videowatching" passHref style={{ textDecoration: 'none' }}>
                 <Typography variant="body2">
-                Правила видионадлюдения в помещении
+                Правила видионаблюдения в помещении
                 </Typography>
               </Link>
               <Link href="/po" passHref style={{ textDecoration: 'none' }}>

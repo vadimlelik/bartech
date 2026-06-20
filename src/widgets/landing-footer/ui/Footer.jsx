@@ -21,7 +21,7 @@ const Footer = () => {
             <p className={styles.companyDetail}>УНП: 193796252</p>
             <p className={styles.companyDetail}>
               Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д.
-              43
+              43, пом. 804
             </p>
             <a className={styles.companyPhone} href="tel:+375447418423">
               +375 44 741-84-23

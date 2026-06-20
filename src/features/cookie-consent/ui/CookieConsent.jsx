@@ -92,16 +92,16 @@ export default function CookieConsent({ onAccept }) {
   const isSubdomain = (() => {
     if (typeof window === 'undefined') return false;
     const hostname = window.location.hostname;
-    
+
     // Используем тот же паттерн, что и в middleware
     const domainPattern = /^([^.]+)\.technobar\.ru$/;
     const isSubdomainCheck = domainPattern.test(hostname);
-    
+
     // Отладочная информация (всегда логируем для отладки)
     if (isSubdomainCheck) {
       console.log('[CookieConsent] поддомен обнаружен, баннер не показывается:', hostname);
     }
-    
+
     return isSubdomainCheck;
   })();
 
@@ -110,7 +110,7 @@ export default function CookieConsent({ onAccept }) {
     if (isSubdomain) {
       return;
     }
-    
+
     // Проверяем, было ли уже дано согласие
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!consent) {
@@ -141,7 +141,7 @@ export default function CookieConsent({ onAccept }) {
       <CookieText>
         Мы используем файлы cookie для улучшения работы сайта и аналитики.
         Продолжая использовать сайт, вы соглашаетесь с{' '}
-        <Link href="/privacy">политикой конфиденциальности</Link>.
+        <Link href="/privacy"> Политику обработки персональных данных</Link>.
       </CookieText>
       <ButtonGroup>
         <Button onClick={handleDecline}>Отклонить</Button>

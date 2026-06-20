@@ -205,7 +205,7 @@ export default function LeadPopup() {
               <PrivacyNote>
                 Нажимая кнопку, вы соглашаетесь с{' '}
                 <Link href="/privacy" onClick={dismiss}>
-                  политикой конфиденциальности
+                  Политику обработки персональных данных
                 </Link>
               </PrivacyNote>
             </form>
