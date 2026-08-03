@@ -170,3 +170,7 @@ export const PIXEL_21 = {
 export const PIXEL_22 = {
   phone3: 'D8H9A8BC77U8POE064DG',
 };
+
+export const PIXEL_24 = {
+  phone3: 'D9M8A73C77U97D5Q2J50',
+};

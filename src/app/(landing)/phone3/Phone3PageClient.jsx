@@ -23,6 +23,8 @@ import {
   PIXEL_20,
   PIXEL_21,
   PIXEL_22,
+  PIXEL_23,
+  PIXEL_24,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
@@ -69,6 +71,7 @@ const PHONE3_PIXELS = [
   PIXEL_20.phone3,
   PIXEL_21.phone3,
   PIXEL_22.phone3,
+  PIXEL_24.phone3,
 ];
 
 const reviews = [

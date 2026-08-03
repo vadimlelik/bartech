@@ -20,6 +20,7 @@ import {
   PIXEL_20,
   PIXEL_21,
   PIXEL_22,
+  PIXEL_24,
   PIXEL_3,
   PIXEL_4,
   PIXEL_5,
@@ -61,6 +62,7 @@ const ThankYouPage = () => {
       PIXEL_20[source],
       PIXEL_21[source],
       PIXEL_22[source],
+      PIXEL_24[source],
     ].filter(Boolean); // Фильтруем undefined значения
 
     // Если есть статические пиксели, используем их
