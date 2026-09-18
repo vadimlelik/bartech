@@ -151,8 +151,9 @@ export default function Phone4() {
       question: 'Выберите подарок',
       type: 'radio',
       options: [
-        { value: 'Беспроводные наушники', label: 'Беспроводные наушники 🎧' },
-        { value: 'PowerBank', label: 'PowerBank 🔋' },
+        { value: 'Телефон', label: 'Телефон  📱' },
+        { value: 'Планшет', label: 'Планшет 🖥' },
+        { value: 'Яндекс станция', label: 'Яндекс станция 📺' },
       ],
     },
     {
