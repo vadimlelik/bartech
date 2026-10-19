@@ -66,25 +66,34 @@ export default function DiscountPage() {
 
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
-    axios
-      .post(
-        'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        {
-          FIELDS: {
-            ...data.FIELDS,
-            UTM_SOURCE: utm_source || '',
-            UTM_MEDIUM: utm_medium || '',
-            UTM_CAMPAIGN: utm_campaign || '',
-            UTM_CONTENT: utm_content || '',
-            UTM_TERM: ad + ttclid || '',
-          },
-        }
-      )
-      .then(() => {
-        closeQuiz();
-        setIsLoading(false);
-        router.push('/thank-you?source=discount50');
+    try {
+      const response = await axios.post('/api/quiz', {
+        FIELDS: {
+          ...data.FIELDS,
+          UTM_SOURCE: utm_source || '',
+          UTM_MEDIUM: utm_medium || '',
+          UTM_CAMPAIGN: utm_campaign || '',
+          UTM_CONTENT: utm_content || '',
+          UTM_TERM: (ad || '') + (ttclid || ''),
+        },
       });
+
+      if (response.data?.success) {
+        closeQuiz();
+        router.push('/thank-you?source=discount50');
+      } else {
+        alert('Форма отправлена слишком часто. Попробуйте через минуту.');
+      }
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      if (error.response?.status === 429) {
+        alert('Форма уже отправлена. Попробуйте через минуту.');
+      } else {
+        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const successMessage = (

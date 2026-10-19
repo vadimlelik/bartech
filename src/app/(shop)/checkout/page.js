@@ -25,9 +25,8 @@ import Image from 'next/image';
 import { useCartStore } from '@/entities/cart';
 import { useRouter } from 'next/navigation';
 
-import { VALIDATION, EXTERNAL_SERVICES, CURRENCY } from '@/shared/config/constants';
+import { VALIDATION, CURRENCY } from '@/shared/config/constants';
 
-const BITRIX24_WEBHOOK_URL = EXTERNAL_SERVICES.BITRIX24_WEBHOOK;
 const PHONE_REGEX = VALIDATION.PHONE_SIMPLE_REGEX;
 const EMAIL_REGEX = VALIDATION.EMAIL_REGEX;
 const NAME_REGEX = VALIDATION.NAME_REGEX;
@@ -81,51 +80,53 @@ export default function CheckoutPage() {
     setSubmitError('');
   };
 
-  const sendToBitrix24 = async (orderData) => {
-    try {
-      const response = await fetch(BITRIX24_WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  const sendOrder = async (orderData) => {
+    const response = await fetch('/api/quiz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        FIELDS: {
+          TITLE: `Заказ от ${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
+          NAME: `${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
+          EMAIL: [
+            { VALUE: orderData.customerInfo.email, VALUE_TYPE: 'WORK' },
+          ],
+          PHONE: [
+            { VALUE: orderData.customerInfo.phone, VALUE_TYPE: 'WORK' },
+          ],
+          ADDRESS: orderData.customerInfo.address,
+          SOURCE_ID: 'WEB',
+          SOURCE_DESCRIPTION: 'Оформление заказа в магазине',
+          STATUS_ID: 'NEW',
+          OPENED: 'Y',
+          TYPE_ID: 'SALE',
+          COMMENTS: [
+            `Email: ${orderData.customerInfo.email}`,
+            `Адрес: ${orderData.customerInfo.address}`,
+            `Город: ${orderData.customerInfo.city}`,
+            `Индекс: ${orderData.customerInfo.zipCode}`,
+            'Товары:',
+            ...orderData.items.map(
+              (item) => `${item.name} - ${item.quantity} шт. x ${item.price} BYN`,
+            ),
+            `Итого: ${orderData.totalPrice} BYN`,
+          ].join('\n'),
         },
-        body: JSON.stringify({
-          fields: {
-            TITLE: `Заказ от ${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
-            NAME: `${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
-            EMAIL: [
-              { VALUE: orderData.customerInfo.email, VALUE_TYPE: 'WORK' },
-            ],
-            PHONE: [
-              { VALUE: orderData.customerInfo.phone, VALUE_TYPE: 'WORK' },
-            ],
-            ADDRESS: orderData.customerInfo.address,
-            COMMENTS: `
-                            Город: ${orderData.customerInfo.city}
-                            Индекс: ${orderData.customerInfo.zipCode}
-                            Товары:
-                            ${orderData.items
-                              .map(
-                                (item) => `
-                                ${item.name} - ${item.quantity} шт. x ${item.price} BYN
-                            `
-                              )
-                              .join('')}
-                            Итого: ${orderData.totalPrice} BYN
-                        `,
-          },
-        }),
-      });
+      }),
+    });
 
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке заказа');
-      }
-
-      return await response.json();
-    } catch (error) {
-      throw new Error(
-        'Не удалось отправить заказ. Пожалуйста, попробуйте позже.'
-      );
+    if (response.status === 429) {
+      throw new Error('Заказ уже отправлен. Попробуйте через минуту.');
     }
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result?.success) {
+      throw new Error('Не удалось отправить заказ. Пожалуйста, попробуйте позже.');
+    }
+
+    return result;
   };
 
   // Мемоизируем итоговую сумму
@@ -141,7 +142,7 @@ export default function CheckoutPage() {
         customerInfo: data,
       };
 
-      await sendToBitrix24(orderData);
+      await sendOrder(orderData);
       clearCart();
       router.push('/thank-you');
     } catch (error) {

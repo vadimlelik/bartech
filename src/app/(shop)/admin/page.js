@@ -42,6 +42,7 @@ import AdminGuard from '@/features/admin-guard/ui/AdminGuard';
 import { useAuthStore } from '@/features/auth';
 import ImageSelector from '@/features/admin-images/ui/ImageSelector';
 import AdminThumbImage from '@/features/admin-images/ui/AdminThumbImage';
+import { AdminLeadsTab } from '@/features/admin-leads';
 
 function AdminPageContent() {
   const router = useRouter();
@@ -912,6 +913,7 @@ function AdminPageContent() {
           <Tab label="Категории" />
           <Tab label="Лендинги" />
           <Tab label="Пользователи" />
+          <Tab label="Заявки" />
         </Tabs>
       </Box>
 
@@ -2160,6 +2162,8 @@ function AdminPageContent() {
           </Dialog>
         </>
       )}
+
+      {activeTab === 4 && <AdminLeadsTab />}
 
       <ImageSelector
         open={imageSelectorOpen}

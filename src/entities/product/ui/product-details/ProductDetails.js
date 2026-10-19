@@ -50,7 +50,7 @@ import ProductImageGallery from '@/entities/product/ui/product-image-gallery/Pro
 import ProductDelivery from '@/entities/product/ui/product-delivery/ProductDelivery';
 import ProductReviews from '@/entities/product/ui/product-reviews/ProductReviews';
 import ProductEducationalCopy from '@/entities/product/ui/product-educational-copy/ProductEducationalCopy';
-import { EXTERNAL_SERVICES, VALIDATION, CURRENCY } from '@/shared/config/constants';
+import { VALIDATION, CURRENCY } from '@/shared/config/constants';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -237,10 +237,12 @@ export default function ProductDetails({ product }) {
         },
       };
 
-      await axios.post(
-        EXTERNAL_SERVICES.BITRIX24_WEBHOOK || 'https://technobar.bitrix24.by/rest/25/7fjyayckv4fkh0c2/crm.lead.add.json',
-        formData
-      );
+      const response = await axios.post('/api/quiz', formData);
+
+      if (response.status === 429 || !response.data?.success) {
+        setSubmitError('Форма уже отправлена. Попробуйте через минуту.');
+        return;
+      }
 
       setSubmitSuccess(true);
       setTimeout(() => {
@@ -248,7 +250,11 @@ export default function ProductDetails({ product }) {
       }, 2000);
     } catch (error) {
       console.error('Error submitting installment form:', error);
-      setSubmitError('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      if (error.response?.status === 429) {
+        setSubmitError('Форма уже отправлена. Попробуйте через минуту.');
+      } else {
+        setSubmitError('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      }
     } finally {
       setIsSubmitting(false);
     }

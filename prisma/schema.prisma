@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "leads"]
 }
 
 model Category {
@@ -17,6 +18,7 @@ model Category {
   products    Product[]
 
   @@map("categories")
+  @@schema("public")
 }
 
 model Product {
@@ -36,6 +38,7 @@ model Product {
   updatedAt          DateTime  @updatedAt @map("updated_at")
 
   @@map("products")
+  @@schema("public")
 }
 
 model User {
@@ -48,6 +51,7 @@ model User {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+  @@schema("public")
 }
 
 model Landing {
@@ -80,4 +84,30 @@ model Landing {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("landing_pages")
+  @@schema("public")
+}
+
+model FormSubmission {
+  id          String   @id @default(cuid())
+  source      String
+  pagePath    String?  @map("page_path")
+  title       String?
+  name        String?
+  phone       String?
+  comments    String?
+  utmSource   String?  @map("utm_source")
+  utmMedium   String?  @map("utm_medium")
+  utmCampaign String?  @map("utm_campaign")
+  utmContent  String?  @map("utm_content")
+  utmTerm     String?  @map("utm_term")
+  payload     Json     @default("{}")
+  ip          String?
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([phone])
+  @@index([source])
+  @@map("form_submissions")
+  @@schema("leads")
 }
