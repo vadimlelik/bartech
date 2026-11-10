@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { prisma } from '@/shared/lib/prisma';
 import { DEFAULT_CITY_SLUG } from '@/shared/config/city-routes';
 import { isCityPublic, normalizeHomeCards } from '@/entities/city/lib/city-content';
+import { bannerMatchesCity } from '@/entities/city/lib/banners';
 
 export const DEFAULT_INSTALLMENT_TERMS = {
   months: [6, 10, 12],
@@ -279,14 +280,10 @@ export async function getIndexableCities() {
 export async function getBannersForCity(slug, placement = 'home') {
   try {
     const rows = await prisma.banner.findMany({
-      where: {
-        enabled: true,
-        placement,
-        OR: [{ citySlugs: { isEmpty: true } }, { citySlugs: { has: slug } }],
-      },
+      where: { enabled: true, placement },
       orderBy: { sortOrder: 'asc' },
     });
-    return rows.map((row) => ({
+    return rows.filter((row) => bannerMatchesCity(row.citySlugs, slug)).map((row) => ({
       id: row.id,
       title: row.title,
       subtitle: row.subtitle || '',

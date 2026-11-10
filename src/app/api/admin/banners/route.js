@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/shared/lib/prisma';
 import { requireAdmin } from '@/shared/lib/auth-helpers';
+import { normalizeBannerSlugs } from '@/entities/city/lib/banners';
 
 function serialize(row) {
   return {
@@ -36,11 +37,11 @@ export async function POST(request) {
       data: {
         title: String(body.title || 'Акция').slice(0, 160),
         subtitle: String(body.subtitle || '').slice(0, 300),
-        href: String(body.href || '').slice(0, 300),
+        href: String(body.href || '').trim().slice(0, 300),
         image: body.image ? String(body.image).slice(0, 500) : null,
         placement: String(body.placement || 'home').slice(0, 40),
         enabled: body.enabled !== false,
-        citySlugs: Array.isArray(body.citySlugs) ? body.citySlugs.map(String).slice(0, 20) : [],
+        citySlugs: normalizeBannerSlugs(body.citySlugs),
         sortOrder: Number(body.sortOrder) || 0,
       },
     });

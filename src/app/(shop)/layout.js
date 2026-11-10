@@ -68,7 +68,11 @@ export default async function ShopLayout({ children }) {
       >
         <CityAnalytics />
         <Header catalogGroups={catalogGroups} />
-        <CityBannerStrip banners={banners} />
+        <CityBannerStrip
+          banners={banners}
+          citySlug={pageCity.slug}
+          knownSlugs={cities.map((city) => city.slug)}
+        />
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Suspense fallback={null}>{children}</Suspense>
         </Box>

@@ -30,6 +30,7 @@ export default function AdminCitiesPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [banner, setBanner] = useState({ title: '', subtitle: '', href: '', citySlugs: '' });
+  const [bannerEdit, setBannerEdit] = useState(null);
   const [draft, setDraft] = useState(EMPTY_DRAFT);
   const [saving, setSaving] = useState(false);
 
@@ -143,6 +144,29 @@ export default function AdminCitiesPage() {
       return;
     }
     setBanner({ title: '', subtitle: '', href: '', citySlugs: '' });
+    await load();
+  };
+
+  const saveBanner = async () => {
+    if (!bannerEdit) return;
+    setError('');
+    const response = await fetch(`/api/admin/banners/${bannerEdit.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: bannerEdit.title,
+        subtitle: bannerEdit.subtitle,
+        href: bannerEdit.href,
+        citySlugs: bannerEdit.citySlugs,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      setError(data.error || 'Не удалось сохранить баннер');
+      return;
+    }
+    setBannerEdit(null);
+    setMessage('Баннер сохранён. Ссылка на сайте обновится в течение минуты.');
     await load();
   };
 
@@ -344,23 +368,67 @@ export default function AdminCitiesPage() {
       <Box sx={{ mt: 6 }}>
         <Typography variant="h5" sx={{ mb: 1 }}>Баннеры</Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Пустой список городов означает «все города». Иначе укажите слаги через запятую: grodno, brest.
+          Баннер на сайте нажимается только если заполнена ссылка. Пустой список городов означает «все города». Иначе укажите слаги через запятую: grodno, brest.
         </Typography>
         <Stack spacing={1} sx={{ mb: 2 }}>
-          {banners.map((item) => (
-            <Stack key={item.id} direction="row" justifyContent="space-between">
-              <Typography>{item.title} — {item.citySlugs?.length ? item.citySlugs.join(', ') : 'все города'}</Typography>
-              <Button color="error" onClick={async () => {
-                await fetch(`/api/admin/banners/${item.id}`, { method: 'DELETE' });
-                await load();
-              }}>Удалить</Button>
-            </Stack>
-          ))}
+          {banners.map((item) => {
+            const editing = bannerEdit?.id === item.id;
+            const cityLabel = item.citySlugs?.length ? item.citySlugs.join(', ') : 'все города';
+            return (
+              <Box key={item.id} sx={{ border: '1px solid #e5e7eb', borderRadius: 1, p: 1.5, bgcolor: '#fff' }}>
+                {editing ? (
+                  <Stack spacing={1}>
+                    <TextField label="Заголовок" value={bannerEdit.title} onChange={(event) => setBannerEdit({ ...bannerEdit, title: event.target.value })} />
+                    <TextField label="Текст" value={bannerEdit.subtitle} onChange={(event) => setBannerEdit({ ...bannerEdit, subtitle: event.target.value })} />
+                    <TextField label="Ссылка" placeholder="/sales или https://..." helperText="Без ссылки баннер на сайте не нажимается" value={bannerEdit.href} onChange={(event) => setBannerEdit({ ...bannerEdit, href: event.target.value })} />
+                    <TextField label="Города" placeholder="grodno, brest" helperText="Пусто — все города" value={bannerEdit.citySlugs} onChange={(event) => setBannerEdit({ ...bannerEdit, citySlugs: event.target.value })} />
+                    <Stack direction="row" spacing={1}>
+                      <Button variant="contained" onClick={saveBanner}>Сохранить баннер</Button>
+                      <Button onClick={() => setBannerEdit(null)}>Отмена</Button>
+                    </Stack>
+                  </Stack>
+                ) : (
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography>{item.title} — {cityLabel}</Typography>
+                      {item.href ? (
+                        <Typography component="a" href={item.href} target="_blank" rel="noreferrer" sx={{ color: '#1D6FE8', wordBreak: 'break-all' }}>
+                          {item.href}
+                        </Typography>
+                      ) : (
+                        <Typography variant="body2" color="error">Ссылка не задана — на сайте баннер не нажимается</Typography>
+                      )}
+                    </Box>
+                    <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+                      <Button onClick={() => setBannerEdit({
+                        id: item.id,
+                        title: item.title || '',
+                        subtitle: item.subtitle || '',
+                        href: item.href || '',
+                        citySlugs: (item.citySlugs || []).join(', '),
+                      })}
+                      >
+                        Изменить
+                      </Button>
+                      <Button color="error" onClick={async () => {
+                        await fetch(`/api/admin/banners/${item.id}`, { method: 'DELETE' });
+                        if (bannerEdit?.id === item.id) setBannerEdit(null);
+                        await load();
+                      }}
+                      >
+                        Удалить
+                      </Button>
+                    </Stack>
+                  </Stack>
+                )}
+              </Box>
+            );
+          })}
         </Stack>
         <Stack spacing={1}>
           <TextField label="Заголовок" value={banner.title} onChange={(event) => setBanner({ ...banner, title: event.target.value })} />
           <TextField label="Текст" value={banner.subtitle} onChange={(event) => setBanner({ ...banner, subtitle: event.target.value })} />
-          <TextField label="Ссылка" value={banner.href} onChange={(event) => setBanner({ ...banner, href: event.target.value })} />
+          <TextField label="Ссылка" placeholder="/sales или https://..." helperText="Без ссылки баннер на сайте не нажимается" value={banner.href} onChange={(event) => setBanner({ ...banner, href: event.target.value })} />
           <TextField label="Города" value={banner.citySlugs} onChange={(event) => setBanner({ ...banner, citySlugs: event.target.value })} />
           <Button variant="outlined" onClick={createBanner}>Добавить баннер</Button>
         </Stack>
