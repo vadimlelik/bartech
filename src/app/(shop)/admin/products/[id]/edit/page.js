@@ -60,6 +60,7 @@ function EditProductPageContent() {
       color: '',
       year: '',
       condition: 'new',
+      warranty: '',
     },
   });
 
@@ -106,6 +107,7 @@ function EditProductPageContent() {
               color: product.specifications?.color || '',
               year: product.specifications?.year || '',
               condition: product.specifications?.condition || 'new',
+              warranty: product.specifications?.warranty || product.specifications?.guarantee || product.specifications?.Гарантия || '',
             },
           });
         } else {
@@ -596,6 +598,17 @@ function EditProductPageContent() {
               label="Год"
               name="specifications.year"
               value={formData.specifications?.year || ''}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Гарантия"
+              name="specifications.warranty"
+              placeholder="1 год"
+              helperText="Срок гарантии этого товара. Пустое поле — 1 год"
+              value={formData.specifications?.warranty || ''}
               onChange={handleInputChange}
             />
           </Grid>

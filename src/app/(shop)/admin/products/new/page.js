@@ -53,6 +53,7 @@ function NewProductPageContent() {
       color: '',
       year: '',
       condition: 'new',
+      warranty: '',
     },
   });
 
@@ -458,6 +459,17 @@ function NewProductPageContent() {
               label="Год"
               name="specifications.year"
               value={formData.specifications?.year || ''}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Гарантия"
+              name="specifications.warranty"
+              placeholder="1 год"
+              helperText="Срок гарантии этого товара. Пустое поле — 1 год"
+              value={formData.specifications?.warranty || ''}
               onChange={handleInputChange}
             />
           </Grid>

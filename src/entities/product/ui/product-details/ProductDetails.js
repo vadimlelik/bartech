@@ -53,6 +53,7 @@ import {
 import { useCity } from '@/entities/city';
 import { cityCall, describeDelivery, showCityField } from '@/entities/city/lib/city-content';
 import { trackCityEvent } from '@/shared/ui/analytics/CityAnalytics';
+import { productWarrantyText } from '@/entities/product/lib/warranty';
 
 const SECTION_LINKS = [
   { href: '#description', label: 'Описание' },
@@ -72,6 +73,7 @@ const specificationTranslations = {
   camera: 'Камера',
   battery: 'Аккумулятор',
   os: 'Операционная система',
+  warranty: 'Гарантия',
 };
 
 function translateSpecification(key) {
@@ -359,7 +361,7 @@ export default function ProductDetails({ product, breadcrumbs = [], similarProdu
     {
       icon: <VerifiedUserIcon color="primary" />,
       title: 'Гарантия',
-      text: 'Возврат в течение 14 дней.',
+      text: productWarrantyText(product.specifications),
       href: '/guarantee',
     },
     {
