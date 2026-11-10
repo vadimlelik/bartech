@@ -17,6 +17,7 @@ import {
   CITY_ROUTE_SLUGS,
   splitCityFromPath,
 } from '@/shared/config/city-routes';
+import { loopbackApiUrl } from '@/shared/lib/loopback-url';
 
 const BLOCKED_SUBDOMAINS_SET = new Set(['www']);
 
@@ -45,7 +46,7 @@ async function canonicalProductSegment(request, id) {
   const cached = productSegmentCache.get(id);
   if (cached && Date.now() - cached.at < 300_000) return cached.segment;
   try {
-    const url = new URL(`/api/products/${id}`, request.url);
+    const url = loopbackApiUrl(request.url, `/api/products/${id}`);
     const response = await fetch(url, {
       cache: 'no-store',
       signal: AbortSignal.timeout(1500),
@@ -65,7 +66,7 @@ async function loadCityRouteSlugs(request) {
   const now = Date.now();
   if (now - citySlugCache.at < 30_000) return citySlugCache.slugs;
   try {
-    const url = new URL('/api/cities/slugs', request.url);
+    const url = loopbackApiUrl(request.url, '/api/cities/slugs');
     const response = await fetch(url, {
       cache: 'no-store',
       signal: AbortSignal.timeout(1500),
