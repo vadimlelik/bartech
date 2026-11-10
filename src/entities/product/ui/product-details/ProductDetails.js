@@ -614,7 +614,7 @@ export default function ProductDetails({ product, breadcrumbs = [], similarProdu
           <Grid item xs={12} md={6}>
             <Typography sx={{ fontWeight: 700, mb: 1 }}>Возврат</Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Товар можно вернуть в течение 14 дней. Условия обмена и гарантийного обслуживания — на странице{' '}
+               Условия обмена и гарантийного обслуживания — на странице{' '}
               <MuiLink component={Link} href="/guarantee" underline="hover">
                 возврата товара
               </MuiLink>

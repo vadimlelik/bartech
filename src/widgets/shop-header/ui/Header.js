@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { startRouteProgress } from '@/shared/lib/route-progress';
 import dynamic from 'next/dynamic';
 import {
   Typography,
@@ -275,6 +276,7 @@ export default function Header({ catalogGroups = [] }) {
       `${pathname}${window.location.search || ''}`,
       knownSlugs,
     );
+    startRouteProgress(next);
     window.location.assign(next);
   };
 

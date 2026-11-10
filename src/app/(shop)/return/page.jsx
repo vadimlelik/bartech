@@ -5,7 +5,7 @@ import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 export const metadata = {
   title: 'Условия возврата — Texnobar',
   description:
-    'Условия возврата товара в интернет-магазине Texnobar. Возврат в течение 14 дней при сохранении товарного вида и упаковки.',
+    'Условия возврата товара в интернет-магазине Texnobar',
   alternates: {
     canonical: `${siteUrl}/return`,
   },
@@ -16,7 +16,7 @@ export default function Return() {
     <ShopPage
       showInfoNav
       title="Условия возврата"
-      description="Товар можно вернуть в течение 14 дней с момента покупки."
+      description="Условия возврата товара в интернет-магазине Texnobar"
       breadcrumbs={[
         { href: '/', label: 'Главная' },
         { label: 'Условия возврата' },

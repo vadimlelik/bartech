@@ -94,6 +94,82 @@ ul > li {
   line-height: 1.65;
 }
 
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1260;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-accent-soft);
+}
+
+.route-progress__bar {
+  display: block;
+  height: 3px;
+  width: 35%;
+  background: var(--color-accent);
+  animation: route-progress 1s ease-in-out infinite;
+}
+
+.route-progress__chip {
+  position: fixed;
+  z-index: 1260;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  box-shadow: var(--shadow-float);
+}
+
+.route-progress__spin {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-accent-soft);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: route-spin 0.7s linear infinite;
+  flex: 0 0 auto;
+}
+
+.page-loading {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@keyframes route-progress {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes route-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

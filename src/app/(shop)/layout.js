@@ -13,6 +13,7 @@ import { getSelectedLocality } from '@/entities/locality/model/localities';
 import { getCategories } from '@/entities/category/model/categories';
 import { groupStoreCategories } from '@/shared/config/catalog-groups';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import PageLoading from '@/shared/ui/page-loading/PageLoading';
 
 export const metadata = {
   title: 'Каталог техники и электроники',
@@ -74,7 +75,7 @@ export default async function ShopLayout({ children }) {
           knownSlugs={cities.map((city) => city.slug)}
         />
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Suspense fallback={null}>{children}</Suspense>
+          <Suspense fallback={<PageLoading />}>{children}</Suspense>
         </Box>
         <ComparePanel />
         <Footer

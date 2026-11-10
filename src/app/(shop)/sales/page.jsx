@@ -28,7 +28,7 @@ const Sales = () => {
   return (
     <div className={style.promo}>
       <InfoNav />
-      <h1 className={style.title}>АКЦИЯ сс 15.02.2026 по 15.05.2026</h1>
+      <h1 className={style.title}>АКЦИЯ с 15.10.2026 по 15.01.2027</h1>
 
       <div className={style.block}>
         <h3>1. При покупке смартфона</h3>

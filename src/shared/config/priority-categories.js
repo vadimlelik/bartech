@@ -1,6 +1,6 @@
 /** Internal links to the catalog URLs that should collect commercial queries. */
 export const PRIORITY_CATEGORY_LINKS = [
-  { href: '/phone', label: 'телефоны в рассрочку' },
+  { href: '/catalog/smartphones', label: 'телефоны в рассрочку' },
   { href: '/categories/laptops', label: 'ноутбуки в рассрочку' },
   { href: '/categories/pc', label: 'компьютеры в рассрочку' },
   { href: '/categories/tw', label: 'телевизоры в рассрочку' },

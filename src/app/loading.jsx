@@ -1,7 +1,6 @@
-/**
- * Глобальный fallback для Suspense (Next.js App Router).
- * Не перекрываем экран — иначе при CSR bailout страницы магазина «залипают» на Loading.
- */
+import PageLoading from '@/shared/ui/page-loading/PageLoading';
+
+// Индикатор внутри потока страницы, без перекрытия всего экрана.
 export default function Loading() {
-  return null;
+  return <PageLoading />;
 }
