@@ -37,10 +37,18 @@ export async function getAllCategories() {
 
 export async function getCategoryById(id) {
   if (!id) return null;
-  const category = await prisma.category.findUnique({
-    where: { id: String(id) },
+  const raw = String(id);
+  const exact = await prisma.category.findUnique({
+    where: { id: raw },
   });
-  return normalizeCategory(category);
+  if (exact) return normalizeCategory(exact);
+
+  const found = await prisma.category.findFirst({
+    where: {
+      id: { equals: raw, mode: 'insensitive' },
+    },
+  });
+  return normalizeCategory(found);
 }
 
 export async function addCategory(categoryData) {

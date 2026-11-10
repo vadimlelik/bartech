@@ -7,6 +7,7 @@ import {
   toPublicProfile,
 } from '@/shared/lib/auth-helpers';
 import { getProductionAuthSecretConfigError } from '@/shared/lib/auth-session';
+import { rememberProfileLocality } from '@/entities/locality/model/localities';
 
 export async function POST(request) {
   try {
@@ -43,6 +44,9 @@ export async function POST(request) {
     }
 
     await setSessionForUser(user);
+    await rememberProfileLocality(user).catch((error) => {
+      console.error('login locality:', error);
+    });
 
     return NextResponse.json({
       user: toPublicUser(user),

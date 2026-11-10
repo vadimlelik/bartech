@@ -6,6 +6,7 @@ import {
   deleteProduct,
 } from '@/entities/product/model/products-db';
 import { requireAdmin } from '@/shared/lib/auth-helpers';
+import { productPublicPath } from '@/shared/lib/product-path';
 
 export async function GET(request, { params }) {
   try {
@@ -63,7 +64,8 @@ export async function PUT(request, { params }) {
 
     if (result.success) {
       revalidateTag('products');
-      revalidatePath(`/products/${id}`);
+      revalidatePath('/products/[id]', 'page');
+      if (result.product) revalidatePath(productPublicPath(result.product));
       revalidatePath('/admin');
 
       return NextResponse.json({
@@ -103,7 +105,8 @@ export async function DELETE(request, { params }) {
 
     if (result.success) {
       revalidateTag('products');
-      revalidatePath(`/products/${id}`);
+      revalidatePath('/products/[id]', 'page');
+      if (result.product) revalidatePath(productPublicPath(result.product));
       revalidatePath('/admin');
 
       return NextResponse.json({

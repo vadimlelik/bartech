@@ -4,8 +4,12 @@ import { getCategories } from '@/entities/category/model/categories';
 import { getAllLandings } from '@/entities/landing/model/landings-db';
 import { logDbFallbackUnlessBuildWithoutDb } from '@/shared/lib/prisma-build-log';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { getIndexableCities } from '@/entities/city/model/cities';
+import { DEFAULT_CITY_SLUG } from '@/shared/config/city-routes';
+import { CATALOG_GROUPS } from '@/shared/config/catalog-groups';
 import { LANDING_SITEMAP_PRIORITIES } from '@/shared/config/subdomains';
 import { getLandingSubdomainUrl, isIndexedLanding } from '@/shared/lib/landing-seo';
+import { productPublicPath } from '@/shared/lib/product-path';
 
 // Не кешировать при сборке Docker (без DATABASE_URL) — категории и товары только из runtime БД
 export const dynamic = 'force-dynamic';
@@ -47,6 +51,13 @@ export default async function sitemap() {
       changeFrequency: 'daily',
       priority: 1,
     },
+    createSitemapEntry('/catalog', { changeFrequency: 'daily', priority: 0.95 }),
+    ...CATALOG_GROUPS.map((group) =>
+      createSitemapEntry(`/catalog/${group.slug}`, {
+        changeFrequency: 'daily',
+        priority: 0.85,
+      }),
+    ),
     createSitemapEntry('/installment', { changeFrequency: 'weekly', priority: 0.95 }),
     createSitemapEntry('/reviews', { changeFrequency: 'weekly', priority: 0.8 }),
     createSitemapEntry('/payment_delivery', { changeFrequency: 'monthly', priority: 0.75 }),
@@ -97,7 +108,7 @@ export default async function sitemap() {
     categoryRoutes = categories
       .filter((category) => category?.id !== null && category?.id !== undefined)
       .map((category) =>
-        createSitemapEntry(`/categories/${safePathSegment(category.id)}`, {
+        createSitemapEntry(`/categories/${safePathSegment(String(category.id).toLowerCase())}`, {
           lastModified: category.updated_at || category.updatedAt,
           changeFrequency: 'daily',
           priority: 0.9,
@@ -107,6 +118,34 @@ export default async function sitemap() {
     logDbFallbackUnlessBuildWithoutDb('Error fetching categories for sitemap:', error);
   }
 
+  let regionalRoutes = [];
+  try {
+    const cities = await getIndexableCities();
+    cities
+      .filter((city) => city.slug !== DEFAULT_CITY_SLUG)
+      .forEach((city) => {
+        const prefix = `/${city.slug}`;
+        regionalRoutes.push(
+          createSitemapEntry(prefix, { changeFrequency: 'daily', priority: 0.9 }),
+          createSitemapEntry(`${prefix}/payment_delivery`, { changeFrequency: 'monthly', priority: 0.7 }),
+          createSitemapEntry(`${prefix}/contacts`, { changeFrequency: 'monthly', priority: 0.7 }),
+        );
+        categoryRoutes.forEach((route) => {
+          const path = String(route.url || '').replace(siteUrl, '');
+          if (!path.startsWith('/categories/')) return;
+          regionalRoutes.push(
+            createSitemapEntry(`${prefix}${path}`, {
+              lastModified: route.lastModified,
+              changeFrequency: 'daily',
+              priority: 0.8,
+            }),
+          );
+        });
+      });
+  } catch (error) {
+    logDbFallbackUnlessBuildWithoutDb('Error fetching cities for sitemap:', error);
+  }
+
   // Получаем продукты
   let productRoutes = [];
   try {
@@ -114,7 +153,7 @@ export default async function sitemap() {
     productRoutes = products
       .filter((product) => product?.id !== null && product?.id !== undefined)
       .map((product) =>
-        createSitemapEntry(`/products/${safePathSegment(product.id)}`, {
+        createSitemapEntry(productPublicPath(product), {
           lastModified: product.updated_at || product.updatedAt,
           changeFrequency: 'weekly',
           priority: 0.8,
@@ -124,5 +163,26 @@ export default async function sitemap() {
     logDbFallbackUnlessBuildWithoutDb('Error fetching products for sitemap:', error);
   }
 
-  return [...baseRoutes, ...landingRoutes, ...categoryRoutes, ...productRoutes];
+  try {
+    const cities = await getIndexableCities();
+    cities
+      .filter((city) => city.slug !== DEFAULT_CITY_SLUG)
+      .forEach((city) => {
+        productRoutes.forEach((route) => {
+          const path = String(route.url || '').replace(siteUrl, '');
+          if (!path.startsWith('/products/')) return;
+          regionalRoutes.push(
+            createSitemapEntry(`/${city.slug}${path}`, {
+              lastModified: route.lastModified,
+              changeFrequency: 'weekly',
+              priority: 0.6,
+            }),
+          );
+        });
+      });
+  } catch (error) {
+    logDbFallbackUnlessBuildWithoutDb('Error fetching city product routes for sitemap:', error);
+  }
+
+  return [...baseRoutes, ...landingRoutes, ...categoryRoutes, ...regionalRoutes, ...productRoutes];
 }

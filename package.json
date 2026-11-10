@@ -14,7 +14,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
-    "create-admin": "node scripts/create-admin.mjs"
+    "create-admin": "node scripts/create-admin.mjs",
+    "import:localities": "node scripts/import-localities.mjs",
+    "seed:popular-localities": "node scripts/seed-popular-localities.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

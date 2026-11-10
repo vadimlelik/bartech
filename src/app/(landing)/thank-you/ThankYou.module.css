@@ -3,10 +3,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: #fff;
-  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  height: auto;
+  padding: 48px 20px;
+  background: #f3f5f8;
+  color: #1f2933;
+  font-family: inherit;
   text-align: center;
   overflow: hidden;
 }
@@ -33,20 +35,18 @@
 }
 
 .button {
-  background-color: #ff6b6b;
+  background-color: #1d6fe8;
   border: none;
   cursor: pointer;
   color: white;
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
   text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: none;
 }
 
 .button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  background-color: #1859bd;
 }

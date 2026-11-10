@@ -18,6 +18,7 @@ export async function GET(request) {
       limit: isNaN(limitParam) || limitParam < 1 || limitParam > 100 ? 12 : limitParam,
       ids: searchParams.get('ids')?.split(',').filter(Boolean) || [],
       filters: {},
+      availability: searchParams.get('availability') || '',
     };
 
     // Собираем все возможные фильтры

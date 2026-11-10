@@ -16,54 +16,44 @@ import { YANDEX_REVIEWS, YANDEX_REVIEWS_URL } from '@/shared/config/yandex-revie
 
 export default function ReviewsContent() {
   return (
-    <Box sx={{ py: 6, backgroundColor: 'background.default' }}>
-      <Container>
+    <Box component="main" sx={{ py: { xs: 3, md: 5 } }}>
+      <Container maxWidth="lg">
         <Typography
-          variant="h2"
           component="h1"
           sx={{
-            mb: 4,
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: { xs: '2rem', md: '2.5rem' },
+            mb: 1,
+            fontWeight: 700,
+            fontSize: { xs: '1.75rem', md: '2.25rem' },
+            letterSpacing: '-0.02em',
           }}
         >
           Отзывы наших клиентов
         </Typography>
 
         <Typography
-          variant="h6"
           color="text.secondary"
           sx={{
-            mb: 6,
-            textAlign: 'center',
-            maxWidth: 800,
-            mx: 'auto',
+            mb: 4,
+            maxWidth: 760,
           }}
         >
           Мы ценим каждого клиента и стремимся предоставить лучший сервис.
           Ознакомьтесь с отзывами покупателей о нашем магазине.
         </Typography>
 
-        <Box sx={{ mt: 8 }}>
+        <Box sx={{ mt: 5 }}>
           <Typography
-            variant="h4"
             component="h2"
             sx={{
-              mb: 2,
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: { xs: '1.6rem', md: '2rem' },
+              mb: 1,
+              fontWeight: 700,
+              fontSize: { xs: '1.35rem', md: '1.6rem' },
             }}
           >
             Отзывы с Яндекс Карт
           </Typography>
 
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ textAlign: 'center', mb: 4 }}
-          >
+          <Typography color="text.secondary" sx={{ mb: 3 }}>
             Рейтинг на Яндекс Картах: 5.0 на основе 50+ оценок.{' '}
             <Box
               component="a"
@@ -84,14 +74,12 @@ export default function ReviewsContent() {
             {YANDEX_REVIEWS.map((review) => (
               <Grid size={{ xs: 12, md: 6 }} key={review.id}>
                 <Card
+                  elevation={0}
                   sx={{
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    border: '1px solid',
-                    borderColor: 'divider',
                   }}
-                  elevation={0}
                 >
                   <CardContent>
                     <Box

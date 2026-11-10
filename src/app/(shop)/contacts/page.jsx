@@ -1,49 +1,81 @@
-import { Container, Typography, Box, Paper, Grid, Link } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PhoneIcon from '@mui/icons-material/Phone';
-import EmailIcon from '@mui/icons-material/Email';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Typography, Box, Grid } from '@mui/material';
+import { ShopPage, ShopSurface } from '@/shared/ui/shop-page/ShopPage';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import BusinessIcon from '@mui/icons-material/Business';
-import { getLocalBusinessSchema } from '@/shared/lib/seo';
+import {
+  ServiceAddressBlock,
+  ServiceEmailBlock,
+  ServiceHoursBlock,
+  ServicePhoneBlock,
+} from '@/entities/locality/ui/ServiceContactDetails';
+import { getBreadcrumbSchema, getLocalBusinessSchema, getOrganizationSchema, clampMeta } from '@/shared/lib/seo';
+import { JsonLd } from '@/shared/ui/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { getPageCity } from '@/entities/city/model/cities';
+import { DEFAULT_CITY_SLUG, withCityPrefix } from '@/shared/config/city-routes';
+import { buildRegionalContactsCopy } from '@/shared/lib/city-seo';
+import { cityAddressLine, cityCall, cityWorkHours } from '@/entities/city/lib/city-content';
 
-export const metadata = {
-  title: 'Контакты — Texnobar | Интернет-магазин техники в Минске',
-  description:
-    'Контакты интернет-магазина Texnobar в Минске. Адрес: ул. Сурганова, 43. Телефон: +375 (25) 776-64-62. Режим работы: Пн–Пт 9:00–21:00. ООО «Баратех», УНП 193796252.',
-  alternates: {
-    canonical: `${siteUrl}/contacts`,
-  },
-  openGraph: {
-    title: 'Контакты — Texnobar | Интернет-магазин техники в Минске',
-    description:
-      'Адрес: г. Минск, ул. Сурганова, 43. Телефон: +375 (25) 776-64-62. Работаем Пн–Пт 9:00–21:00.',
-    url: `${siteUrl}/contacts`,
-    type: 'website',
-  },
-};
+export async function generateMetadata() {
+  const city = await getPageCity();
+  if (!city) {
+    return { title: 'Страница не найдена', robots: { index: false, follow: false } };
+  }
+  const prefix = city.slug !== DEFAULT_CITY_SLUG ? `/${city.slug}` : '';
+  const nameIn = city.nameIn || 'Минске';
+  const regional = city.slug === DEFAULT_CITY_SLUG ? null : buildRegionalContactsCopy(city);
+  const title = regional ? regional.title : `Контакты Технобар в ${nameIn} — ООО «Баратех»`;
+  const phone = cityCall(city);
+  const address = cityAddressLine(city);
+  const hours = cityWorkHours(city);
+  const description = clampMeta(
+    regional
+      ? regional.description
+      : `Контакты Технобар в ${nameIn}. ${address}. ${phone?.display || ''}. ${hours}. ООО «Баратех», УНП 193796252.`,
+  );
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: `${siteUrl}${prefix}/contacts` },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}${prefix}/contacts`,
+      type: 'website',
+      locale: 'ru_BY',
+      siteName: 'Технобар',
+    },
+  };
+}
 
-export default function Contacts() {
-  const localBusinessSchema = getLocalBusinessSchema();
+export default async function Contacts() {
+  const city = await getPageCity();
+  if (!city) notFound();
+  const localBusinessSchema = getLocalBusinessSchema(city);
+  const homeHref = withCityPrefix(city?.slug, '/');
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Главная', url: homeHref },
+    { name: 'Контакты', url: withCityPrefix(city?.slug, '/contacts') },
+  ]);
+  const title = city && city.slug !== DEFAULT_CITY_SLUG
+    ? `Контакты в ${city.nameIn || city.name}`
+    : 'Контакты в Минске';
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <Container maxWidth="lg" sx={{ py: 6 }}>
-        <Paper elevation={0} sx={{ p: { xs: 2, md: 4 } }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            align="center"
-            sx={{ mb: 4 }}
-          >
-            Контактная информация
-          </Typography>
-
+      <JsonLd data={getOrganizationSchema()} />
+      <JsonLd data={localBusinessSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <ShopPage
+        showInfoNav
+        title={title}
+        breadcrumbs={[
+          { href: homeHref, label: 'Главная' },
+          { label: 'Контакты' },
+        ]}
+      >
+        <ShopSurface>
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 4 }}>
@@ -57,78 +89,17 @@ export default function Contacts() {
                 <Typography variant="body1" sx={{ mb: 1, pl: 5 }}>
                   УНП: 193796252
                 </Typography>
-              </Box>
-
-              <Box sx={{ mb: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <LocationOnIcon
-                    color="primary"
-                    sx={{ fontSize: 30, mr: 2 }}
-                  />
-                  <Typography variant="h6">Адрес</Typography>
-                </Box>
                 <Typography variant="body1" sx={{ pl: 5 }}>
-                  220013, г. Минск, ул. Сурганова, д. 43, пом. 804
+                  <Link href={withCityPrefix(city?.slug, '/reviews')}>Отзывы покупателей</Link>
                 </Typography>
               </Box>
-
-              <Box sx={{ mb: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <AccessTimeIcon
-                    color="primary"
-                    sx={{ fontSize: 30, mr: 2 }}
-                  />
-                  <Typography variant="h6">Время работы</Typography>
-                </Box>
-                <Typography variant="body1" sx={{ pl: 5 }}>
-                  Понедельник - пятница, с 9:00 до 21:00
-                </Typography>
-              </Box>
+              <ServiceAddressBlock />
+              <ServiceHoursBlock />
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Box sx={{ mb: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <PhoneIcon color="primary" sx={{ fontSize: 30, mr: 2 }} />
-                  <Typography variant="h6">Телефон</Typography>
-                </Box>
-                <Link
-                  href="tel:+375 44 741-84-23"
-                  sx={{
-                    textDecoration: 'none',
-                    color: 'text.primary',
-                    pl: 5,
-                    display: 'block',
-                    '&:hover': {
-                      color: 'primary.main',
-                    },
-                  }}
-                >
-                  <Typography variant="body1">+375 (25) 776-64-62</Typography>
-                </Link>
-              </Box>
-
-              <Box sx={{ mb: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <EmailIcon color="primary" sx={{ fontSize: 30, mr: 2 }} />
-                  <Typography variant="h6">Email</Typography>
-                </Box>
-                <Link
-                  href="mailto:baratexby@gmail.com"
-                  sx={{
-                    textDecoration: 'none',
-                    color: 'text.primary',
-                    pl: 5,
-                    display: 'block',
-                    '&:hover': {
-                      color: 'primary.main',
-                    },
-                  }}
-                >
-                  <Typography variant="body1">baratexby@gmail.com</Typography>
-                </Link>
-              </Box>
-
+              <ServicePhoneBlock />
+              <ServiceEmailBlock />
               <Box sx={{ mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <AccountBalanceIcon
@@ -158,8 +129,8 @@ export default function Contacts() {
               </Box>
             </Grid>
           </Grid>
-        </Paper>
-      </Container>
+        </ShopSurface>
+      </ShopPage>
     </>
   );
 }

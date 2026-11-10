@@ -1,12 +1,14 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 24px 16px 48px;
 }
 
 .title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   margin-bottom: 24px;
 }
 
@@ -19,9 +21,9 @@
 .paymentOptions {
   margin-top: 28px;
   padding: 20px;
-  border: 1px solid #bfdbfe;
-  border-radius: 10px;
-  background: #eff6ff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+  background: #fff;
 }
 
 .paymentHeader {
@@ -35,7 +37,7 @@
   position: relative;
   width: 18px;
   height: 14px;
-  border: 2px solid #1d4ed8;
+  border: 2px solid #2f6fed;
   border-radius: 2px;
 }
 

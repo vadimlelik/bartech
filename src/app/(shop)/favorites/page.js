@@ -1,33 +1,26 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useFavoritesStore } from '@/entities/favorites';
-import { useCartStore } from '@/entities/cart';
+import { useCity } from '@/entities/city';
 import {
   Container,
   Grid,
   Typography,
-  Card,
-  CardContent,
-  Button,
-  Box,
-  IconButton,
   Snackbar,
   Alert,
-  CircularProgress,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Link from 'next/link';
-import Image from 'next/image';
+import { shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
+import { CardSkeletonGrid, EmptyState } from '@/shared/ui/states/States';
+import CatalogProductCard from '@/entities/product/ui/catalog-product-card/CatalogProductCard';
 
 export default function FavoritesPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const { favorites, removeFromFavorites } = useFavoritesStore();
-  const { addToCart } = useCartStore();
+  const { favorites } = useFavoritesStore();
+  const { href } = useCity();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -85,72 +78,39 @@ export default function FavoritesPage() {
     fetchProducts();
   }, [favorites]);
 
-  const handleRemoveFromFavorites = useCallback((productId) => {
-    removeFromFavorites(productId);
-    setSnackbarMessage('Товар удален из избранного');
-    setSnackbarOpen(true);
-  }, [removeFromFavorites]);
-
-  const handleAddToCart = useCallback((product) => {
-    if (!product) return;
-    addToCart(product);
-    setSnackbarMessage('Товар добавлен в корзину');
-    setSnackbarOpen(true);
-  }, [addToCart]);
-
   // Мемоизируем количество товаров
   const productsCount = useMemo(() => products.length, [products.length]);
 
   if (loading) {
     return (
-      <Container sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        <Typography component="h1" sx={shopTitleSx}>
           Избранное
         </Typography>
-        <Grid container spacing={3}>
-          {[...Array(6)].map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} key={`skeleton-${index}`}>
-              <Box
-                sx={{
-                  height: 400,
-                  borderRadius: 2,
-                  bgcolor: 'grey.200',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <CircularProgress />
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
+        <CardSkeletonGrid count={6} />
       </Container>
     );
   }
 
   if (!products || products.length === 0) {
     return (
-      <Container sx={{ py: 4, textAlign: 'center' }}>
-        <Typography variant="h5" gutterBottom>
-          В избранном пока нет товаров
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        <Typography component="h1" sx={shopTitleSx}>
+          Избранное
         </Typography>
-        <Button
-          component={Link}
-          href="/"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-        >
-          Перейти к покупкам
-        </Button>
+        <EmptyState
+          title="В избранном пока нет товаров"
+          text="Отметьте сердечко на карточке, и товар появится здесь."
+          actionHref={href('/catalog')}
+          actionLabel="Перейти в каталог"
+        />
       </Container>
     );
   }
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+      <Typography component="h1" sx={shopTitleSx}>
         Избранное ({productsCount})
       </Typography>
       <Grid container spacing={3}>
@@ -158,72 +118,17 @@ export default function FavoritesPage() {
           if (!product.id) {
             return null;
           }
-          const isProductInStock =
-            (product.availabilityStatus || product.availability_status || 'in_stock') !== 'on_order';
-          const totalPrice = product.totalPrice ?? product.total_price;
-          const numericPrice = Number(product.price) || 0;
-          const numericTotalPrice = Number(totalPrice) > 0 ? Number(totalPrice) : numericPrice;
-          const displayPrice = isProductInStock
-            ? numericTotalPrice > 0
-              ? `${Math.round(numericTotalPrice).toLocaleString('ru-RU')} BYN${
-                  numericPrice > 0 ? ` · от ${numericPrice.toFixed(2)} BYN/мес.` : ''
-                }`
-              : ''
-            : numericPrice > 0
-              ? `от ${numericPrice.toFixed(2)} BYN/мес.`
-              : '';
           return (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Card
-              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-            >
-              <Box sx={{ position: 'relative', width: '100%', pt: '100%' }}>
-                <Link href={`/products/${product.id}`}>
-                  <Image
-                    src={product.image || '/placeholder.jpg'}
-                    alt={product.name}
-                    fill
-                    style={{
-                      objectFit: 'contain',
-                      padding: '20px',
-                    }}
-                    sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                    loading="lazy"
-                  />
-                </Link>
-              </Box>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography gutterBottom variant="h6" component="h2">
-                  {product.name}
-                </Typography>
-                {displayPrice && (
-                  <Typography variant="h6" color="primary" gutterBottom>
-                    {displayPrice}
-                  </Typography>
-                )}
-                <Box
-                  sx={{
-                    mt: 2,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    startIcon={<ShoppingCartIcon />}
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    В корзину
-                  </Button>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleRemoveFromFavorites(product.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </Card>
+          <Grid item xs={6} sm={6} md={4} lg={3} key={product.id}>
+            <CatalogProductCard
+              product={product}
+              onFavoriteToggle={(item, next) => {
+                if (!next) {
+                  setSnackbarMessage('Товар удален из избранного');
+                  setSnackbarOpen(true);
+                }
+              }}
+            />
           </Grid>
           );
         })}

@@ -20,6 +20,8 @@ export function toPublicProfile(user) {
     email: user.email,
     full_name: user.fullName || '',
     role: user.role,
+    city_slug: user.citySlug || null,
+    locality_id: user.localityId || null,
   };
 }
 

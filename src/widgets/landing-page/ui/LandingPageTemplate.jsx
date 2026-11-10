@@ -1,15 +1,27 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import styles from './landing-page.module.css';
-import Image from 'next/image';
-import CountdownTimer from '@/shared/ui/countdown-timer/CountdownTimer';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { loadTikTokPixels, scheduleNonCriticalTask } from '@/shared/utils';
+import { trackCityEvent } from '@/shared/ui/analytics/CityAnalytics';
+import styles from './landing-page.module.css';
+import { buildLandingView, readableButtonColor } from '../lib/content';
+import {
+  AdvantageStrip,
+  BenefitGrid,
+  CtaButton,
+  FaqList,
+  FinalCta,
+  GuaranteeRow,
+  InstallmentBand,
+  LandingHero,
+  ReviewSlider,
+  StorySection,
+} from './sections';
 
 const Quiz = dynamic(() => import('@/features/quiz/ui/Quiz'), { ssr: false });
 
-// Фиксированные вопросы для квиза
 const quizQuestions = [
   {
     id: 1,
@@ -21,10 +33,7 @@ const quizQuestions = [
       { value: '3 года', label: '3 года' },
       { value: '4 года', label: '4 года' },
       { value: '5 лет', label: '5 лет' },
-      {
-        value: 'Нужна консультация',
-        label: 'Нужна консультация',
-      },
+      { value: 'Нужна консультация', label: 'Нужна консультация' },
     ],
   },
   {
@@ -44,88 +53,93 @@ const quizQuestions = [
       { value: 'Viber', label: 'Viber' },
       { value: 'Telegram', label: 'Telegram' },
       { value: 'SMS', label: 'SMS' },
-      {
-        value: 'Нужна консультация по телефону',
-        label: 'Нужна консультация по телефону',
-      },
+      { value: 'Нужна консультация по телефону', label: 'Нужна консультация по телефону' },
     ],
   },
   {
     id: 4,
-    question:
-      'Укажите на какой номер прислать каталог с ценами и графиками платежей',
+    question: 'Укажите на какой номер прислать каталог с ценами и графиками платежей',
     type: 'text',
   },
 ];
 
 export default function LandingPageTemplate({ landing }) {
+  const view = useMemo(() => buildLandingView(landing), [landing]);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisible, setIsVisible] = useState({});
+  const [heroGone, setHeroGone] = useState(false);
+  const [finalVisible, setFinalVisible] = useState(false);
+  const heroRef = useRef(null);
+  const finalRef = useRef(null);
   const router = useRouter();
   const params = useSearchParams();
-
-  const utm_source = params.get('utm_source');
-  const utm_medium = params.get('utm_medium');
-  const utm_content = params.get('utm_content');
-  const utm_campaign = params.get('utm_campaign');
+  const utmSource = params.get('utm_source');
+  const utmMedium = params.get('utm_medium');
+  const utmContent = params.get('utm_content');
+  const utmCampaign = params.get('utm_campaign');
   const ad = params.get('ad');
   const ttclid = params.get('ttclid');
 
+  const colors = view.colors;
+  const showStory = Boolean(view.secondaryImage) || view.advantages.some((item) => item.description);
+  const detailsHref = view.benefits.length
+    ? '#benefits'
+    : showStory
+      ? '#story'
+      : view.reviews.length
+        ? '#reviews'
+        : '#faq';
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible((prev) => ({
-            ...prev,
-            [entry.target.id]: entry.isIntersecting,
-          }));
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('[data-animate]');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Загрузка пикселей TikTok
-  useEffect(() => {
-    if (
-      landing?.pixels &&
-      Array.isArray(landing.pixels) &&
-      landing.pixels.length > 0
-    ) {
-      const cancel = scheduleNonCriticalTask(() => {
-        loadTikTokPixels(landing.pixels);
-      });
-      return cancel;
-    }
-    return undefined;
-  }, [landing]);
-
-  // Применение кастомных цветов через CSS variables
-  useEffect(() => {
-    if (landing?.colors && typeof landing.colors === 'object') {
-      const root = document.documentElement;
-      Object.entries(landing.colors).forEach(([key, value]) => {
-        if (value) {
-          root.style.setProperty(`--color-${key}`, value);
-        }
-      });
-    }
-  }, [landing]);
-
-  // Применяем фон за лендингом к body
-  useEffect(() => {
-    const bodyBackground = landing?.colors?.bodyBackground || '#ffffff';
+    const bodyBackground = colors.bodyBackground || '#f3f5f8';
     document.body.style.backgroundColor = bodyBackground;
     return () => {
       document.body.style.backgroundColor = '';
     };
-  }, [landing?.colors?.bodyBackground]);
+  }, [colors.bodyBackground]);
+
+  useEffect(() => {
+    if (!Array.isArray(view.pixels) || view.pixels.length === 0) return undefined;
+    return scheduleNonCriticalTask(() => {
+      loadTikTokPixels(view.pixels);
+    });
+  }, [view.pixels]);
+
+  useEffect(() => {
+    const seen = new Set();
+    const nodes = document.querySelectorAll('[data-section]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const section = entry.target.getAttribute('data-section');
+        if (!section || seen.has(section)) return;
+        seen.add(section);
+        trackCityEvent('landing_section_view', { landing_slug: view.slug, section });
+      });
+    }, { threshold: 0.45 });
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [view.slug]);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const finalBlock = finalRef.current;
+    if (!hero || !finalBlock) return undefined;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === hero) setHeroGone(!entry.isIntersecting);
+        if (entry.target === finalBlock) setFinalVisible(entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    observer.observe(hero);
+    observer.observe(finalBlock);
+    return () => observer.disconnect();
+  }, []);
+
+  const openQuiz = (place) => {
+    trackCityEvent('landing_cta_click', { landing_slug: view.slug, cta: view.ctaLabel, place });
+    setIsQuizOpen(true);
+  };
 
   const handleQuizSubmit = async (data) => {
     setIsLoading(true);
@@ -136,10 +150,10 @@ export default function LandingPageTemplate({ landing }) {
         body: JSON.stringify({
           FIELDS: {
             ...data.FIELDS,
-            UTM_SOURCE: utm_source || '',
-            UTM_MEDIUM: utm_medium || '',
-            UTM_CAMPAIGN: utm_campaign || '',
-            UTM_CONTENT: utm_content || '',
+            UTM_SOURCE: utmSource || '',
+            UTM_MEDIUM: utmMedium || '',
+            UTM_CAMPAIGN: utmCampaign || '',
+            UTM_CONTENT: utmContent || '',
             UTM_TERM: (ad || '') + (ttclid || ''),
           },
         }),
@@ -151,248 +165,71 @@ export default function LandingPageTemplate({ landing }) {
       }
 
       const result = await response.json();
-
       if (result?.success) {
-        router.push(`https://technobar.by/thank-you?source=${landing.slug}`);
+        router.push(`https://technobar.by/thank-you?source=${view.slug}`);
       } else {
         alert('Форма отправлена слишком часто. Попробуйте через минуту.');
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
-      alert(
-        'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-      );
+      alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const benefits = Array.isArray(landing.benefits) ? landing.benefits : [];
-  const advantages = Array.isArray(landing.advantages)
-    ? landing.advantages
-    : [];
-  const reviews = Array.isArray(landing.reviews) ? landing.reviews : [];
-  const colors = landing.colors || {};
-  const headerBg = colors.header || '#1a1a1a';
-  const buttonBg = colors.button || '#4caf50';
-  const buttonHover = colors.buttonHover || '#45a049';
-  const backgroundColor = colors.background || '#ffffff';
-  const textColor = colors.textColor || '#1a1a1a';
-
   return (
     <div
-      className={styles.container}
-      style={{ backgroundColor, color: textColor }}
+      className={styles.page}
+      style={{
+        '--landing-header': colors.header || '#1a1a1a',
+        '--landing-button': readableButtonColor(colors.button, '#1d6fe8'),
+        '--landing-button-hover': readableButtonColor(colors.buttonHover, '#1859bd'),
+        '--landing-bg': colors.background || '#ffffff',
+        '--landing-text': colors.textColor || '#1f2933',
+      }}
     >
-      <div className={styles.header} style={{ backgroundColor: headerBg }}>
-        <h1 className={styles.mainTitle}>
-          {landing.main_title || landing.title}
-        </h1>
-
-        <a
-          href="tel:+375447883122"
-          className={styles.priceButton}
-          style={{
-            backgroundColor: buttonBg,
-            display: 'inline-block',
-            marginTop: '10px',
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = buttonHover;
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = buttonBg;
-          }}
-          rel="noreferrer"
-        >
-          {'Позвонить '}
-        </a>
+      <div ref={heroRef}>
+        <LandingHero view={view} detailsHref={detailsHref} onCta={() => openQuiz('hero')} />
       </div>
-
-      <div
-        className={styles.mainSection}
-        id="mainSection"
-        data-animate="fade-in"
-      >
-        <div className={styles.textContent}>
-          {benefits.length > 0 && (
-            <ul className={styles.benefits}>
-              {benefits.map((benefit, index) => (
-                <li key={index} className={styles.checkmarkItem}>
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className={styles.timerSection}>
-            <p>До конца акции осталось:</p>
-            <CountdownTimer />
-          </div>
-
-          {landing.survey_text && (
-            <p className={styles.surveyText}>{landing.survey_text}</p>
-          )}
-
-          <button
-            className={styles.priceButton}
-            onClick={() => setIsQuizOpen(true)}
-            style={{
-              backgroundColor: buttonBg,
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = buttonHover;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = buttonBg;
-            }}
-          >
-            {landing.button_text || 'Узнать цену'}
-          </button>
-        </div>
-
-        {landing.main_image && (
-          <div className={styles.imageContainer}>
-            <Image
-              src={landing.main_image}
-              alt={landing.title || 'Изображение'}
-              width={500}
-              height={400}
-              priority
-              className={styles.mainImage}
-              style={{ width: '100%', height: 'auto' }}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 500px"
-            />
-          </div>
-        )}
+      <AdvantageStrip items={view.advantages} />
+      <BenefitGrid items={view.benefits} />
+      {showStory ? (
+        <StorySection
+          image={view.secondaryImage}
+          items={view.advantages.filter((item) => item.description)}
+          ctaLabel={view.ctaLabel}
+          onCta={() => openQuiz('story')}
+        />
+      ) : null}
+      <ReviewSlider
+        reviews={view.reviews}
+        rating={view.rating}
+        onReview={(index) => trackCityEvent('landing_review_click', { landing_slug: view.slug, index })}
+      />
+      <InstallmentBand />
+      <GuaranteeRow />
+      <FaqList
+        items={view.faq}
+        onOpen={(question) => trackCityEvent('landing_faq_open', { landing_slug: view.slug, question })}
+      />
+      <div ref={finalRef}>
+        <FinalCta
+          label={view.ctaLabel}
+          microcopy={view.microcopy}
+          onClick={() => openQuiz('final')}
+        />
       </div>
-
-      {advantages.length > 0 && (
-        <div
-          className={styles.advantagesSection}
-          id="advantagesSection"
-          data-animate="slide-up"
-        >
-          {landing.secondary_image && (
-            <div className={styles.advantagesImage}>
-              <Image
-                src={landing.secondary_image}
-                alt="Особенности"
-                width={500}
-                height={400}
-                className={styles.featuresImage}
-                style={{ width: '100%', height: 'auto' }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 500px"
-              />
-            </div>
-          )}
-
-          <div className={styles.advantagesList}>
-            <h2 className={styles.sectionTitle}>
-              Преимущества нашего магазина
-            </h2>
-
-            {advantages.map((advantage, index) => (
-              <div
-                key={index}
-                className={`${styles.advantageItem} ${styles.fadeIn}`}
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <span className={styles.advantageNumber}>{index + 1}</span>
-                <div>
-                  <h3>{advantage.title || advantage.name || ''}</h3>
-                  <p>{advantage.description || advantage.desc || ''}</p>
-                </div>
-              </div>
-            ))}
-
-            <button
-              className={styles.priceButton}
-              onClick={() => setIsQuizOpen(true)}
-              style={{
-                backgroundColor: buttonBg,
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = buttonHover;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = buttonBg;
-              }}
-            >
-              {landing.button_text || 'Узнать цену'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {reviews.length > 0 && (
-        <div
-          className={styles.reviewsSection}
-          id="reviewsSection"
-          data-animate="fade-in"
-        >
-          <h2 className={styles.reviewsTitle}>ОТЗЫВЫ НАШИХ ПОКУПАТЕЛЕЙ</h2>
-          <div className={styles.reviewsGrid}>
-            {reviews.map((review, index) => (
-              <div
-                key={index}
-                className={`${styles.reviewCard} ${styles.fadeIn}`}
-                style={{ animationDelay: `${index * 0.3}s` }}
-              >
-                {review.image && (
-                  <div
-                    style={{
-                      width: '100%',
-                      overflow: 'hidden',
-                      borderRadius: '10px',
-                    }}
-                  >
-                    <Image
-                      src={review.image}
-                      alt="Отзыв покупателя"
-                      width={300}
-                      height={200}
-                      className={styles.reviewImage}
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        maxWidth: '100%',
-                      }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 300px"
-                    />
-                  </div>
-                )}
-                <p className={styles.reviewText}>
-                  {review.text || review.comment || ''}
-                </p>
-              </div>
-            ))}
-          </div>
-          <button
-            className={styles.priceButton}
-            onClick={() => setIsQuizOpen(true)}
-            style={{
-              backgroundColor: buttonBg,
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = buttonHover;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = buttonBg;
-            }}
-          >
-            {landing.button_text || 'Узнать цену'}
-          </button>
-        </div>
-      )}
-
+      <div className={`${styles.sticky} ${heroGone && !finalVisible ? styles.stickyVisible : ''}`}>
+        <CtaButton label={view.ctaLabel} onClick={() => openQuiz('sticky')} />
+      </div>
       <Quiz
         isOpen={isQuizOpen}
         onClose={() => setIsQuizOpen(false)}
         isLoading={isLoading}
         questions={quizQuestions}
         onSubmit={handleQuizSubmit}
-        title={landing.title || 'Лендинг'}
+        title={view.title}
       />
     </div>
   );

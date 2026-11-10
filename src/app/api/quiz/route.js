@@ -76,6 +76,10 @@ export async function POST(req) {
   globalThis._quiz[ip] = Date.now();
 
   const fields = sanitizeFields(body.FIELDS);
+  const citySlug = String(body.citySlug || '').trim().slice(0, 40);
+  if (citySlug) {
+    fields.CITY_SLUG = citySlug;
+  }
 
   try {
     await saveFormSubmission(req, fields);
@@ -84,7 +88,9 @@ export async function POST(req) {
   }
 
   try {
-    await axios.post(webhookUrl, { FIELDS: fields });
+    const bitrixFields = { ...fields };
+    delete bitrixFields.CITY_SLUG;
+    await axios.post(webhookUrl, { FIELDS: bitrixFields });
   } catch (err) {
     console.error('Bitrix24 webhook error:', err?.response?.data ?? err.message);
     return NextResponse.json({ success: false, reason: 'bitrix_error' }, { status: 502 });

@@ -9,9 +9,12 @@ import {
     Box,
 } from '@mui/material';
 import Link from 'next/link';
+import { useCity } from '@/entities/city';
+import { categoryPublicPath } from '@/shared/lib/category-path';
 
 export default function CategoryCard({ category }) {
     const { id, name, image, description } = category;
+    const { href } = useCity();
 
     if (!id || id === '') {
         return null;
@@ -32,7 +35,7 @@ export default function CategoryCard({ category }) {
         >
             <CardActionArea
                 component={Link}
-                href={`/categories/${id}`}
+                href={href(categoryPublicPath(id))}
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
             >
                 <Box sx={{ position: 'relative', paddingTop: '60%' }}>

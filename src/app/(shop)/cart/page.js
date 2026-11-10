@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   Box,
   Container,
@@ -19,6 +19,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Alert,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,12 +28,37 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/entities/cart';
+import { useCity } from '@/entities/city';
+import { minOrderShortfall, orderGoodsTotal } from '@/entities/city/lib/delivery-rules';
+import { useLocality } from '@/entities/locality/ui/LocalityProvider';
+import { resolveServiceCity } from '@/entities/locality/lib/service-city';
+import { showCityField } from '@/entities/city/lib/city-content';
+import { shopSurfaceSx, shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
 
 export default function CartPage() {
   const router = useRouter();
-  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } =
+  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, cityNotices, applyCityCatalog } =
     useCartStore();
+  const { commerceCity, cities, href } = useCity();
+  const { locality } = useLocality();
+  const deliveryCity = resolveServiceCity(locality, cities, commerceCity);
   const [promoCode, setPromoCode] = useState('');
+
+  useEffect(() => {
+    if (!commerceCity?.slug || cartItems.length === 0) return;
+    const ids = cartItems.map((item) => item.id).join(',');
+    let cancelled = false;
+    // TODO: цены в корзине пока берутся из города страницы, не из населённого пункта.
+    fetch(`/api/products?ids=${ids}&limit=100`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!cancelled) applyCityCatalog(commerceCity.slug, data.products || []);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [commerceCity?.slug, applyCityCatalog, cartItems.length]);
 
   const handleQuantityChange = useCallback((productId, newQuantity) => {
     if (newQuantity > 0) {
@@ -46,24 +72,15 @@ export default function CartPage() {
   if (!cartItems.length) {
     return (
       <>
-        <Box
-          sx={{
-            minHeight: 'calc(100vh - 64px - 200px)', // Adjust based on your header and footer heights
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            py: 8,
-          }}
-        >
+        <Box component="main" sx={{ py: { xs: 6, md: 10 } }}>
           <Container maxWidth="lg">
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" gutterBottom>
+            <Box>
+              <Typography component="h1" sx={shopTitleSx}>
                 Корзина пуста
               </Typography>
               <Button
                 component={Link}
-                href="/"
+                href={href('/catalog')}
                 variant="contained"
                 color="primary"
                 sx={{ mt: 2 }}
@@ -79,22 +96,25 @@ export default function CartPage() {
 
   return (
     <>
-      <Box
-        sx={{
-          minHeight: 'calc(100vh - 64px - 200px)', // Adjust based on your header and footer heights
-          display: 'flex',
-          flexDirection: 'column',
-          py: 4,
-        }}
-      >
+      <Box component="main" sx={{ py: { xs: 3, md: 5 } }}>
         <Container maxWidth="lg">
-          <Typography variant="h4" gutterBottom>
+          <Typography component="h1" sx={shopTitleSx}>
             Корзина
           </Typography>
+          {cityNotices.length > 0 && (
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              {cityNotices.map((notice) => notice.message).join(' ')} Позиции не удалены.
+            </Alert>
+          )}
+          {showCityField(deliveryCity, 'minOrder') && deliveryCity?.minOrderAmount ? (
+            <Alert severity={minOrderShortfall(deliveryCity, orderGoodsTotal(cartItems)) > 0 ? 'warning' : 'info'} sx={{ mb: 2 }}>
+              Минимальная сумма заказа в {deliveryCity.nameIn || deliveryCity.name}: {deliveryCity.minOrderAmount} BYN.
+            </Alert>
+          ) : null}
 
           <Grid container spacing={4}>
             <Grid item xs={12} md={8}>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} sx={{ ...shopSurfaceSx, overflow: 'hidden' }}>
                 <Table>
                   <TableHead>
                     <TableRow>

@@ -46,11 +46,190 @@ model User {
   email        String   @unique
   passwordHash String   @map("password_hash")
   fullName     String?  @map("full_name")
-  role         String   @default("user")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  role         String    @default("user")
+  citySlug     String?   @map("city_slug")
+  localityId   Int?      @map("locality_id")
+  locality     Locality? @relation(fields: [localityId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
+  @@index([citySlug])
+  @@index([localityId])
   @@map("users")
+  @@schema("public")
+}
+
+model City {
+  slug               String               @id
+  name               String
+  nameIn             String               @map("name_in")
+  nameGenitive       String               @default("") @map("name_genitive")
+  nameDative         String               @default("") @map("name_dative")
+  regionName         String               @map("region_name")
+  enabled            Boolean              @default(false)
+  isDefault          Boolean              @default(false) @map("is_default")
+  phoneDisplay       String               @map("phone_display")
+  phoneTel           String               @map("phone_tel")
+  email              String?
+  workHours          String               @map("work_hours")
+  postalCode         String?              @map("postal_code")
+  streetAddress      String               @map("street_address")
+  addressLine        String               @map("address_line")
+  latitude           Float?
+  longitude          Float?
+  messengers         Json                 @default("[]")
+  minOrderAmount     Int?                 @map("min_order_amount")
+  freeDeliveryFrom   Int?                 @map("free_delivery_from")
+  deliveryLocalities String[]             @default([]) @map("delivery_localities")
+  installmentTerms   Json                 @map("installment_terms")
+  hasPickup          Boolean              @default(false) @map("has_pickup")
+  hasDelivery        Boolean              @default(false) @map("has_delivery")
+  aboutParagraphs    String[]             @default([]) @map("about_paragraphs")
+  faq                Json                 @default("[]")
+  publicFields       Json                 @default("{}") @map("public_fields")
+  homeCards          Json                 @default("{}") @map("home_cards")
+  sortOrder          Int                  @default(0) @map("sort_order")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  deliveryMethods    CityDeliveryMethod[]
+  pickupPoints       CityPickupPoint[]
+  paymentMethods     CityPaymentMethod[]
+  localities         Locality[]
+
+  @@map("cities")
+  @@schema("public")
+}
+
+model CityDeliveryMethod {
+  id          String  @id
+  citySlug    String  @map("city_slug")
+  city        City    @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  code        String
+  title       String
+  description String  @default("")
+  price       Int     @default(0)
+  eta         String  @default("")
+  enabled     Boolean @default(true)
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  @@index([citySlug])
+  @@map("city_delivery_methods")
+  @@schema("public")
+}
+
+model CityPickupPoint {
+  id        String  @id
+  citySlug  String  @map("city_slug")
+  city      City    @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  title     String
+  address   String
+  hours     String  @default("")
+  enabled   Boolean @default(true)
+  sortOrder Int     @default(0) @map("sort_order")
+
+  @@index([citySlug])
+  @@map("city_pickup_points")
+  @@schema("public")
+}
+
+model CityPaymentMethod {
+  id        String  @id
+  citySlug  String  @map("city_slug")
+  city      City    @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  code      String
+  title     String
+  enabled   Boolean @default(true)
+  sortOrder Int     @default(0) @map("sort_order")
+
+  @@index([citySlug])
+  @@map("city_payment_methods")
+  @@schema("public")
+}
+
+model GeoRegion {
+  id        Int           @id @default(autoincrement())
+  name      String
+  districts GeoDistrict[]
+
+  @@unique([name])
+  @@map("geo_regions")
+  @@schema("public")
+}
+
+model GeoDistrict {
+  id         Int        @id @default(autoincrement())
+  regionId   Int        @map("region_id")
+  region     GeoRegion  @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  name       String
+  localities Locality[]
+
+  @@unique([regionId, name])
+  @@index([regionId])
+  @@map("geo_districts")
+  @@schema("public")
+}
+
+model Locality {
+  id              Int         @id @default(autoincrement())
+  districtId      Int         @map("district_id")
+  district        GeoDistrict @relation(fields: [districtId], references: [id], onDelete: Restrict)
+  name            String
+  nameNorm        String      @default("") @map("name_norm")
+  type            String
+  slug            String
+  latitude        Float?      @map("lat")
+  longitude       Float?      @map("lon")
+  population      Int?
+  osmId           BigInt?     @unique @map("osm_id")
+  isPopular       Boolean     @default(false) @map("is_popular")
+  isActive        Boolean     @default(true) @map("is_active")
+  serviceCitySlug String?     @map("service_city_slug")
+  serviceCity     City?       @relation(fields: [serviceCitySlug], references: [slug], onDelete: SetNull)
+  users           User[]
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  @@unique([slug])
+  @@index([districtId])
+  @@index([serviceCitySlug])
+  @@index([isActive, isPopular])
+  @@index([nameNorm(ops: raw("text_pattern_ops"))], map: "localities_name_norm_prefix_idx")
+  @@index([nameNorm(ops: raw("gin_trgm_ops"))], type: Gin, map: "localities_name_norm_trgm_idx")
+  @@map("localities")
+  @@schema("public")
+}
+
+model LocalityImportRun {
+  id         Int       @id @default(autoincrement())
+  status     String    @default("running")
+  added      Int       @default(0)
+  updated    Int       @default(0)
+  unchanged  Int       @default(0)
+  skipped    Int       @default(0)
+  error      String    @default("")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  finishedAt DateTime? @map("finished_at")
+
+  @@index([status])
+  @@map("locality_import_runs")
+  @@schema("public")
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String   @default("")
+  href      String   @default("")
+  image     String?
+  placement String   @default("home")
+  enabled   Boolean  @default(true)
+  citySlugs String[] @default([]) @map("city_slugs")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([placement, enabled])
+  @@map("banners")
   @@schema("public")
 }
 

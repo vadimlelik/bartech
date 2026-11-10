@@ -9,6 +9,8 @@ import {
   useRef,
 } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useCity } from '@/entities/city';
+import { productPublicPath } from '@/shared/lib/product-path';
 import {
   Grid,
   Card,
@@ -106,8 +108,10 @@ const ProductGridCard = memo(function ProductGridCard({
   isCompared,
   onCompare,
   onFavorite,
+  priority = false,
 }) {
   const [mounted, setMounted] = useState(false);
+  const { href } = useCity();
   const showSpecs = !isMobile && hasSpecsToShow(product.specifications);
   const isProductOnOrder =
     (product.availabilityStatus || product.availability_status || 'in_stock') === 'on_order';
@@ -126,17 +130,17 @@ const ProductGridCard = memo(function ProductGridCard({
   }, []);
 
   return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={6} sm={6} md={4} lg={3}>
       <Card
         sx={{
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          transition: 'transform 0.2s, box-shadow 0.2s',
+          border: '1px solid #E1E5EB',
+          boxShadow: 'none',
           '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+            boxShadow: '0 8px 24px rgba(31, 41, 51, 0.08)',
           },
         }}
       >
@@ -196,7 +200,7 @@ const ProductGridCard = memo(function ProductGridCard({
         </Box>
 
         <Link
-          href={`/products/${product.id}`}
+          href={href(productPublicPath(product))}
           style={{
             textDecoration: 'none',
             color: 'inherit',
@@ -222,8 +226,8 @@ const ProductGridCard = memo(function ProductGridCard({
                   objectFit: 'contain',
                   padding: '20px',
                 }}
-                sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                loading="lazy"
+                sizes="(max-width: 600px) 50vw, (max-width: 900px) 33vw, 25vw"
+                {...(priority ? { priority: true } : { loading: 'lazy' })}
               />
             )}
           </Box>
@@ -266,12 +270,14 @@ const ProductGridCard = memo(function ProductGridCard({
             </Typography>
 
             <Box sx={{ mb: 2 }}>
-              <Rating
-                value={product.rating || 0}
-                readOnly
-                size="small"
-                precision={0.5}
-              />
+              {Number(product.rating) > 0 && (
+                <Rating
+                  value={Number(product.rating)}
+                  readOnly
+                  size="small"
+                  precision={0.5}
+                />
+              )}
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {product.description}
               </Typography>
@@ -819,6 +825,16 @@ export default function ProductList({
             )}
           </Stack>
           <Divider sx={{ mb: 2 }} />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={previewFilters.availability === 'in_stock'}
+                onChange={() => handleFilterChange('availability', 'in_stock')}
+              />
+            }
+            label="В наличии"
+            sx={{ mb: 1 }}
+          />
           <List>
             {filterSections.map(
               ({ key, label }) =>
@@ -855,7 +871,7 @@ export default function ProductList({
               sx={{
                 p: 2,
                 position: 'sticky',
-                bottom: 16,
+                bottom: 'calc(16px + var(--shop-dock, 0px))',
                 mt: 2,
                 backgroundColor: 'background.paper',
                 zIndex: 1,
@@ -886,7 +902,7 @@ export default function ProductList({
       {loading ? (
         <Grid container spacing={3}>
           {[...Array(isMobile ? 4 : 6)].map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} key={`skeleton-${index}`}>
+            <Grid item xs={6} sm={6} md={4} lg={3} key={`skeleton-${index}`}>
               <Skeleton
                 variant="rectangular"
                 height={400}
@@ -921,6 +937,7 @@ export default function ProductList({
                 isCompared={compareIds.has(productId)}
                 onCompare={handleCompareToggle}
                 onFavorite={handleFavoriteClick}
+                priority={index < 4}
               />
             );
           })}

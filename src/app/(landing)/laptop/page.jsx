@@ -2,10 +2,13 @@ import LaptopPageClient from './LaptopPageClient';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
 
+const laptopTitle = 'Купить ноутбук в рассрочку в Минске — Технобар';
+const laptopDescription =
+  'Игровые и офисные ноутбуки в рассрочку в Минске. Оформление онлайн, доставка по Беларуси, без переплат по акциям. Технобар.';
+
 export const metadata = mergeLandingMetadata('laptop', {
-  title: 'Купить ноутбук в рассрочку в Минске — Texnobar',
-  description:
-    'Купить ноутбук в рассрочку в Минске без переплат. Широкий выбор: игровые, офисные, для учёбы. Рассрочка до 12 месяцев, доставка по Минску в день заказа. Оформление онлайн.',
+  title: { absolute: laptopTitle },
+  description: laptopDescription,
   keywords: [
     'купить ноутбук в рассрочку минск',
     'ноутбук в рассрочку',
@@ -15,11 +18,12 @@ export const metadata = mergeLandingMetadata('laptop', {
     'рассрочка на ноутбук минск',
   ],
   openGraph: {
-    title: 'Купить ноутбук в рассрочку в Минске — Texnobar',
-    description:
-      'Ноутбуки в рассрочку без переплат. Игровые, офисные, для учёбы. Доставка по Минску.',
+    title: laptopTitle,
+    description: laptopDescription,
     url: `${siteUrl}/laptop`,
     type: 'website',
+    locale: 'ru_BY',
+    siteName: 'Технобар',
   },
   alternates: {
     canonical: `${siteUrl}/laptop`,

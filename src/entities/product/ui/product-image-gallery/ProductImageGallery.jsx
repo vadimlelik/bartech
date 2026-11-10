@@ -42,14 +42,19 @@ export default function ProductImageGallery({ images, productName }) {
     setCurrentImageIndex(index);
   }, []);
 
+  const thumbnailSlots = Array.from({ length: 4 }, (_, index) => productImages[index] || null);
+
   return (
     <>
       <Box
         sx={{
           position: 'relative',
           width: '100%',
-          height: '500px',
-          cursor: productImages.length > 1 ? 'pointer' : 'default',
+          height: { xs: 320, md: 460 },
+          cursor: 'zoom-in',
+          bgcolor: '#eef2f6',
+          borderRadius: 3,
+          overflow: 'hidden',
         }}
         onClick={handleImageClick}
       >
@@ -58,83 +63,52 @@ export default function ProductImageGallery({ images, productName }) {
             src={productImages[currentImageIndex]}
             alt={`${productName} - изображение ${currentImageIndex + 1}`}
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: 'contain', padding: 16 }}
             sizes="(max-width: 960px) 100vw, 50vw"
             priority
           />
         )}
-        {productImages.length > 1 && (
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              display: 'flex',
-              justifyContent: 'space-between',
-              p: 2,
-              zIndex: 1,
-            }}
-          >
-            <IconButton
-              onClick={handlePrevImage}
-              sx={{
-                bgcolor: 'background.paper',
-                '&:hover': { bgcolor: 'background.paper' },
-              }}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            <IconButton
-              onClick={handleNextImage}
-              sx={{
-                bgcolor: 'background.paper',
-                '&:hover': { bgcolor: 'background.paper' },
-              }}
-            >
-              <ArrowForwardIcon />
-            </IconButton>
-          </Box>
-        )}
       </Box>
 
-      {productImages.length > 1 && (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            mt: 2,
-            overflowX: 'auto',
-            pb: 1,
-          }}
-        >
-          {productImages.map((img, index) => (
-            <Box
-              key={index}
-              onClick={() => handleThumbnailClick(index)}
-              sx={{
-                position: 'relative',
-                width: 80,
-                height: 80,
-                flexShrink: 0,
-                cursor: 'pointer',
-                border: currentImageIndex === index ? 2 : 1,
-                borderColor: currentImageIndex === index ? 'primary.main' : 'divider',
-                borderRadius: 1,
-                overflow: 'hidden',
-              }}
-            >
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+          gap: 1,
+          mt: 1.5,
+        }}
+      >
+        {thumbnailSlots.map((img, index) => (
+          <Box
+            key={index}
+            onClick={() => {
+              if (img) handleThumbnailClick(index);
+            }}
+            sx={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: '1 / 1',
+              cursor: img ? 'pointer' : 'default',
+              border: currentImageIndex === index && img ? 2 : 1,
+              borderColor:
+                currentImageIndex === index && img ? 'primary.main' : 'divider',
+              borderRadius: 2,
+              overflow: 'hidden',
+              bgcolor: '#eef2f6',
+            }}
+          >
+            {img && (
               <Image
                 src={img}
                 alt={`${productName} - миниатюра ${index + 1}`}
                 fill
-                style={{ objectFit: 'contain' }}
-                sizes="80px"
+                style={{ objectFit: 'contain', padding: 6 }}
+                sizes="120px"
               />
-            </Box>
-          ))}
-        </Box>
-      )}
+            )}
+          </Box>
+        ))}
+      </Box>
 
       <Dialog
         open={isDialogOpen}

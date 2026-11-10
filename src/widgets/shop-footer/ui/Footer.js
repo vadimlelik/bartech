@@ -9,240 +9,167 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useCity } from '@/entities/city';
+import { categoryPublicPath } from '@/shared/lib/category-path';
+import { cityAddressLine, cityCall, cityWorkHours } from '@/entities/city/lib/city-content';
+import { useServiceCity } from '@/entities/locality/ui/useServiceCity';
 
-export default function Footer() {
+const LINK_SX = {
+  color: '#C5CCD6',
+  fontSize: '0.95rem',
+  '&:hover': { color: '#FFFFFF' },
+};
+
+export default function Footer({ categories = [] }) {
+  const { commerceCity, pageCity, cities, href } = useCity();
+  const city = commerceCity || pageCity;
+  const serviceCity = useServiceCity();
+  const phone = cityCall(serviceCity);
+  const address = cityAddressLine(serviceCity);
+  const hours = cityWorkHours(serviceCity);
+  const area = city?.nameDative || 'Минску';
+
   return (
     <Box
       component="footer"
       sx={{
-        py: { xs: 3, md: 5 },
-        px: 1,
+        bgcolor: '#2B3440',
+        color: '#C5CCD6',
+        pt: { xs: 5, md: 7 },
+        pb: { xs: 'calc(88px + env(safe-area-inset-bottom))', md: 4 },
       }}
     >
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            background: 'rgba(255, 255, 255, 0.97)',
-            borderRadius: 4,
-            border: '1px solid rgba(0, 123, 255, 0.15)',
-            boxShadow: '0 14px 32px rgba(17, 24, 39, 0.12)',
-            p: { xs: 2, md: 3 },
-          }}
-        >
-          <Grid container spacing={{ xs: 2, md: 3 }}>
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  height: '100%',
-                  border: '1px solid rgba(148, 163, 184, 0.28)',
-                  borderRadius: 3,
-                  p: { xs: 2, md: 2.5 },
-                  backgroundColor: 'rgba(248, 250, 252, 0.8)',
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{
-                    fontSize: { xs: '1rem', md: '1.15rem' },
-                    fontWeight: 700,
-                  }}
-                >
-                  Контактная информация
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1.2 }}
-                >
-                  ООО «Баратех» УНП: 193796252
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1.2 }}
-                >
-                  Регистрационный номер в Торговом реестре Республики Беларусь:
-                  732062
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1.2 }}
-                >
-                  Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова,
-                  д. 43, пом. 804
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 1.2 }}>
-                  <MuiLink
-                    href="tel:+375447418423"
-                    color="primary.main"
-                    underline="hover"
-                    sx={{ fontWeight: 600 }}
-                  >
-                    +375 44 741-84-23
-                  </MuiLink>
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Технобар. Свидетельство о гос. регистрации: выдано 07 октября
-                  2024 г. Минским горисполкомом. Регистрация в Торговом реестре:
-                  743083 от 26.02.2025.
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  height: '100%',
-                  border: '1px solid rgba(148, 163, 184, 0.28)',
-                  borderRadius: 3,
-                  p: { xs: 2, md: 2.5 },
-                  backgroundColor: 'rgba(248, 250, 252, 0.8)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1.2,
-                  '& a': {
-                    fontSize: { xs: '0.9rem', md: '0.98rem' },
-                    color: 'text.secondary',
-                    transition: 'color 0.2s ease',
-                  },
-                  '& a:hover': {
-                    color: 'primary.main',
-                  },
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{
-                    fontSize: { xs: '1rem', md: '1.15rem' },
-                    fontWeight: 700,
-                  }}
-                >
-                  Информация
-                </Typography>
-                <Link
-                  href="/videowatching"
-                  passHref
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Typography variant="body2">
-                    Правила видеонаблюдения в помещении
-                  </Typography>
-                </Link>
-                <Link href="/po" passHref style={{ textDecoration: 'none' }}>
-                  <Typography variant="body2">Публичная оферта</Typography>
-                </Link>
-                <Link href="/sales" passHref style={{ textDecoration: 'none' }}>
-                  <Typography variant="body2">Акции</Typography>
-                </Link>
-                <Link
-                  href="/guarantee"
-                  passHref
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Typography variant="body2">Возврат товара</Typography>
-                </Link>
-                <Link href="/installment" style={{ textDecoration: 'none' }}>
-                  <Typography variant="body2">Купить в рассрочку</Typography>
-                </Link>
-                <Link href="/service" style={{ textDecoration: 'none' }}>
-                  <Typography variant="body2">Сервисные центры</Typography>
-                </Link>
-                <Link href="/pk" style={{ textDecoration: 'none' }}>
-                  <Typography variant="body2">
-                    Политика обработки персональных данных
-                  </Typography>
-                </Link>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  height: '100%',
-                  border: '1px solid rgba(148, 163, 184, 0.28)',
-                  borderRadius: 3,
-                  p: { xs: 2, md: 2.5 },
-                  backgroundColor: 'rgba(248, 250, 252, 0.8)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: { xs: 1.5, md: 2 },
-                  '& .MuiTypography-root': {
-                    fontSize: { xs: '0.9rem', md: '0.98rem' },
-                  },
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: { xs: '1rem', md: '1.15rem' },
-                    fontWeight: 700,
-                  }}
-                >
-                  Дополнительно
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Работает на MixCMS
-                </Typography>
-                <Box sx={{ mt: { xs: 0.5, md: 1 } }}>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Варианты оплаты
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: { xs: 1, md: 2 },
-                      mt: 1,
-                      maxWidth: '180px',
-                      '& > span': {
-                        flex: '1 1 0',
-                        display: 'flex !important',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: { xs: '12px', md: '16px' },
-                        position: 'relative',
-                      },
-                      '& img': {
-                        objectFit: 'contain',
-                        imageRendering: '-webkit-optimize-contrast',
-                        opacity: 0.9,
-                      },
-                    }}
-                  >
-                    <Image
-                      src="/images/payment-visa.png"
-                      alt="Visa"
-                      width={50}
-                      height={100}
-                      loading="lazy"
-                    />
-                    <Image
-                      src="/images/payment-mastercard.png"
-                      alt="Mastercard"
-                      width={50}
-                      height={100}
-                      loading="lazy"
-                    />
-                    <Image
-                      src="/images/payment-belcard.png"
-                      alt="BelCard"
-                      width={50}
-                      height={100}
-                      loading="lazy"
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              О магазине
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5, lineHeight: 1.6 }}>
+              Texnobar — техника в рассрочку с доставкой по {area} и Беларуси.
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5, lineHeight: 1.6 }}>
+              ООО «Баратех» УНП: 193796252. Регистрационный номер в Торговом
+              реестре Республики Беларусь: 732062.
+            </Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
+              Технобар. Свидетельство о гос. регистрации: выдано 07 октября 2024
+              г. Минским горисполкомом. Регистрация в Торговом реестре: 743083
+              от 26.02.2025.
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.1, mt: 1.5 }}>
+              <Link href={href('/contacts')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Реквизиты и контакты</Typography>
+              </Link>
+              <Link href={href('/reviews')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Отзывы покупателей</Typography>
+              </Link>
+            </Box>
           </Grid>
-        </Box>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              Покупателям
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.1 }}>
+              <Link href={href('/payment_delivery')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Оплата и доставка</Typography>
+              </Link>
+              <Link href={href('/installment')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Купить в рассрочку</Typography>
+              </Link>
+              <Link href={href('/sales')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Акции</Typography>
+              </Link>
+              <Link href={href('/guarantee')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Возврат товара</Typography>
+              </Link>
+              <Link href={href('/reviews')} style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Отзывы</Typography>
+              </Link>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              Компания
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.1 }}>
+              <Link href="/po" style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Публичная оферта</Typography>
+              </Link>
+              <Link href="/pk" style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Политика обработки персональных данных</Typography>
+              </Link>
+              <Link href="/videowatching" style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Правила видеонаблюдения в помещении</Typography>
+              </Link>
+              <Link href="/service" style={{ textDecoration: 'none' }}>
+                <Typography sx={LINK_SX}>Сервисные центры</Typography>
+              </Link>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              Контакты
+            </Typography>
+            {address ? (
+              <Typography variant="body2" sx={{ mb: 1.2, lineHeight: 1.6 }}>
+                {address}
+              </Typography>
+            ) : null}
+            {phone ? (
+              <MuiLink href={`tel:${phone.tel}`} underline="hover" sx={{ ...LINK_SX, fontWeight: 700 }}>
+                {phone.display}
+              </MuiLink>
+            ) : null}
+            {hours ? (
+              <Typography variant="body2" sx={{ mt: 1.2, mb: 2 }}>
+                {hours}
+              </Typography>
+            ) : null}
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              Варианты оплаты
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Image src="/images/payment-visa.png" alt="Visa" width={42} height={28} style={{ objectFit: 'contain' }} />
+              <Image src="/images/payment-mastercard.png" alt="Mastercard" width={42} height={28} style={{ objectFit: 'contain' }} />
+              <Image src="/images/payment-belcard.png" alt="BelCard" width={42} height={28} style={{ objectFit: 'contain' }} />
+            </Box>
+            <Typography variant="caption" sx={{ display: 'block', mt: 2, opacity: 0.7 }}>
+              Работает на MixCMS
+            </Typography>
+          </Grid>
+        </Grid>
+        {cities.length > 0 ? (
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" component="h2" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              Города
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+              {cities.map((item) => (
+                <Link key={item.slug} href={item.slug === 'minsk' ? '/' : `/${item.slug}`} style={{ textDecoration: 'none' }}>
+                  <Typography sx={LINK_SX}>{item.name}</Typography>
+                </Link>
+              ))}
+            </Box>
+          </Box>
+        ) : null}
+        {categories.length > 0 ? (
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="h6" component="h2" sx={{ color: '#fff', fontWeight: 700, mb: 1.5, fontSize: '1rem' }}>
+              Категории {city?.nameIn ? `в ${city.nameIn}` : ''}
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+              {categories.map((category) => (
+                <Link key={category.id} href={href(categoryPublicPath(category.id))} style={{ textDecoration: 'none' }}>
+                  <Typography sx={LINK_SX}>{category.name}</Typography>
+                </Link>
+              ))}
+            </Box>
+          </Box>
+        ) : null}
       </Container>
     </Box>
   );

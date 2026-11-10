@@ -1,4 +1,5 @@
-import { Container, Typography, Box, Paper } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+import { ShopPage, ShopSurface } from '@/shared/ui/shop-page/ShopPage';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
@@ -13,14 +14,17 @@ export const metadata = {
 
 export default function Privacy() {
 	return (
-		<Container maxWidth='lg' sx={{ py: 6 }}>
-			<Paper elevation={0} sx={{ p: { xs: 2, md: 4 } }}>
-				<Typography variant='h4' component='h1' gutterBottom align='center' sx={{ mb: 4 }}>
-					Политика конфиденциальности
-				</Typography>
-
+		<ShopPage
+			showInfoNav
+			title="Политика конфиденциальности"
+			breadcrumbs={[
+				{ href: '/', label: 'Главная' },
+				{ label: 'Политика конфиденциальности' },
+			]}
+		>
+			<ShopSurface>
 				<Box component='section' sx={{ mb: 4 }}>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						1. Общие положения
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -31,7 +35,7 @@ export default function Privacy() {
 				</Box>
 
 				<Box component='section' sx={{ mb: 4 }}>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						2. Сбор информации
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -51,7 +55,7 @@ export default function Privacy() {
 				</Box>
 
 				<Box component='section' sx={{ mb: 4 }}>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						3. Использование информации
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -71,7 +75,7 @@ export default function Privacy() {
 				</Box>
 
 				<Box component='section' sx={{ mb: 4 }}>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						4. Защита информации
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -83,7 +87,7 @@ export default function Privacy() {
 				</Box>
 
 				<Box component='section' sx={{ mb: 4 }}>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						5. Файлы cookie
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -94,7 +98,7 @@ export default function Privacy() {
 				</Box>
 
 				<Box component='section'>
-					<Typography variant='h5' gutterBottom sx={{ color: 'primary.main' }}>
+					<Typography variant='h5' gutterBottom sx={{ fontWeight: 700 }}>
 						6. Контакты
 					</Typography>
 					<Typography variant='body1' paragraph>
@@ -103,7 +107,7 @@ export default function Privacy() {
 						на сайте. Мы обязуемся рассмотреть ваш запрос и ответить в течение 3 рабочих дней.
 					</Typography>
 				</Box>
-			</Paper>
-		</Container>
+			</ShopSurface>
+		</ShopPage>
 	);
 }

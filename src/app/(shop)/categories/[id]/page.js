@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { Container, Typography, Box } from '@mui/material';
+import { ShopBreadcrumbs, shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
 import Link from 'next/link';
 import { unstable_cache } from 'next/cache';
-import BackButton from './BackButton';
 import ProductList from './ProductList';
 import { getCategories, getCategoryById } from '@/entities/category/model/categories';
 import { getProducts } from '@/entities/product/model/products';
@@ -12,13 +12,30 @@ import {
   getCategoryItemListSchema,
   getBreadcrumbSchema,
   getCategorySeoCopy,
-  getCategoryCitabilityBlock,
-  getCategoryCitabilityQuestion,
+  getCategoryArticleParagraphs,
+  getCategoryFaqItems,
+  getFaqPageSchema,
   buildDefaultOpenGraphImages,
   DEFAULT_OG_IMAGE_PATH,
 } from '@/shared/lib/seo';
-import { SeoCitabilityPanel } from '@/shared/ui/seo';
+import { JsonLd, SeoFaqSection } from '@/shared/ui/seo';
+import { categoryPublicPath } from '@/shared/lib/category-path';
+import { productPublicPath } from '@/shared/lib/product-path';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { findCatalogGroup } from '@/shared/config/catalog-groups';
+import { getPageCity } from '@/entities/city/model/cities';
+import { DEFAULT_CITY_SLUG, withCityPrefix } from '@/shared/config/city-routes';
+import { buildRegionalCategoryCopy } from '@/shared/lib/city-seo';
+import CityOfferBlock from '@/entities/city/ui/CityOfferBlock';
+
+function cityPrefix(city) {
+  if (!city || city.slug === DEFAULT_CITY_SLUG) return '';
+  return `/${city.slug}`;
+}
+
+function isDefaultCity(city) {
+  return !city || city.slug === DEFAULT_CITY_SLUG;
+}
 
 const PAGE_SIZE = 24;
 
@@ -79,7 +96,7 @@ export async function generateStaticParams() {
   try {
     const categories = await getCategories();
     return categories.map((category) => ({
-      id: category.id.toString(),
+      id: String(category.id).toLowerCase(),
     }));
   } catch {
     // Сборка без доступной БД (Docker/CI) — страницы по id генерируются on-demand
@@ -87,8 +104,10 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { id } = await params;
+  const query = await searchParams;
+  const hasFilters = query && Object.keys(query).some((key) => query[key]);
   try {
     if (!id) {
       return {
@@ -107,26 +126,38 @@ export async function generateMetadata({ params }) {
     }
 
     const seo = getCategorySeoCopy(category);
+    const city = await getPageCity();
+    if (!city) {
+      return { title: 'Страница не найдена', robots: { index: false, follow: false } };
+    }
+    const prefix = cityPrefix(city);
+    const regional = isDefaultCity(city) ? null : buildRegionalCategoryCopy(category, city);
+    const title = regional ? regional.title : seo.title;
+    const description = regional ? regional.description : seo.description;
+    const canonical = `${siteUrl}${prefix}${categoryPublicPath(category.id)}`;
 
     return {
-      title: seo.title.replace(' | Texnobar', ''),
-      description: seo.description,
-      keywords: seo.keywords,
+      title: { absolute: title },
+      description,
+      keywords: regional ? regional.keywords : seo.keywords,
+      robots: hasFilters ? { index: false, follow: true } : undefined,
       openGraph: {
-        title: seo.title.replace(' | Texnobar', ''),
-        description: seo.description,
+        title,
+        description,
         type: 'website',
-        url: `${siteUrl}/categories/${id}`,
+        locale: 'ru_BY',
+        siteName: 'Технобар',
+        url: canonical,
         images: buildDefaultOpenGraphImages(category.name),
       },
       twitter: {
         card: 'summary_large_image',
-        title: seo.title.replace(' | Texnobar', ''),
-        description: seo.description,
+        title,
+        description,
         images: [DEFAULT_OG_IMAGE_PATH],
       },
       alternates: {
-        canonical: `${siteUrl}/categories/${id}`,
+        canonical,
       },
     };
   } catch (error) {
@@ -149,83 +180,84 @@ export default async function CategoryPage({ params }) {
     }
 
     const seoProductsResult = await getCachedCategorySeoSample(category.id);
+  const city = await getPageCity();
+  if (!city) notFound();
+  const schemaOptions = { pathPrefix: cityPrefix(city), nameIn: city.nameIn || city.name };
     const collectionSchema = getCollectionPageSchema(
       category,
       seoProductsResult?.products || [],
       seoProductsResult?.pagination?.total ?? 0,
+      schemaOptions,
     );
     const itemListSchema = getCategoryItemListSchema(
       category,
       seoProductsResult?.products || [],
       seoProductsResult?.pagination?.total ?? 0,
+      schemaOptions,
     );
 
-    const categorySeo = getCategorySeoCopy(category);
-    const citabilityQuestion = getCategoryCitabilityQuestion(category);
-    const citabilityAnswer = getCategoryCitabilityBlock(category);
+    const regionalCopy = isDefaultCity(city) ? null : buildRegionalCategoryCopy(category, city);
+    const articleParagraphs = regionalCopy ? [] : getCategoryArticleParagraphs(category);
+    const faqItems = getCategoryFaqItems(category);
+    const faqSchema = getFaqPageSchema(faqItems);
     const firstPageProductsResult = await getCachedCategoryProductsFirstPage(category.id);
     const featuredProducts = (firstPageProductsResult?.products || []).slice(0, 12);
 
     // Breadcrumbs для категории
+    const catalogGroup = findCatalogGroup(category.id);
     const breadcrumbs = [
-      { name: 'Главная', url: '/' },
-      { name: category.name, url: `/categories/${id}` },
+      { name: 'Главная', url: withCityPrefix(city?.slug, '/') },
+      { name: 'Каталог', url: '/catalog' },
+      ...(catalogGroup
+        ? [{ name: catalogGroup.name, url: `/catalog/${catalogGroup.slug}` }]
+        : []),
+      { name: category.name, url: withCityPrefix(city?.slug, categoryPublicPath(category.id)) },
     ];
     const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);
 
     return (
       <>
-        {collectionSchema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(collectionSchema),
-            }}
-          />
-        )}
-        {itemListSchema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(itemListSchema),
-            }}
-          />
-        )}
-        {breadcrumbSchema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(breadcrumbSchema),
-            }}
-          />
-        )}
-        <Box
-          sx={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
-            <BackButton />
-            <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 2 }}>
-              {category.name} — купить в рассрочку в Минске
+        <JsonLd data={collectionSchema} />
+        <JsonLd data={itemListSchema} />
+        <JsonLd data={breadcrumbSchema} />
+        <JsonLd data={faqSchema} />
+        <Box component="main" sx={{ flex: 1 }}>
+          <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 }, flex: 1 }}>
+            <ShopBreadcrumbs items={breadcrumbs} />
+            <Typography component="h1" sx={shopTitleSx}>
+              {regionalCopy
+                ? regionalCopy.h1
+                : `${category.name} в рассрочку в ${city?.nameIn || 'Минске'}`}
             </Typography>
-            <Typography
-              variant="body1"
-              component="p"
-              color="text.secondary"
-              sx={{ mb: 3, maxWidth: 900 }}
-            >
-              {categorySeo.introParagraph}
-            </Typography>
-            <Box sx={{ mb: 4, maxWidth: 900 }}>
-              <SeoCitabilityPanel
-                question={citabilityQuestion}
-                answer={citabilityAnswer}
-                label={`О рассрочке — ${category.name}`}
-              />
-            </Box>
+            {regionalCopy ? (
+              <Typography
+                variant="body1"
+                component="p"
+                color="text.secondary"
+                sx={{ mb: 3, maxWidth: 900 }}
+              >
+                {regionalCopy.intro}
+              </Typography>
+            ) : (
+              <Box sx={{ mb: 3, maxWidth: 900 }}>
+                {articleParagraphs.map((paragraph) => (
+                  <Typography
+                    key={paragraph.slice(0, 48)}
+                    variant="body1"
+                    component="p"
+                    color="text.secondary"
+                    sx={{ mb: 1.5 }}
+                  >
+                    {paragraph}
+                  </Typography>
+                ))}
+              </Box>
+            )}
+            {regionalCopy ? (
+              <Box sx={{ mb: 4 }}>
+                <CityOfferBlock city={city} />
+              </Box>
+            ) : null}
             <Suspense fallback={null}>
               <ProductList
                 categoryId={category.id}
@@ -236,6 +268,14 @@ export default async function CategoryPage({ params }) {
                 }
               />
             </Suspense>
+            {faqItems.length > 0 && (
+              <Box sx={{ mt: 4, mb: 2, maxWidth: 900 }}>
+                <SeoFaqSection
+                  title={`Рассрочка на ${category.name.toLocaleLowerCase('ru')}`}
+                  items={faqItems}
+                />
+              </Box>
+            )}
             {featuredProducts.length > 0 && (
               <Box
                 component="section"
@@ -266,9 +306,9 @@ export default async function CategoryPage({ params }) {
                     {featuredProducts.map((product) => (
                       <li key={product.id}>
                         <Link
-                          href={`/products/${product.id}`}
-                          title={`Купить ${product.name} в рассрочку в Минске`}
-                          aria-label={`Купить ${product.name} в рассрочку в Минске`}
+                          href={withCityPrefix(city?.slug, productPublicPath(product))}
+                          title={`Купить ${product.name} в рассрочку в ${city?.nameIn || 'Минске'}`}
+                          aria-label={`Купить ${product.name} в рассрочку в ${city?.nameIn || 'Минске'}`}
                         >
                           {product.name}
                         </Link>

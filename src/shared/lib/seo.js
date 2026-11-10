@@ -3,7 +3,11 @@
  */
 
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { withCityPrefix } from '@/shared/config/city-routes';
+import { findCatalogGroup } from '@/shared/config/catalog-groups';
 import { getStaticCategorySeo } from '@/shared/config/category-static-seo';
+import { categoryPublicPath } from '@/shared/lib/category-path';
+import { productPublicPath } from '@/shared/lib/product-path';
 import { getBusinessSameAs } from '@/shared/config/business-profiles';
 import {
   INSTALLMENT_FAQ_ITEMS,
@@ -45,16 +49,43 @@ export function resolveProductCategoryLabel(product, category) {
   return null;
 }
 
-export function buildProductBreadcrumbs(product, category, productId) {
+export function buildProductBreadcrumbs(product, category, productId, citySlug) {
+  const linkedProduct = product?.id ? product : { ...product, id: productId };
   const categoryLabel = resolveProductCategoryLabel(product, category);
   const categoryId = product?.categoryId || product?.category_id;
+  const brandRaw = product?.specifications?.brand;
+  const brand =
+    brandRaw && String(brandRaw).trim() ? String(brandRaw).trim() : null;
+  const brandRepeatsCategory =
+    brand &&
+    categoryLabel &&
+    brand.toLocaleLowerCase('ru') === categoryLabel.toLocaleLowerCase('ru');
+
+  const group = findCatalogGroup(categoryId);
 
   return [
-    { name: 'Главная', url: '/' },
-    ...(categoryId && categoryLabel
-      ? [{ name: categoryLabel, url: `/categories/${categoryId}` }]
+    { name: 'Главная', url: withCityPrefix(citySlug, '/') },
+    { name: 'Каталог', url: '/catalog' },
+    ...(group
+      ? [{ name: group.name, url: `/catalog/${group.slug}` }]
       : []),
-    { name: product.name, url: `/products/${productId}` },
+    ...(categoryId && categoryLabel
+      ? [{ name: categoryLabel, url: withCityPrefix(citySlug, categoryPublicPath(categoryId)) }]
+      : []),
+    ...(brand && !brandRepeatsCategory
+      ? [
+          {
+            name: brand,
+            url: categoryId
+              ? withCityPrefix(
+                  citySlug,
+                  `${categoryPublicPath(categoryId)}?search=${encodeURIComponent(brand)}`,
+                )
+              : undefined,
+          },
+        ]
+      : []),
+    { name: product.name, url: withCityPrefix(citySlug, productPublicPath(linkedProduct)) },
   ];
 }
 
@@ -85,60 +116,68 @@ export const COMMERCIAL_SEO_KEYWORDS = [
   'магазин техники минск рассрочка',
 ];
 
+/** Title stays within the typical SERP width and does not repeat the root template. */
+export function categoryTitleFromName(name) {
+  const label = String(name || 'Техника').trim();
+  const primary = `${label} в рассрочку в Минске — купить в Технобар`;
+  if (primary.length <= 60) return primary;
+  const compact = `${label} в рассрочку в Минске — Технобар`;
+  if (compact.length <= 60) return compact;
+  return clampMeta(`${label} — рассрочка, Технобар`, 60);
+}
+
+export function clampMeta(text, max = 155) {
+  const value = String(text || '').replace(/\s+/g, ' ').trim();
+  if (value.length <= max) return value;
+  const cut = value.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  const base = (space > 40 ? cut.slice(0, space) : cut).trim();
+  return `${base}…`;
+}
+
+function categoryDescriptionFromName(name, extra) {
+  const label = String(name || 'Техника').trim();
+  if (extra) {
+    return clampMeta(
+      `${label} в рассрочку в Минске и по Беларуси. ${extra} Без переплат по акциям. Технобар.`,
+    );
+  }
+  return clampMeta(
+    `${label} в рассрочку в Минске и по Беларуси: каталог с ценами, срок до 12 месяцев, без переплат по акциям. Технобар.`,
+  );
+}
+
 /**
- * SEO для страницы категории: заголовок и описание под запросы вида «купить X в рассрочку».
- * Приоритет: 1) готовый текст в `category-static-seo.js` по id категории; 2) description из БД; 3) шаблон.
+ * SEO для страницы категории.
+ * Title по шаблону «{Категория} в рассрочку в Минске — купить в Технобар».
+ * Готовый description из category-static-seo.js сохраняется, если он уместной длины.
  */
 export function getCategorySeoCopy(category) {
   const name = (category?.name && String(category.name).trim()) || 'товары';
   const lower = name.toLowerCase();
   const staticSeo = getStaticCategorySeo(category?.id);
-
-  if (staticSeo) {
-    const title =
-      staticSeo.title ||
-      `Купить ${lower} в рассрочку в Минске — каталог и цены | Texnobar`;
-    const description =
-      staticSeo.description ||
-      `Купить ${lower} в рассрочку в Минске в интернет-магазине Texnobar: рассрочка без переплат, доставка по Беларуси. technobar.by.`;
-    const introParagraph = staticSeo.introParagraph;
-    const extraKw = staticSeo.extraKeywords?.length ? staticSeo.extraKeywords : [];
-    const keywords = [
-      ...extraKw,
-      `купить ${lower} в рассрочку`,
-      `купить ${lower} в минске`,
-      `купить ${lower}`,
-      `${lower} в рассрочку минск`,
-      name,
-      ...SEO_INSTALLMENT_PHRASES.slice(0, 8),
-      'интернет-магазин техники минск',
-    ];
-    return { title, description, introParagraph, keywords };
-  }
-
   const extra =
     category?.description && String(category.description).trim()
       ? String(category.description).trim()
       : '';
 
-  const title = `Купить ${lower} в рассрочку в Минске — каталог и цены | Texnobar`;
-
-  const description = extra
-    ? `${extra} Рассрочка без переплат, доставка по Минску и Беларуси — Texnobar (technobar.by).`
-    : `Купить ${lower} в рассрочку в Минске в интернет-магазине Texnobar: рассрочка без переплат, доставка по Беларуси, большой каталог и цены онлайн. Оформление заказа на сайте technobar.by.`;
-
-  const introParagraph = extra
-    ? `${extra} Ниже — актуальные модели и цены; рассрочка и доставка по Минску и Беларуси.`
-    : `В интернет-магазине Texnobar можно купить ${lower} в рассрочку в Минске: выгодные условия, доставка по Беларуси, актуальные цены в каталоге. Подберите модель по характеристикам ниже — рассрочка без переплат в рамках акций.`;
+  const title = staticSeo?.title || categoryTitleFromName(name);
+  const description = staticSeo?.description
+    ? clampMeta(staticSeo.description)
+    : categoryDescriptionFromName(name, extra);
+  const introParagraph =
+    staticSeo?.introParagraph ||
+    (extra
+      ? `${extra} Ниже — актуальные модели и цены; рассрочка и доставка по Минску и Беларуси.`
+      : `В каталоге Технобар можно выбрать ${lower} и оформить рассрочку в Минске: цены в BYN, доставка по Беларуси, без переплат в рамках акций.`);
 
   const keywords = [
+    ...(staticSeo?.extraKeywords || []),
     `купить ${lower} в рассрочку`,
     `купить ${lower} в минске`,
-    `купить ${lower}`,
     `${lower} в рассрочку минск`,
     name,
-    ...SEO_INSTALLMENT_PHRASES.slice(0, 8),
-    'интернет-магазин техники минск',
+    ...SEO_INSTALLMENT_PHRASES.slice(0, 6),
   ];
 
   return { title, description, introParagraph, keywords };
@@ -162,6 +201,75 @@ export function getCategoryCitabilityBlock(category) {
 export function getCategoryCitabilityQuestion(category) {
   const name = (category?.name && String(category.name).trim()) || 'технику';
   return `Как купить ${name.toLowerCase()} в рассрочку в Минске?`;
+}
+
+const CATEGORY_TERMS_PARAGRAPH =
+  'Заявку оставляют на сайте: менеджер перезванивает обычно за 15–30 минут в рабочее время. Срок — до 12 месяцев, первоначальный взнос от 10%, в отдельных акциях первый платёж не нужен. По акциям и партнёрским программам нет переплат и скрытых комиссий. Чаще всего достаточно паспорта гражданина Республики Беларусь. Доставка по Минску — в день заказа, по Беларуси — за 1–3 рабочих дня. Подробные условия собраны на странице «Рассрочка».';
+
+/** Visible category copy, about 100–200 words, only from catalog text and /installment. */
+export function getCategoryArticleParagraphs(category) {
+  const seo = getCategorySeoCopy(category);
+  const paragraphs = [seo.introParagraph].filter(Boolean);
+  const citability = getCategoryCitabilityBlock(category);
+  if (citability && citability !== seo.introParagraph) {
+    paragraphs.push(citability);
+  }
+  const words = paragraphs.join(' ').split(/\s+/).filter(Boolean).length;
+  if (words < 100) {
+    paragraphs.push(CATEGORY_TERMS_PARAGRAPH);
+  }
+  return paragraphs;
+}
+
+/** FAQ answers are copied from the installment page. A bank-card question is not stated there. */
+export function getCategoryFaqItems(category) {
+  const name = (category?.name && String(category.name).trim()) || 'технику';
+  const lower = name.toLocaleLowerCase('ru');
+  const answer = (question) =>
+    INSTALLMENT_FAQ_ITEMS.find((item) => item.q === question)?.a || '';
+
+  return [
+    {
+      q: `Как оформить рассрочку на ${lower}?`,
+      a: answer('Как купить в рассрочку в Texnobar?'),
+    },
+    {
+      q: 'Какие документы нужны для рассрочки?',
+      a: answer('Нужна ли справка о доходах?'),
+    },
+    {
+      q: 'На какой срок оформляется рассрочка?',
+      a: answer('На какой срок доступна рассрочка?'),
+    },
+    {
+      q: 'Есть ли переплата при рассрочке?',
+      a: answer('Есть ли переплаты при покупке в рассрочку?'),
+    },
+  ].filter((item) => item.a);
+}
+
+export function serializeJsonLd(data) {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+export function getProductPageTitle(product) {
+  const name = String(product?.name || 'Товар').trim();
+  const brand = String(product?.specifications?.brand || '').trim();
+  const withBrand =
+    brand && !name.toLocaleLowerCase('ru').includes(brand.toLocaleLowerCase('ru'))
+      ? `${brand} ${name}`
+      : name;
+  return clampMeta(`${withBrand} — в рассрочку в Минске, Технобар`, 70);
+}
+
+export function getProductPageDescription(product) {
+  const name = String(product?.name || 'Товар').trim();
+  const full = Number(product?.totalPrice ?? product?.total_price);
+  const priceBit =
+    Number.isFinite(full) && full > 0 ? ` Цена ${full.toLocaleString('ru-RU')} BYN.` : '';
+  const own = String(product?.description || '').replace(/\s+/g, ' ').trim();
+  const lead = `${name} в рассрочку в Минске и по Беларуси.${priceBit} Без переплат по акциям.`;
+  return clampMeta(own ? `${lead} ${own}` : `${lead} Технобар.`);
 }
 
 /** Build FAQPage JSON-LD from { q, a } items. */
@@ -230,12 +338,12 @@ function buildMerchantReturnPolicy() {
  * Сверяйте shippingRate и сроки с фактическими условиями на сайте / в оформлении заказа.
  * @see https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#offer-shipping-details-properties
  */
-function buildOfferShippingDetails() {
+function buildOfferShippingDetails(shippingRate = 0) {
   return {
     '@type': 'OfferShippingDetails',
     shippingRate: {
       '@type': 'MonetaryAmount',
-      value: 0,
+      value: Number(shippingRate) || 0,
       currency: 'BYN',
     },
     shippingDestination: {
@@ -275,10 +383,12 @@ function absoluteProductImageUrl(product) {
 }
 
 /** Текст description для Product в JSON-LD (страница товара и списки на категориях). */
-function productDescriptionForSchema(product) {
+function productDescriptionForSchema(product, options = {}) {
+  if (options.description) return options.description;
+  const nameIn = options.nameIn || 'Минске';
   return (
     product?.description ||
-    `Купить ${product.name} в Минске с доставкой. Купить в рассрочку — без переплат.`
+    `Купить ${product.name} в ${nameIn} с доставкой. Купить в рассрочку — без переплат.`
   );
 }
 
@@ -294,22 +404,25 @@ function productBrandForSchema(product) {
  * Offer для schema.org Product — поля, которые ожидает Google (иначе «нет offers» в Search Console).
  * @see https://developers.google.com/search/docs/appearance/structured-data/product
  */
-function buildProductOffer(product, productId) {
-  const id = productId ?? product?.id;
-  const productUrl = `${siteUrl}/products/${id}`;
-  const raw = product?.price;
-  const priceNum =
-    raw !== undefined && raw !== null && Number.isFinite(Number(raw))
-      ? Number(raw)
-      : 0;
+function buildProductOffer(product, productId, options = {}) {
+  const pricedProduct = product?.id ? product : { ...product, id: productId };
+  const productUrl = options.url || `${siteUrl}${options.pathPrefix || ''}${productPublicPath(pricedProduct)}`;
+  const fullPrice = Number(product?.totalPrice ?? product?.total_price);
+  const salePrice = Number.isFinite(fullPrice) && fullPrice > 0 ? fullPrice : null;
+  const availability =
+    (product?.availabilityStatus || product?.availability_status) === 'on_order'
+      ? 'https://schema.org/PreOrder'
+      : 'https://schema.org/InStock';
 
   return {
     '@type': 'Offer',
     url: productUrl,
     priceCurrency: 'BYN',
-    price: priceNum,
-    priceValidUntil: priceValidUntilIso(365),
-    availability: 'https://schema.org/InStock',
+    // `price` в каталоге — платёж в месяц. В Offer попадает только полная цена из total_price.
+    ...(salePrice !== null
+      ? { price: salePrice, priceValidUntil: priceValidUntilIso(365) }
+      : {}),
+    availability,
     itemCondition: 'https://schema.org/NewCondition',
     seller: {
       '@type': 'Organization',
@@ -317,19 +430,20 @@ function buildProductOffer(product, productId) {
       url: siteUrl,
     },
     hasMerchantReturnPolicy: buildMerchantReturnPolicy(),
-    shippingDetails: buildOfferShippingDetails(),
+    shippingDetails: buildOfferShippingDetails(options.shippingRate),
   };
 }
 
-/**
- * Fallback aggregate rating for Product rich results.
- * Keeps Product entities eligible even when Google temporarily distrusts Offer parsing.
- */
+/** Rating is included only when the product record actually has rating and review count. */
 function buildProductAggregateRating(product) {
-  const rawReviews = product?.reviewsCount ?? product?.reviewCount ?? 10;
-  const reviewCount = Math.max(1, Number(rawReviews) || 10);
-  const rawRating = product?.ratingValue ?? product?.rating ?? 4.8;
-  const ratingValue = Math.min(5, Math.max(1, Number(rawRating) || 4.8));
+  const rawReviews = product?.reviewsCount ?? product?.reviewCount;
+  const rawRating = product?.ratingValue ?? product?.rating;
+  if (rawReviews === undefined || rawReviews === null || rawRating === undefined || rawRating === null) {
+    return null;
+  }
+  const reviewCount = Math.max(1, Number(rawReviews) || 0);
+  const ratingValue = Math.min(5, Math.max(1, Number(rawRating) || 0));
+  if (!reviewCount || !ratingValue) return null;
 
   return {
     '@type': 'AggregateRating',
@@ -348,7 +462,9 @@ export function getOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Texnobar',
+    alternateName: ['Технобар', 'Баратех', 'bartech'],
     legalName: 'ООО «Баратех»',
+    taxID: '193796252',
     url: siteUrl,
     logo: {
       '@type': 'ImageObject',
@@ -369,68 +485,69 @@ export function getOrganizationSchema() {
 /**
  * Generate LocalBusiness structured data — ключевой элемент для локального SEO по Минску.
  */
-export function getLocalBusinessSchema() {
-  return {
+export function getLocalBusinessSchema(city) {
+  const nameIn = city?.nameIn || 'Минске';
+  const locality = city?.name || 'Минск';
+  const showAddress = city?.publicFields?.address !== false && city?.publicFields?.street !== false;
+  const hasPoint = showAddress && Boolean(city?.streetAddress && String(city.streetAddress).trim().length > 3);
+  const hasGeo = city?.publicFields?.coordinates !== false && Number.isFinite(city?.latitude) && Number.isFinite(city?.longitude);
+  const knownHours = city?.workHours === 'Понедельник–пятница, 9:00–21:00';
+  const schema = {
     '@context': 'https://schema.org',
-    '@type': ['LocalBusiness', 'ElectronicsStore'],
+    '@type': hasPoint ? ['Store', 'ElectronicsStore'] : 'LocalBusiness',
     name: 'Texnobar',
+    alternateName: ['Технобар', 'Баратех', 'bartech'],
     legalName: 'ООО «Баратех»',
-    url: siteUrl,
+    taxID: '193796252',
+    url: city?.slug && city.slug !== 'minsk' ? `${siteUrl}/${city.slug}` : siteUrl,
     logo: `${siteUrl}/logo_techno_bar.svg`,
     image: `${siteUrl}/logo_techno_bar.svg`,
-    description:
-      'Интернет-магазин техники в Минске. Купить в рассрочку телефоны, ноутбуки, телевизоры и бытовую технику без переплат. Доставка по Минску и всей Беларуси.',
-    address: {
+    description: `Интернет-магазин техники в ${nameIn}. Рассрочка, каталог и цены на technobar.by.`,
+    areaServed: [
+      { '@type': 'City', name: locality },
+      ...(city?.regionName ? [{ '@type': 'AdministrativeArea', name: city.regionName }] : []),
+      { '@type': 'Country', name: 'Беларусь' },
+    ],
+    currenciesAccepted: 'BYN',
+    sameAs: getBusinessSameAs(),
+  };
+
+  if (hasPoint) {
+    schema.address = {
       '@type': 'PostalAddress',
-      ...BUSINESS_ADDRESS,
-    },
-    geo: {
+      streetAddress: city.streetAddress,
+      addressLocality: locality,
+      ...(city.postalCode && city?.publicFields?.postal !== false ? { postalCode: city.postalCode } : {}),
+      addressCountry: 'BY',
+    };
+  }
+  if (hasGeo) {
+    schema.geo = {
       '@type': 'GeoCoordinates',
-      latitude: 53.9085,
-      longitude: 27.5685,
-    },
-    telephone: BUSINESS_PHONE,
-    email: BUSINESS_EMAIL,
-    openingHoursSpecification: [
+      latitude: city.latitude,
+      longitude: city.longitude,
+    };
+  }
+  if (city?.phoneTel) schema.telephone = city.phoneTel;
+  if (city?.email) schema.email = city.email;
+  if (knownHours) {
+    schema.openingHoursSpecification = [
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         opens: '09:00',
         closes: '21:00',
       },
-    ],
-    priceRange: '$$',
-    currenciesAccepted: 'BYN',
-    paymentAccepted: 'Наличные, Банковская карта, Рассрочка',
-    areaServed: [
-      { '@type': 'City', name: 'Минск' },
-      { '@type': 'Country', name: 'Беларусь' },
-    ],
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Каталог техники в рассрочку',
-      itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Смартфоны в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ноутбуки в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Телевизоры в рассрочку' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Бытовая техника в рассрочку' } },
-      ],
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '10',
-      bestRating: '5',
-      worstRating: '1',
-    },
-    sameAs: getBusinessSameAs(),
-  };
+    ];
+  }
+
+  return schema;
 }
 
 /**
  * Generate Product structured data
  */
-export function getProductSchema(product) {
+export function getProductSchema(product, options = {}) {
   if (!product) return null;
 
   const images =
@@ -458,13 +575,17 @@ export function getProductSchema(product) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description: productDescriptionForSchema(product),
+    description: options.description || productDescriptionForSchema(product, options),
     image: imageUrls,
     sku: String(product.id),
     brand: productBrandForSchema(product),
-    offers: buildProductOffer(product, product.id),
-    aggregateRating: buildProductAggregateRating(product),
+    offers: buildProductOffer(product, product.id, options),
   };
+
+  const aggregateRating = buildProductAggregateRating(product);
+  if (aggregateRating) {
+    schema.aggregateRating = aggregateRating;
+  }
 
   // Добавляем спецификации если они есть
   if (product.specifications) {
@@ -531,7 +652,7 @@ export function getWebSiteSchema() {
 /**
  * Generate CollectionPage structured data for categories
  */
-export function getCollectionPageSchema(category, products, numberOfItems) {
+export function getCollectionPageSchema(category, products, numberOfItems, options = {}) {
   if (!category) return null;
 
   const count =
@@ -547,26 +668,29 @@ export function getCollectionPageSchema(category, products, numberOfItems) {
     '@type': 'CollectionPage',
     name: category.name,
     description: desc,
-    url: `${siteUrl}/categories/${category.id}`,
+    url: `${siteUrl}${options.pathPrefix || ''}${categoryPublicPath(category.id)}`,
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: count,
       itemListElement:
-        products?.slice(0, 10).map((product, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          item: {
-            '@type': 'Product',
-            name: product.name,
-            description: productDescriptionForSchema(product),
-            sku: String(product.id),
-            brand: productBrandForSchema(product),
-            url: `${siteUrl}/products/${product.id}`,
-            image: absoluteProductImageUrl(product),
-            offers: buildProductOffer(product, product.id),
-            aggregateRating: buildProductAggregateRating(product),
-          },
-        })) || [],
+        products?.slice(0, 10).map((product, index) => {
+          const aggregateRating = buildProductAggregateRating(product);
+          return {
+            '@type': 'ListItem',
+            position: index + 1,
+            item: {
+              '@type': 'Product',
+              name: product.name,
+              description: productDescriptionForSchema(product, options),
+              sku: String(product.id),
+              brand: productBrandForSchema(product),
+              url: `${siteUrl}${options.pathPrefix || ''}${productPublicPath(product)}`,
+              image: absoluteProductImageUrl(product),
+              offers: buildProductOffer(product, product.id, options),
+              ...(aggregateRating ? { aggregateRating } : {}),
+            },
+          };
+        }) || [],
     },
   };
 }
@@ -585,7 +709,7 @@ export function getHomeFaqSchema() {
 /**
  * Standalone ItemList for category pages (complements CollectionPage schema).
  */
-export function getCategoryItemListSchema(category, products, numberOfItems) {
+export function getCategoryItemListSchema(category, products, numberOfItems, options = {}) {
   if (!category) return null;
 
   const count =
@@ -602,7 +726,7 @@ export function getCategoryItemListSchema(category, products, numberOfItems) {
       '@type': 'ListItem',
       position: index + 1,
       name: product.name,
-      url: `${siteUrl}/products/${product.id}`,
+      url: `${siteUrl}${options.pathPrefix || ''}${productPublicPath(product)}`,
     })),
   };
 }

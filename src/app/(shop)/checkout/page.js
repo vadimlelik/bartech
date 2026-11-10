@@ -20,12 +20,21 @@ import {
   Step,
   StepLabel,
   Alert,
+  MenuItem,
 } from '@mui/material';
 import Image from 'next/image';
 import { useCartStore } from '@/entities/cart';
+import { useCity } from '@/entities/city';
+import { deliveryFee, isLocalityServed, minOrderShortfall, orderGoodsTotal } from '@/entities/city/lib/delivery-rules';
+import { useLocality } from '@/entities/locality/ui/LocalityProvider';
+import { formatLocalityLabel } from '@/entities/locality/lib/selection';
+import { resolveServiceCity } from '@/entities/locality/lib/service-city';
+import { showCityField } from '@/entities/city/lib/city-content';
+import { trackCityEvent } from '@/shared/ui/analytics/CityAnalytics';
 import { useRouter } from 'next/navigation';
 
 import { VALIDATION, CURRENCY } from '@/shared/config/constants';
+import { shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
 
 const PHONE_REGEX = VALIDATION.PHONE_SIMPLE_REGEX;
 const EMAIL_REGEX = VALIDATION.EMAIL_REGEX;
@@ -33,7 +42,11 @@ const NAME_REGEX = VALIDATION.NAME_REGEX;
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cartItems, getCartTotal, clearCart } = useCartStore();
+  const { cartItems, getCartTotal, clearCart, citySlug } = useCartStore();
+  const { commerceCity, cities } = useCity();
+  const { locality } = useLocality();
+  const catalogCity = cities.find((city) => city.slug === (citySlug || commerceCity?.slug)) || commerceCity;
+  const orderCity = resolveServiceCity(locality, cities, catalogCity);
   const [activeStep, setActiveStep] = useState(0);
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +56,8 @@ export default function CheckoutPage() {
     handleSubmit,
     formState: { errors, isValid },
     getValues,
+    setValue,
+    watch,
     trigger,
   } = useForm({
     defaultValues: {
@@ -53,6 +68,9 @@ export default function CheckoutPage() {
       address: '',
       city: '',
       zipCode: '',
+      deliveryMethodId: '',
+      pickupPointId: '',
+      paymentMethodId: '',
     },
     mode: 'onChange',
   });
@@ -62,6 +80,28 @@ export default function CheckoutPage() {
       router.push('/');
     }
   }, [cartItems, router]);
+
+  useEffect(() => {
+    if (!orderCity?.slug) return;
+    setValue('city', orderCity.name);
+    trackCityEvent('begin_checkout', {
+      city: orderCity.slug,
+      value: orderGoodsTotal(cartItems),
+      currency: 'BYN',
+    });
+    // Город заказа фиксируется при входе на страницу и при смене города, а не при правке корзины.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderCity?.slug, setValue]);
+
+  const deliveryMethodId = watch('deliveryMethodId');
+  const selectedDelivery = orderCity?.deliveryMethods?.find((method) => method.id === deliveryMethodId);
+  const goodsTotal = orderGoodsTotal(cartItems);
+  const shippingFee = deliveryFee(
+    selectedDelivery,
+    goodsTotal,
+    showCityField(orderCity, 'freeDelivery') ? orderCity?.freeDeliveryFrom : null,
+  );
+  const shortfall = showCityField(orderCity, 'minOrder') ? minOrderShortfall(orderCity, goodsTotal) : 0;
 
   const steps = ['Корзина', 'Данные доставки', 'Подтверждение'];
 
@@ -87,6 +127,7 @@ export default function CheckoutPage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        citySlug: orderData.citySlug,
         FIELDS: {
           TITLE: `Заказ от ${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
           NAME: `${orderData.customerInfo.firstName} ${orderData.customerInfo.lastName}`,
@@ -105,14 +146,21 @@ export default function CheckoutPage() {
           COMMENTS: [
             `Email: ${orderData.customerInfo.email}`,
             `Адрес: ${orderData.customerInfo.address}`,
-            `Город: ${orderData.customerInfo.city}`,
+            `Город заказа: ${orderData.cityName} (${orderData.citySlug})`,
+            `Населённый пункт: ${orderData.customerInfo.city}`,
+            orderData.selectedLocality ? `Выбранный населённый пункт: ${orderData.selectedLocality}` : '',
+            `Получение: ${orderData.deliveryTitle || 'не выбрано'}`,
+            orderData.pickupAddress ? `Пункт выдачи: ${orderData.pickupAddress}` : '',
+            `Оплата: ${orderData.paymentTitle || 'не выбрано'}`,
+            `Доставка: ${orderData.shippingFee} BYN`,
             `Индекс: ${orderData.customerInfo.zipCode}`,
             'Товары:',
             ...orderData.items.map(
               (item) => `${item.name} - ${item.quantity} шт. x ${item.price} BYN`,
             ),
             `Итого: ${orderData.totalPrice} BYN`,
-          ].join('\n'),
+            `Сумма товаров: ${orderData.goodsTotal} BYN`,
+          ].filter(Boolean).join('\n'),
         },
       }),
     });
@@ -136,9 +184,35 @@ export default function CheckoutPage() {
     try {
       setSubmitError('');
       setIsSubmitting(true);
+      if (shortfall > 0) {
+        setSubmitError(`Минимальная сумма заказа для ${orderCity?.name || 'города'} — ${orderCity.minOrderAmount} BYN. Не хватает ${shortfall} BYN.`);
+        return;
+      }
+      if (!selectedDelivery) {
+        setSubmitError('Выберите способ получения');
+        return;
+      }
+      if (selectedDelivery.code === 'pickup' && !data.pickupPointId) {
+        setSubmitError('Выберите пункт выдачи');
+        return;
+      }
+      if (!isLocalityServed(orderCity, data.city)) {
+        setSubmitError(`Адрес должен относиться к городу ${orderCity?.name} или к населённым пунктам, которые указаны для доставки этого города.`);
+        return;
+      }
+      const pickup = orderCity?.pickupPoints?.find((point) => point.id === data.pickupPointId);
+      const payment = orderCity?.paymentMethods?.find((method) => method.id === data.paymentMethodId);
       const orderData = {
         items: cartItems,
         totalPrice: cartTotal,
+        goodsTotal,
+        shippingFee,
+        citySlug: orderCity?.slug || 'minsk',
+        cityName: orderCity?.name || 'Минск',
+        selectedLocality: locality?.id ? formatLocalityLabel(locality) : '',
+        deliveryTitle: selectedDelivery?.title,
+        pickupAddress: pickup?.address || '',
+        paymentTitle: payment?.title || '',
         customerInfo: data,
       };
 
@@ -150,7 +224,7 @@ export default function CheckoutPage() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [cartItems, cartTotal, clearCart, router]);
+  }, [cartItems, cartTotal, clearCart, goodsTotal, locality, orderCity, router, selectedDelivery, shippingFee, shortfall]);
 
   const renderCartItems = () => (
     <List>
@@ -267,17 +341,67 @@ export default function CheckoutPage() {
           <TextField
             required
             fullWidth
-            label="Город"
+            label="Населённый пункт"
             error={!!errors.city}
-            helperText={errors.city?.message}
+            helperText={errors.city?.message || `Доставка: ${orderCity?.name || 'Минск'}${showCityField(orderCity, 'localities') && orderCity?.deliveryLocalities?.length ? `, также ${orderCity.deliveryLocalities.join(', ')}` : ''}`}
             {...register('city', {
-              required: 'Город обязателен',
-              minLength: {
-                value: 2,
-                message: 'Название города должно быть не менее 2 символов',
-              },
+              required: 'Укажите населённый пункт',
+              validate: (value) =>
+                isLocalityServed(orderCity, value) ||
+                `Пункт должен относиться к ${orderCity?.name || 'выбранному городу'} или его зоне доставки`,
             })}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            required
+            fullWidth
+            label="Способ получения"
+            defaultValue=""
+            error={!!errors.deliveryMethodId}
+            helperText={errors.deliveryMethodId?.message || (selectedDelivery ? `Стоимость доставки: ${shippingFee} BYN` : '')}
+            {...register('deliveryMethodId', { required: 'Выберите способ получения' })}
+          >
+            {(orderCity?.deliveryMethods || []).map((method) => (
+              <MenuItem key={method.id} value={method.id}>
+                {method.title} — {method.eta}{method.price ? `, ${method.price} BYN` : ''}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        {selectedDelivery?.code === 'pickup' && (
+          <Grid item xs={12}>
+            <TextField
+              select
+              required
+              fullWidth
+              label="Пункт выдачи"
+              defaultValue=""
+              {...register('pickupPointId', { required: 'Выберите пункт выдачи' })}
+            >
+              {(orderCity?.pickupPoints || []).map((point) => (
+                <MenuItem key={point.id} value={point.id}>
+                  {point.title}: {point.address}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            label="Способ оплаты"
+            defaultValue=""
+            {...register('paymentMethodId')}
+          >
+            {(orderCity?.paymentMethods || []).map((method) => (
+              <MenuItem key={method.id} value={method.id}>
+                {method.title}
+              </MenuItem>
+            ))}
+          </TextField>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -321,6 +445,10 @@ export default function CheckoutPage() {
           <Typography>
             {formData.address}, {formData.city}, {formData.zipCode}
           </Typography>
+          <Typography>
+            {orderCity?.name}. {selectedDelivery?.title || 'Способ получения не выбран'}
+            {shippingFee ? `, доставка ${shippingFee} BYN` : ''}
+          </Typography>
         </Paper>
         <Paper variant="outlined" sx={{ p: 2 }}>
           <Typography variant="subtitle1" gutterBottom>
@@ -362,8 +490,8 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
+      <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
+        <Typography component="h1" sx={shopTitleSx}>
           Оформление заказа
         </Typography>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
@@ -374,6 +502,11 @@ export default function CheckoutPage() {
           ))}
         </Stepper>
         <Paper sx={{ p: 3 }}>
+          {shortfall > 0 && (
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              Минимальная сумма заказа для {orderCity?.name} — {orderCity.minOrderAmount} BYN. Сейчас {goodsTotal} BYN.
+            </Alert>
+          )}
           {submitError && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {submitError}

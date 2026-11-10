@@ -1,127 +1,82 @@
 'use client';
 
-import React, { useState } from 'react';
-import styles from './footer.module.css';
+import { useState } from 'react';
 import Link from 'next/link';
 import CreditCardsModal from '@/features/credit-cards/ui/CreditCardsModal';
+import styles from './footer.module.css';
+
+const DOCUMENTS = [
+  { href: 'https://technobar.by/pk', label: 'Политика конфиденциальности' },
+  { href: 'https://technobar.by/po', label: 'Публичная оферта' },
+  { href: 'https://technobar.by/guarantee', label: 'Возврат товара' },
+  { href: 'https://technobar.by/sales', label: 'Акции' },
+  {
+    href: 'https://drive.google.com/drive/folders/1FGlmNEqbBpMffkOpQqsT53d5G3cAMhU5',
+    label: 'Сертификаты',
+  },
+];
+
+const BANKS = [
+  'ОАО «Банк Дабрабыт»',
+  'ЗАО «Сбер Банк»',
+  'ОАО «Паритетбанк»',
+  'ОАО «АСБ Беларусбанк»',
+];
 
 const Footer = () => {
   const [creditModalOpen, setCreditModalOpen] = useState(false);
 
-  const handleCreditClick = () => {
-    setCreditModalOpen(true);
-  };
-
   return (
     <>
       <footer className={styles.footer}>
-        <div className={styles.container}>
-          <div className={styles.text}>
+        <div className={styles.wrap}>
+          <div className={styles.brand}>
             <p className={styles.companyTitle}>ООО «Баратех»</p>
-            <p className={styles.companyDetail}>УНП: 193796252</p>
-            <p className={styles.companyDetail}>
-              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д.
-              43, пом. 804
+            <p className={styles.muted}>УНП: 193796252</p>
+            <p className={styles.muted}>
+              Юридический и почтовый адрес: 220013, г. Минск, ул. Сурганова, д. 43, пом. 804
             </p>
-            <a className={styles.companyPhone} href="tel:+375447418423">
+            <a className={styles.phone} href="tel:+375447418423">
               +375 44 741-84-23
             </a>
           </div>
-          <div className={styles.content}>
-            <div className={styles.offer}>
-              <ul className={styles['footer__offer__list']}>
-                <li className={styles['footer__offer__item']}>
-                  <span className={styles.bold}>Время работы - </span> с 9:00 до
-                  20:00 без выходных
-                </li>
-                <li className={styles['footer__offer__item']}>
-                  Доставка бесплатная по РБ от 500 руб. суммы заказа.
-                </li>
-                <li className={styles['footer__offer__item']}>
-                  <span className={styles.bold}>Сроки доставки:</span> по г
-                  .Минску 1-2 рабочих дня. По Беларуси (Кроме Минска) 3-5
-                  рабочих дней.
-                </li>
-              </ul>
-            </div>
-            <div className={styles.offer}>
-              <ul className={styles['footer__offer__list']}>
-                <li className={styles['footer__offer__item']}>
-                  <span className={styles.bold}>Условия рассрочки</span> - Банки
-                  партнеры:
-                  <ul className={styles.bankList}>
-                    <li>ОАО &quot;Банк Дабрабыт&quot;</li>
-                    <li>ЗАО &quot;Сбер Банк&quot;</li>
-                    <li>ОАО &quot;Паритетбанк&quot;</li>
-                    <li>ОАО &quot;АСБ Беларусбанк&quot;</li>
-                  </ul>
-                </li>
-                <li className={styles['footer__offer__item']}>
-                  Рассрочка предоставляеться на сроки 3 месяца, 6 месяцев, 12
-                  месяцев, 18 месяцев.{' '}
-                </li>
-                <li className={styles['footer__offer__item']}>
-                  <button
-                    type="button"
-                    onClick={handleCreditClick}
-                    className={`${styles['footer__offer__link']} ${styles.creditButton}`}
-                  >
-                    Кредитные предложения
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div className={styles.offer}>
+          <div className={styles.columns}>
+            <section>
+              <h2 className={styles.columnTitle}>Доставка</h2>
               <ul>
-                <li>
-                  <Link
-                    className={styles['footer__offer__link']}
-                    href={'https://technobar.by/pk'}
-                    target="_blank"
-                  >
-                    Политика конфиденциальности
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    target="_blank"
-                    className={styles['footer__offer__link']}
-                    href={'https://technobar.by/po'}
-                  >
-                    Публичная оферта
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    target="_blank"
-                    href={'https://technobar.by/guarantee'}
-                    className={styles['footer__offer__link']}
-                  >
-                    Возврат товара
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={styles['footer__offer__link']}
-                    href={'https://technobar.by/sales'}
-                    target="_blank"
-                  >
-                    Акции
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={styles['footer__offer__link']}
-                    href={
-                      'https://drive.google.com/drive/folders/1FGlmNEqbBpMffkOpQqsT53d5G3cAMhU5'
-                    }
-                    target="_blank"
-                  >
-                    Сертификаты
-                  </Link>
-                </li>
+                <li>Ежедневно с 9:00 до 20:00, без выходных</li>
+                <li>Бесплатно по Беларуси от 500 руб. суммы заказа</li>
+                <li>Минск — 1–2 рабочих дня. По стране, кроме Минска, — 3–5 рабочих дней</li>
               </ul>
-            </div>
+            </section>
+            <section>
+              <h2 className={styles.columnTitle}>Рассрочка</h2>
+              <p className={styles.note}>Сроки: 3, 6, 12 и 18 месяцев.</p>
+              <ul className={styles.banks}>
+                {BANKS.map((bank) => (
+                  <li key={bank}>{bank}</li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className={styles.creditButton}
+                onClick={() => setCreditModalOpen(true)}
+              >
+                Кредитные предложения
+              </button>
+            </section>
+            <nav aria-label="Документы">
+              <h2 className={styles.columnTitle}>Документы</h2>
+              <ul className={styles.links}>
+                {DOCUMENTS.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} target="_blank" rel="noopener noreferrer">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
       </footer>

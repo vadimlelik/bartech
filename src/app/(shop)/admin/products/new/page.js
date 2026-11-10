@@ -208,7 +208,7 @@ function NewProductPageContent() {
         >
           Назад к списку товаров
         </Button>
-        <Typography variant="h4" component="h1">
+        <Typography component="h1" sx={{ fontWeight: 800, fontSize: { xs: '1.75rem', md: '2.25rem' }, letterSpacing: '-0.02em', mb: 2 }}>
           Добавить товар
         </Typography>
       </Box>

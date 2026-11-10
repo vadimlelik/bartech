@@ -13,6 +13,7 @@ import {
   Paper,
 } from '@mui/material';
 import { useAuthStore } from '@/features/auth';
+import { shopSurfaceSx, shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -46,9 +47,9 @@ export default function LoginPage() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center">
+    <Container maxWidth="sm" sx={{ py: { xs: 4, md: 8 } }}>
+      <Paper elevation={0} sx={{ p: { xs: 2.5, md: 4 }, ...shopSurfaceSx }}>
+        <Typography component="h1" sx={shopTitleSx}>
           Вход
         </Typography>
         

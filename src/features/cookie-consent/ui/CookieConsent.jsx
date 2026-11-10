@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const CookieBanner = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: var(--shop-dock, 0px);
   left: 0;
   right: 0;
   background: #1a1a1a;

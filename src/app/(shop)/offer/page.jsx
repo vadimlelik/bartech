@@ -1,3 +1,5 @@
+import { Typography, Box } from '@mui/material';
+import { ShopPage, ShopSurface } from '@/shared/ui/shop-page/ShopPage';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 
 export const metadata = {
@@ -12,26 +14,36 @@ export const metadata = {
 
 export default function Offer() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Публичная оферта</h1>
-      <div className="prose max-w-none">
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">1. Общие положения</h2>
-          <p>
+    <ShopPage
+      showInfoNav
+      title="Публичная оферта"
+      breadcrumbs={[
+        { href: '/', label: 'Главная' },
+        { label: 'Публичная оферта' },
+      ]}
+    >
+      <ShopSurface>
+        <Box component="section" sx={{ mb: 4 }}>
+          <Typography component="h2" sx={{ fontWeight: 800, fontSize: '1.25rem', mb: 1.5 }}>
+            1. Общие положения
+          </Typography>
+          <Typography>
             Настоящий документ является публичной офертой и содержит все
             существенные условия договора купли-продажи товаров через
             интернет-магазин.
-          </p>
-        </section>
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">2. Предмет договора</h2>
-          <p>
+          </Typography>
+        </Box>
+        <Box component="section">
+          <Typography component="h2" sx={{ fontWeight: 800, fontSize: '1.25rem', mb: 1.5 }}>
+            2. Предмет договора
+          </Typography>
+          <Typography>
             Продавец обязуется передать в собственность Покупателю товар, а
             Покупатель обязуется оплатить и принять товар на условиях настоящего
             Договора.
-          </p>
-        </section>
-      </div>
-    </div>
+          </Typography>
+        </Box>
+      </ShopSurface>
+    </ShopPage>
   );
 }

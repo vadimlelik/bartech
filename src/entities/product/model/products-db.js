@@ -250,7 +250,7 @@ function mapRawProductRow(row) {
   });
 }
 
-function buildProductsWhereSql({ categoryId, search, filters, ids }) {
+function buildProductsWhereSql({ categoryId, search, filters, ids, availability }) {
   const parts = [];
   if (ids && ids.length > 0) {
     const numericIds = ids.map(Number).filter((n) => !Number.isNaN(n));
@@ -274,6 +274,9 @@ function buildProductsWhereSql({ categoryId, search, filters, ids }) {
     const term = `%${escaped}%`;
     parts.push(Prisma.sql`name ILIKE ${term} ESCAPE '\\'`);
   }
+  if (availability === 'in_stock') {
+    parts.push(Prisma.sql`availability_status = 'in_stock'`);
+  }
   for (const field of SPEC_FILTER_FIELDS) {
     const value = filters?.[field];
     if (value) {
@@ -291,9 +294,12 @@ function buildProductsWhereSql({ categoryId, search, filters, ids }) {
   return { sql: Prisma.join(parts, ' AND '), emptyIds: false };
 }
 
-function orderBySql(sortBy, sort) {
+function orderBySql(sortBy, sort, prioritizeInStock) {
   const col = sortBy === 'price' ? 'price' : 'name';
   const dir = sort === 'desc' ? 'DESC' : 'ASC';
+  if (prioritizeInStock) {
+    return Prisma.sql`ORDER BY CASE WHEN availability_status = 'in_stock' THEN 0 ELSE 1 END, ${Prisma.raw(col)} ${Prisma.raw(dir)}`;
+  }
   return Prisma.sql`ORDER BY ${Prisma.raw(col)} ${Prisma.raw(dir)}`;
 }
 
@@ -336,6 +342,8 @@ export async function getProducts({
   limit = 12,
   ids = [],
   filters = {},
+  availability = '',
+  prioritizeInStock = false,
 } = {}) {
   const safePage = Math.max(1, Number(page) || 1);
   const safeLimit = Math.max(1, Number(limit) || 12);
@@ -346,6 +354,7 @@ export async function getProducts({
     search,
     filters,
     ids,
+    availability,
   });
 
   if (emptyIds) {
@@ -361,7 +370,7 @@ export async function getProducts({
     };
   }
 
-  const orderFrag = orderBySql(sortBy, sort);
+  const orderFrag = orderBySql(sortBy, sort, prioritizeInStock || Boolean(search && String(search).trim()));
 
   const [countRows, specRows, productRows] = await Promise.all([
     prisma.$queryRaw`

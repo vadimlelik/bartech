@@ -1,18 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
+import { categoryPublicPath } from '@/shared/lib/category-path';
 import Image from 'next/image';
 import { IoIosArrowForward } from 'react-icons/io';
 import styles from './categoriesItem.module.css';
 
 const CategoriesItem = ({ id, name, image, imageUrl }) => {
   const imageSrc = image || imageUrl;
-  
+
   if (!id || id === '') {
     return null;
   }
-  
+
   return (
-    <Link key={id} href={`/categories/${id}`} className={styles.categoriesItem}>
+    <Link key={id} href={categoryPublicPath(id)} className={styles.categoriesItem}>
       <span className={styles.categoriesName}>
         {name}
         <IoIosArrowForward className={styles.categoriesIcon} />

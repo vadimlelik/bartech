@@ -4,6 +4,13 @@ import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 export const DISALLOWED_PATHS = [
   '/api/',
   '/admin/',
+  '/auth/',
+  '/cart',
+  '/checkout',
+  '/search',
+  '/favorites',
+  '/compare',
+  '/pass',
 ];
 
 /**
@@ -43,7 +50,8 @@ const YANDEX_CLEAN_PARAM_KEYS = [
 ];
 
 function formatDisallowLines(paths) {
-  return paths.map((path) => `Disallow: ${path}`).join('\n');
+  const filters = YANDEX_CLEAN_PARAM_KEYS.map((key) => `Disallow: /*?${key}=`);
+  return [...paths.map((path) => `Disallow: ${path}`), ...filters].join('\n');
 }
 
 /**

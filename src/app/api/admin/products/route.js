@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { addProduct, listProductsForAdmin } from '@/entities/product/model/products-db';
 import { requireAdmin } from '@/shared/lib/auth-helpers';
+import { productPublicPath } from '@/shared/lib/product-path';
 
 export async function GET(request) {
   try {
@@ -57,8 +58,9 @@ export async function POST(request) {
     if (result.success) {
       revalidateTag('products');
       revalidatePath('/admin');
+      revalidatePath('/products/[id]', 'page');
       if (result.product?.id) {
-        revalidatePath(`/products/${result.product.id}`);
+        revalidatePath(productPublicPath(result.product));
       }
 
       return NextResponse.json(

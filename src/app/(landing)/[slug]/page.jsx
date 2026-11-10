@@ -4,9 +4,18 @@ import LandingPageTemplate from '@/widgets/landing-page/ui/LandingPageTemplate';
 import { getAllLandings, getLandingBySlug } from '@/entities/landing/model/landings-db';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { getLandingSubdomainUrl, mergeLandingMetadata } from '@/shared/lib/landing-seo';
+import { landingJsonLd, landingShareImage } from '@/widgets/landing-page/lib/schema';
 
 function isValidLandingSlug(slug) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''));
+}
+
+function clipMeta(value, max) {
+  const clean = String(value || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > 40 ? cut.slice(0, space) : cut).trim()}…`;
 }
 
 // Кэш по каждому slug отдельно (ключ БЕЗ slug ломал все URL: возвращался первый закэшированный результат).
@@ -66,9 +75,11 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const title = landing.title || 'Лендинг';
-    const description = landing.description || landing.title || 'Лендинг';
+    const headline = landing.main_title || landing.title || 'Лендинг';
+    const description = clipMeta(landing.description || headline, 170);
     const url = getLandingSubdomainUrl(slug);
+    const image = landingShareImage(landing.main_image, url);
+    const title = /texnobar/i.test(headline) ? headline : `${headline} | Texnobar`;
 
     return mergeLandingMetadata(slug, {
       title,
@@ -77,15 +88,18 @@ export async function generateMetadata({ params }) {
         canonical: url,
       },
       openGraph: {
-        title,
+        title: headline,
         description,
         url,
+        siteName: 'Texnobar',
         type: 'website',
+        images: image ? [{ url: image, alt: headline }] : undefined,
       },
       twitter: {
-        card: 'summary_large_image',
-        title,
+        card: image ? 'summary_large_image' : 'summary',
+        title: headline,
         description,
+        images: image ? [image] : undefined,
       },
     });
   } catch (error) {
@@ -141,7 +155,15 @@ export default async function LandingPage({ params }) {
       notFound();
     }
 
-    return <LandingPageTemplate landing={landing} />;
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: landingJsonLd(landing, slug) }}
+        />
+        <LandingPageTemplate landing={landing} />
+      </>
+    );
   } catch (error) {
     console.error('Error loading landing:', error);
     notFound();

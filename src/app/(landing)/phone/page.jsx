@@ -2,10 +2,13 @@ import PhonePageClient from './PhonePageClient';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
 import { mergeLandingMetadata } from '@/shared/lib/landing-seo';
 
+const phoneTitle = 'Телефоны в рассрочку в Минске — купить в Технобар';
+const phoneDescription =
+  'Телефоны и смартфоны в рассрочку в Минске: Samsung, Apple, Xiaomi. До 12 месяцев, без переплат по акциям. Технобар.';
+
 export const metadata = mergeLandingMetadata('phone', {
-  title: 'Купить телефон в рассрочку в Минске — Texnobar',
-  description:
-    'Купить смартфон в рассрочку в Минске без переплат. Samsung, Apple, Xiaomi, Huawei — широкий выбор. Оформление онлайн, доставка по Минску в день заказа. Рассрочка до 12 месяцев.',
+  title: { absolute: phoneTitle },
+  description: phoneDescription,
   keywords: [
     'купить телефон в рассрочку минск',
     'смартфон в рассрочку',
@@ -16,11 +19,12 @@ export const metadata = mergeLandingMetadata('phone', {
     'рассрочка на телефон минск',
   ],
   openGraph: {
-    title: 'Купить телефон в рассрочку в Минске — Texnobar',
-    description:
-      'Samsung, Apple, Xiaomi в рассрочку без переплат. Доставка по Минску в день заказа.',
+    title: phoneTitle,
+    description: phoneDescription,
     url: `${siteUrl}/phone`,
     type: 'website',
+    locale: 'ru_BY',
+    siteName: 'Технобар',
   },
   alternates: {
     canonical: `${siteUrl}/phone`,

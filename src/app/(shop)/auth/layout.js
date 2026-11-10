@@ -4,7 +4,7 @@ export const metadata = {
     'Авторизация и регистрация пользователей интернет-магазина Texnobar.',
   robots: {
     index: false,
-    follow: false,
+    follow: true,
   },
 };
 

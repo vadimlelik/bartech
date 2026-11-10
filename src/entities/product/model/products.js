@@ -69,6 +69,8 @@ export async function getProducts({
   limit = 12,
   ids = [],
   filters = {},
+  availability = '',
+  prioritizeInStock = false,
 } = {}) {
   try {
     if (useDb) {
@@ -82,6 +84,8 @@ export async function getProducts({
           limit,
           ids,
           filters,
+          availability,
+          prioritizeInStock,
         });
       } catch (error) {
         logDbFallbackUnlessBuildWithoutDb(

@@ -19,6 +19,7 @@ function normalizeLanding(landing) {
     survey_text: landing.surveyText,
     colors: landing.colors || {},
     styles: landing.styles || {},
+    content: landing.content && typeof landing.content === 'object' ? landing.content : {},
     is_active: landing.isActive,
     created_at: landing.createdAt,
     updated_at: landing.updatedAt,
@@ -47,6 +48,15 @@ export async function getLandingById(id) {
     where: { id: Number(id) },
   });
   return normalizeLanding(landing);
+}
+
+export async function findLandingIdBySlug(slug) {
+  if (!slug) return null;
+  const row = await prisma.landing.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+  return row ? row.id : null;
 }
 
 function landingCreateData(landingData) {

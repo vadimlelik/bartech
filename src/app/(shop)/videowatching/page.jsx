@@ -3,6 +3,7 @@
 import React from 'react';
 
 import PdfPreview from '@/shared/ui/pdf-preview/PdfPreview';
+import { ShopPage } from '@/shared/ui/shop-page/ShopPage';
 
 import styles from './pkPage.module.css';
 
@@ -10,9 +11,13 @@ const PDF_PATH = '/videowathcing/videowatching.pdf';
 
 const PK = () => {
   return (
-    <div className={styles.container}>
-      <h1>Правила видеонаблюдения в помещении</h1>
-
+    <ShopPage
+      title="Правила видеонаблюдения в помещении"
+      breadcrumbs={[
+        { href: '/', label: 'Главная' },
+        { label: 'Видеонаблюдение' },
+      ]}
+    >
       <PdfPreview
         pdfPath={PDF_PATH}
         title="Правила видеонаблюдения в помещении (PDF)"
@@ -22,7 +27,7 @@ const PK = () => {
         frameClassName={styles.pdfFrame}
         iframeClassName={styles.pdfIframe}
       />
-    </div>
+    </ShopPage>
   );
 };
 

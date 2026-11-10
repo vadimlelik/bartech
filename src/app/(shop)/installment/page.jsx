@@ -6,16 +6,18 @@ import {
   INSTALLMENT_CITABILITY_ANSWER,
   buildDefaultOpenGraphImages,
 } from '@/shared/lib/seo';
-import { SeoCitabilityPanel, SeoFaqSection } from '@/shared/ui/seo';
+import { SeoCitabilityPanel, SeoFaqSection, JsonLd, PriorityCategoryLinks } from '@/shared/ui/seo';
 import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+import { getPageCity } from '@/entities/city/model/cities';
 import styles from './page.module.css';
+import InfoNav from '@/shared/ui/info-nav/InfoNav';
 
-const title = 'Купить в рассрочку в Минске — условия Texnobar';
+const title = 'Рассрочка без переплат в Минске — Технобар';
 const description =
-  'Купить в рассрочку телефоны, ноутбуки и технику в интернет-магазине Texnobar: до 12 месяцев, взнос от 10%, без переплат и скрытых комиссий. Оформление онлайн и в магазине.';
+  'Рассрочка на технику в Минске и по Беларуси: до 12 месяцев, взнос от 10%, без переплат по акциям. Технобар.';
 
 export const metadata = {
-  title,
+  title: { absolute: title },
   description,
   keywords: [
     ...SEO_INSTALLMENT_PHRASES,
@@ -31,31 +33,33 @@ export const metadata = {
     description,
     type: 'article',
     url: `${siteUrl}/installment`,
-    siteName: 'Texnobar',
+    siteName: 'Технобар',
+    locale: 'ru_BY',
     images: buildDefaultOpenGraphImages(),
   },
   twitter: {
     card: 'summary_large_image',
     title,
     description,
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: `${siteUrl}/installment`,
   },
 };
 
-export default function Installment() {
+export default async function Installment() {
+  const city = await getPageCity();
+  const bullets = city?.installmentTerms?.bullets || [];
   const faqSchema = getInstallmentFaqSchema();
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema} />
       <div className={styles.container}>
+        <InfoNav />
         <h1 className={styles.h1}>
-          Купить в рассрочку — телефоны и техника в Минске
+          Купить в рассрочку — телефоны и техника в {city?.nameIn || 'Минске'}
         </h1>
         <p className={styles.lead}>
           В Texnobar можно купить в рассрочку смартфоны, ноутбуки, телевизоры и
@@ -73,11 +77,9 @@ export default function Installment() {
         <section className={styles.section}>
           <h2 className={styles.h2}>Условия рассрочки</h2>
           <ul className={styles.bulletList}>
-            <li>Срок рассрочки: до 12 месяцев</li>
-            <li>Первоначальный взнос: от 10% (в акциях — без взноса)</li>
-            <li>Без переплат и скрытых комиссий</li>
-            <li>Одобрение в течение 15–30 минут</li>
-            <li>Достаточно паспорта гражданина Республики Беларусь</li>
+            {bullets.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </section>
 
@@ -86,16 +88,7 @@ export default function Installment() {
           <p className={styles.text}>
             В нашем каталоге доступны в рассрочку:
           </p>
-          <ul className={styles.gridList}>
-            <li>Смартфоны и телефоны</li>
-            <li>Ноутбуки и планшеты</li>
-            <li>Телевизоры Smart TV</li>
-            <li>Персональные компьютеры</li>
-            <li>Электросамокаты</li>
-            <li>Велосипеды</li>
-            <li>Мотоблоки и садовая техника</li>
-            <li>Бытовая электроника</li>
-          </ul>
+          <PriorityCategoryLinks listClassName={styles.gridList} linkClassName={styles.link} />
         </section>
 
         <section className={styles.section}>
@@ -112,7 +105,7 @@ export default function Installment() {
               <span className={styles.stepBadge}>2</span>
               <div>
                 <strong className={styles.stepTitle}>Оформите заявку онлайн</strong>
-                <span className={styles.stepText}>Заполните форму на сайте или позвоните нам: +375 (25) 776-64-62.</span>
+                <span className={styles.stepText}>Заполните форму на сайте или позвоните нам: {city?.phoneDisplay || '+375 44 741-84-23'}.</span>
               </div>
             </li>
             <li className={styles.step}>
@@ -126,7 +119,9 @@ export default function Installment() {
               <span className={styles.stepBadge}>4</span>
               <div>
                 <strong className={styles.stepTitle}>Получите товар с доставкой</strong>
-                <span className={styles.stepText}>Курьер привезёт товар по Минску в день заказа, оформит все документы на месте.</span>
+                <span className={styles.stepText}>
+                  Курьер привезёт товар по {city?.nameIn || 'Минску'} по условиям доставки города.
+                </span>
               </div>
             </li>
           </ol>
@@ -172,8 +167,8 @@ export default function Installment() {
           </p>
           <p className={styles.contactRow}>
             Телефон:{' '}
-            <a href="tel:+375257766462" className={styles.link}>
-              +375 (25) 776-64-62
+            <a href={`tel:${city?.phoneTel || '+375447418423'}`} className={styles.link}>
+              {city?.phoneDisplay || '+375 44 741-84-23'}
             </a>
           </p>
           <p className={styles.contactRow}>

@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import {
+  Button,
   Container,
   Typography,
   Table,
@@ -16,20 +18,32 @@ import {
 import Image from 'next/image';
 import { useCompareStore } from '@/entities/compare';
 import CloseIcon from '@mui/icons-material/Close';
+import { shopSurfaceSx, shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
+
+const stickyCellSx = {
+  position: 'sticky',
+  left: 0,
+  zIndex: 1,
+  bgcolor: '#fff',
+  minWidth: 140,
+  boxShadow: '1px 0 0 #E1E5EB',
+};
 
 export default function ComparePage() {
   const { compareItems, removeFromCompare } = useCompareStore();
 
   if (compareItems.length === 0) {
     return (
-      <Container sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        <Typography component="h1" sx={shopTitleSx}>
           Сравнение товаров
         </Typography>
-        <Typography>
-          Нет товаров для сравнения. Добавьте товары, чтобы сравнить их
-          характеристики.
+        <Typography color="text.secondary" sx={{ mb: 2 }}>
+          Нет товаров для сравнения. Добавьте товары со страницы каталога, чтобы сравнить их характеристики.
         </Typography>
+        <Button component={Link} href="/catalog" variant="contained">
+          Перейти в каталог
+        </Button>
       </Container>
     );
   }
@@ -50,16 +64,16 @@ export default function ComparePage() {
 
   return (
     <>
-      <Container sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        <Typography component="h1" sx={shopTitleSx}>
           Сравнение товаров
         </Typography>
 
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ ...shopSurfaceSx, overflow: 'auto' }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Характеристики</TableCell>
+                <TableCell sx={stickyCellSx}>Характеристики</TableCell>
                 {compareItems.map((item) => {
                   const isProductInStock =
                     (item.availabilityStatus || item.availability_status || 'in_stock') !== 'on_order';
@@ -77,7 +91,7 @@ export default function ComparePage() {
                       : '';
 
                   return (
-                    <TableCell key={item.id} align="center">
+                    <TableCell key={item.id} align="center" sx={{ minWidth: 180 }}>
                       <Box sx={{ position: 'relative' }}>
                         <IconButton
                           size="small"
@@ -133,7 +147,7 @@ export default function ComparePage() {
 
                 return (
                   <TableRow key={spec}>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" sx={stickyCellSx}>
                       {spec}
                     </TableCell>
                     {compareItems.map((item) => {

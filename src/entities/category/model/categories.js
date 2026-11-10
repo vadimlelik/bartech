@@ -46,7 +46,10 @@ export async function getCategoryById(id) {
       category = await getCategoryByIdDb(id);
     } else {
       const categories = getAllCategoriesFromJSON();
-      category = categories.find((cat) => String(cat.id) === String(id)) || null;
+      category =
+        categories.find(
+          (cat) => String(cat.id).toLowerCase() === String(id).toLowerCase(),
+        ) || null;
     }
 
     if (category) {
@@ -54,10 +57,15 @@ export async function getCategoryById(id) {
     }
 
     const categories = useDb ? await getAllCategoriesDb() : getAllCategoriesFromJSON();
+    const categoryById = categories.find(
+      (cat) => String(cat.id).toLowerCase() === String(id).toLowerCase(),
+    );
+    if (categoryById) return categoryById;
+
     const categoryByName = categories.find(
       (cat) => cat.name.toLowerCase() === id.toString().toLowerCase()
     );
-    
+
     return categoryByName || null;
   } catch (error) {
     console.error('Error in getCategoryById:', error);

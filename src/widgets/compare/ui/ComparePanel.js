@@ -32,10 +32,10 @@ export default function ComparePanel() {
         elevation={3}
         sx={{
           position: 'fixed',
-          bottom: 0,
+          bottom: 'var(--shop-dock, 0px)',
           left: 0,
           right: 0,
-          zIndex: 1000,
+          zIndex: 1100,
           p: 2,
           backgroundColor: 'background.paper',
         }}

@@ -1,0 +1,96 @@
+import style from './sales.module.css';
+import InfoNav from '@/shared/ui/info-nav/InfoNav';
+import { SITE_URL as siteUrl } from '@/shared/config/site-url';
+
+export const metadata = {
+  title: 'Акции и специальные предложения | Texnobar',
+  description:
+    'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам. Выгодные предложения и рассрочка без переплат.',
+  alternates: {
+    canonical: `${siteUrl}/sales`,
+  },
+  openGraph: {
+    title: 'Акции и специальные предложения | Texnobar',
+    description:
+      'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам.',
+    url: `${siteUrl}/sales`,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Акции и специальные предложения | Texnobar',
+    description:
+      'Актуальные акции Texnobar: подарки к смартфонам, ноутбукам и телевизорам.',
+  },
+};
+
+const Sales = () => {
+  return (
+    <div className={style.promo}>
+      <InfoNav />
+      <h1 className={style.title}>АКЦИЯ сс 15.02.2026 по 15.05.2026</h1>
+
+      <div className={style.block}>
+        <h3>1. При покупке смартфона</h3>
+        <p>
+          любых марок и моделей стоимостью от <strong>1000 BYN</strong> —
+          получаете ПОДАРОК за <strong>1 BYN</strong> на выбор:
+        </p>
+        <ul>
+          <li>Пауэрбэнк 22.5W Digital Display 20000mAh</li>
+          <li>Беспроводные наушники XO T4Pods</li>
+        </ul>
+      </div>
+
+      <div className={style.block}>
+        <h3>2. При покупке бронетелефона CUBOT / CUBOT KINGKONG</h3>
+        <p>
+          стоимостью от <strong>1700 BYN</strong> — подарок за{' '}
+          <strong>1 BYN</strong>:
+        </p>
+        <ul>
+          <li>Пауэрбэнк 22.5W Digital Display 20000mAh</li>
+          <li>Беспроводные наушники XO T4Pods</li>
+          <li>Смартчасы Cubot X3</li>
+        </ul>
+      </div>
+
+      <div className={style.block}>
+        <h3>
+          3. При покупке ноутбуков Ninkear / KUU / Chuwi / Horizont H-Book
+        </h3>
+        <p>
+          от <strong>2500 BYN</strong> — подарок за <strong>1 BYN</strong>:
+        </p>
+        <ul>
+          <li>Смартфон Xiaomi Redmi A5 3/64</li>
+          <li>Набор Defender Target MKP-350</li>
+        </ul>
+      </div>
+
+      <div className={style.block}>
+        <h3>4. При покупке телевизора от 50″</h3>
+        <p>
+          от <strong>3000 BYN</strong> — подарок за <strong>1 BYN</strong>:
+        </p>
+        <ul>
+          <li>Яндекс Станция Лайт 2</li>
+          <li>Смартфон Xiaomi Redmi A5 3/64</li>
+        </ul>
+      </div>
+
+      <div className={style.block}>
+        <h3>5. При покупке стирально-сушильной машины</h3>
+        <p>
+          от <strong>3000 BYN</strong> — подарок за <strong>1 BYN</strong>:
+        </p>
+        <ul>
+          <li>Яндекс Станция Лайт 2</li>
+          <li>Аэрогриль Galaxy Line GL 2530</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Sales;
