@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import { ShopBreadcrumbs, shopTitleSx } from '@/shared/ui/shop-page/ShopPage';
 import Link from 'next/link';
-import { unstable_cache } from 'next/cache';
+import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 import ProductList from './ProductList';
-import { getCategories, getCategoryById } from '@/entities/category/model/categories';
+import { getCategoryById } from '@/entities/category/model/categories';
 import { getProducts } from '@/entities/product/model/products';
-import { notFound } from 'next/navigation';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import {
   getCollectionPageSchema,
   getCategoryItemListSchema,
@@ -89,22 +89,12 @@ function getCachedCategoryProductsFirstPage(categoryId) {
   )();
 }
 
-// Кэшируем страницу на 1 час
-export const revalidate = 3600;
-
-export async function generateStaticParams() {
-  try {
-    const categories = await getCategories();
-    return categories.map((category) => ({
-      id: String(category.id).toLowerCase(),
-    }));
-  } catch {
-    // Сборка без доступной БД (Docker/CI) — страницы по id генерируются on-demand
-    return [];
-  }
-}
+// Как у товара: город берётся из заголовка запроса. revalidate заставлял Next
+// собрать страницу без запроса, и на проде весь раздел /categories отдавал 500.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params, searchParams }) {
+  noStore();
   const { id } = await params;
   const query = await searchParams;
   const hasFilters = query && Object.keys(query).some((key) => query[key]);
@@ -161,6 +151,7 @@ export async function generateMetadata({ params, searchParams }) {
       },
     };
   } catch (error) {
+    unstable_rethrow(error);
     console.error('Error generating category metadata:', error);
     return {
       title: 'Ошибка',
@@ -170,6 +161,7 @@ export async function generateMetadata({ params, searchParams }) {
 }
 
 export default async function CategoryPage({ params }) {
+  noStore();
   const { id } = await Promise.resolve(params);
 
   try {
@@ -323,6 +315,7 @@ export default async function CategoryPage({ params }) {
       </>
     );
   } catch (error) {
+    unstable_rethrow(error);
     console.error('Error in CategoryPage:', error);
     throw error;
   }

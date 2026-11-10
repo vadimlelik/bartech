@@ -1,8 +1,8 @@
 import { Container, Box } from '@mui/material';
-import { unstable_cache } from 'next/cache';
+import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 import ProductDetails from '@/entities/product/ui/product-details/ProductDetails';
-import { getProductById, getAllProducts, getProductsByCategory } from '@/entities/product/model/products';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { getProductById, getProductsByCategory } from '@/entities/product/model/products';
+import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation';
 import {
   getProductSchema,
   getBreadcrumbSchema,
@@ -32,21 +32,12 @@ const getCachedProductById = unstable_cache(
   }
 );
 
-export const revalidate = 3600;
-
-export async function generateStaticParams() {
-  try {
-    const products = await getAllProducts();
-    return products.map((product) => ({
-      id: productPublicSegment(product),
-    }));
-  } catch {
-    // Сборка без доступной БД (Docker/CI) — страницы по id генерируются on-demand
-    return [];
-  }
-}
+// Страница читает город из заголовка запроса. Статическая генерация на сборке
+// Docker (без запроса) сохраняла 500, и прод отдавал его на все адреса товара.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
+  noStore();
   const { id: raw } = await params;
   const parsed = parseProductSegment(raw);
   if (!parsed) {
@@ -131,6 +122,7 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (error) {
+    unstable_rethrow(error);
     console.error('Error generating product metadata:', error);
     return {
       title: 'Ошибка',
@@ -140,6 +132,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
+  noStore();
   const { id: raw } = await Promise.resolve(params);
   const parsed = parseProductSegment(raw);
   if (!parsed) {
