@@ -53,6 +53,9 @@ function generateSubdomainRewrites() {
 }
 
 const nextConfig = {
+  // Chrome DevTools Lighthouse ходит обычным UA и не входит в список html-ботов.
+  // Без этого Next стримит <meta name="description"> в body, Lighthouse не видит его в head и ставит SEO 92.
+  htmlLimitedBots: /.*/,
   output: 'standalone', // Для Docker оптимизации
   assetPrefix: isPhoneSubdomain ? 'https://technobar.by' : '',
   reactStrictMode: false,
