@@ -40,7 +40,12 @@ import { categoryPublicPath } from '@/shared/lib/category-path';
 import CitySuggest from '@/entities/city/ui/CitySuggest';
 import { useServiceCity } from '@/entities/locality/ui/useServiceCity';
 import CityPickDialog from '@/entities/city/ui/CityPickDialog';
-import { CITY_COOKIE_NAME, citySwitchHref } from '@/shared/config/city-routes';
+import {
+  CITY_COOKIE_NAME,
+  citySwitchHref,
+  isCityContentPath,
+  stripCityPrefix,
+} from '@/shared/config/city-routes';
 import { cityCall } from '@/entities/city/lib/city-content';
 import { useFavoritesStore } from '@/entities/favorites';
 import { useCompareStore } from '@/entities/compare';
@@ -260,10 +265,15 @@ export default function Header({ catalogGroups = [] }) {
     }).catch(() => {});
     if (slug === city?.slug) return;
     setCommerceSlug(slug);
+    const knownSlugs = cities.map((item) => item.slug);
+    const barePath = stripCityPrefix(pathname, knownSlugs);
+    // На витрине город живёт в адресе. На остальных страницах остаёмся здесь:
+    // шапка и тексты берут выбранный город и обновляются без ухода со страницы.
+    if (!isCityContentPath(barePath)) return;
     const next = citySwitchHref(
       slug,
       `${pathname}${window.location.search || ''}`,
-      cities.map((item) => item.slug),
+      knownSlugs,
     );
     window.location.assign(next);
   };
