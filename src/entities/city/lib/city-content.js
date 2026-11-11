@@ -47,10 +47,17 @@ export function showCityField(city, key) {
   return flags[key] !== false;
 }
 
+function callableTel(value) {
+  const compact = String(value || '').replace(/[^\d+]/g, '');
+  if (!compact || compact === '+') return '';
+  return compact.startsWith('+') ? compact : `+${compact}`;
+}
+
 export function cityCall(city) {
-  if (city?.phoneDisplay && city?.phoneTel) {
-    return { display: city.phoneDisplay, tel: city.phoneTel };
-  }
+  const display = String(city?.phoneDisplay || '').trim();
+  const tel = callableTel(city?.phoneTel) || callableTel(display);
+  if (display && tel) return { display, tel };
+  if (tel) return { display: tel, tel };
   if (isDefaultCity(city)) {
     return { display: COMPANY_PHONE_DISPLAY, tel: COMPANY_PHONE_TEL };
   }

@@ -95,6 +95,12 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
+    // Next.js 15 держит dynamic-страницы в клиентском кэше 0 секунд,
+    // поэтому «назад» с карточки заново рендерит каталог и крутит лоадер.
+    staleTimes: {
+      dynamic: 180,
+      static: 300,
+    },
   },
   async headers() {
     return [

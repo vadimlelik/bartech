@@ -8,7 +8,7 @@ import {
   splitCityFromPath,
   withCityPrefix,
 } from '../../shared/config/city-routes.js';
-import { hasUniqueCityContent, isCityPublic, isRealAddress, resolveHomeCards, showCityField } from './lib/city-content.js';
+import { cityCall, hasUniqueCityContent, isCityPublic, isRealAddress, resolveHomeCards, showCityField } from './lib/city-content.js';
 import { deliveryFee, isLocalityServed, minOrderShortfall, orderGoodsTotal } from './lib/delivery-rules.js';
 import { reconcileCartItems } from '../cart/lib/reconcile-cart.js';
 import { getMonthlyPayment } from '../product/lib/pricing.js';
@@ -128,6 +128,19 @@ test('смена города не удаляет позицию и показы
   assert.equal(result.items[0].price, 45);
   assert.equal(result.notices.some((notice) => notice.type === 'price'), true);
   assert.equal(result.notices.some((notice) => notice.type === 'availability'), true);
+});
+
+test('телефон города можно набрать, даже если заполнено только одно поле', () => {
+  assert.deepEqual(
+    cityCall({ slug: 'grodno', phoneDisplay: '+375 29 111-22-33', phoneTel: '' }),
+    { display: '+375 29 111-22-33', tel: '+375291112233' },
+  );
+  assert.deepEqual(
+    cityCall({ slug: 'grodno', phoneDisplay: '', phoneTel: '375291112233' }),
+    { display: '+375291112233', tel: '+375291112233' },
+  );
+  assert.equal(cityCall({ slug: 'grodno', phoneDisplay: '', phoneTel: '' }), null);
+  assert.equal(cityCall({ slug: 'minsk', isDefault: true, phoneDisplay: '', phoneTel: '' }).tel, '+375447418423');
 });
 
 test('платёж рассрочки считается из полной цены и срока города', () => {

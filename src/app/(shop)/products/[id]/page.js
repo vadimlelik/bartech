@@ -1,7 +1,7 @@
 import { Container, Box } from '@mui/material';
 import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 import ProductDetails from '@/entities/product/ui/product-details/ProductDetails';
-import { getProductById, getProductsByCategory } from '@/entities/product/model/products';
+import { getProductById, getSimilarProducts } from '@/entities/product/model/products';
 import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation';
 import {
   getProductSchema,
@@ -31,6 +31,20 @@ const getCachedProductById = unstable_cache(
     tags: ['products'],
   }
 );
+
+function getCachedSimilarCards(categoryId) {
+  return unstable_cache(
+    async () => {
+      const rows = await getSimilarProducts(categoryId, 8);
+      return rows.map(toCatalogCard).filter(Boolean);
+    },
+    ['product-similar-cards', String(categoryId)],
+    {
+      revalidate: 3600,
+      tags: ['products'],
+    },
+  )();
+}
 
 // Страница читает город из заголовка запроса. Статическая генерация на сборке
 // Docker (без запроса) сохраняла 500, и прод отдавал его на все адреса товара.
@@ -144,12 +158,14 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  const category =
-    product.categoryId !== null && product.categoryId !== undefined
-      ? await getCategoryById(product.categoryId).catch(() => null)
-      : null;
-
-  const city = await getPageCity();
+  const categoryId = product.categoryId || product.category_id;
+  const [category, city, similarCards] = await Promise.all([
+    categoryId !== null && categoryId !== undefined
+      ? getCategoryById(categoryId).catch(() => null)
+      : null,
+    getPageCity(),
+    categoryId ? getCachedSimilarCards(categoryId) : [],
+  ]);
   if (!city) {
     notFound();
   }
@@ -167,13 +183,9 @@ export default async function ProductPage({ params }) {
   });
   const breadcrumbs = buildProductBreadcrumbs(product, category, product.id, city.slug);
   const breadcrumbSchema = getBreadcrumbSchema(breadcrumbs);
-  const categoryId = product.categoryId || product.category_id;
-  const sameCategory = categoryId ? await getProductsByCategory(categoryId) : [];
-  const similarProducts = (sameCategory || [])
+  const similarProducts = (similarCards || [])
     .filter((item) => String(item.id) !== String(product.id))
-    .slice(0, 4)
-    .map(toCatalogCard)
-    .filter(Boolean);
+    .slice(0, 4);
 
   return (
     <>

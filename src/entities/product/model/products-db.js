@@ -224,6 +224,25 @@ export async function getProductsByCategory(categoryId) {
   return (products || []).map(normalizeProduct);
 }
 
+export async function getSimilarProducts(categoryId, limit = 8) {
+  if (!categoryId) return [];
+  const take = Math.min(24, Math.max(1, Number(limit) || 8));
+  const products = await prisma.product.findMany({
+    where: { categoryId: String(categoryId) },
+    orderBy: { id: 'desc' },
+    take,
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      totalPrice: true,
+      image: true,
+      availabilityStatus: true,
+    },
+  });
+  return (products || []).map(normalizeProduct);
+}
+
 function mapRawProductRow(row) {
   if (!row) return null;
   const specs = row.specifications;

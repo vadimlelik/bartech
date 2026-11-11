@@ -4,6 +4,7 @@ import {
   getProducts as getProductsFromDb,
   getProductById as getProductByIdFromDb,
   getProductsByCategory as getProductsByCategoryFromDb,
+  getSimilarProducts as getSimilarProductsFromDb,
 } from './products-db';
 
 import fs from 'fs';
@@ -270,6 +271,35 @@ export async function getProductById(id) {
   } catch (error) {
     logDbFallbackUnlessBuildWithoutDb('Error in getProductById:', error);
     return null;
+  }
+}
+
+export async function getSimilarProducts(categoryId, limit = 8) {
+  if (!categoryId) return [];
+  const take = Math.min(24, Math.max(1, Number(limit) || 8));
+  try {
+    if (useDb) {
+      try {
+        return await getSimilarProductsFromDb(categoryId, take);
+      } catch (error) {
+        logDbFallbackUnlessBuildWithoutDb(
+          'Error fetching similar products from DB, falling back to JSON:',
+          error,
+        );
+      }
+    }
+
+    const products = getAllProductsFromJSON();
+    if (!Array.isArray(products)) return [];
+    return products
+      .filter(
+        (product) =>
+          product.categoryId === categoryId || product.category_id === categoryId,
+      )
+      .slice(0, take);
+  } catch (error) {
+    logDbFallbackUnlessBuildWithoutDb('Error in getSimilarProducts:', error);
+    return [];
   }
 }
 

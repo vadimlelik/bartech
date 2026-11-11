@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Alert,
   Box,
@@ -23,6 +24,7 @@ const EMPTY_PAYMENT = { code: 'cash', title: '', enabled: true };
 const EMPTY_DRAFT = { slug: '', name: '', nameIn: '', nameGenitive: '', nameDative: '', regionName: '' };
 
 export default function AdminCitiesPage() {
+  const router = useRouter();
   const [cities, setCities] = useState([]);
   const [banners, setBanners] = useState([]);
   const [selected, setSelected] = useState('');
@@ -118,6 +120,7 @@ export default function AdminCitiesPage() {
     }
     setMessage('Город сохранён. Тексты на главной обновлены.');
     await load(selected);
+    router.refresh();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       setError('Не удалось сохранить город');

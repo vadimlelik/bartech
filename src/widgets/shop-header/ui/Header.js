@@ -39,7 +39,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useCity } from '@/entities/city';
 import { categoryPublicPath } from '@/shared/lib/category-path';
 import CitySuggest from '@/entities/city/ui/CitySuggest';
-import { useServiceCity } from '@/entities/locality/ui/useServiceCity';
 import CityPickDialog from '@/entities/city/ui/CityPickDialog';
 import {
   CITY_COOKIE_NAME,
@@ -146,7 +145,6 @@ export default function Header({ catalogGroups = [] }) {
   const router = useRouter();
   const pathname = usePathname();
   const { commerceCity, pageCity, cities, href, setCommerceSlug } = useCity();
-  const serviceCity = useServiceCity();
   const city = commerceCity || pageCity;
   const cityLabel = `г. ${city?.name || 'Минск'}`;
   const favoritesCount = useFavoritesStore((state) => state.favorites.length);
@@ -161,7 +159,7 @@ export default function Header({ catalogGroups = [] }) {
   } = useAuthStore();
 
   const popularCategories = catalogGroups.flatMap((group) => group.categories || []).slice(0, 10);
-  const phone = cityCall(serviceCity);
+  const phone = cityCall(city);
 
   useEffect(() => {
     setMounted(true);
@@ -400,7 +398,7 @@ export default function Header({ catalogGroups = [] }) {
               component="a"
               href={`tel:${phone.tel}`}
               aria-label={`Позвонить ${phone.display}`}
-              sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#1F2933', textDecoration: 'none', fontSize: 13, fontWeight: 700, minHeight: 32 }}
+              sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0, color: '#1F2933', textDecoration: 'none', fontSize: 13, fontWeight: 700, minHeight: 32, whiteSpace: 'nowrap', cursor: 'pointer' }}
             >
               <PhoneIcon sx={{ fontSize: 16, color: '#1D6FE8' }} />
               {phone.display}
@@ -646,6 +644,7 @@ export default function Header({ catalogGroups = [] }) {
         <Button
           component={phone ? 'a' : 'button'}
           href={phone ? `tel:${phone.tel}` : undefined}
+          type={phone ? undefined : 'button'}
           aria-label={phone ? `Позвонить ${phone.display}` : 'Телефон не указан'}
           sx={{ flex: 1, flexDirection: 'column', color: '#1F2933', minHeight: 56, fontSize: 11, gap: 0.25 }}
         >
