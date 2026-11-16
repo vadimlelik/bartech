@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/shared/lib/auth-helpers';
+import { parseLeadQuery } from '@/shared/lib/lead-query';
 import { findFormSubmissionsForExport } from '@/shared/lib/form-submissions';
+
+export const dynamic = 'force-dynamic';
 
 function formatDate(value) {
   if (!value) return '';
@@ -28,8 +31,7 @@ export async function GET(request) {
     await requireAdmin();
 
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get('search') || '';
-    const leads = await findFormSubmissionsForExport({ search });
+    const leads = await findFormSubmissionsForExport(parseLeadQuery(searchParams));
 
     const headers = [
       'Дата',
