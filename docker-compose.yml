@@ -48,7 +48,9 @@ services:
         max-file: '3'
 
   nginx:
-    image: nginx:stable-alpine
+    # 1.30.7 закрывает NGINX2Root. Плавающий stable-alpine на сервере остаётся старым, пока контейнер не пересоздан.
+    image: nginx:1.30.7-alpine
+    pull_policy: always
     container_name: bartech-nginx
     restart: unless-stopped
     depends_on:

@@ -221,9 +221,26 @@ jobs:
               exit 1
             fi
             
-            # Перезагрузка Nginx после готовности Next.js
-            echo "Reloading Nginx..."
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload || true
+            # NGINX2Root: nginx -s reload не загружает новый бинарник, контейнер нужно пересоздать.
+            echo "Updating nginx to the patched image..."
+            NGINX_IMAGE=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml config --images 2>/dev/null | grep -E '^nginx:' | head -n1 || true)
+            if [ -z "$NGINX_IMAGE" ]; then
+              echo "ERROR: Could not resolve nginx image from compose"
+              exit 1
+            fi
+            echo "Nginx image: $NGINX_IMAGE"
+            docker pull "$NGINX_IMAGE"
+            NGINX_PULLED_ID=$(docker image inspect "$NGINX_IMAGE" --format '{{.Id}}')
+            NGINX_RUNNING_ID=$(docker inspect bartech-nginx --format '{{.Image}}' 2>/dev/null || true)
+            if [ "$NGINX_RUNNING_ID" != "$NGINX_PULLED_ID" ]; then
+              echo "Recreating nginx container so the patched binary is loaded..."
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps --force-recreate --pull never nginx
+            else
+              echo "Nginx image unchanged, reloading configuration..."
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -s reload
+            fi
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -t
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T nginx nginx -v
             
             # Очистка кеша Next.js внутри контейнера (если есть)
             echo "Clearing Next.js cache if needed..."
